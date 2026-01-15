@@ -2,17 +2,21 @@ export default function SideMenu_Tab() {
   const isSelected = true;
   return (
     <div
-      className={`w-[172px] h-[56px] flex items-center gap-[20px] px-[16px] rounded-[4px] ${
+      className={`w-[172px] h-[56px] flex items-center gap-[20px] px-[16px] rounded-[4px] text-[20px] ${
         isSelected
-          ? "bg-violet-100 text-violet-700 border-[1px] border-violet-700"
-          : "bg-transparent"
+          ? "bg-violet-100 text-violet-50 border-[1px] border-violet-50"
+          : "bg-white"
       }`}
     >
       <img
-        src="../../src/assets/checkbox-outlined.svg"
+        src={`${
+          isSelected
+            ? "../../src/assets/emoji/checkbox-dashed-purple.svg"
+            : "../../src/assets/emoji/checkbox-dashed.svg"
+        }`}
         className="w-[20px] h-[20px]"
       />
-      <span className="text-[20px]">Text</span>
+      <span>Text</span>
     </div>
   );
 }
