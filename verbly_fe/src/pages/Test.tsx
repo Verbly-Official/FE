@@ -1,4 +1,5 @@
 import { Text } from "../components/Text/Text";
+import { SearchBar } from "../components/SearchBar/SearchBar";
 
 const Test = () => {
   return (
@@ -52,6 +53,8 @@ const Test = () => {
           </Text>
         </div>
       </section>
+
+      <SearchBar shape="round" />
     </div>
   );
 };
