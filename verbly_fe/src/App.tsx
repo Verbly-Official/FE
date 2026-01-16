@@ -1,11 +1,14 @@
 import "./App.css";
-import Chip from "./components/Chip/Chip";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import TestPage from "./pages/Test";
 
 function App() {
   return (
-    <>
-      <Chip label="how are you?" />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/test" element={<TestPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
