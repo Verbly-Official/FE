@@ -1,5 +1,6 @@
 import React from 'react';
 import { type User } from '../../types/user';
+import { Badge } from '../Badge/ContentBadge';
 
 interface ProfileProps {
   data: User;
@@ -16,9 +17,8 @@ const IMG_PIXELS = {
 export const UserProfile: React.FC<ProfileProps> = ({ 
   data, 
   size = 'small', 
-  // onFollow // 추후 사용 시 주석 해제
+  // onFollow 
 }) => {
-  // 렌더링 헬퍼
   const renderImage = () => (
     <img
       src={data.profileUrl}
@@ -41,7 +41,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
     );
   }
 
-  // 2. Medium: 이름 + 접속 시간 (버튼/뱃지 제거됨)
+  // 2. Medium: 이름 + 접속 시간
   if (size === 'medium') {
     return (
       <div className="flex items-center gap-4">
@@ -49,7 +49,6 @@ export const UserProfile: React.FC<ProfileProps> = ({
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <span className="font-bold text-lg text-gray-900">{data.name}</span>
-            {/* Follow btn는 별도 구현 예정이므로 이곳의 버튼/뱃지 로직 제거 */}
           </div>
           
           {data.lastActive && (
@@ -60,7 +59,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
     );
   }
 
-  // 3. Large: 이름 + 레벨 (뱃지 제거됨)
+  // 3. Large: 이름 + 레벨 + 뱃지(Small Size)
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       {renderImage()}
@@ -70,7 +69,9 @@ export const UserProfile: React.FC<ProfileProps> = ({
           {data.level !== undefined && (
             <span className="text-gray-600">LV.{data.level}</span>
           )}
-          {/* Content Badge 별도 구현 예정으로 기존 뱃지 렌더링 제거 */}
+          {data.badges && (
+            <Badge content={data.badges} size="small" />
+          )}
         </div>
       </div>
     </div>
