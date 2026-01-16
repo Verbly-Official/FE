@@ -55,7 +55,7 @@ const Toast: React.FC<ToastProps> = React.memo(({ variant = "default", message, 
         <IconComponent className={`w-5 h-5 flex-shrink-0 ${config.iconColor}`} />
 
         {/* 메시지 */}
-        <span className="text-white font-pretendard text-[24px] font-semibold leading-none flex-1 min-w-0 max-w-[320px]">{displayMessage}</span>
+        <span className="text-white font-pretendard text-[16px] font-semibold leading-none flex-1 min-w-0 max-w-[320px]">{displayMessage}</span>
       </div>
     </div>
   );
