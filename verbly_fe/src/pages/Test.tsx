@@ -1,6 +1,5 @@
 import { useState } from "react";
 import TextArea from "../components/TextArea/TextArea";
-import { TextField } from "../components/TextArea/TextField";
 import { UserProfile } from "../components/Profile/Profile";
 import { Badge } from "../components/Badge/ContentBadge";
 import basicProfile from "../components/Profile/img/basicProfile.svg";
@@ -22,11 +21,6 @@ const Test = () => {
   const [value, setValue] = useState("");
 
   return (
-    <div className="p-8">
-      <TextArea value={value} onChange={(e) => setValue(e.target.value)} placeholder="여기에 텍스트 입력..." />
-      <TextField shape="square" showBtn={false} placeholder="질문을 적어주세요..." />
-      <TextField shape="square" showBtn={true} />
-      <TextField shape="round" showBtn={true} />
     <div className="p-8 max-w-3xl mx-auto space-y-10">
       {/* 1. TextArea */}
       <section>

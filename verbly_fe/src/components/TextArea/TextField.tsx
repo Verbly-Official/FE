@@ -1,7 +1,7 @@
 import React from "react";
-import Plus from "../../assets/plus.svg";
-import Mic_On from "../../assets/mic-on.svg";
-import Send from "../../assets/send-filled.svg";
+import Plus from "../../assets/emoji/plus.svg";
+import Mic_On from "../../assets/emoji/mic-on.svg";
+import Send from "../../assets/emoji/send-filled.svg";
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   shape?: "square" | "round";
