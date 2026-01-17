@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { UserProfile } from "../components/Profile/Profile";
 import { Badge } from "../components/Badge/ContentBadge";
-import SolidButton from "../components/Button/SolidButton"; // SolidButton 임포트
-import OutlinedButton from "../components/Button/OutlinedButton"; // OutlinedButton 임포트
 import basicProfile from "../components/Profile/img/basicProfile.svg";
 import { type User } from "../types/user";
 
@@ -14,7 +12,7 @@ const DUMMY_USER: User = {
   introduction: "test",
   lastActive: "10 min",
   level: 10,
-  badges: "test",
+  badges: "test", // 프로필 내부에 표시될 뱃지 데이터
   isFollowing: false,
 };
 const Test = () => {
@@ -22,6 +20,7 @@ const Test = () => {
 
   return (
     <div className="p-8 max-w-3xl mx-auto space-y-10">
+<<<<<<< HEAD
       {/* 2. Buttons (New) */}
       <section>
         <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">
@@ -103,6 +102,68 @@ const Test = () => {
             </div>
         </div>
       </section>
+=======
+      {/* 1. TextArea */}
+      <section>
+        <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">
+          TextArea
+        </h2>
+        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+          <TextArea 
+            value={value} 
+            onChange={(e) => setValue(e.target.value)} 
+            placeholder="여기에 텍스트 입력..." 
+          />
+    <div className="p-8 space-y-8">
+      {/* Small size */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold">Small</h2>
+
+        <div className="flex flex-wrap gap-4 items-center">
+          <Text size="small">기본 텍스트</Text>
+          <Text size="small" state="wrong">
+            틀린 표현
+          </Text>
+          <Text size="small" state="right">
+            정답 표현
+          </Text>
+          <Text size="small" state="suggestion">
+            수정 제안
+          </Text>
+          <Text size="small" state="highlight">
+            강조 키워드
+          </Text>
+        </div>
+      </section>
+
+      {/* Medium size */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold">Medium</h2>
+
+        <div className="flex flex-wrap gap-4 items-center">
+          <Text size="medium">본문 텍스트</Text>
+          <Text size="medium" state="wrong">
+            잘못된 문장
+          </Text>
+          <Text size="medium" state="right">
+            올바른 문장
+          </Text>
+          <Text size="medium" state="suggestion">
+            이렇게 바꿔보세요
+          </Text>
+          <Text size="medium" state="highlight">
+            중요한 내용
+          </Text>
+        </div>
+      </section>
+
+      {/* Search */}
+      <SearchBar shape="round" />
+
+      {/* Pagination */}
+      <Pagination shape="dot" currentPage={page} totalPages={10} onChange={setPage} />
+      <Pagination shape="num" currentPage={page} totalPages={10} onChange={setPage} />
+>>>>>>> 7d06a8d409e298f38e36d9905599a3da53f41b7b
     </div>
   );
 };
