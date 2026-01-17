@@ -1,10 +1,11 @@
 import { useState } from "react";
-import TextArea from "../components/TextArea/TextArea";
-import { TextField } from "../components/TextArea/TextField";
 import { UserProfile } from "../components/Profile/Profile";
 import { Badge } from "../components/Badge/ContentBadge";
 import basicProfile from "../components/Profile/img/basicProfile.svg";
 import { type User } from "../types/user";
+import SolidButton from "../components/Button/SolidButton";
+import OutlinedButton from "../components/Button/OutlinedButton";
+import FollowButton from "../components/Button/FollowButton";
 
 // 테스트용 더미 데이터
 const DUMMY_USER: User = {
@@ -17,59 +18,74 @@ const DUMMY_USER: User = {
   badges: "test", // 프로필 내부에 표시될 뱃지 데이터
   isFollowing: false,
 };
-
 const Test = () => {
-  const [value, setValue] = useState("");
+  const [page, setPage] = useState(1);
 
   return (
-    <div className="p-8">
-      <TextArea value={value} onChange={(e) => setValue(e.target.value)} placeholder="여기에 텍스트 입력..." />
-      <TextField shape="square" showBtn={false} placeholder="질문을 적어주세요..." />
-      <TextField shape="square" showBtn={true} />
-      <TextField shape="round" showBtn={true} />
     <div className="p-8 max-w-3xl mx-auto space-y-10">
-      {/* 1. TextArea */}
+      {/* 2. Buttons (New) */}
       <section>
         <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">
-          TextArea
+          Buttons
         </h2>
-        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-          <TextArea 
-            value={value} 
-            onChange={(e) => setValue(e.target.value)} 
-            placeholder="여기에 텍스트 입력..." 
-          />
+        
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 space-y-6">
+          
+          {/* Solid Buttons */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-500 mb-3">Solid Button</h3>
+            <div className="flex flex-wrap gap-3">
+              <SolidButton label="Primary" variant="primary" />
+              <SolidButton label="Secondary" variant="secondary" />
+              <SolidButton label="Assistive" variant="assistive" />
+              <SolidButton label="Destructive" variant="destructive" />
+              <SolidButton label="Disabled" disabled />
+            </div>
+          </div>
+
+          {/* Outlined Buttons */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-500 mb-3">Outlined Button</h3>
+            <div className="flex flex-wrap gap-3">
+              <OutlinedButton label="Primary" variant="primary" />
+              <OutlinedButton label="Secondary" variant="secondary" />
+              <OutlinedButton label="Assistive" variant="assistive" />
+              <OutlinedButton label="Destructive" variant="destructive" />
+              <OutlinedButton label="Disabled" disabled />
+            </div>
+          </div>
+              <FollowButton />
+              <FollowButton size="large" />
         </div>
       </section>
 
       <hr className="border-gray-200" />
 
-      {/* 2. UserProfile */}
+      {/* 3. UserProfile */}
       <section>
         <h2 className="text-xl font-bold mb-6 border-l-4 border-gray-800 pl-3">
           User Profile
         </h2>
         
-        <div className="space-y-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-500 mb-4">Small</h3>
+        <div className="space-y-4">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center gap-4">
+            <span className="text-sm font-semibold text-gray-500 w-20">Small</span>
             <UserProfile data={DUMMY_USER} size="small" />
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-500 mb-4">Medium</h3>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center gap-4">
+            <span className="text-sm font-semibold text-gray-500 w-20">Medium</span>
             <UserProfile data={DUMMY_USER} size="medium" />
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-500 mb-4">Large (Badge Integrated)</h3>
-            {/* 이제 UserProfile 내부에서 badges 데이터를 받아 small 뱃지를 렌더링합니다 */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center gap-4">
+            <span className="text-sm font-semibold text-gray-500 w-20">Large</span>
             <UserProfile data={DUMMY_USER} size="large" />
           </div>
         </div>
       </section>
 
-      {/* 3. Badge Variations (참고용) */}
+      {/* 4. Badge Variations */}
       <section>
         <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">
           Badge Variations
