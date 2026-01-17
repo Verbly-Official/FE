@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TextArea from "../components/TextArea/TextArea";
 import { UserProfile } from "../components/Profile/Profile";
 import { Badge } from "../components/Badge/ContentBadge";
 import SolidButton from "../components/Button/SolidButton"; // SolidButton 임포트
@@ -18,30 +17,11 @@ const DUMMY_USER: User = {
   badges: "test",
   isFollowing: false,
 };
-
 const Test = () => {
-  const [value, setValue] = useState("");
+  const [page, setPage] = useState(1);
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-10 pb-20">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Component Test Page</h1>
-
-      {/* 1. TextArea */}
-      <section>
-        <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">
-          TextArea
-        </h2>
-        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-          <TextArea 
-            value={value} 
-            onChange={(e) => setValue(e.target.value)} 
-            placeholder="여기에 텍스트 입력..." 
-          />
-        </div>
-      </section>
-
-      <hr className="border-gray-200" />
-
+    <div className="p-8 max-w-3xl mx-auto space-y-10">
       {/* 2. Buttons (New) */}
       <section>
         <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">

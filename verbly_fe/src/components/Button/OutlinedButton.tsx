@@ -30,12 +30,12 @@ export default function OutlinedButton({
         return "border-gray-4 text-black hover:bg-gray-1 active:bg-gray-2";
 
       case "destructive":
-        // Error: 붉은색 계열
+        // Error
         return "border-red-1 text-red-1 bg-gray-1";
       
       case "primary":
       default:
-        // Primary: 보라색 계열 (기본)
+        // Primary
         return "border-violet-50 text-violet-50 hover:bg-violet-100 active:bg-violet-90";
     }
   };
