@@ -21,7 +21,7 @@ export const Badge: React.FC<BadgeProps> = ({
       className={`
         inline-flex items-center justify-center
         rounded font-medium whitespace-nowrap
-        bg-blue-100 text-blue-600
+        bg-[var(--color-blue-90)] text-[var(--color-blue-60)]
         ${BADGE_SIZES[size]}
         ${className}
       `}
