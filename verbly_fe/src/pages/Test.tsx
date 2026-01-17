@@ -16,9 +16,12 @@ const DUMMY_USER: User = {
   badges: "test", // 프로필 내부에 표시될 뱃지 데이터
   isFollowing: false,
 };
+import { Text } from "../components/Text/Text";
+import { SearchBar } from "../components/SearchBar/SearchBar";
+import { Pagination } from "../components/Pagination/Pagination";
 
 const Test = () => {
-  const [value, setValue] = useState("");
+  const [page, setPage] = useState(1);
 
   return (
     <div className="p-8 max-w-3xl mx-auto space-y-10">
@@ -33,56 +36,55 @@ const Test = () => {
             onChange={(e) => setValue(e.target.value)} 
             placeholder="여기에 텍스트 입력..." 
           />
+    <div className="p-8 space-y-8">
+      {/* Small size */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold">Small</h2>
+
+        <div className="flex flex-wrap gap-4 items-center">
+          <Text size="small">기본 텍스트</Text>
+          <Text size="small" state="wrong">
+            틀린 표현
+          </Text>
+          <Text size="small" state="right">
+            정답 표현
+          </Text>
+          <Text size="small" state="suggestion">
+            수정 제안
+          </Text>
+          <Text size="small" state="highlight">
+            강조 키워드
+          </Text>
         </div>
       </section>
 
-      <hr className="border-gray-200" />
+      {/* Medium size */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold">Medium</h2>
 
-      {/* 2. UserProfile */}
-      <section>
-        <h2 className="text-xl font-bold mb-6 border-l-4 border-gray-800 pl-3">
-          User Profile
-        </h2>
-        
-        <div className="space-y-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-500 mb-4">Small</h3>
-            <UserProfile data={DUMMY_USER} size="small" />
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-500 mb-4">Medium</h3>
-            <UserProfile data={DUMMY_USER} size="medium" />
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-500 mb-4">Large (Badge Integrated)</h3>
-            {/* 이제 UserProfile 내부에서 badges 데이터를 받아 small 뱃지를 렌더링합니다 */}
-            <UserProfile data={DUMMY_USER} size="large" />
-          </div>
+        <div className="flex flex-wrap gap-4 items-center">
+          <Text size="medium">본문 텍스트</Text>
+          <Text size="medium" state="wrong">
+            잘못된 문장
+          </Text>
+          <Text size="medium" state="right">
+            올바른 문장
+          </Text>
+          <Text size="medium" state="suggestion">
+            이렇게 바꿔보세요
+          </Text>
+          <Text size="medium" state="highlight">
+            중요한 내용
+          </Text>
         </div>
       </section>
 
-      {/* 3. Badge Variations (참고용) */}
-      <section>
-        <h2 className="text-xl font-bold mb-4 border-l-4 border-gray-800 pl-3">
-          Badge Variations
-        </h2>
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 grid grid-cols-2 gap-6">
-            <div>
-                <h4 className="text-sm font-bold text-gray-500 mb-3">Small Size (22px)</h4>
-                <div className="flex flex-wrap gap-2">
-                    <Badge content="Content" size="small" />
-                </div>
-            </div>
-            <div>
-                <h4 className="text-sm font-bold text-gray-500 mb-3">Medium Size (32px)</h4>
-                <div className="flex flex-wrap gap-2">
-                    <Badge content="Content" size="medium" />
-                </div>
-            </div>
-        </div>
-      </section>
+      {/* Search */}
+      <SearchBar shape="round" />
+
+      {/* Pagination */}
+      <Pagination shape="dot" currentPage={page} totalPages={10} onChange={setPage} />
+      <Pagination shape="num" currentPage={page} totalPages={10} onChange={setPage} />
     </div>
   );
 };
