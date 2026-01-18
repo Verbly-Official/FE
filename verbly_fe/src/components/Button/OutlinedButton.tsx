@@ -17,14 +17,14 @@ export default function OutlinedButton({
   iconSrc,
   variant = "primary",
 }: OutlinedButtonProps) {
-
+  
   // Variant별 스타일 매핑 (Outlined 스타일)
   const getVariantStyle = (variant: ButtonVariant) => {
     switch (variant) {
       case "secondary":
         // Secondary
         return "border-gray-4 text-violet-50 hover:bg-gray-1 active:bg-gray-2";
-
+      
       case "assistive":
         // Assistive
         return "border-gray-4 text-black hover:bg-gray-1 active:bg-gray-2";
@@ -32,7 +32,7 @@ export default function OutlinedButton({
       case "destructive":
         // Error
         return "border-red-1 text-red-1 bg-gray-1";
-
+      
       case "primary":
       default:
         // Primary

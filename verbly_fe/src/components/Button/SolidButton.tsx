@@ -1,6 +1,9 @@
+<<<<<<< HEAD
+=======
 import React from "react";
 
 // Variant는 4가지 (primary, secondary, assistive, destructive)
+>>>>>>> 7d06a8d409e298f38e36d9905599a3da53f41b7b
 type ButtonVariant = "primary" | "secondary" | "assistive" | "destructive";
 
 interface SolidButtonProps {
