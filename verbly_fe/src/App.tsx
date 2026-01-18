@@ -1,14 +1,14 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import TestPage from "./pages/Test";
-import TextButtonTestPage from "./pages/TextButtonTestPage";
+
+import GradientButtonTestPage from "./pages/GradientButtonTestPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/test" element={<TestPage />} /> */}
-        <Route path="/text-button-test" element={<TextButtonTestPage />} />
+        
+        <Route path="/gradient-button-test" element={<GradientButtonTestPage />} />
       </Routes>
     </BrowserRouter>
   );

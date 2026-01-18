@@ -35,6 +35,13 @@
   font-family: "Pretendard", system-ui, -apple-system, sans-serif;
 }
 
+.text-title3-bold24 {
+  font-family: "Pretendard";
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 100%;
+}
+
 .text-subtitle6-semi18 {
   font-family: "Pretendard";
   font-size: 18px;
@@ -46,12 +53,5 @@
   font-family: "Pretendard";
   font-size: 14px;
   font-weight: 600;
-  line-height: 100%;
-}
-
-.text-btn2-medium14 {
-  font-family: "Pretendard";
-  font-size: 14px;
-  font-weight: 500;
   line-height: 100%;
 }
