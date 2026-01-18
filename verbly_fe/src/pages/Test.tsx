@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select from "../components/Select/Select"; // Select 컴포넌트 경로 확인 필요
+import { useState } from "react";
 
 const Test = () => {
   // 각 Select의 상태 관리
@@ -121,6 +122,8 @@ const Test = () => {
           </div>
         </div>
       </section>
+    <div className="p-8 max-w-3xl mx-auto space-y-10">
+      
     </div>
   );
 };

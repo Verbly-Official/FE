@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-=======
-import React from "react";
-
-// Variant는 4가지 (primary, secondary, assistive, destructive)
->>>>>>> 7d06a8d409e298f38e36d9905599a3da53f41b7b
 type ButtonVariant = "primary" | "secondary" | "assistive" | "destructive";
 
-interface SolidButtonProps {
+interface OutlinedButtonProps {
   label: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -15,34 +9,34 @@ interface SolidButtonProps {
   variant?: ButtonVariant;
 }
 
-export default function SolidButton({
+export default function OutlinedButton({
   label,
   onClick,
   disabled = false,
   className = "",
   iconSrc,
   variant = "primary",
-}: SolidButtonProps) {
+}: OutlinedButtonProps) {
   
-  // Variant별 스타일 매핑
+  // Variant별 스타일 매핑 (Outlined 스타일)
   const getVariantStyle = (variant: ButtonVariant) => {
     switch (variant) {
       case "secondary":
         // Secondary
-        return "bg-violet-100 hover:bg-violet-90 active:bg-violet-80 text-white";
+        return "border-gray-4 text-violet-50 hover:bg-gray-1 active:bg-gray-2";
       
       case "assistive":
         // Assistive
-        return "bg-gray-1 hover:bg-gray-2 active:bg-gray-3 text-white";
+        return "border-gray-4 text-black hover:bg-gray-1 active:bg-gray-2";
 
       case "destructive":
-        // Error 
-        return "bg-gray-1 text-red-1";
+        // Error
+        return "border-red-1 text-red-1 bg-gray-1";
       
       case "primary":
       default:
         // Primary
-        return "bg-violet-50 hover:bg-violet-40 active:bg-violet-30 text-white";
+        return "border-violet-50 text-violet-50 hover:bg-violet-100 active:bg-violet-90";
     }
   };
 
@@ -52,10 +46,10 @@ export default function SolidButton({
       disabled={disabled}
       className={`
         inline-flex justify-center items-center px-[24px] py-[12px] rounded-[8px] gap-[8px]
-        text-[16px] font-medium transition-colors duration-200
+        text-[16px] font-medium transition-colors duration-200 border-[1px] bg-white
         ${
           disabled
-            ? "bg-gray-3 cursor-not-allowed text-gray-5" // Disabled 상태
+            ? "border-gray-4 bg-gray-2 text-gray-4 cursor-not-allowed" // Disabled 상태
             : `${getVariantStyle(variant)} cursor-pointer`
         }
         ${className}
