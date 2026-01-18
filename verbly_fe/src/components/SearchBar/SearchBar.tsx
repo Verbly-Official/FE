@@ -1,6 +1,6 @@
 import React from "react";
-import Search from "../../assets/search.svg";
-import Close from "../../assets/close.svg";
+import Search from "../../assets/emoji/search.svg";
+import Close from "../../assets/emoji/close.svg";
 
 interface SearchBarProps extends React.InputHTMLAttributes<HTMLInputElement> {
   shape?: "square" | "round";

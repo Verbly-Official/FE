@@ -1,6 +1,6 @@
 import React from "react";
-import Chev_L from "../../assets/chev-left.svg";
-import Chev_R from "../../assets/chev-right.svg";
+import Chev_L from "../../assets/emoji/chev-left.svg";
+import Chev_R from "../../assets/emoji/chev-right.svg";
 
 interface PaginationProps {
   currentPage: number;
