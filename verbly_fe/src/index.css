@@ -81,4 +81,8 @@
   /* Stroke */
   --color-line1: #d9d9d9;
   --color-line2: #adadad;
+
+  /* Gradients */
+  --gradient-1-main: linear-gradient(90deg, #713de3 0%, #4f46dd 100%);
+  --gradient-4: linear-gradient(90deg, #713de3 0%, #ff7395 100%);
 }
