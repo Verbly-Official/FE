@@ -1,10 +1,11 @@
+import type { ReactNode } from "react";
+
 // Variant: 스타일 테마 ('destructive' 제거됨)
 type ButtonVariant = "primary" | "secondary" | "assistive";
 // Size: 버튼 크기
 type ButtonSize = "small" | "medium" | "large";
 
 interface OutlinedButtonProps {
-  label: string;
   onClick?: () => void;
   disabled?: boolean;
   error?: boolean; // error prop 추가
@@ -12,10 +13,10 @@ interface OutlinedButtonProps {
   iconSrc?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  children?: ReactNode;
 }
 
 export default function OutlinedButton({
-  label,
   onClick,
   disabled = false,
   error = false, // 기본값 false
@@ -23,6 +24,7 @@ export default function OutlinedButton({
   iconSrc,
   variant = "primary",
   size = "large",
+  children,
 }: OutlinedButtonProps) {
   
   // Variant별 스타일 매핑 (Outlined 스타일)
@@ -85,7 +87,7 @@ export default function OutlinedButton({
           className="w-[24px] h-[24px] object-contain"
         />
       )}
-      <span>{label}</span>
+      {children}
     </button>
   );
 }
