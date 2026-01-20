@@ -36,7 +36,6 @@ export default function SolidButton({
         return "bg-gray-1 hover:bg-gray-2 active:bg-gray-3 text-white";
       case "primary":
       default:
-        // Primary
         return "bg-violet-50 hover:bg-violet-40 active:bg-violet-30 text-white";
     }
   };
