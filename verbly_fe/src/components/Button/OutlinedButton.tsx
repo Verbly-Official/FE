@@ -1,21 +1,28 @@
-type ButtonVariant = "primary" | "secondary" | "assistive" | "destructive";
+// Variant: 스타일 테마 ('destructive' 제거됨)
+type ButtonVariant = "primary" | "secondary" | "assistive";
+// Size: 버튼 크기
+type ButtonSize = "small" | "medium" | "large";
 
 interface OutlinedButtonProps {
   label: string;
   onClick?: () => void;
   disabled?: boolean;
+  error?: boolean; // error prop 추가
   className?: string;
   iconSrc?: string;
   variant?: ButtonVariant;
+  size?: ButtonSize;
 }
 
 export default function OutlinedButton({
   label,
   onClick,
   disabled = false,
+  error = false, // 기본값 false
   className = "",
   iconSrc,
   variant = "primary",
+  size = "large",
 }: OutlinedButtonProps) {
   
   // Variant별 스타일 매핑 (Outlined 스타일)
@@ -23,35 +30,51 @@ export default function OutlinedButton({
     switch (variant) {
       case "secondary":
         // Secondary
-        return "border-gray-4 text-violet-50 hover:bg-gray-1 active:bg-gray-2";
+        return "border-[#D9D9D9] text-violet-50 bg-white hover:bg-gray-1 active:bg-gray-2";
       
       case "assistive":
         // Assistive
-        return "border-gray-4 text-black hover:bg-gray-1 active:bg-gray-2";
-
-      case "destructive":
-        // Error
-        return "border-red-1 text-red-1 bg-gray-1";
+        return "border-[#D9D9D9] text-gray-9 bg-white hover:bg-gray-1 active:bg-gray-2";
       
       case "primary":
       default:
         // Primary
-        return "border-violet-50 text-violet-50 hover:bg-violet-100 active:bg-violet-90";
+        return "border-violet-50 text-violet-50 bg-white hover:bg-violet-100 active:bg-violet-90";
+    }
+  };
+   // Size별 크기 스타일
+  const getSizeStyle = (size: ButtonSize) => {
+    switch (size) {
+      case "small":
+        return "h-[40px] w-auto px-[8px] py-[20px] text-[14px]";
+      case "large":
+        return "h-[60px] w-auto px-[20px] py-[32px] text-[18px]"; 
+      case "medium":
+      default:
+        return "h-[48px] w-auto px-[12px] py-[24px] text-[16px]";
     }
   };
 
-  return (
+  // 배경 및 텍스트 색상 결정 로직 (우선순위: Disabled > Error > Variant)
+  const getColorStyle = () => {
+    if (disabled) {
+      return "bg-gray-2 cursor-not-allowed text-gray-9";
+    }
+    if (error) {
+      return "border-[#EF1111] bg-gray-1 text-[#EF1111]";
+    }
+    return `${getVariantStyle(variant)} cursor-pointer`;
+  };
+  
+   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={`
-        inline-flex justify-center items-center px-[24px] py-[12px] rounded-[8px] gap-[8px]
-        text-[16px] font-medium transition-colors duration-200 border-[1px] bg-white
-        ${
-          disabled
-            ? "border-gray-4 bg-gray-2 text-gray-4 cursor-not-allowed" // Disabled 상태
-            : `${getVariantStyle(variant)} cursor-pointer`
-        }
+        inline-flex justify-center items-center rounded-[8px] gap-[8px]
+        font-medium transition-colors duration-200 border
+        ${getSizeStyle(size)}
+        ${getColorStyle()}
         ${className}
       `}
     >
@@ -59,7 +82,7 @@ export default function OutlinedButton({
         <img
           src={iconSrc}
           alt="icon"
-          className="w-[20px] h-[20px] object-contain"
+          className="w-[24px] h-[24px] object-contain"
         />
       )}
       <span>{label}</span>

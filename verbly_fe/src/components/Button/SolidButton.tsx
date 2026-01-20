@@ -22,16 +22,18 @@ export default function SolidButton({
   className = "",
   iconSrc,
   variant = "primary",
-  size = "medium",
+  size = "large",
 }: SolidButtonProps) {
-  
-  // Variant별 색상 스타일 (기본 테마)
+
+  // Variant별 스타일 매핑
   const getVariantStyle = (variant: ButtonVariant) => {
     switch (variant) {
       case "secondary":
+        // Secondary
         return "bg-violet-100 hover:bg-violet-90 active:bg-violet-80 text-gray-9";
       case "assistive":
-        return "bg-gray-1 hover:bg-gray-2 active:bg-gray-3 text-gray-9";
+        // Assistive
+        return "bg-gray-1 hover:bg-gray-2 active:bg-gray-3 text-white";
       case "primary":
       default:
         return "bg-violet-50 hover:bg-violet-40 active:bg-violet-30 text-white";
@@ -44,7 +46,7 @@ export default function SolidButton({
       case "small":
         return "h-[40px] w-auto px-[8px] py-[20px] text-[14px]";
       case "large":
-        return "h-[60px] w-auto px-[2px] py-[32px] text-[18px]"; 
+        return "h-[60px] w-auto px-[20px] py-[32px] text-[18px]"; 
       case "medium":
       default:
         return "h-[48px] w-auto px-[12px] py-[24px] text-[16px]";
@@ -68,7 +70,7 @@ export default function SolidButton({
       disabled={disabled}
       className={`
         inline-flex justify-center items-center rounded-[8px] gap-[8px]
-        font-medium transition-colors duration-200
+        font-medium transition-colors duration-200 border
         ${getSizeStyle(size)}
         ${getColorStyle()}
         ${className}

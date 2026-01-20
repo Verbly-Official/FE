@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// 기존 import 유지...
-import LoginPage from './pages/LoginPage';
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import GradientButtonTestPage from "./pages/GradientButtonTestPage";
+import ButtonTestPage from "./pages/Test";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 기존 라우트 유지 */}
-        <Route path="/login" element={<LoginPage />} />
-        {/* 필요시 메인 경로를 로그인으로 변경 */}
-        {/* <Route path="/" element={<LoginPage />} /> */}
+        <Route path="/gradient-button-test" element={<GradientButtonTestPage />} />
+        <Route path="/test" element={<ButtonTestPage/>}/>
       </Routes>
     </BrowserRouter>
   );
