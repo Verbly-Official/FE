@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate import 추가
-import Logo from '../components/Logo/Logo';
-import googleIcon from '../assets/emoji/google.svg';
-import kakaoIcon from '../assets/emoji/kakao.svg';
-import SolidButton from '../components/Button/SolidButton';
-import {Text} from '../components/Text/Text';
+import Logo from '../../components/Logo/Logo';
+import googleIcon from '../../assets/emoji/google.svg';
+import kakaoIcon from '../../assets/emoji/kakao.svg';
+import SolidButton from '../../components/Button/SolidButton';
+import {Text} from '../../components/Text/Text';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // navigate 함수 생성
@@ -41,18 +41,18 @@ const LoginPage = () => {
               size="large"
               iconSrc={googleIcon}
               className="justify-center !text-gray-9 text-opacity-85"
-              onClick={handleLogin} // 클릭 핸들러 연결
+              onClick={handleLogin}
               >
                 <Text size="medium" state="default">Continue with Google</Text>
             </SolidButton>
 
             {/* 카카오 로그인 버튼 */}
-            <SolidButton 
+            <SolidButton
               variant="assistive"
               size="large"
               iconSrc={kakaoIcon}
-              className="justify-center !text-gray-9 text-opacity-85 !bg-[#FFE100] !hover:bg-gray-2" 
-              onClick={handleLogin} // 클릭 핸들러 연결
+              className="!bg-[#FFE100]"
+              onClick={handleLogin}
             >
               <Text size="medium" state="default">Continue with Kakao Talk</Text>
             </SolidButton>

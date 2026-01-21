@@ -28,7 +28,6 @@ const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
   small: "w-auto h-[16px]",
 };
 
-// [수정] 기본 상태별 스타일 통합
 const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
   primary: {
     normal: "border border-violet-50 text-violet-50 bg-white",
@@ -50,7 +49,6 @@ const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = 
   },
 };
 
-// normal 상태 인터랙션 클래스
 const INTERACTION_PSEUDO_CLASSES: Record<ButtonVariant, string> = {
   primary: "hover:bg-violet-100 active:bg-violet-90",
   secondary: "hover:bg-gray-1 active:bg-gray-2",
@@ -76,10 +74,7 @@ export default function OutlinedButton({
       return "border border-[#EF1111] bg-gray-1 text-[#EF1111]";
     }
     
-    // Static 스타일을 기본으로 사용
     const baseStyle = STATIC_STYLES[variant][effectiveInteraction];
-    
-    // normal 상태일 때만 hover/active 클래스 결합
     const interactionStyle = effectiveInteraction === "normal"
       ? INTERACTION_PSEUDO_CLASSES[variant]
       : "";
