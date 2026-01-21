@@ -1,10 +1,11 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import ProgressIndicatorDemo from "./pages/ProgressIndicatorDemo";
 import LoginPage from "./pages/LoginPage";
 import SelectLangPage from "./pages/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
+import InboxPage from "./pages/Inbox/InboxPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/select-language" element={<SelectLangPage />} />
         <Route path="/correction" element={<Correction_Main />} />
+        <Route path="/inbox" element={<InboxPage />} />
       </Routes>
     </BrowserRouter>
   );
