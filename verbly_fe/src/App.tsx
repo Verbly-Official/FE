@@ -5,8 +5,7 @@ import ProgressIndicatorDemo from "./pages/ProgressIndicatorDemo";
 import LoginPage from "./pages/LoginPage";
 import SelectLangPage from "./pages/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
-import Test from "./pages/Home/test";
-
+import InboxPage from "./pages/Inbox/InboxPage";
 function App() {
   return (
     <BrowserRouter>
@@ -24,7 +23,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/select-language" element={<SelectLangPage />} />
         <Route path="/correction" element={<Correction_Main />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/inbox" element={<InboxPage />} />
       </Routes>
     </BrowserRouter>
   );
