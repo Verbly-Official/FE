@@ -15,7 +15,6 @@ interface SelectProps {
   value?: string | number | (string | number)[];
   onChange: (value: any) => void;
   placeholder?: string;
-  label?: string;
   error?: boolean;
   errorMessage?: string;
   disabled?: boolean;
@@ -28,7 +27,6 @@ const Select: React.FC<SelectProps> = ({
   value,
   onChange,
   placeholder = "Text",
-  label,
   error = false,
   errorMessage,
   disabled = false,
@@ -90,12 +88,12 @@ const Select: React.FC<SelectProps> = ({
   // Styles
   const getSizeClass = () => {
     switch (size) {
-      case 'small': return 'w-[280px] h-[40px] px-3 text-sm rounded-xl';
-      case 'medium': return 'w-[280px] h-[48px] px-4 text-base rounded-xl';
+      case 'small': return 'h-[40px] px-3 text-sm rounded-xl';
+      case 'medium': return 'h-[48px] px-4 text-base rounded-xl';
       case 'chip': 
-        return 'w-[280px] h-[36px] px-2 text-sm rounded-xl';
+        return 'h-[36px] px-2 text-sm rounded-xl';
       case 'large':
-      default: return 'w-[280px] h-[60px] px-4 text-lg rounded-xl';
+      default: return 'h-[60px] px-4 text-lg rounded-xl';
     }
   };
 
@@ -118,21 +116,16 @@ const Select: React.FC<SelectProps> = ({
 
   return (
     <div
-      className={`relative flex flex-col gap-2 w-fit outline-none ${className}`}
+      className={`relative flex flex-col gap-2 w-[280px] outline-none ${className}`}
       ref={containerRef}
     >
-      {label && (
-        <label className="text-sm font-medium text-gray-9">
-          {label}
-        </label>
-      )}
-
       {/* Select Box */}
       <div
         onClick={handleToggle}
         className={`
           flex items-center justify-between
           bg-white border transition-all duration-200 cursor-pointer
+          w-full 
           ${getSizeClass()}
           ${getBorderClass()}
         `}
@@ -177,7 +170,7 @@ const Select: React.FC<SelectProps> = ({
 
       {/* Dropdown Menu */}
       {isOpen && !disabled && (
-        <ul className="absolute top-full left-0 w-[280px] mt-1 bg-white border border-gray-3 rounded-xl shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
+        <ul className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-3 rounded-xl shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
           {options.map((option) => {
             const isSelected = isMultiSelect 
               ? selectedValues.includes(option.value)
