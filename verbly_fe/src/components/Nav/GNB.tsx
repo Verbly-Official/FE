@@ -6,7 +6,7 @@ export default function GNB({ variant = "default" }) {
   switch (variant) {
     case "default":
       return (
-        <div className="relative flex justify-center items-center w-[1920px] h-[60px] bg-white px-[40px] py-[8px]">
+        <div className="relative flex justify-center items-center w-full h-[60px] bg-white px-[40px] py-[8px]">
           <Logo variant="hori" />
           <div
             className={`absolute right-[40px] w-[44px] h-[44px] rounded-[24px] px-[3px] py-[3px] flex items-center justify-center ${
@@ -30,7 +30,7 @@ export default function GNB({ variant = "default" }) {
       );
     case "home":
       return (
-        <div className="flex items-center justify-between w-[1920px] h-[60px] bg-white px-[40px] py-[8px]">
+        <div className="flex items-center justify-between w-full h-[60px] bg-white px-[40px] py-[8px]">
           <Logo variant="hori" />
           <div className="flex w-[680px] h-[40px] px-[20px] py-[8px] bg-bg1 rounded-[20px] border-[1px] border-line1">
             <img
