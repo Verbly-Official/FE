@@ -6,7 +6,7 @@ export default function SideMenu({ variant = "default" }) {
   switch (variant) {
     case "default":
       return (
-        <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px]">
+        <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
           <div className="w-[221px] h-[56px] px-[16px] py-[16px] flex flex-row gap-[20px]">
             <img src="../../src/assets/emoji/home.svg" />
             <div>Home</div>
