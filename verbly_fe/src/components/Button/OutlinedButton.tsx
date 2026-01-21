@@ -1,14 +1,14 @@
 import type { ReactNode } from "react";
 
-// Variant: 스타일 테마 ('destructive' 제거됨)
 type ButtonVariant = "primary" | "secondary" | "assistive";
-// Size: 버튼 크기
 type ButtonSize = "small" | "medium" | "large";
+type ButtonInteraction = "normal" | "hovered" | "pressed" | "disabled";
 
 interface OutlinedButtonProps {
   onClick?: () => void;
   disabled?: boolean;
-  error?: boolean; // error prop 추가
+  error?: boolean;
+  interaction?: ButtonInteraction;
   className?: string;
   iconSrc?: string;
   variant?: ButtonVariant;
@@ -16,10 +16,52 @@ interface OutlinedButtonProps {
   children?: ReactNode;
 }
 
+const SIZE_STYLES: Record<ButtonSize, string> = {
+  large: "h-[60px] px-[20px] py-[32px] text-[18px] gap-[8px]",
+  medium: "h-[48px] px-[12px] py-[24px] text-[16px] gap-[8px]",
+  small: "h-[40px] px-[8px] py-[20px] text-[14px] gap-[8px]",
+};
+
+const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
+  large: "w-auto h-[24px]",
+  medium: "w-auto h-[20px]",
+  small: "w-auto h-[16px]",
+};
+
+// [수정] 기본 상태별 스타일 통합
+const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
+  primary: {
+    normal: "border border-violet-50 text-violet-50 bg-white",
+    hovered: "border border-violet-50 text-violet-50 bg-violet-100",
+    pressed: "border border-violet-50 text-violet-50 bg-violet-90",
+    disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
+  },
+  secondary: {
+    normal: "border border-[#D9D9D9] text-violet-50 bg-white",
+    hovered: "border border-[#D9D9D9] text-violet-50 bg-gray-1",
+    pressed: "border border-[#D9D9D9] text-violet-50 bg-gray-2",
+    disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
+  },
+  assistive: {
+    normal: "border border-[#D9D9D9] text-gray-9 bg-white",
+    hovered: "border border-[#D9D9D9] text-gray-9 bg-gray-1",
+    pressed: "border border-[#D9D9D9] text-gray-9 bg-gray-2",
+    disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
+  },
+};
+
+// normal 상태 인터랙션 클래스
+const INTERACTION_PSEUDO_CLASSES: Record<ButtonVariant, string> = {
+  primary: "hover:bg-violet-100 active:bg-violet-90",
+  secondary: "hover:bg-gray-1 active:bg-gray-2",
+  assistive: "hover:bg-gray-1 active:bg-gray-2",
+};
+
 export default function OutlinedButton({
   onClick,
   disabled = false,
-  error = false, // 기본값 false
+  error = false,
+  interaction = "normal",
   className = "",
   iconSrc,
   variant = "primary",
@@ -27,56 +69,35 @@ export default function OutlinedButton({
   children,
 }: OutlinedButtonProps) {
   
-  // Variant별 스타일 매핑 (Outlined 스타일)
-  const getVariantStyle = (variant: ButtonVariant) => {
-    switch (variant) {
-      case "secondary":
-        // Secondary
-        return "border-[#D9D9D9] text-violet-50 bg-white hover:bg-gray-1 active:bg-gray-2";
-      
-      case "assistive":
-        // Assistive
-        return "border-[#D9D9D9] text-gray-9 bg-white hover:bg-gray-1 active:bg-gray-2";
-      
-      case "primary":
-      default:
-        // Primary
-        return "border-violet-50 text-violet-50 bg-white hover:bg-violet-100 active:bg-violet-90";
+  const effectiveInteraction: ButtonInteraction = disabled ? "disabled" : interaction;
+
+  const getColorStyle = () => {
+    if (error) {
+      return "border border-[#EF1111] bg-gray-1 text-[#EF1111]";
     }
-  };
-   // Size별 크기 스타일
-  const getSizeStyle = (size: ButtonSize) => {
-    switch (size) {
-      case "small":
-        return "h-[40px] w-auto px-[8px] py-[20px] text-[14px]";
-      case "large":
-        return "h-[60px] w-auto px-[20px] py-[32px] text-[18px]"; 
-      case "medium":
-      default:
-        return "h-[48px] w-auto px-[12px] py-[24px] text-[16px]";
-    }
+    
+    // Static 스타일을 기본으로 사용
+    const baseStyle = STATIC_STYLES[variant][effectiveInteraction];
+    
+    // normal 상태일 때만 hover/active 클래스 결합
+    const interactionStyle = effectiveInteraction === "normal"
+      ? INTERACTION_PSEUDO_CLASSES[variant]
+      : "";
+
+    return `${baseStyle} ${interactionStyle}`;
   };
 
-  // 배경 및 텍스트 색상 결정 로직 (우선순위: Disabled > Error > Variant)
-  const getColorStyle = () => {
-    if (disabled) {
-      return "bg-gray-2 cursor-not-allowed text-gray-9";
-    }
-    if (error) {
-      return "border-[#EF1111] bg-gray-1 text-[#EF1111]";
-    }
-    return `${getVariantStyle(variant)} cursor-pointer`;
-  };
-  
-   return (
+  return (
     <button
       onClick={onClick}
       disabled={disabled}
+      aria-pressed={effectiveInteraction === "pressed"}
       className={`
-        inline-flex justify-center items-center rounded-[8px] gap-[8px]
-        font-medium transition-colors duration-200 border
-        ${getSizeStyle(size)}
+        inline-flex justify-center items-center rounded-[8px]
+        font-medium transition-colors duration-200
+        ${SIZE_STYLES[size]}
         ${getColorStyle()}
+        ${effectiveInteraction === "normal" ? "cursor-pointer" : ""}
         ${className}
       `}
     >
@@ -84,7 +105,7 @@ export default function OutlinedButton({
         <img
           src={iconSrc}
           alt="icon"
-          className="w-[24px] h-[24px] object-contain"
+          className={`${ICON_SIZE_STYLES[size]} object-contain`}
         />
       )}
       {children}
