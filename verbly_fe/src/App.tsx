@@ -6,15 +6,18 @@ import LoginPage from "./pages/LoginPage";
 import SelectLangPage from "./pages/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
 import InboxPage from "./pages/Inbox/InboxPage";
-
 function App() {
   return (
     <BrowserRouter>
       <nav className="p-2 bg-gray-100 mb-4 flex gap-4">
-        <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
-        <Link to="/inbox" className="text-blue-500 hover:underline">Inbox</Link>
+        <Link to="/login" className="text-blue-500 hover:underline">
+          Login
+        </Link>
+        <Link to="/inbox" className="text-blue-500 hover:underline">
+          Inbox
+        </Link>
       </nav>
-      
+
       <Routes>
         <Route path="/progress-indicator" element={<ProgressIndicatorDemo />} />
         <Route path="/login" element={<LoginPage />} />
