@@ -11,19 +11,20 @@ function App() {
   return (
     <BrowserRouter>
       <nav className="p-2 bg-gray-100 mb-4 flex gap-4">
-        <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
-        <Link to="/inbox" className="text-blue-500 hover:underline">Inbox</Link>
+        <Link to="/login" className="text-blue-500 hover:underline">
+          Login
+        </Link>
+        <Link to="/inbox" className="text-blue-500 hover:underline">
+          Inbox
+        </Link>
       </nav>
-      
+
       <Routes>
         <Route path="/progress-indicator" element={<ProgressIndicatorDemo />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/select-language" element={<SelectLangPage />} />
         <Route path="/correction" element={<Correction_Main />} />
-<<<<<<< HEAD
-=======
         <Route path="/inbox" element={<InboxPage />} />
->>>>>>> 484642d3fcfc65616b405da6ade51b91092fdde4
       </Routes>
     </BrowserRouter>
   );
