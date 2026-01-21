@@ -8,11 +8,10 @@ export default function ButtonTestPage() {
       <h1 className="text-3xl font-bold text-gray-900 mb-10">UI Components: Buttons</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        
-        {/* === SECTION 1: SOLID BUTTONS === */}
+        {/* === SECTION 1: SOLID BUTTONS == */}
         <section className="space-y-6">
           <h2 className="text-xl font-bold text-gray-800 border-b pb-2">Solid Button</h2>
-          
+
           {/* 1. Sizes */}
           <div className="space-y-2">
             <h3 className="text-sm text-gray-500">Sizes (Primary)</h3>
@@ -44,11 +43,10 @@ export default function ButtonTestPage() {
           </div>
         </section>
 
-
         {/* === SECTION 2: OUTLINED BUTTONS === */}
         <section className="space-y-6">
           <h2 className="text-xl font-bold text-gray-800 border-b pb-2">Outlined Button</h2>
-          
+
           {/* 1. Sizes */}
           <div className="space-y-2">
             <h3 className="text-sm text-gray-500">Sizes (Primary)</h3>
@@ -79,7 +77,6 @@ export default function ButtonTestPage() {
             </div>
           </div>
         </section>
-
       </div>
     </div>
   );
