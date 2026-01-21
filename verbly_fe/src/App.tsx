@@ -6,7 +6,6 @@ import LoginPage from "./pages/LoginPage";
 import SelectLangPage from "./pages/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
 import InboxPage from "./pages/Inbox/InboxPage";
-
 function App() {
   return (
     <BrowserRouter>
