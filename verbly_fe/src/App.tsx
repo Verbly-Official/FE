@@ -6,6 +6,7 @@ import LoginPage from "./pages/Onboarding/LoginPage";
 import SelectLangPage from "./pages/Onboarding/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
 import Mypage from "./pages/Mypage/MyPage";
+import InboxPage from "./pages/Inbox/InboxPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/select-language" element={<SelectLangPage />} />
         <Route path="/correction" element={<Correction_Main />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/inbox" element={<InboxPage />} />
       </Routes>
     </BrowserRouter>
   );

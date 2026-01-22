@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import SideMenu from '../../components/Nav/SideMenu';
 import { SearchBar } from '../../components/SearchBar/SearchBar';
 import { Avatar } from '../../components/Avatar/Avatar';
@@ -6,9 +7,13 @@ import { Header } from '../../components/Header/Header';
 import { IconButton } from '../../components/Button/IconButton';
 import { Text } from '../../components/Text/Text';
 import { mockChatrooms } from './mocks/chatData';
+import { ChatRoomView } from './components/ChatRoomView';
+import { EmptyChatState } from './components/EmptyChatState';
 import ReloadIcon from '../../assets/emoji/reload.svg';
 
 const InboxPage = () => {
+    const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+
     return (
         <div className="flex flex-col h-screen bg-white overflow-hidden">
             {/* Global Header - Fixed Top */}
@@ -55,7 +60,10 @@ const InboxPage = () => {
                                     {mockChatrooms.map((room) => (
                                         <div
                                             key={room.id}
-                                            className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50"
+                                            onClick={() => setSelectedChatId(room.id.toString())}
+                                            className={`flex items-center gap-4 px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50
+                                                ${selectedChatId === room.id.toString() ? 'bg-violet-100' : ''}
+                                            `}
                                         >
                                             {/* Avatar */}
                                             <Avatar src={room.partner.avatarUrl} className="w-[48px] h-[48px] flex-shrink-0" />
@@ -85,14 +93,12 @@ const InboxPage = () => {
                             </div>
                         </div>
 
-                        {/* Empty Chat View - Flex 1 */}
-                        <div className="flex-1 bg-gray-50 h-full flex items-center justify-center">
-                            {/* Placeholder for empty state or selected chat */}
-                            <div className="text-center text-gray-400">
-                                {/* You can add an illustration here later */}
-                                <p>Select a chat to start messaging</p>
-                            </div>
-                        </div>
+                        {/* Chat Room View or Empty State */}
+                        {selectedChatId ? (
+                            <ChatRoomView chatroomId={selectedChatId} />
+                        ) : (
+                            <EmptyChatState />
+                        )}
                     </div>
                 </div>
             </div>
