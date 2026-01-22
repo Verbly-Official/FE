@@ -84,22 +84,20 @@ const ProfilePage = () => {
                                     <OutlinedButton
                                         size="medium"
                                         iconSrc={MessageIcon}
+                                        label="Message"
                                         className="!h-[48px] !px-8 !text-violet-50 !border-violet-50 !text-lg !font-semibold [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
                                         onClick={() => navigate('/inbox')}
-                                    >
-                                        Message
-                                    </OutlinedButton>
+                                    />
                                     <OutlinedButton
                                         size="medium"
                                         iconSrc={isFollowing ? PersonIcon : PersonPlusIcon}
+                                        label={isFollowing ? 'Following' : 'Follow'}
                                         className={`!h-[48px] !px-8 !text-lg !font-semibold transition-all ${isFollowing
                                             ? '!bg-violet-50 !text-white !border-violet-50 [&>img]:brightness-0 [&>img]:invert'
                                             : '!text-violet-50 !border-violet-50 [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]'
                                             }`}
                                         onClick={() => setIsFollowing(!isFollowing)}
-                                    >
-                                        {isFollowing ? 'Following' : 'Follow'}
-                                    </OutlinedButton>
+                                    />
                                 </div>
                             </div>
                         </div>
