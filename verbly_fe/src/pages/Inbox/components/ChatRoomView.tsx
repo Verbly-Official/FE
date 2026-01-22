@@ -6,9 +6,15 @@ import { ChatInput } from './ChatInput';
 
 interface ChatRoomViewProps {
     chatroomId: string;
+    onToggleSidebar: () => void;
+    isSidebarOpen: boolean;
 }
 
-export const ChatRoomView: React.FC<ChatRoomViewProps> = ({ chatroomId }) => {
+export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
+    chatroomId,
+    onToggleSidebar,
+    isSidebarOpen
+}) => {
     const { messages, partner, isLoading, sendMessage } = useChatroom(chatroomId);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +42,11 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({ chatroomId }) => {
     return (
         <div className="flex-1 flex flex-col h-full bg-white min-w-0">
             {/* Header */}
-            <ChatRoomHeader partner={partner} />
+            <ChatRoomHeader
+                partner={partner}
+                onToggleSidebar={onToggleSidebar}
+                isSidebarOpen={isSidebarOpen}
+            />
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto px-6 py-4 min-h-0">
