@@ -13,11 +13,11 @@ const BADGE_SIZES = {
 
 export const Badge: React.FC<BadgeProps> = ({ 
   content,
-  size = 'small', 
-  className = '' 
+  size = 'small',
+  className = ''
 }) => {
   return (
-    <span 
+    <span
       className={`
         inline-flex items-center justify-center
         rounded font-medium whitespace-nowrap

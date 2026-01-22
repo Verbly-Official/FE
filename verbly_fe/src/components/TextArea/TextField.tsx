@@ -8,6 +8,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   showBtn?: boolean;
   onSendClick?: () => void;
   onMicClick?: () => void;
+  onPlusClick?: () => void;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -18,6 +19,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   disabled,
   onSendClick,
   onMicClick,
+  onPlusClick,
   ...props
 }) => {
   const radius = shape === "round" ? "rounded-full" : "rounded-xl";
@@ -37,7 +39,14 @@ export const TextField: React.FC<TextFieldProps> = ({
         `}
       >
         {/* left plus */}
-        {showBtn && <img src={Plus} alt="plus" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" draggable={false} />}
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={onPlusClick}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 hover:opacity-70 transition disabled:opacity-40"
+        >
+          <img src={Plus} alt="plus" className="w-full h-full" draggable={false} />
+        </button>
 
         <input
           {...props}

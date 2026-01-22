@@ -1,16 +1,40 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { useChatroom } from '../../../hooks/useChatroom';
 import { ChatRoomHeader } from './ChatRoomHeader';
-import { MessageBubble } from './MessageBubble';
+import { ChatList } from '../../../components/Chat/ChatList';
 import { ChatInput } from './ChatInput';
+import type { ChatMessage } from '../../../types/chat';
 
 interface ChatRoomViewProps {
     chatroomId: string;
+    onToggleSidebar: () => void;
+    isSidebarOpen: boolean;
 }
 
-export const ChatRoomView: React.FC<ChatRoomViewProps> = ({ chatroomId }) => {
+export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
+    chatroomId,
+    onToggleSidebar,
+    isSidebarOpen
+}) => {
     const { messages, partner, isLoading, sendMessage } = useChatroom(chatroomId);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Map Message[] to ChatMessage[] for the common ChatList component
+    const chatMessages = useMemo((): ChatMessage[] => {
+        if (!partner) return [];
+
+        return messages.map(msg => ({
+            id: msg.id,
+            from: msg.role === 'user' ? 'me' : 'other',
+            text: msg.content,
+            time: new Date(msg.createdAt).toLocaleTimeString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+            }),
+            avatarUrl: msg.role === 'assistant' ? partner.avatarUrl : undefined
+        }));
+    }, [messages, partner]);
 
     // Auto-scroll to bottom when messages change
     useEffect(() => {
@@ -36,24 +60,15 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({ chatroomId }) => {
     return (
         <div className="flex-1 flex flex-col h-full bg-white min-w-0">
             {/* Header */}
-            <ChatRoomHeader partner={partner} />
+            <ChatRoomHeader
+                partner={partner}
+                onToggleSidebar={onToggleSidebar}
+                isSidebarOpen={isSidebarOpen}
+            />
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 min-h-0">
-                {messages.map((message, index) => {
-                    // Determine if we should show avatar
-                    const prevMessage = index > 0 ? messages[index - 1] : null;
-                    const showAvatar = !prevMessage || prevMessage.role !== message.role;
-
-                    return (
-                        <MessageBubble
-                            key={message.id}
-                            message={message}
-                            showAvatar={showAvatar}
-                            partnerAvatarUrl={partner.avatarUrl}
-                        />
-                    );
-                })}
+            <div className="flex-1 overflow-y-auto min-h-0">
+                <ChatList messages={chatMessages} />
                 <div ref={messagesEndRef} />
             </div>
 

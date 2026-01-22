@@ -1,0 +1,63 @@
+import React from 'react';
+
+interface StarRatingProps {
+    rating: number;
+    maxRating?: number;
+    onRatingChange?: (rating: number) => void;
+    readonly?: boolean;
+    size?: number;
+    gap?: number;
+}
+
+export const StarRating: React.FC<StarRatingProps> = ({
+    rating,
+    maxRating = 5,
+    onRatingChange,
+    readonly = false,
+    size = 24,
+    gap = 4
+}) => {
+    return (
+        <div className="flex items-center" style={{ gap: `${gap}px` }}>
+            {Array.from({ length: maxRating }).map((_, index) => {
+                const starValue = index + 1;
+                const isActive = starValue <= rating;
+
+                return (
+                    <button
+                        key={index}
+                        type="button"
+                        disabled={readonly}
+                        onClick={() => onRatingChange?.(starValue)}
+                        className={`${readonly ? 'cursor-default' : 'cursor-pointer hover:scale-110 transition-transform'} flex items-center justify-center`}
+                    >
+                        <svg
+                            width={size}
+                            height={size}
+                            viewBox="0 0 18 17"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={isActive ? 'text-[#FFB800]' : 'text-gray-300'}
+                        >
+                            {isActive ? (
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M10.4302 0.96873C9.65289 -0.322909 7.7803 -0.322911 7.00298 0.96873L5.1158 4.10457L1.55027 4.93036C0.0816405 5.2705 -0.497024 7.05144 0.491194 8.18985L2.89039 10.9537L2.57395 14.5999C2.4436 16.1018 3.95856 17.2024 5.34663 16.6144L8.7166 15.1867L12.0866 16.6144C13.4746 17.2024 14.9896 16.1018 14.8593 14.5999L14.5428 10.9537L16.942 8.18985C17.9302 7.05144 17.3516 5.2705 15.8829 4.93036L12.3174 4.10457L10.4302 0.96873Z"
+                                    fill="currentColor"
+                                />
+                            ) : (
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M7.00298 0.96873C7.7803 -0.322911 9.65289 -0.322909 10.4302 0.96873L12.3174 4.10457L15.8829 4.93036C17.3516 5.2705 17.9302 7.05144 16.942 8.18985L14.5428 10.9537L14.8593 14.5999C14.9896 16.1018 13.4746 17.2024 12.0866 16.6144L8.7166 15.1867L5.34663 16.6144C3.95856 17.2024 2.4436 16.1018 2.57395 14.5999L2.89039 10.9537L0.491194 8.18985C-0.497024 7.05144 0.0816405 5.2705 1.55027 4.93036L5.1158 4.10457L7.00298 0.96873ZM8.7166 2L6.82942 5.13584C6.55016 5.59987 6.09467 5.93081 5.56706 6.053L2.00153 6.87879L4.40072 9.64263C4.75574 10.0516 4.92972 10.5871 4.8829 11.1266L4.56646 14.7728L7.93642 13.3451C8.43509 13.1339 8.99811 13.1339 9.49678 13.3451L12.8667 14.7728L12.5503 11.1266C12.5035 10.5871 12.6775 10.0516 13.0325 9.64263L15.4317 6.87879L11.8661 6.053C11.3385 5.93081 10.883 5.59987 10.6038 5.13584L8.7166 2Z"
+                                    fill="currentColor"
+                                />
+                            )}
+                        </svg>
+                    </button>
+                );
+            })}
+        </div>
+    );
+};
