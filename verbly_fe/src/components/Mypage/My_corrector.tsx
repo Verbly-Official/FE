@@ -6,7 +6,7 @@ import { Badge } from '../Badge/ContentBadge';
 interface Corrector {
   id: string;
   name: string;
-  location: string; // 'role' 대신 '주거지'로 변경하거나 같이 사용
+  location: string; 
   imageUrl?: string;
   isPro?: boolean;
 }
@@ -32,16 +32,16 @@ const My_corrector: React.FC = () => {
         {correctors.map((corrector) => (
           <div 
             key={corrector.id} 
-            className="min-w-[172px] h-[192px] bg-white border border-gray-100 rounded-2xl flex flex-col p-3 hover:border-violet-100 hover:shadow-sm transition-all group"
+            className="w-[272px] h-[192px] bg-white border border-gray-100 rounded-2xl flex flex-col p-3 hover:border-violet-100 hover:shadow-sm transition-all group"
           >
             {/* 상단: 이미지 영역 (절반 정도 차지) */}
             <div className="relative w-full h-[110px] rounded-xl overflow-hidden bg-gray-50 mb-3">
               {/* 뱃지: 이미지 위에 위치 (absolute) */}
               <div className="absolute top-2 left-2 z-10">
                 <Badge 
-                  content={corrector.isPro ? "Professional" : "Tutor"} 
+                  content= "첨삭 완료"
                   size="small"
-                  className="!px-1.5 !py-0.5 !text-[10px] opacity-90" // 사이즈 미세 조정
+                  className="!px-1.5 !py-0.5 !text-[14px] opacity-90" // 사이즈 미세 조정
                 />
               </div>
               
@@ -56,10 +56,10 @@ const My_corrector: React.FC = () => {
             <div className="flex justify-between items-end w-full mt-auto">
               {/* 왼쪽: 이름 및 주거지 */}
               <div className="flex flex-col text-left gap-0.5">
-                <p className="text-sm font-bold text-gray-900 truncate max-w-[80px]">
+                <p className="text-[17px] font-bold text-gray-900 truncate max-w-[80px]">
                   {corrector.name}
                 </p>
-                <p className="text-[11px] text-gray-400 truncate max-w-[80px]">
+                <p className="text-[12px] text-gray-400 truncate max-w-[80px]">
                   {corrector.location}
                 </p>
               </div>
