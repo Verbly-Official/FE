@@ -56,6 +56,7 @@ const Correction_Main = () => {
                 {tabs.map((label, index) => (
                   <Tab key={index} label={label} isSelected={index === selectedTab} onClick={() => setSelectedTab(index)} />
                 ))}
+                <span className="w-full border-b border-[var(--Strok-line2,#ADADAD)]" />
               </div>
 
               <div className="pt-7 pb-3">
