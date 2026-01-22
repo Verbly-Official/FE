@@ -2,7 +2,7 @@ import { Badge } from "../../components/Badge/ContentBadge";
 import FollowButton from "../../components/Button/FollowButton";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
-import Tab from "../../components/Tab/Tab";
+import Tabs from "../../components/Tab/Tabs";
 export default function Home_Korean() {
   return (
     <div className="min-h-screen">
@@ -18,12 +18,12 @@ export default function Home_Korean() {
             <div>
               {/* Tab */}
               <div className="flex mb-[28px] justify-start gap-0">
-                <div>
-                  <Tab label="For You" />
-                </div>
-                <div>
-                  <Tab label="Hot Post" />
-                </div>
+                <Tabs
+                  tabs={["For You", "Hot Posts"]}
+                  onChange={(index) => {
+                    console.log("선택된 탭:", index);
+                  }}
+                />
               </div>
               <div className="flex flex-col gap-[20px]">
                 {/* Post Card */}
