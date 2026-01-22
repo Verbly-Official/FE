@@ -1,10 +1,12 @@
 import SideMenu from '../../components/Nav/SideMenu';
-
 import { SearchBar } from '../../components/SearchBar/SearchBar';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { Badge as ContentBadge } from '../../components/Badge/ContentBadge';
 import { Header } from '../../components/Header/Header';
+import { IconButton } from '../../components/Button/IconButton';
+import { Text } from '../../components/Text/Text';
 import { mockChatrooms } from './mocks/chatData';
+import ReloadIcon from '../../assets/emoji/reload.svg';
 
 const InboxPage = () => {
     return (
@@ -29,12 +31,13 @@ const InboxPage = () => {
                                 {/* Header */}
                                 <div className="flex items-center justify-between mb-6">
                                     <h1 className="text-[24px] font-bold text-gray-900">Chat</h1>
-                                    <button className="p-2 hover:bg-gray-100 rounded-full">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C9.53614 4 7.33236 5.11309 5.86477 6.86477" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" />
-                                            <path d="M4 4V8H8" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                    </button>
+                                    <IconButton
+                                        iconSrc={ReloadIcon}
+                                        shape="round"
+                                        size="small"
+                                        ariaLabel="Refresh"
+                                        className="!bg-transparent hover:!bg-gray-100"
+                                    />
                                 </div>
 
                                 {/* Search Bar */}
@@ -43,7 +46,7 @@ const InboxPage = () => {
                                 </div>
 
                                 {/* Section Header */}
-                                <h2 className="text-sm font-semibold text-gray-500 mb-2">메세지</h2>
+                                <Text size="small" className="text-gray-500 mb-2">메세지</Text>
                             </div>
 
                             {/* Scrollable List */}
@@ -60,7 +63,7 @@ const InboxPage = () => {
                                             {/* Content */}
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between mb-1">
-                                                    <span className="text-base font-bold text-gray-900">{room.partner.name}</span>
+                                                    <Text size="medium" className="font-bold text-gray-900">{room.partner.name}</Text>
                                                     <span className="text-xs text-gray-400 whitespace-nowrap ml-2">{room.time}</span>
                                                 </div>
                                                 <div className="flex items-center justify-between">
