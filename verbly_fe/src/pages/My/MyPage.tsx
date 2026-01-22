@@ -1,53 +1,52 @@
-import { Header } from '../../components/Header/Header';
 import SideMenu from '../../components/Nav/SideMenu';
-
-// 하위 컴포넌트 및 데이터 Import
-import { ProfileCard, mockUser, mockExpertRequests, mockCorrectionHistory } from '../../components/Mypage/My_profilecard';
-import { BadgeManagement } from '../../components/Mypage/My_badge';
-import { ExpertRequestManagement } from '../../components/Mypage/My_corrector';
-import { PremiumBanner } from '../../components/Mypage/My_banner';
-import { Dashboard } from '../../components/Mypage/My_board';
-import { CorrectionHistory } from '../../components/Mypage/My_correctedlist';
+import ProfileCard from '../../components/Mypage/My_profilecard';
+import MyBadge from '../../components/Mypage/My_badge';
+import MyCorrector from '../../components/Mypage/My_corrector';
+import MyBanner from '../../components/Mypage/My_banner';
+import MyCorrectedList from '../../components/Mypage/My_correctedlist';
+import MyBoard from '../../components/Mypage/My_board';
+import { Header } from '../../components/Header/Header';
 
 const MyPage = () => {
   return (
-    <div className="flex flex-col h-screen bg-bg0">
-      {/* Header */}
-      <Header />
-      
-      <div className="flex flex-1 overflow-hidden">
-        {/* Side Menu */}
+    <div className="min-h-screen bg-[#F8FAFC]">
+      {/* 1. Header 영역 */}
+      <div className="w-full max-w-[1920px] mx-auto">
+        <Header />
+      </div>
+
+      {/* 2. 메인 컨텐츠 영역 */}
+      <div className="flex w-full max-w-[1920px] mx-auto">
+        {/* 좌측 사이드 메뉴 */}
         <SideMenu variant="default" />
-        
-        {/* Main Content */}
-        <div className="flex-1 overflow-y-auto p-8">
-          <div className="w-auto mx-auto">
-            {/* 상단 섹션: 프로필 + 뱃지/전문가 의뢰 */}
-            <div className="flex gap-[29px] mb-8">
-              {/* 왼쪽: 프로필 카드 */}
-              <div className="w-full max-w-[615px] h-auto max-h-[550px]">
-                <ProfileCard user={mockUser} />
-              </div>
-              
-              {/* 오른쪽: 뱃지 관리 + 전문가 의뢰 관리 */}
-              <div className="flex flex-col gap-8 flex-1"> 
-                <BadgeManagement badges={mockUser.badges} />
-                <ExpertRequestManagement requests={mockExpertRequests} />
-              </div>
-            </div>
+
+        {/* 페이지 내용 */}
+        <main className="flex-1 p-[32px] overflow-x-hidden">
+          <div className="flex flex-col gap-[24px] max-w-[1200px] mx-auto">
             
-            {/* 프리미엄 배너 */}
-            <div className="mb-8">
-              <PremiumBanner />
+            {/* [상단 섹션] 좌측: 프로필 / 우측: 배지 + 전문가 의뢰 */}
+            <div className="flex flex-col h-[30%] xl:flex-row gap-[24px]">
+              {/* 프로필 카드 (고정 너비 유지 혹은 반응형) */}
+              <div className="flex-none xl:w-[40%] w-full h-full flex justify-center xl:block">
+                <ProfileCard />
+              </div>
+
+              {/* 우측: 배지(상) + 전문가 의뢰(하) */}
+              <div className="flex flex-col gap-[24px] flex-1 min-w-0">
+                <MyBadge />
+                <MyCorrector />
+              </div>
             </div>
-            
-            {/* 하단 섹션: 대시보드 + Correction History */}
-            <div className="flex flex-col gap-8">
-              <Dashboard />
-              <CorrectionHistory history={mockCorrectionHistory} />
+
+            {/* [하단 섹션] 배너 -> 게시글(Board) -> 첨삭 리스트(CorrectedList) 순서 */}
+            <div className="flex flex-col gap-[24px] w-full">
+               <MyBanner />
+               <MyBoard />
+               <MyCorrectedList />
             </div>
+
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

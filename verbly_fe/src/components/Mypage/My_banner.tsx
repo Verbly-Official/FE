@@ -1,21 +1,46 @@
-import SolidButton from '../../components/Button/SolidButton';
+import React from 'react';
+import SolidButton from '../Button/SolidButton';
+import BannerIcon from './img/BannerEmoji.svg';
 
-// [수정] export 추가
-export const PremiumBanner = () => (
-  <div className="bg-gradient-to-r from-violet-50 to-pink-40 rounded-xl p-10 flex items-center justify-between shadow-lg relative overflow-hidden">
-    <div className="absolute left-8 top-1/2 -translate-y-1/2 text-8xl opacity-20 select-none">📝</div>
-    <div className="flex items-center gap-8 z-10">
-      <div className="text-7xl select-none">📝</div>
-      <div>
-        <h3 className="text-3xl font-bold text-white mb-2">Upgrade to Premium</h3>
-        <p className="text-white text-opacity-90 text-lg">Get unlimited AI corrections & templates</p>
+const My_banner: React.FC = () => {
+  return (
+    <div className="relative w-full h-[124px] border border-pink-50 rounded-2xl bg-pink-100 shadow-sm overflow-hidden flex items-center">
+      
+      {/* 1. 이미지 영역 */}
+      <img 
+        src={BannerIcon} 
+        alt="" 
+        className="absolute left-[-10px] w-[200px] h-[220px] bottom-[-60px] z-0 pointer-events-none object-contain"
+      />
+
+      {/* 2. 콘텐츠 영역 (텍스트 + 버튼) */}
+      {/* pl-[140px]로 이미지 영역만큼 여백 확보 */}
+      <div className="relative z-10 w-full flex justify-between items-center px-6 pl-[150px]">
+        
+        {/* 텍스트 */}
+        <div className="flex flex-col justify-center gap-1">
+          <p className="text-xl font-bold bg-[image:var(--gradient-4)] bg-clip-text text-transparent leading-tight tracking-tight">
+            Upgrade to Premium
+          </p>
+          <p className="text-sm text-gray-500 font-medium leading-snug">
+            Get unlimited AI corrections & templates
+          </p>
+        </div>
+
+        {/* 버튼 */}
+        <div className="shrink-0">
+          <SolidButton 
+            label="BUY NOW" 
+            onClick={() => {}} 
+            size="medium" // large -> medium으로 크기 조정
+            variant="primary"
+            // !text-white를 추가하여 글자색 강제 지정
+            className="bg-[image:var(--gradient-4)] !text-white !font-bold px-6"
+          />
+        </div>
       </div>
     </div>
-    <SolidButton 
-      variant="primary" 
-      size="large" 
-      label='BUY NOW'
-      className="!bg-white !text-violet-50 hover:!bg-gray-1 z-10 border-none"
-    />
-  </div>
-);
+  );
+};
+
+export default My_banner;

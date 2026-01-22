@@ -1,19 +1,47 @@
-// [수정] export 추가
-export const Dashboard = () => (
-  <div className="bg-white rounded-xl border border-line1 p-6">
-    <div className="flex items-center gap-2 mb-6">
-      <span className="text-lg">≡</span>
-      <h3 className="text-lg font-bold text-gray-10">Dashboard</h3>
-    </div>
-    
-    <div className="flex items-center gap-6 p-8 bg-gray-50 rounded-xl border border-line1">
-      <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-        <div className="text-5xl">📄</div>
+import React from 'react';
+
+interface RecentCountCardProps {
+  title?: string;
+  count?: number;
+  unit?: string;
+  imageSrc?: string;
+}
+
+const RecentCountCard: React.FC<RecentCountCardProps> = ({ 
+  title = '도움 준 글',
+  count = 45,
+  unit = '개',
+  imageSrc
+}) => {
+  return (
+    <div className="w-full bg-white rounded-2xl border border-gray-200 p-6 flex items-center justify-between">
+      {/* 텍스트 영역 */}
+      <div className="flex flex-col gap-1">
+        <p className="text-sm text-gray-600 font-medium">
+          {title}
+        </p>
+        <p className="text-3xl font-bold text-gray-900">
+          {count}<span className="text-2xl ml-1">{unit}</span>
+        </p>
       </div>
-      <div>
-        <div className="text-sm text-gray-5 mb-2 font-semibold">도움 준 글</div>
-        <div className="text-4xl font-bold text-gray-10">45개</div>
+
+      {/* 이미지 영역 */}
+      <div className="w-32 h-20 rounded-xl overflow-hidden flex items-center justify-center">
+        {imageSrc ? (
+          <img 
+            src={imageSrc} 
+            alt={title}
+            className="w-full h-full object-contain"
+          />
+        ) : (
+          // 이미지 없을 때 플레이스홀더
+          <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+            <span className="text-gray-300 text-4xl"></span>
+          </div>
+        )}
       </div>
     </div>
-  </div>
-);
+  );
+};
+
+export default RecentCountCard;

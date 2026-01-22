@@ -2,7 +2,7 @@ import SideMenu from '../../components/Nav/SideMenu';
 
 import { SearchBar } from '../../components/SearchBar/SearchBar';
 import { Avatar } from '../../components/Avatar/Avatar';
-import { Badge as ContentBadge } from '../../components/Badge/ContentBadge';
+import { ContentBadge } from '../../components/Badge/ContentBadge';
 import { Header } from '../../components/Header/Header';
 import { mockChatrooms } from './mocks/chatData';
 

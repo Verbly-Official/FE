@@ -1,4 +1,4 @@
-import { Badge } from "../../components/Badge/ContentBadge";
+import { ContentBadge } from "../../components/Badge/ContentBadge";
 
 const documents = [
   {
@@ -45,7 +45,7 @@ export default function DocumentTable() {
       }
     };
 
-    return <Badge content={status} size="small" className={getVariantClass(status)} />;
+    return <ContentBadge content={status} size="small" className={getVariantClass(status)} />;
   };
 
   return (

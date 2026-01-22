@@ -103,6 +103,7 @@ export default function OutlinedButton({
           className={`${ICON_SIZE_STYLES[size]} object-contain`}
         />
       )}
+      {label && <span>{label}</span>}
     </button>
   );
 }

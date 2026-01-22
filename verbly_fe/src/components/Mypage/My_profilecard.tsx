@@ -1,103 +1,94 @@
-import type { User } from '../../types/user'; 
-import OutlinedButton from '../../components/Button/OutlinedButton'; // 경로 수정 확인
-import basicProfile from '../../components/Profile/img/basicProfile.svg';
+import React from 'react';
+import BasicProfile from '../Profile/img/basicProfile.svg'; 
+import { OutlinedButton } from '../Button'; // index.ts가 있다면 이렇게 import 가능
+import LinearProgress from '../ProgressIndicator/LinearProgress';
 
-// [수정] 외부에서 사용할 수 있도록 export 추가
-export const mockUser = {
-  id: '1',
-  name: 'Alice',
-  role: 'KOREAN' as const,
-  profileImg: '',
-  introduction: '',
-  level: 3,
-  stats: {
-    follow: 24,
-    streak: 42,
-    point: 150
-  },
-  progress: 50,
-  badges: ['출석왕200', '출석왕200', '출석왕200', '출석왕200', '출석왕200', '출석왕200', '출석왕200', '출석왕4']
-};
-
-// [수정] 외부 export 추가
-export const mockExpertRequests = [
-  { id: 1, name: 'Sarah Jenkins', location: 'New york, USA', profileImg: '' },
-  { id: 2, name: 'Sarah Jenkins', location: 'New york, USA', profileImg: '' },
-  { id: 3, name: 'Sarah Jenkins', location: 'New york, USA', profileImg: '' }
-];
-
-// [수정] 외부 export 추가
-export const mockCorrectionHistory = [
-  { id: 1, title: 'Travel Diary - Day 1', date: 'Yesterday', status: 'Completed' },
-  { id: 2, title: 'Travel Diary - Day 1', date: 'Yesterday', status: 'Completed' },
-  { id: 3, title: 'Travel Diary - Day 1', date: 'Yesterday', status: 'Completed' }
-];
-
-interface UserStats {
-  follow: number;
-  streak: number;
-  point: number;
-}
-interface ProfileUser extends Omit<User, 'badges' | 'level'> {
-  level: number;
-  stats: UserStats;
-  progress: number;
-  badges: string[];
+interface UserProfileProps {
+  user?: {
+    name: string;
+    profileImage?: string;
+    followers: number;
+    following: number;
+    points: number;
+    level: number;
+  };
 }
 
-// [수정] export 추가
-export const ProfileCard = ({ user }: { user: ProfileUser }) => (
-  <div className="bg-white rounded-xl border border-line1 p-8 h-auto max-h-[547px] w-full max-w-[615px]">
-    <div className="flex justify-end mb-6">
-      <OutlinedButton 
-        variant='assistive'
-        size="small"
-        label='프로필 수정'
-        className="text-violet-50 text-sm font-semibold hover:text-violet-40 transition-colors"
-      />
-    </div>
-    
-    <div className="flex flex-col items-center">
-      <div className="relative mb-6">
-        <div className="w-[180px] h-[180px] rounded-full bg-gray-300 relative overflow-hidden">
-           {/* absolute 위치 조정 제거하여 중앙 정렬 단순화 */}
-          {user.profileImg ? (
+const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
+  const userData = user || {
+    name: "Alice",
+    profileImage: null,
+    followers: 120,
+    following: 45,
+    points: 150,
+    level: 3,
+  };
+
+  return (
+    <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+      {/* 상단 배경 배너 */}
+      {/* h-32(128px) 높이 설정 */}
+      <div className="h-full bg-[image:var(--gradient-1-main)] w-full"></div>
+
+      <div className="px-6 pb-6 flex-1 flex flex-col">
+        {/* 프로필 이미지 & 편집 버튼 */}
+        <div className="relative flex justify-between items-end -mt-14 mb-4">
+          <div className="p-1 bg-white rounded-full relative z-10">
             <img 
-              src={user.profileImg} 
-              alt={user.name}
-              className="w-full h-full object-cover"
+              src={userData.profileImage || BasicProfile} 
+              alt="프로필" 
+              className="w-28 h-28 rounded-full object-cover bg-gray-50 border border-gray-100"
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-100">
-              <img src={basicProfile} alt="default" className="w-1/2 opacity-50" />
+          </div>
+          <div className="mb-1">
+             <OutlinedButton
+               label="프로필 수정" 
+               onClick={() => {}} 
+               size="small" 
+               variant="assistive"
+               // w-auto 등으로 버튼 너비 자동 조정
+               className="!px-3"
+             />
+          </div>
+        </div>
+
+        {/* 유저 정보 (이름) */}
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-gray-9">{userData.name}</h2>
+        </div>
+
+        {/* 스탯 정보 (Followers, Streak, Points) */}
+        <div className="flex justify-between items-center w-full mb-8 px-2">
+          <div className="flex items-start gap-0.5">
+            <span className="text-10px text-gray-9">{userData.followers}</span>
+            <span className="text-10px text-gray-5">Follow</span>
+          </div>
+          <div className="flex items-start gap-0.5">
+            <span className="text-10px text-gray-9">{userData.following}</span>
+            <span className="text-10px  text-gray-5">Streak</span>
+          </div>
+          <div className="flex items-start gap-0.5">
+            <span className="text-10px text-gray-9">{userData.points}</span>
+            <span className="text-10px text-gray-5">Point</span>
+          </div>
+        </div>
+
+        {/* 레벨 정보 (구분선 하단) */}
+        <div className="border-t border-gray-100 pt-5 mt-auto">
+            <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-9 text-sm">Level</span>
             </div>
-          )}
+            {/* LinearProgress 스타일 조정 */}
+            <LinearProgress 
+                value={50} 
+                className="h-2 rounded-full bg-gray-100" 
+                // 내부 bar 색상을 변경하고 싶다면 LinearProgress 컴포넌트의 props나 css 수정 필요
+            />
+            <p className="text-right text-xs text-gray-400 mt-1">Lv.{userData.level} ({userData.points} / 300 XP)</p>
         </div>
       </div>
     </div>
-      
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-gray-10 mb-2">{user.name}</h2>
-    </div>
-    
-    <div className="flex items-center justify-center gap-6 mb-8">
-      <span className="text-gray-9 font-medium">{user.stats.follow} Follow</span>
-      <span className="text-gray-9 font-medium">{user.stats.streak} Streak</span>
-      <span className="text-gray-9 font-medium">{user.stats.point} Point</span>
-    </div>
+  );
+};
 
-    <div className="w-full mb-2">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-gray-6 font-semibold">Level</span>
-        <span className="text-gray-9 font-semibold">Lv.{user.level} ({user.progress}%)</span>
-      </div>
-    </div>
-    
-    <div className="w-full bg-gray-2 h-4 rounded-full mb-6">
-      <div 
-        className="h-full bg-gradient-to-r from-violet-50 to-blue-60 rounded-full transition-all"
-        style={{ width: `${user.progress}%` }}
-      ></div>
-    </div>
-  </div>
-);
+export default My_profilecard;

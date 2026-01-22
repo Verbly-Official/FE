@@ -1,4 +1,4 @@
-import { Badge } from "../../components/Badge/ContentBadge";
+import { ContentBadge } from "../../components/Badge/ContentBadge";
 import FollowButton from "../../components/Button/FollowButton";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
@@ -75,7 +75,7 @@ export default function Home_Korean() {
                       </div>
                       <FollowButton />
                     </div>
-                    <Badge content="Request Correction" size="medium" />
+                    <ContentBadge content="Request Correction" size="medium" />
                   </div>
 
                   {/* Content */}
