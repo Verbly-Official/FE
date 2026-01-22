@@ -8,7 +8,6 @@ import InboxPage from "./pages/Inbox/InboxPage";
 import Home_Korean from "./pages/Home/Home_Korean";
 import Mypage from "./pages/My/MyPage";
 import Correction_Write from "./pages/Correction/WriteCorrectionPage";
-import InboxPage from "./pages/Inbox/InboxPage";
 
 function App() {
   return (
