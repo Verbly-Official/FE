@@ -5,7 +5,7 @@ import SideMenu from "../../components/Nav/SideMenu";
 import SolidButton from "../../components/Button/SolidButton";
 import Plus from "../../assets/emoji/plus.svg?react";
 import Tab from "../../components/Tab/Tab";
-import BtnTab_C from "./BtnTab_C";
+import BtnTab_C from "./BtnTab_c";
 import Sidebar from "./SideBar";
 import DocumentTable from "./DocumentTable";
 import File from "../../assets/emoji/file.svg?react";
@@ -60,7 +60,6 @@ const Correction_Main = () => {
               </div>
 
               <div className="pt-7 pb-3">
-                {" "}
                 <BtnTab_C />
               </div>
 
