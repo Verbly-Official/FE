@@ -34,7 +34,7 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({ chatroomId }) => {
     }
 
     return (
-        <div className="flex-1 flex flex-col h-full bg-white">
+        <div className="flex-1 flex flex-col h-full bg-white min-w-0">
             {/* Header */}
             <ChatRoomHeader partner={partner} />
 

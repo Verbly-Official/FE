@@ -33,6 +33,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled = false }
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onSendClick={handleSend}
                     disabled={disabled}
                     className="flex-1"
                 />
