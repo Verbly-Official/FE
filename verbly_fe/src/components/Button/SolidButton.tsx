@@ -28,7 +28,6 @@ const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
   small: "w-auto h-[16px]",
 };
 
-// [수정] 기본 상태별 스타일 (Source of Truth)
 const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
   primary: {
     normal: "bg-violet-50 text-white",
@@ -50,7 +49,6 @@ const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = 
   },
 };
 
-// normal 상태일 때 추가될 인터랙션 클래스
 const INTERACTION_PSEUDO_CLASSES: Record<ButtonVariant, string> = {
   primary: "hover:bg-violet-40 active:bg-violet-30",
   secondary: "hover:bg-violet-90 active:bg-violet-80",
@@ -71,16 +69,12 @@ export default function SolidButton({
 
   const effectiveInteraction: ButtonInteraction = disabled ? "disabled" : interaction;
 
-  // 스타일 계산 로직 간소화
   const getColorStyle = () => {
     if (error) {
       return "bg-gray-1 text-[#EF1111]";
     }
 
-    // 기본적으로 Static 스타일을 사용
     const baseStyle = STATIC_STYLES[variant][effectiveInteraction];
-    
-    // normal 상태일 때만 hover/active 클래스 추가
     const interactionStyle = effectiveInteraction === "normal" 
       ? INTERACTION_PSEUDO_CLASSES[variant] 
       : "";
