@@ -8,6 +8,7 @@ import Sidebar from "./SideBar";
 import DocumentTable from "./DocumentTable";
 import File from "../../assets/emoji/file.svg?react";
 import { Pagination } from "../../components/Pagination/Pagination";
+import plusSrc from "../../assets/emoji/plus.svg";
 
 const Correction_Main = () => {
   const [page, setPage] = useState(1);
@@ -32,8 +33,7 @@ const Correction_Main = () => {
           <div className="flex">
             {/* 왼쪽 메뉴 카드 */}
             <div className="w-[278px] h-[940px] px-[20px] py-9 bg-white rounded-l-[12px] border border-r-0 border-[#E5E7EB]">
-              {/* ✅ SolidButton은 children 대신 label 사용 */}
-              <SolidButton size="large" className="w-full mb-8" label="새 글 작성하기" />
+              <SolidButton size="large" className="w-full mb-8" iconSrc={plusSrc} label="새 글 작성하기" />
               <Sidebar />
             </div>
 
