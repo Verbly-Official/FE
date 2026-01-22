@@ -1,4 +1,4 @@
-import { Badge } from "../../components/Badge/ContentBadge";
+import { ContentBadge } from "../../components/Badge/ContentBadge";
 import Star_t from "../../assets/emoji/star-true.svg";
 import Star_f from "../../assets/emoji/star-false.svg";
 
@@ -50,7 +50,7 @@ export default function DocumentTable() {
       }
     };
 
-    return <Badge content={status} size="small" className={getVariantClass(status)} />;
+    return <ContentBadge content={status} size="small" className={getVariantClass(status)} />;
   };
 
   return (
