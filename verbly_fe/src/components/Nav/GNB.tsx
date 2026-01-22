@@ -1,5 +1,6 @@
 import Logo from "../Logo/Logo";
 import SearchIcon from "../../assets/emoji/search-gray.svg";
+import { SearchBar } from "../SearchBar/SearchBar";
 
 export default function GNB({ variant = "default" }) {
   const isActive = true;
@@ -32,16 +33,10 @@ export default function GNB({ variant = "default" }) {
       return (
         <div className="flex items-center justify-between w-full h-[60px] bg-white px-[40px] py-[8px]">
           <Logo variant="hori" />
-          <div className="flex w-[680px] h-[40px] px-[20px] py-[8px] bg-bg1 rounded-[20px] border-[1px] border-line1">
-            <img
-              src={SearchIcon}
-              className="mr-[12px] w-[24px] h-[24px] fill-gray-4"
-            />
-            <input
-              placeholder="Search topcis, users or keywords,,,"
-              className="w-[604px] text-[16px] truncate focus:outline-none placeholder-gray-4"
-            ></input>
-          </div>
+          <SearchBar
+            shape="round"
+            placeholder="Search topcis, users or keywords,,,"
+          />
           <div
             className={`relative w-[44px] h-[44px] rounded-[24px] px-[3px] py-[3px] flex items-center justify-center ${
               isActive ? "bg-violet-90" : ""
