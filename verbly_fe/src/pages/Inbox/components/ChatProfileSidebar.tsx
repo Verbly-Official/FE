@@ -58,7 +58,7 @@ export const ChatProfileSidebar: React.FC<ChatProfileSidebarProps> = ({ chatroom
                 <OutlinedButton
                     size="medium"
                     iconSrc={PersonIcon}
-                    className="w-full !text-violet-50 !border-violet-50 !text-subtitle6-semi18"
+                    className="w-full !text-violet-50 !border-violet-50 !text-subtitle6-semi18 [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
                 >
                     View Profile
                 </OutlinedButton>
@@ -66,7 +66,7 @@ export const ChatProfileSidebar: React.FC<ChatProfileSidebarProps> = ({ chatroom
                 <OutlinedButton
                     size="medium"
                     iconSrc={EditIcon}
-                    className="w-full !text-violet-50 !border-violet-50 !text-subtitle6-semi18"
+                    className="w-full !text-violet-50 !border-violet-50 !text-subtitle6-semi18 [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
                 >
                     Review
                 </OutlinedButton>
