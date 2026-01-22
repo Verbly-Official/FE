@@ -6,6 +6,7 @@ type ButtonInteraction = "normal" | "hovered" | "pressed" | "disabled";
 
 interface OutlinedButtonProps {
   onClick?: () => void;
+  label?: string;
   disabled?: boolean;
   error?: boolean;
   interaction?: ButtonInteraction;
@@ -13,7 +14,6 @@ interface OutlinedButtonProps {
   iconSrc?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  children?: ReactNode;
 }
 
 const SIZE_STYLES: Record<ButtonSize, string> = {
@@ -64,7 +64,7 @@ export default function OutlinedButton({
   iconSrc,
   variant = "primary",
   size = "large",
-  children,
+  label,
 }: OutlinedButtonProps) {
   
   const effectiveInteraction: ButtonInteraction = disabled ? "disabled" : interaction;
@@ -103,7 +103,6 @@ export default function OutlinedButton({
           className={`${ICON_SIZE_STYLES[size]} object-contain`}
         />
       )}
-      {children}
     </button>
   );
 }

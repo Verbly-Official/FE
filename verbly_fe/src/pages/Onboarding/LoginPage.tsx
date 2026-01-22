@@ -38,9 +38,8 @@ const LoginPage = () => {
               iconSrc={googleIcon}
               className="justify-center !text-gray-9 text-opacity-85"
               onClick={handleLogin}
-              >
-                <Text size="medium" state="default">Continue with Google</Text>
-            </SolidButton>
+              label='Continue with Google'
+              />
 
             {/* 카카오 로그인 버튼 */}
             <SolidButton
@@ -49,11 +48,8 @@ const LoginPage = () => {
               iconSrc={kakaoIcon}
               className="!bg-[#FFE100]"
               onClick={handleLogin}
-            >
-              <Text size="medium" state="default">
-                Continue with Kakao Talk
-              </Text>
-            </SolidButton>
+              label='Continue with Kakap talk'
+            />
           </div>
         </div>
       </div>
