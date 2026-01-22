@@ -85,7 +85,6 @@ const Select: React.FC<SelectProps> = ({
     };
   }, []);
 
-  // Styles
   const getSizeClass = () => {
     switch (size) {
       case 'small': return 'h-[40px] px-3 text-sm rounded-xl';
@@ -119,7 +118,6 @@ const Select: React.FC<SelectProps> = ({
       className={`relative flex flex-col gap-2 w-[280px] outline-none ${className}`}
       ref={containerRef}
     >
-      {/* Select Box */}
       <div
         onClick={handleToggle}
         className={`
@@ -168,7 +166,6 @@ const Select: React.FC<SelectProps> = ({
         />
       </div>
 
-      {/* Dropdown Menu */}
       {isOpen && !disabled && (
         <ul className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-3 rounded-xl shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
           {options.map((option) => {
@@ -195,7 +192,6 @@ const Select: React.FC<SelectProps> = ({
         </ul>
       )}
 
-      {/* Error Message */}
       {error && errorMessage && (
         <span className="text-xs text-red-500 mt-1">{errorMessage}</span>
       )}

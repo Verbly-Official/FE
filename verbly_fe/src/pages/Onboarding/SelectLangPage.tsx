@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Select from '../components/Select/Select';
-import SolidButton from '../components/Button/SolidButton';
-import OutlinedButton from '../components/Button/OutlinedButton';
-import Logo from '../components/Logo/Logo';
-import { Text } from '../components/Text/Text';
+import Select from '../../components/Select/Select';
+import SolidButton from '../../components/Button/SolidButton';
+import OutlinedButton from '../../components/Button/OutlinedButton';
+import Logo from '../../components/Logo/Logo';
+import { Text } from '../../components/Text/Text';
 
 // 언어 선택 옵션 정의
 const LANGUAGE_OPTIONS = [
