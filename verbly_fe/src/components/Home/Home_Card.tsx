@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 import { UserProfile } from "../Profile/Profile";
+=======
+import { useState } from "react";
+import { Badge } from "../Badge/ContentBadge";
+import { UserProfile } from "../Profile/Profile";
+import { CommentItem } from "../Comment/CommentItem";
+import { TextField } from "../TextArea/TextField";
+import { IconButton } from "../Button";
+>>>>>>> e869990 ([feat/#90] Home_Card 구현)
 
 type HomeCardProps = {
   isCorrected: boolean;
@@ -14,11 +23,23 @@ const MOCK_USER = {
   badges: "Expert", // Badge 컴포넌트 타입에 맞춰 수정 필요
 };
 
+<<<<<<< HEAD
 export default function Home_Card() {
   return (
     <div className="flex flex-col bg-white w-[1072px] my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
       {/* Profile */}
       <UserProfile data={MOCK_USER} size="medium" />
+=======
+export default function Home_Card({ isCorrected = true }: HomeCardProps) {
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
+  return (
+    <div className="flex flex-col bg-white w-full my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
+      <div className="flex flex-row items-center justify-between">
+        {/* Profile */}
+        <UserProfile data={MOCK_USER} size="medium" />
+        {!isCorrected && <Badge content="Request Correction" size="medium" />}
+      </div>
+>>>>>>> e869990 ([feat/#90] Home_Card 구현)
       {/* Content */}
       <div>
         I worked all day and when I came home, I didn’t want to do anything. Is
@@ -37,11 +58,66 @@ export default function Home_Card() {
           <img src="../../src/assets/emoji/heart-false.svg" />
           <div>12</div>
         </div>
+<<<<<<< HEAD
         <div className="flex flex-row gap-[4px]">
+=======
+        <div
+          onClick={() => setIsCommentOpen((prev) => !prev)}
+          className="flex flex-row gap-[4px]"
+        >
+>>>>>>> e869990 ([feat/#90] Home_Card 구현)
           <img src="../../src/assets/emoji/message1.svg" />
           <div>12</div>
         </div>
       </div>
+<<<<<<< HEAD
+=======
+
+      {/* Comment Section */}
+      <div className="w-full h-auto px-[12px] py-[24px] rounded-[8px] flex flex-col gap-[12px] bg-bg0">
+        <div className="flex flex-row text-blue-60 text-[16px] gap-[4px] font-medium">
+          <img
+            src="../../src/assets/emoji/message1.svg"
+            className="w-[20px] h-[20px]"
+          />
+          <div>COMMENTS</div>
+          <div>(12)</div>
+        </div>
+        <div className="flex flex-col gap-[16px]">
+          <CommentItem
+            author="Mark"
+            time="30min"
+            content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+            avatarUrl=""
+          />
+          <CommentItem
+            author="Mark"
+            time="30min"
+            content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+            avatarUrl=""
+          />
+          <CommentItem
+            author="Mark"
+            time="30min"
+            content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+            avatarUrl=""
+          />
+        </div>
+      </div>
+      <div className="flex flex-row items-center w-full gap-[12px]">
+        <div className="w-[40px] h-[40px] bg-gray-200"></div>
+        <div className="flex-1 w-[720px]">
+          <TextField shape="round" showBtn={false} />
+        </div>
+        <div>
+          <IconButton
+            ariaLabel="전송"
+            size="medium"
+            iconSrc={"../../src/assets/emoji/send-filled.svg"}
+          />
+        </div>
+      </div>
+>>>>>>> e869990 ([feat/#90] Home_Card 구현)
     </div>
   );
 }
