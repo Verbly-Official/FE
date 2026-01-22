@@ -3,6 +3,7 @@ import FollowButton from "../../components/Button/FollowButton";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import Tabs from "../../components/Tab/Tabs";
+import TrendingTag from "../../components/TrendingTag/TrendingTag";
 export default function Home_Korean() {
   return (
     <div className="min-h-screen">
@@ -108,7 +109,7 @@ export default function Home_Korean() {
           </div>
           <div className="mt-[32px] flex flex-col gap-[32px]">
             <div className="bg-white w-[384px] h-[503px]">Profile</div>
-            <div className="bg-white w-[384px] h-[483px]">Trending Tags</div>
+            <TrendingTag />
           </div>
         </div>
       </div>
