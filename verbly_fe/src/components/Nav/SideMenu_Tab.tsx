@@ -1,8 +1,17 @@
-export default function SideMenu_Tab() {
-  const isSelected = true;
+type SideMenuProps = {
+  label: string;
+  isSelected: boolean;
+  onClick: () => void;
+};
+export default function SideMenu_Tab({
+  label,
+  isSelected,
+  onClick,
+}: SideMenuProps) {
   return (
     <div
-      className={`w-[172px] h-[56px] flex items-center gap-[20px] px-[16px] rounded-[4px] text-[20px] ${
+      onClick={onClick}
+      className={`w-[172px] h-[56px] flex items-center gap-[20px] px-[16px] rounded-[4px] text-[20px] cursor-pointer ${
         isSelected
           ? "bg-violet-100 text-violet-50 border-[1px] border-violet-50"
           : "bg-white"
@@ -16,7 +25,7 @@ export default function SideMenu_Tab() {
         }`}
         className="w-[20px] h-[20px]"
       />
-      <span>Text</span>
+      <span>{label}</span>
     </div>
   );
 }

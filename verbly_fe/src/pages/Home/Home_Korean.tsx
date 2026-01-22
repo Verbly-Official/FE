@@ -2,6 +2,7 @@ import { Badge } from "../../components/Badge/ContentBadge";
 import FollowButton from "../../components/Button/FollowButton";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
+import SideMenu_Tab from "../../components/Nav/SideMenu_Tab";
 import Tabs from "../../components/Tab/Tabs";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
 export default function Home_Korean() {
@@ -26,6 +27,11 @@ export default function Home_Korean() {
                   }}
                 />
               </div>
+              <SideMenu_Tab
+                label="hi"
+                isSelected={true}
+                onClick={() => console.log("hi")}
+              />
               <div className="flex flex-col gap-[20px]">
                 {/* Post Card */}
                 <div className="flex flex-col bg-white w-[1072px] my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
