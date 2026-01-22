@@ -32,6 +32,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     shape="round"
                     size="medium"
                     ariaLabel="Notifications"
+                    className="bg-white"
                 />
                 <div className="w-[8px] h-[8px] absolute right-[10px] top-[10px] rounded-full bg-violet-500 pointer-events-none" />
             </div>

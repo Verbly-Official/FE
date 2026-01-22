@@ -22,8 +22,8 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 }) => {
 
     const bgColor = variant === "my"
-        ? "bg-violet-100" 
-        : "bg-bg2"; 
+        ? "bg-violet-100"
+        : "bg-bg2";
 
     return (
         <div className={`flex gap-3 ${className}`}>

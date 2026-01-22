@@ -14,9 +14,9 @@ const IMG_PIXELS = {
   large: 180,
 };
 
-export const UserProfile: React.FC<ProfileProps> = ({ 
-  data, 
-  size = 'small', 
+export const UserProfile: React.FC<ProfileProps> = ({
+  data,
+  size = 'small',
 }) => {
   const renderImage = () => (
     <img
@@ -26,6 +26,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
       style={{ width: IMG_PIXELS[size], height: IMG_PIXELS[size] }}
     />
   );
+
 
   if (size === 'small') {
     return (
@@ -47,6 +48,8 @@ export const UserProfile: React.FC<ProfileProps> = ({
           <div className="flex items-center gap-2">
             <span className="font-bold text-lg text-gray-900">{data.name}</span>
           </div>
+
+
           {data.lastActive && (
             <span className="text-sm text-gray-400">{data.lastActive}</span>
           )}

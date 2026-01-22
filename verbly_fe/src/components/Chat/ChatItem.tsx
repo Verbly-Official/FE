@@ -34,7 +34,7 @@ export const ChatItem: React.FC<ChatItemProps> = ({
                 <div className={`flex items-end gap-2 ${isMe ? "flex-row-reverse" : "flex-row"} ${!isMe ? "ml-[64px]" : ""}`}>
                     {/* 말풍선 */}
                     <div
-                        className={`px-5 py-2 text-[16px] font-[500] leading-[150%] [word-break:break-word] max-w-[528px] antialiased
+                        className={`px-5 py-2 text-body1-medium16 [word-break:break-word] max-w-[528px] antialiased
               ${isMe
                                 ? "bg-violet-60 text-white rounded-[12px_12px_0_12px]"
                                 : "bg-violet-100 text-gray-8 rounded-[12px_12px_12px_0]"
