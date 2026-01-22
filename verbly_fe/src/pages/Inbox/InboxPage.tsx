@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import SideMenu from '../../components/Nav/SideMenu';
 
-import { ContentBadge } from '../../components/Badge/ContentBadge';
 import { Header } from '../../components/Header/Header';
 import { ChatRoomView } from './components/ChatRoomView';
 import { EmptyChatState } from './components/EmptyChatState';

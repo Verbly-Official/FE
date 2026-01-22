@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 type ButtonVariant = "primary" | "secondary" | "assistive";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonInteraction = "normal" | "hovered" | "pressed" | "disabled";
@@ -103,6 +101,7 @@ export default function SolidButton({
           className={`${ICON_SIZE_STYLES[size]} object-contain`}
         />
       )}
+      {label && <span>{label}</span>}
     </button>
   );
 }
