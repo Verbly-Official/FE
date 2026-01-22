@@ -1,6 +1,6 @@
 import React from 'react';
 import { type User } from '../../types/user';
-import { ContentBadge } from '../Badge/ContentBadge';
+import { Badge } from '../Badge/ContentBadge';
 
 interface ProfileProps {
   data: User;
@@ -68,7 +68,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
             <span className="text-gray-600">LV.{data.level}</span>
           )}
           {data.badges && (
-            <ContentBadge content={data.badges} size="small" />
+            <Badge content={data.badges} size="small" />
           )}
         </div>
       </div>

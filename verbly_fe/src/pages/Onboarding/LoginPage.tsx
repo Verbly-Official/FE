@@ -1,10 +1,8 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate import 추가
 import Logo from '../../components/Logo/Logo';
 import googleIcon from '../../assets/emoji/google.svg';
 import kakaoIcon from '../../assets/emoji/kakao.svg';
 import SolidButton from '../../components/Button/SolidButton';
-import {Text} from '../../components/Text/Text';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // navigate 함수 생성
