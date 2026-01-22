@@ -371,4 +371,42 @@ export const mockMessages: Record<string, Message[]> = {
             promptType: 'default_chat',
         },
     ],
+    // Chatroom 9: Homework help
+    '9': [
+        {
+            id: 'msg-9-1',
+            chatId: '9',
+            role: 'user',
+            content: 'Hi Lucas, can you check my homework please?',
+            createdAt: '2026-01-14T10:00:00Z',
+            promptType: 'default_chat',
+        },
+        {
+            id: 'msg-9-2',
+            chatId: '9',
+            role: 'assistant',
+            content: 'Sure! Send it over.',
+            createdAt: '2026-01-14T10:05:00Z',
+            promptType: 'default_chat',
+        },
+    ],
+    // Chatroom 10: Meeting coordination
+    '10': [
+        {
+            id: 'msg-10-1',
+            chatId: '10',
+            role: 'user',
+            content: 'See you at the meeting!',
+            createdAt: '2026-01-10T09:00:00Z',
+            promptType: 'default_chat',
+        },
+        {
+            id: 'msg-10-2',
+            chatId: '10',
+            role: 'assistant',
+            content: 'Looking forward to it!',
+            createdAt: '2026-01-10T09:10:00Z',
+            promptType: 'default_chat',
+        },
+    ],
 };
