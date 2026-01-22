@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import ProgressIndicatorDemo from "./pages/ProgressIndicatorDemo";
+
 import LoginPage from "./pages/Onboarding/LoginPage";
 import SelectLangPage from "./pages/Onboarding/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
@@ -11,7 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/progress-indicator" element={<ProgressIndicatorDemo />} />
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/select-language" element={<SelectLangPage />} />
         <Route path="/correction" element={<Correction_Main />} />
