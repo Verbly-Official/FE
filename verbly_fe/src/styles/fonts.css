@@ -62,3 +62,10 @@
   font-weight: 600;
   line-height: 150%;
 }
+
+.text-body1-medium16 {
+  font-family: "Pretendard";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 150%;
+}
