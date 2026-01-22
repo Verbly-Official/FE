@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/Onboarding/LoginPage";
 import SelectLangPage from "./pages/Onboarding/SelectLangPage";
 import Correction_Main from "./pages/Correction/CorrectionMainPage";
+import Correction_Write from "./pages/Correction/WriteCorrection";
 import Mypage from "./pages/Mypage/MyPage";
-import Correction_Write from "./pages/Correction/WriteCorrectionPage";
 import InboxPage from "./pages/Inbox/InboxPage";
 
 function App() {

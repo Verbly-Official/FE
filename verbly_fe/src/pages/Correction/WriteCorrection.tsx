@@ -5,13 +5,13 @@ import SideMenu from "../../components/Nav/SideMenu";
 import SolidButton from "../../components/Button/SolidButton";
 import Plus from "../../assets/emoji/plus.svg?react";
 import Tab from "../../components/Tab/Tab";
-import BtnTab_C from "./BtnTab_c";
 import Sidebar from "./SideBar";
 import DocumentTable from "./DocumentTable";
 import File from "../../assets/emoji/file.svg?react";
 import { Pagination } from "../../components/Pagination/Pagination";
+import BtnTab_C from "./BtnTab_C";
 
-const Correction_Main = () => {
+const Correction_Write = () => {
   const [pressed, setPressed] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -73,4 +73,4 @@ const Correction_Main = () => {
   );
 };
 
-export default Correction_Main;
+export default Correction_Write;
