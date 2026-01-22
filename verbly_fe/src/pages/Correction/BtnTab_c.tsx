@@ -12,7 +12,7 @@ type BtnTabItem = {
 };
 
 type BtnTabProps = {
-  onChange?: (key: string) => void;
+  onChange?: (key: string) => void; // 선택 값 외부로 전달용 (선택)
   className?: string;
 };
 
@@ -23,9 +23,9 @@ const BTN_TABS: BtnTabItem[] = [
 ];
 
 export default function BtnTab_C({ onChange, className = "" }: BtnTabProps) {
-  const [selectedKey, setSelectedKey] = useState<BtnTabItem["key"]>("all");
+  const [selectedKey, setSelectedKey] = useState("all");
 
-  const handleClick = (key: BtnTabItem["key"]) => {
+  const handleClick = (key: string) => {
     setSelectedKey(key);
     onChange?.(key);
   };
@@ -39,16 +39,12 @@ export default function BtnTab_C({ onChange, className = "" }: BtnTabProps) {
         return (
           <button
             key={tab.key}
-            type="button"
             onClick={() => handleClick(tab.key)}
             className={`inline-flex items-center gap-[6px] px-[14px] py-[8px] rounded-[24px]
-              border transition font-pretendard text-[14px] font-semibold
-              ${isSelected ? "bg-violet-50 border-violet-50 text-white" : "bg-white border-[#E5E7EB] text-[var(--gray-6-active,#777)]"}`}
+        border transition font-pretendard text-[14px] font-semibold
+        ${isSelected ? "bg-violet-50 border-violet-50 text-white" : "bg-white border-[#E5E7EB] text-[var(--gray-6-active,#777)]"}`}
           >
-            {/* 아이콘 (색은 text-* 따라감) */}
             <Icon className="w-[18px] h-[18px]" />
-
-            {/* 라벨 */}
             <span>{tab.label}</span>
           </button>
         );
