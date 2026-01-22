@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 type ButtonVariant = "primary" | "secondary" | "assistive";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonInteraction = "normal" | "hovered" | "pressed" | "disabled";
