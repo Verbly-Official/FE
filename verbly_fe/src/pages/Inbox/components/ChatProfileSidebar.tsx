@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useChatroom } from '../../../hooks/useChatroom';
 import { Avatar } from '../../../components/Avatar/Avatar';
 import { Badge } from '../../../components/Badge/ContentBadge';
@@ -6,7 +7,7 @@ import OutlinedButton from '../../../components/Button/OutlinedButton';
 import FollowButton from '../../../components/Button/FollowButton';
 import PersonIcon from '../../../assets/emoji/person.svg';
 import EditIcon from '../../../assets/emoji/edit.svg';
-import FeatherIcon from '../../../assets/emoji/feather-white.svg';
+import RequestCorrectionButton from '../../../components/Button/RequestCorrectionButton';
 
 import { UserProfile } from '../../../components/Profile/Profile';
 
@@ -14,14 +15,11 @@ interface ChatProfileSidebarProps {
     chatroomId: string;
 }
 
-const InterestTag: React.FC<{ label: string }> = ({ label }) => (
-    <div className="inline-flex h-[32px] whitespace-nowrap bg-gray-1 px-[8px] py-[12px] flex flex-row justify-center items-center gap-[8px] rounded-[4px] border border-gray-2">
-        <div className="text-[14px] text-gray-9 font-medium">{label}</div>
-    </div>
-);
+import { InterestTag } from '../../../components/Tag/InterestTag';
 
 export const ChatProfileSidebar: React.FC<ChatProfileSidebarProps> = ({ chatroomId }) => {
     const { partner } = useChatroom(chatroomId);
+    const navigate = useNavigate();
 
     if (!partner) return null;
 
@@ -46,19 +44,16 @@ export const ChatProfileSidebar: React.FC<ChatProfileSidebarProps> = ({ chatroom
             {/* Action Buttons */}
             <div className="flex flex-col gap-3 px-6 py-6 border-b border-gray-100">
                 {/* Custom Request Correction Button */}
-                <button
-                    className="flex h-[48px] px-6 py-3 justify-center items-center gap-1 self-stretch rounded-[8px] text-white text-subtitle6-semi18 cursor-pointer hover:opacity-90 transition-opacity"
-                    style={{ background: 'var(--gradient-4)' }}
+                <RequestCorrectionButton
+                    className="self-stretch"
                     onClick={() => console.log('Request Correction clicked')}
-                >
-                    <img src={FeatherIcon} alt="" className="w-5 h-5" />
-                    <span>Request Correction</span>
-                </button>
+                />
 
                 <OutlinedButton
                     size="medium"
                     iconSrc={PersonIcon}
                     className="w-full !text-violet-50 !border-violet-50 !text-subtitle6-semi18 [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
+                    onClick={() => navigate(`/profile/${chatroomId}`)}
                 >
                     View Profile
                 </OutlinedButton>
@@ -67,6 +62,7 @@ export const ChatProfileSidebar: React.FC<ChatProfileSidebarProps> = ({ chatroom
                     size="medium"
                     iconSrc={EditIcon}
                     className="w-full !text-violet-50 !border-violet-50 !text-subtitle6-semi18 [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
+                    onClick={() => navigate(`/review/${chatroomId}`)}
                 >
                     Review
                 </OutlinedButton>

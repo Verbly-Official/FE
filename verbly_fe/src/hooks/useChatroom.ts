@@ -35,13 +35,25 @@ export const useChatroom = (chatroomId: string | null): UseChatroomReturn => {
         setError(null);
 
         try {
+            console.log('Fetching messages for:', chatroomId);
             const fetchedMessages = await getChatroomMessages(chatroomId);
             setMessages(fetchedMessages);
 
-            // Get partner info from chatroom data
-            const chatroom = mockChatrooms.find((room) => room.id.toString() === chatroomId);
+            // Get partner info from chatroom data (search by room ID or partner ID)
+            const searchId = chatroomId.toLowerCase();
+            console.log('Searching for partner with ID:', searchId);
+            console.log('Available rooms:', mockChatrooms.map(r => ({ id: r.id, partnerId: r.partner.id })));
+
+            const chatroom = mockChatrooms.find((room) =>
+                room.id.toString().toLowerCase() === searchId ||
+                room.partner.id.toLowerCase() === searchId
+            );
+
             if (chatroom) {
+                console.log('Found partner:', chatroom.partner.name);
                 setPartner(chatroom.partner as Partner);
+            } else {
+                console.warn('Partner not found for ID:', searchId);
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to fetch messages');

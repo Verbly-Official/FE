@@ -9,6 +9,8 @@ import InboxPage from "./pages/Inbox/InboxPage";
 import Home_Korean from "./pages/Home/Home_Korean";
 import Mypage from "./pages/My/MyPage";
 import Correction_Write from "./pages/Correction/WriteCorrectionPage";
+import ReviewPage from "./pages/Inbox/ReviewPage";
+import ProfilePage from "./pages/Inbox/ProfilePage";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/correction/write" element={<Correction_Write />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/inbox" element={<InboxPage />} />
+        <Route path="/review/:id" element={<ReviewPage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
