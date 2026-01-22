@@ -10,19 +10,19 @@ const My_banner: React.FC = () => {
       <img 
         src={BannerIcon} 
         alt="" 
-        className="absolute left-[-10px] w-[200px] h-[220px] bottom-[-60px] z-0 pointer-events-none object-contain"
+        className="absolute left-[4px] w-[480px] h-[520px]  z-0 pointer-events-none object-contain"
       />
 
       {/* 2. 콘텐츠 영역 (텍스트 + 버튼) */}
       {/* pl-[140px]로 이미지 영역만큼 여백 확보 */}
-      <div className="relative z-10 w-full flex justify-between items-center px-6 pl-[150px]">
+      <div className="relative z-10 w-full flex justify-between items-center px-6 pl-[250px]">
         
         {/* 텍스트 */}
         <div className="flex flex-col justify-center gap-1">
-          <p className="text-xl font-bold bg-[image:var(--gradient-4)] bg-clip-text text-transparent leading-tight tracking-tight">
+          <p className="text-[28px] font-bold bg-[image:var(--gradient-4)] bg-clip-text text-transparent leading-tight tracking-tight">
             Upgrade to Premium
           </p>
-          <p className="text-sm text-gray-500 font-medium leading-snug">
+          <p className="text-[20px] text-gray-500 font-medium leading-snug">
             Get unlimited AI corrections & templates
           </p>
         </div>

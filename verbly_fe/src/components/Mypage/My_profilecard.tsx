@@ -54,7 +54,7 @@ const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
 
         {/* 유저 정보 (이름) */}
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-9">{userData.name}</h2>
+          <h2 className="text-[28px] font-bold text-gray-9">{userData.name}</h2>
         </div>
 
         {/* 스탯 정보 (Followers, Streak, Points) */}

@@ -22,7 +22,7 @@ const My_badge: React.FC = () => {
     <div className="w-full h-[40%] bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="flex justify-between items-center mb-6">
         {/*<Fire className="w-[16px] h-[16px]" />*/}
-        <h3 className="text-lg font-bold text-gray-900">나의 뱃지</h3>
+        <h3 className="text-[20px] text-gray-900">나의 뱃지</h3>
       </div>
       
       {/* 뱃지 리스트 영역 */}

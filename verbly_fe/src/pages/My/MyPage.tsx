@@ -3,14 +3,37 @@ import ProfileCard from '../../components/Mypage/My_profilecard';
 import MyBadge from '../../components/Mypage/My_badge';
 import MyCorrector from '../../components/Mypage/My_corrector';
 import MyBanner from '../../components/Mypage/My_banner';
-import MyCorrected from '../../components/Mypage/My_correctedlist';
+import MyCorrected from '../../components/Mypage/My_corrected';
 import MyBoard from '../../components/Mypage/My_board';
 import { Header } from '../../components/Header/Header';
-import type { CorrectedPost } from '../../components/Mypage/My_correctedlist';
 
-const correctionItems: CorrectedPost[] = [
-
-  ];
+// 테스트용 더미 데이터
+const MOCK_CORRECTIONS = [
+  {
+    id: "1",
+    title: "How to improve my English speaking skills?",
+    date: "2024.01.20",
+    correctorName: "Jenny",
+  },
+  {
+    id: "2",
+    title: "Where is the bathroom?",
+    date: "2024.01.18",
+    correctorName: "Mike",
+  },
+  {
+    id: "3",
+    title: "What is the difference between 'affect' and 'effect'?",
+    date: "2024.01.15",
+    correctorName: "Tom",
+  },
+  {
+    id: "4",
+    title: "Can you explain the past perfect tense?",
+    date: "2024.01.10",
+    correctorName: "Sarah",
+  },
+];
 
 const MyPage = () => {
   return (
@@ -54,7 +77,7 @@ const MyPage = () => {
                <div>
                 <div className="mb-4 text-lg font-bold text-gray-9">Correction History</div>
                 {/*있으면 불러오기*/}
-                {/*<MyCorrected />*/}
+                <MyCorrected data={MOCK_CORRECTIONS} />
                </div>
             </div>
 
