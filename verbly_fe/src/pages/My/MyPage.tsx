@@ -3,9 +3,14 @@ import ProfileCard from '../../components/Mypage/My_profilecard';
 import MyBadge from '../../components/Mypage/My_badge';
 import MyCorrector from '../../components/Mypage/My_corrector';
 import MyBanner from '../../components/Mypage/My_banner';
-import MyCorrectedList from '../../components/Mypage/My_correctedlist';
+import MyCorrected from '../../components/Mypage/My_correctedlist';
 import MyBoard from '../../components/Mypage/My_board';
 import { Header } from '../../components/Header/Header';
+import type { CorrectedPost } from '../../components/Mypage/My_correctedlist';
+
+const correctionItems: CorrectedPost[] = [
+
+  ];
 
 const MyPage = () => {
   return (
@@ -22,12 +27,12 @@ const MyPage = () => {
 
         {/* 페이지 내용 */}
         <main className="flex-1 p-[32px] overflow-x-hidden">
-          <div className="flex flex-col gap-[24px] max-w-[1200px] mx-auto">
+          <div className="flex flex-col gap-[24px] mx-auto">
             
             {/* [상단 섹션] 좌측: 프로필 / 우측: 배지 + 전문가 의뢰 */}
             <div className="flex flex-col h-[30%] xl:flex-row gap-[24px]">
               {/* 프로필 카드 (고정 너비 유지 혹은 반응형) */}
-              <div className="flex-none xl:w-[40%] w-full h-full flex justify-center xl:block">
+              <div className="flex-none xl:w-[40%] h-full flex justify-center xl:block">
                 <ProfileCard />
               </div>
 
@@ -39,10 +44,18 @@ const MyPage = () => {
             </div>
 
             {/* [하단 섹션] 배너 -> 게시글(Board) -> 첨삭 리스트(CorrectedList) 순서 */}
-            <div className="flex flex-col gap-[24px] w-full">
+            <div className="flex flex-col gap-[24px] flex-1 w-full min-w-0">
                <MyBanner />
-               <MyBoard />
-               <MyCorrectedList />
+               <div>
+                <div className="mb-4 text-lg font-bold text-gray-9">대시보드</div>
+                <MyBoard />
+               </div>
+               
+               <div>
+                <div className="mb-4 text-lg font-bold text-gray-9">Correction History</div>
+                {/*있으면 불러오기*/}
+                {/*<MyCorrected />*/}
+               </div>
             </div>
 
           </div>

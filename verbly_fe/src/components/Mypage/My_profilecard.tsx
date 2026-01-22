@@ -28,9 +28,9 @@ const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
     <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
       {/* 상단 배경 배너 */}
       {/* h-32(128px) 높이 설정 */}
-      <div className="h-full bg-[image:var(--gradient-1-main)] w-full"></div>
+      <div className="h-62 bg-[image:var(--gradient-1-main)] w-full"></div>
 
-      <div className="px-6 pb-6 flex-1 flex flex-col">
+      <div className="px-6 pb-6 flex-1 flex flex-col h-full">
         {/* 프로필 이미지 & 편집 버튼 */}
         <div className="relative flex justify-between items-end -mt-14 mb-4">
           <div className="p-1 bg-white rounded-full relative z-10">
@@ -58,7 +58,7 @@ const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
         </div>
 
         {/* 스탯 정보 (Followers, Streak, Points) */}
-        <div className="flex justify-between items-center w-full mb-8 px-2">
+        <div className="flex justify-start items-center w-full mb-8 px-2 gap-4">
           <div className="flex items-start gap-0.5">
             <span className="text-10px text-gray-9">{userData.followers}</span>
             <span className="text-10px text-gray-5">Follow</span>
