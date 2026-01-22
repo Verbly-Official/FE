@@ -8,7 +8,7 @@ import TextArea from "../../components/TextArea/TextArea";
 
 import AISection from "./components/AISection";
 
-const Correction_Write: React.FC = () => {
+const Correction_Templete: React.FC = () => {
   const [text, setText] = useState<string>("");
 
   return (
@@ -47,12 +47,16 @@ const Correction_Write: React.FC = () => {
             </div>
 
             {/* AI section */}
-            <div className="flex flex-col flex-1 px-[2.5rem] py-6 min-w-[30rem] rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
-              <AISection
-                text={text}
-                nativeRoute="/correction"
-                // onApplyResult={(result) => setText(result)}
-              />
+            <div className="flex flex-col flex-1 h-full px-[2.5rem] py-6 min-w-[30rem] rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] gap-4 items-stretch">
+              <div className="text-black font-pretendard text-[1.75rem] font-bold leading-none bg-[linear-gradient(90deg,#713DE3_0%,#4F46DD_100%)] bg-clip-text text-transparent w-full">
+                AI 실시간 템플릿화
+              </div>
+
+              <div className="w-full flex-1">
+                <TextArea className="w-full h-full" value="변환 결과" rows={20} maxRows={20} />
+              </div>
+
+              <SolidButton className="w-full mt-auto" label="템플릿 변환" />
             </div>
           </div>
         </div>
@@ -61,4 +65,4 @@ const Correction_Write: React.FC = () => {
   );
 };
 
-export default Correction_Write;
+export default Correction_Templete;

@@ -1,4 +1,3 @@
-// AIResultPanel.tsx
 import React from "react";
 import SolidButton from "../../../components/Button/SolidButton";
 import type { AIToolKey } from "./AIMenu";

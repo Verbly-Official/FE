@@ -1,4 +1,3 @@
-// AISection.tsx
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AIHelperMenu, { type AIToolKey } from "./AIMenu";
