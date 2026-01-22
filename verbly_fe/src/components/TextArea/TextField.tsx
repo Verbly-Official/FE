@@ -24,7 +24,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   const baseBorder = shape === "round" ? "border-violet-200" : "border-gray-200";
 
   const rightPadding = showBtn ? "pr-[92px]" : "pr-4";
-  const leftPadding = "pl-10";
+  const leftPadding = showBtn ? "pl-10" : "pl-4";
 
   return (
     <div className={`w-full ${className}`}>
@@ -37,7 +37,7 @@ export const TextField: React.FC<TextFieldProps> = ({
         `}
       >
         {/* left plus */}
-        <img src={Plus} alt="plus" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" draggable={false} />
+        {showBtn && <img src={Plus} alt="plus" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" draggable={false} />}
 
         <input
           {...props}
