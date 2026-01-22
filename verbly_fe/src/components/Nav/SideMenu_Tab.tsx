@@ -5,7 +5,7 @@ type SideMenuProps = {
 };
 export default function SideMenu_Tab({
   label,
-  isSelected,
+  isSelected = false,
   onClick,
 }: SideMenuProps) {
   return (

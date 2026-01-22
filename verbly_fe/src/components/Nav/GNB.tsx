@@ -1,5 +1,4 @@
 import Logo from "../Logo/Logo";
-import SearchIcon from "../../assets/emoji/search-gray.svg";
 import { SearchBar } from "../SearchBar/SearchBar";
 
 export default function GNB({ variant = "default" }) {
