@@ -66,7 +66,8 @@ const MyPage = () => {
           <div className="flex flex-col gap-[24px] mx-auto">
             
             {/* [상단 섹션] 좌측: 프로필 / 우측: 배지 + 전문가 의뢰 */}
-            <div className="flex flex-col h-[30%] xl:flex-row gap-[24px]">
+            {/*전체화면의 30`% 차지*/}
+            <div className="h-[30%] flex flex-col  xl:flex-row gap-[24px]">
               {/* 프로필 카드 (고정 너비 유지 혹은 반응형) */}
               <div className="flex-none xl:w-[40%] h-full flex justify-center xl:block">
                 <ProfileCard />
