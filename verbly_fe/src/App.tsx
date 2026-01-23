@@ -7,6 +7,7 @@ import Correction_Main from "./pages/Correction/CorrectionMainPage";
 import InboxPage from "./pages/Inbox/InboxPage";
 import Home_Korean from "./pages/Home/Home_Korean";
 import Home_Native from "./pages/Home/Home_Native";
+import Home_Notification from "./pages/Home/Home_Notification";
 import MyPage_Korean from "./pages/My/My_Korean";
 import MyPage_Foreigner from "./pages/My/My_Foreigner";
 import Correction_Write from "./pages/Correction/WriteCorrectionPage";
@@ -25,6 +26,7 @@ function App() {
         <Route path="/correction" element={<Correction_Main />} />
         <Route path="/home-korean" element={<Home_Korean />} />
         <Route path="/home-native" element={<Home_Native />} />
+        <Route path="/home-notification" element={<Home_Notification />} />
         <Route path="/correction/write" element={<Correction_Write />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/my-korean/payment" element={<PaymentPage />} />

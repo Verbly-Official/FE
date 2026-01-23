@@ -17,10 +17,9 @@ export default function Home_Korean() {
         <div>
           <div className="w-full min-h-screen bg-bg0 flex flex-row justify-between pr-[40px]">
             <SideMenu />
-
             <div className="bg-white p-[24px] w-[1120px] min-h-screen mt-[32px] rounded-[12px]">
               {/* Tab */}
-              <div className="flex mb-[28px] justify-start gap-0">
+              <div className="flex mb-[28px] justify-start gap-0 border-b-[1px] border-line2">
                 <Tabs tabs={["For You", "Hot Posts"]} />
               </div>
               <div className="flex flex-col gap-[20px]">
