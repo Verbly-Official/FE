@@ -27,21 +27,16 @@ const ICON_SIZE_CLASS: Record<GradientButtonSize, string> = {
     small: "w-[16px] h-[16px]",
 };
 
+
+const MAIN_GRADIENT = "var(--gradient-1-main)";
+const PRESSED_GRADIENT = "linear-gradient(0deg,rgba(0,0,0,0.20)_0%,rgba(0,0,0,0.20)_100%),var(--gradient-1-main)";
+
 const INTERACTION_STYLES: Record<GradientButtonInteraction, string> = {
-    normal: "bg-gradient-to-r from-violet-50 to-blue-60 text-white",
-    hovered: "text-white",
-    pressed: "text-white",
+    normal: `bg-[image:${MAIN_GRADIENT}] text-white hover:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)] active:bg-[image:${PRESSED_GRADIENT}] active:shadow-[0_2px_8px_0_rgba(0,0,0,0.12)] transition-all duration-200`,
+    hovered: `bg-[image:${MAIN_GRADIENT}] text-white shadow-[0_2px_8px_0_rgba(0,0,0,0.20)]`,
+    pressed: `bg-[image:${PRESSED_GRADIENT}] text-white shadow-[0_2px_8px_0_rgba(0,0,0,0.12)]`,
     disabled: "bg-gray-2 text-gray-6 opacity-50 cursor-not-allowed",
 };
-
-const HOVERED_GRADIENT =
-    "linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), linear-gradient(90deg, var(--color-violet-50) 0%, var(--color-blue-60) 100%)";
-const PRESSED_GRADIENT =
-    "linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), linear-gradient(90deg, var(--color-violet-50) 0%, var(--color-blue-60) 100%)";
-
-const NORMAL_HOVER_ACTIVE_BG =
-    "hover:[background-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.1)),linear-gradient(90deg,var(--color-violet-50)_0%,var(--color-blue-60)_100%)] " +
-    "active:[background-image:linear-gradient(0deg,rgba(0,0,0,0.2),rgba(0,0,0,0.2)),linear-gradient(90deg,var(--color-violet-50)_0%,var(--color-blue-60)_100%)]";
 
 export const GradientButton: React.FC<GradientButtonProps> = ({
     size = "large",
@@ -55,25 +50,10 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
 }) => {
     const effectiveInteraction: GradientButtonInteraction = disabled ? "disabled" : interaction;
 
-    const dynamicClasses =
-        effectiveInteraction === "normal"
-            ? "transition-all duration-200"
-            : "";
-
-    // hovered/pressed 강제 상태일 때만 inline background 적용 (색 유지)
-    const style: React.CSSProperties | undefined =
-        effectiveInteraction === "hovered"
-            ? { background: HOVERED_GRADIENT }
-            : effectiveInteraction === "pressed"
-                ? { background: PRESSED_GRADIENT }
-                : undefined;
-
     const classes = [
-        "inline-flex justify-center items-center rounded-[8px]",
+        "inline-flex justify-center items-center rounded-[var(--8,8px)]",
         SIZE_STYLES[size],
         INTERACTION_STYLES[effectiveInteraction],
-        dynamicClasses,
-        effectiveInteraction === "normal" && !disabled ? NORMAL_HOVER_ACTIVE_BG : "",
         className,
     ]
         .filter(Boolean)
@@ -85,7 +65,6 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
             disabled={disabled}
             onClick={onClick}
             aria-label={ariaLabel}
-            style={style}
             className={classes}
         >
             {icon && (
