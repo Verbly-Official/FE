@@ -11,6 +11,7 @@ import Correction_Write from "./pages/Correction/WriteCorrectionPage";
 import ReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
+import LibraryPage from "./pages/Library/LibraryPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/review/:id" element={<ReviewPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/correction1" element={<Correction_NMain />} />
+        <Route path="/library" element={<LibraryPage />} />
       </Routes>
     </BrowserRouter>
   );
