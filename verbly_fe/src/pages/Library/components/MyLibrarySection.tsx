@@ -17,45 +17,45 @@ export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({ words }) => 
     );
 
     return (
-        <div className="flex flex-col gap-[20px]">
-            <div className="flex justify-between items-center gap-[16px]">
+        <div className="flex flex-col gap-[18px] w-full">
+            <div className="flex justify-between items-end gap-[16px]">
                 <div className="flex flex-col gap-[2px]">
-                    <h3 className="text-title3-bold24 text-gray-10">My Library</h3>
-                    <p className="text-body1-medium16 text-gray-5">
-                        You have saved <span className="text-violet-50 font-bold">{filteredWords.length}</span> items.
+                    <h3 className="text-title3-bold24 text-gray-9">My Library</h3>
+                    <p className="text-body-medium14 text-gray-7">
+                        <span className="font-regular">You have saved </span>
+                        <span className="text-btn1-semi14 text-violet-50">{filteredWords.length}</span>
+                        <span className="font-regular"> items.</span>
                     </p>
                 </div>
-                <div className="flex items-center gap-[8px]">
-                    {/* SearchBar - 강제로 크기 조정 */}
-                    <div style={{ width: '345px' }} className="[&>div]:!w-full [&>div>div]:!w-full [&>div>div]:!max-w-full [&_input]:!text-sm">
-                        <SearchBar
-                            shape="round"
-                            placeholder="Search topics, users or keywords,,,"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
+                <div className="flex items-center gap-[8px] flex-shrink-0">
+                    {/* SearchBar */}
+                    <SearchBar
+                        shape="round"
+                        placeholder="Search topics, users or keywords,,,"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
 
-                    {/* TextButton으로 교체 및 스타일 수정 */}
+                    {/* Filter Button */}
                     <TextButton
                         variant="primary"
                         size="medium"
-                        className="!px-[20px] !py-[8px] !rounded-[20px] border border-[#D9D9D9] bg-[#FBFBFB] hover:!bg-gray-50 shadow-sm !gap-[10px]"
+                        className="!px-[4px] !py-[4px] !rounded-[4px] !border-none !bg-transparent !gap-[4px] flex-shrink-0 hover:!bg-transparent"
                     >
-                        <div className="flex items-center gap-[10px]">
+                        <div className="flex items-center gap-[4px]">
                             <img
                                 src={FilterIcon}
                                 alt="filter"
-                                className="w-[14px] h-[14px] [filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
+                                className="w-[20px] h-[20px]"
                             />
-                            <span className="text-violet-50 font-semibold">Filter</span>
+                            <span className="text-violet-50 font-semibold text-btn1-semi14">Filter</span>
                         </div>
                     </TextButton>
                 </div>
             </div>
 
-            {/* Word Grid */}
-            <div className="grid grid-cols-3 gap-[16px] pb-[20px]">
+            {/* Word Grid - 반응형 */}
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-[12px] w-full">
                 {filteredWords.map((item, index) => (
                     <WordCard key={index} word={item.word} translation={item.translation} />
                 ))}

@@ -29,37 +29,43 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({ userData, stats })
     };
 
     return (
-        <div className="bg-white p-[24px] rounded-[16px] border border-gray-100 flex flex-col items-center gap-[24px] shadow-sm">
-            {/* UserProfile - 이미지 크기 120px로 조정 */}
-            <div className="[&_img]:!w-[120px] [&_img]:!h-[120px] [&_h2]:!text-[20px] [&_span]:!text-[14px]">
+        <div className="bg-white p-[20px] rounded-[12px] border border-line1 flex flex-col items-center gap-[12px] shadow-sm">
+            {/* UserProfile - 180px 크기 */}
+            <div className="[&_img]:!w-[180px] [&_img]:!h-[180px] [&_h2]:!text-[24px] [&_span]:!text-[16px]">
                 <UserProfile size="large" data={displayUser} />
             </div>
 
-            {/* Stats Grid - 아이콘 -> 텍스트 -> 숫자 순서 */}
-            <div className="grid grid-cols-3 w-full border-t border-gray-100 pt-[24px] gap-[8px]">
-                <div className="flex flex-col items-center gap-[4px]">
-                    <img src={PersonIcon} alt="follow" className="w-[24px] h-[24px] opacity-40" />
-                    <span className="text-[14px] text-gray-5 font-medium">Follow</span>
-                    <span className="text-[20px] font-bold text-gray-10">{stats.follow}</span>
+            {/* Stats Grid - 3열 그리드 */}
+            <div className="grid grid-cols-3 w-full bg-white border border-line1 rounded-[12px] p-[12px] gap-0 shadow-sm">
+                <div className="flex flex-col items-center gap-[8px] px-[12px]">
+                    <div className="flex flex-col items-center gap-[4px]">
+                        <img src={PersonIcon} alt="follow" className="w-[24px] h-[24px] opacity-50" />
+                        <span className="text-body-medium14 text-gray-5 font-medium">Follow</span>
+                    </div>
+                    <span className="text-subtitle-semi22 text-gray-7 font-semibold">{stats.follow}</span>
                 </div>
-                <div className="flex flex-col items-center gap-[4px] border-x border-gray-100">
-                    <img src={FireIcon} alt="streak" className="w-[24px] h-[24px] opacity-40" />
-                    <span className="text-[14px] text-gray-5 font-medium">Streak</span>
-                    <span className="text-[20px] font-bold text-gray-10">{stats.streak}</span>
+                <div className="flex flex-col items-center gap-[8px] px-[12px] border-x border-line1">
+                    <div className="flex flex-col items-center gap-[4px]">
+                        <img src={FireIcon} alt="streak" className="w-[24px] h-[24px] opacity-50" />
+                        <span className="text-body-medium14 text-gray-5 font-medium">Streak</span>
+                    </div>
+                    <span className="text-subtitle-semi22 text-gray-7 font-semibold">{stats.streak}</span>
                 </div>
-                <div className="flex flex-col items-center gap-[4px]">
-                    <img src={PointIcon} alt="point" className="w-[24px] h-[24px] opacity-40" />
-                    <span className="text-[14px] text-gray-5 font-medium">Point</span>
-                    <span className="text-[20px] font-bold text-gray-10">{stats.point}</span>
+                <div className="flex flex-col items-center gap-[8px] px-[12px]">
+                    <div className="flex flex-col items-center gap-[4px]">
+                        <img src={PointIcon} alt="point" className="w-[24px] h-[24px] opacity-50" />
+                        <span className="text-body-medium14 text-gray-5 font-medium">Point</span>
+                    </div>
+                    <span className="text-subtitle-semi22 text-gray-7 font-semibold">{stats.point}</span>
                 </div>
             </div>
 
             {/* Correction Received */}
             <div className="w-full flex flex-col gap-[12px]">
-                <span className="text-[16px] font-bold text-gray-8 text-left">Correction</span>
-                <div className="bg-violet-100 p-[16px] rounded-[12px] flex flex-col items-center justify-center gap-[4px] h-[80px]">
-                    <span className="text-[24px] font-bold text-violet-50">{stats.correctionReceived}</span>
-                    <span className="text-[14px] text-violet-50 opacity-70">Received</span>
+                <span className="text-subtitle-semi18 text-gray-6 font-semibold text-left px-[4px]">Correction</span>
+                <div className="bg-violet-100 p-[16px] rounded-[12px] flex flex-col items-center justify-center gap-[4px] h-auto">
+                    <span className="text-subtitle-semi22 font-semibold text-violet-50">{stats.correctionReceived}</span>
+                    <span className="text-body-medium14 text-gray-5 font-medium">Received</span>
                 </div>
             </div>
         </div>
