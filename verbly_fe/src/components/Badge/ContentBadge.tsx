@@ -11,13 +11,13 @@ const BADGE_SIZES = {
   medium: 'h-[32px] px-3 text-sm',
 };
 
-export const ContentBadge: React.FC<BadgeProps> = ({ 
+export const Badge: React.FC<BadgeProps> = ({ 
   content,
-  size = 'small', 
-  className = '' 
+  size = 'small',
+  className = ''
 }) => {
   return (
-    <span 
+    <span
       className={`
         inline-flex items-center justify-center
         rounded font-medium whitespace-nowrap

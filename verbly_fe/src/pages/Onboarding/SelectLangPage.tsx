@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from '../../components/Select/Select';
 import SolidButton from '../../components/Button/SolidButton';
@@ -78,21 +78,19 @@ const SelectLangPage = () => {
             variant="primary" 
             size="large" 
             className="w-full"
+            label='Complete'
             disabled={!learningLang || !nativeLang}
             onClick={handleComplete}
-          >
-            Complete
-          </SolidButton>
+          />
 
           {/* Logout Button */}
           <OutlinedButton 
             variant="secondary"
             size="large"
             className="w-full"
+            label='Logout'
             onClick={handleLogout}
-          >
-            Logout
-          </OutlinedButton>
+          />
         </div>
 
       </div>

@@ -1,15 +1,21 @@
 import React from 'react';
 import type { Partner } from '../../../types/chat';
 import { Avatar } from '../../../components/Avatar/Avatar';
-import { Badge as ContentBadge } from '../../../components/Badge/ContentBadge';
+import { Badge } from '../../../components/Badge/ContentBadge';
 import { IconButton } from '../../../components/Button/IconButton';
 import MoreIcon from '../../../assets/emoji/more-vert.svg';
 
 interface ChatRoomHeaderProps {
     partner: Partner;
+    onToggleSidebar: () => void;
+    isSidebarOpen: boolean;
 }
 
-export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({ partner }) => {
+export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
+    partner,
+    onToggleSidebar,
+    isSidebarOpen
+}) => {
     return (
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white sticky top-0 z-10">
             {/* Left: Avatar + Name + Badges */}
@@ -22,7 +28,7 @@ export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({ partner }) => {
                     </span>
 
                     {partner.status === 'online' && (
-                        <ContentBadge
+                        <Badge
                             content="Online"
                             size="small"
                             className="!bg-blue-100 !text-blue-60"
@@ -37,7 +43,8 @@ export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({ partner }) => {
                 shape="round"
                 size="medium"
                 ariaLabel="More options"
-                className="!bg-white hover:!bg-gray-100"
+                onClick={onToggleSidebar}
+                className={`transition-colors ${isSidebarOpen ? '!bg-gray-100' : '!bg-white hover:!bg-gray-100'}`}
             />
         </div>
     );

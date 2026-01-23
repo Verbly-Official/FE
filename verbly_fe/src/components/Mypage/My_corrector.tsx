@@ -1,8 +1,7 @@
 import React from 'react';
 import BasicProfile from '../Profile/img/basicProfile.svg';
 import { TextButton } from '../Button';
-import { ContentBadge } from '../Badge/ContentBadge'; // Badge import
-import PlusIcon from '../../assets/emoji/plus.svg';
+import { Badge } from '../Badge/ContentBadge'; 
 
 interface Corrector {
   id: string;
@@ -39,7 +38,7 @@ const My_corrector: React.FC = () => {
             <div className="relative w-full h-[110px] rounded-xl overflow-hidden bg-gray-50 mb-3">
               {/* 뱃지: 이미지 위에 위치 (absolute) */}
               <div className="absolute top-2 left-2 z-10">
-                <ContentBadge 
+                <Badge 
                   content={corrector.isPro ? "Professional" : "Tutor"} 
                   size="small"
                   className="!px-1.5 !py-0.5 !text-[10px] opacity-90" // 사이즈 미세 조정
