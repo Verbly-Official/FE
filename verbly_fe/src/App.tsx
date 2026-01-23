@@ -10,7 +10,6 @@ import MyPage_Korean from "./pages/My/My_Korean";
 import MyPage_Foreigner from "./pages/My/My_Foreigner";
 import Correction_Write from "./pages/Correction/WriteCorrectionPage";
 import EditProfilePage from "./pages/My/EditProfilePage";
-import ReviewPage from "./pages/Inbox/ReviewPage";
 import InboxReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 import PaymentPage from "./pages/My/PaymentPage";
@@ -36,7 +35,6 @@ function App() {
         <Route path="/my-korean/payment" element={<PaymentPage />} />
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/review/:id" element={<ReviewPage />} />
-        <Route path="/mypage" element={<Mypage />} />
         <Route path="/review/:id" element={<InboxReviewPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/correction1" element={<Correction_NMain />} />

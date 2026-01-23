@@ -3,7 +3,7 @@ import { UserProfile } from '../../../components/Profile/Profile';
 import FireIcon from '../../../assets/emoji/fire2.svg';
 import PersonIcon from '../../../assets/emoji/person.svg';
 import PointIcon from '../../../assets/emoji/point.svg';
-import DefaultProfileIcon from '../../../components/Profile/img/basicProfile.svg'; // Correct default profile image
+import DefaultProfileIcon from '../../../components/Profile/img/medium.svg'; // Correct default profile image
 
 interface UserStatsCardProps {
     userData: {

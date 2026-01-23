@@ -4,7 +4,7 @@ import Home_Card from "../../components/Home/Home_Card";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import Tabs from "../../components/Tab/Tabs";
-import TrendingTag from "../../components/TrendingTag/TrendingTag";
+//import TrendingTag from "../../components/TrendingTag/TrendingTag";
 export default function Home_Korean() {
   return (
     <>
@@ -33,7 +33,7 @@ export default function Home_Korean() {
                 <Tabs tabs={["For You", "Hot Posts"]} />
               </div>
               <div className="flex flex-col gap-[20px]">
-                <Home_Card />
+                {/*<Home_Card />*/}
 
                 {/* Post Card */}
                 <div className="flex flex-col bg-white w-[1072px] my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
@@ -80,13 +80,13 @@ export default function Home_Korean() {
           </div>
           <div className="mt-[32px] flex flex-col gap-[32px]">
             <div className="bg-white w-[384px] h-[503px]">Profile</div>
-            <TrendingTag />
+            {/*<TrendingTag />*/}
           </div>
         </div>
       </div>
       <div>
         <div></div>
       </div>
-    </div>
+    </>
   );
 }
