@@ -1,6 +1,6 @@
 import React from 'react';
-import SolidButton from '../Button/SolidButton';
-import BannerIcon from './img/BannerEmoji.svg';
+import SolidButton from '../../../components/Button/SolidButton';
+import BannerIcon from '../img/BannerEmoji.svg';
 
 const My_banner: React.FC = () => {
   return (

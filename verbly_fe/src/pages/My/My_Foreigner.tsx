@@ -1,11 +1,22 @@
 import SideMenu from '../../components/Nav/SideMenu';
-import ProfileCard from '../../components/Mypage/My_profilecard';
-import MyBadge from '../../components/Mypage/My_badge';
-import MyCorrector from '../../components/Mypage/My_corrector';
-import MyBanner from '../../components/Mypage/My_banner';
-import MyCorrected from '../../components/Mypage/My_corrected';
-import MyBoard from '../../components/Mypage/My_board';
+import ProfileCard from './components/My_profilecard';
+import MyBadge from './components/My_badge';
+import MyCorrector from './components/My_corrector';
+import MyBanner from './components/My_banner';
+import MyCorrected from './components/My_corrected';
+import MyBoard from './components/My_board';
 import { Header } from '../../components/Header/Header';
+import type { User } from '../../types/user';
+
+// 1. 테스트용 유저 데이터 (여기서 역할을 변경해보세요!)
+const MOCK_USER: User = {
+  id: "user1",
+  name: "Test User",
+  profileImg: "https://via.placeholder.com/150",
+  introduction: "Hello, I am using this app.",
+  progress: {},
+  stats: {}
+};
 
 // 테스트용 더미 데이터
 const MOCK_CORRECTIONS = [
@@ -36,6 +47,8 @@ const MOCK_CORRECTIONS = [
 ];
 
 const MyPage = () => {
+  const user = MOCK_USER;
+
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* 1. Header 영역 */}
@@ -66,10 +79,9 @@ const MyPage = () => {
               </div>
             </div>
 
-            {/* [하단 섹션] 배너 -> 게시글(Board) -> 첨삭 리스트(CorrectedList) 순서 */}
-            <div className="flex flex-col gap-[24px] flex-1 w-full min-w-0">
-               <MyBanner />
-               <div>
+            {/* [하단 섹션] 게시글(Board) -> 첨삭 리스트(CorrectedList) 순서 */}  {/* 외국인 마이페이지 배너 제거 */}
+            <div className="flex flex-col gap-[24px]">
+                <div>
                 <div className="mb-4 text-lg font-bold text-gray-9">대시보드</div>
                 <MyBoard />
                </div>

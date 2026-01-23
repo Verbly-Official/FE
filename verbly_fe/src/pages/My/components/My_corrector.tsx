@@ -1,7 +1,7 @@
 import React from 'react';
-import BasicProfile from '../Profile/img/basicProfile.svg';
-import { TextButton } from '../Button';
-import { Badge } from '../Badge/ContentBadge'; 
+import BasicProfile from '../../../components/Profile/img/basicProfile.svg';
+import { TextButton } from '../../../components/Button';
+import { Badge } from '../../../components/Badge/ContentBadge'; 
 
 interface Corrector {
   id: string;

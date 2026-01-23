@@ -1,7 +1,7 @@
 import React from 'react';
-import BasicProfile from '../Profile/img/basicProfile.svg'; 
-import { OutlinedButton } from '../Button'; // index.ts가 있다면 이렇게 import 가능
-import LinearProgress from '../ProgressIndicator/LinearProgress';
+import BasicProfile from '../../../components/Profile/img/basicProfile.svg'; 
+import { OutlinedButton } from '../../../components/Button'; // index.ts가 있다면 이렇게 import 가능
+import LinearProgress from '../../../components/ProgressIndicator/LinearProgress';
 
 interface UserProfileProps {
   user?: {
