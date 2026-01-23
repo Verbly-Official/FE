@@ -1,7 +1,6 @@
 import Home_Card from "../../components/Home/Home_Card";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
-import SideMenu_Tab from "../../components/Nav/SideMenu_Tab";
 import Tabs from "../../components/Tab/Tabs";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
 export default function Home_Korean() {
@@ -9,12 +8,12 @@ export default function Home_Korean() {
     <>
       <div className="min-h-screen">
         {/*GNB*/}
-        <div className="w-full max-w-[1920px] mx-auto">
+        <div className="w-full mx-auto">
           <GNB variant="home" />
         </div>
         <div>
           <div className="w-full min-h-screen bg-bg0 flex flex-row justify-between pr-[40px]">
-            <SideMenu variant="small" />
+            <SideMenu />
 
             <div className="bg-white p-[24px] w-[1120px] min-h-screen mt-[32px] rounded-[12px]">
               <div>

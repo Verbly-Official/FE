@@ -59,7 +59,7 @@ export default function SideMenu({ variant = "default" }) {
               className={`w-[56px] h-[56px] px-[16px] py-[16px]
               flex items-center justify-center
               rounded-[12px] cursor-pointer
-              ${selectedIndex === index ? "bg-violet-100 border-violet-50" : "bg-transparent"}
+              ${selectedIndex === index ? "bg-violet-100 border border-violet-50" : "bg-transparent"}
             `}
             >
               {renderIcon(menu.icon)}
