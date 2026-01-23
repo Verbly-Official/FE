@@ -14,7 +14,7 @@ export default function Home_Korean() {
         </div>
         <div>
           <div className="w-full min-h-screen bg-bg0 flex flex-row justify-between pr-[40px]">
-            <SideMenu />
+            <SideMenu variant="small" />
 
             <div className="bg-white p-[24px] w-[1120px] min-h-screen mt-[32px] rounded-[12px]">
               <div>
