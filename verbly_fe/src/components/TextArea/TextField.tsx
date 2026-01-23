@@ -39,14 +39,11 @@ export const TextField: React.FC<TextFieldProps> = ({
         `}
       >
         {/* left plus */}
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={onPlusClick}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 hover:opacity-70 transition disabled:opacity-40"
-        >
-          <img src={Plus} alt="plus" className="w-full h-full" draggable={false} />
-        </button>
+        {showBtn && (
+          <button type="button" disabled={disabled} onClick={onPlusClick} className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 hover:opacity-70 transition disabled:opacity-40">
+            <img src={Plus} alt="plus" className="w-full h-full" draggable={false} />
+          </button>
+        )}
 
         <input
           {...props}
@@ -58,25 +55,14 @@ export const TextField: React.FC<TextFieldProps> = ({
             ${leftPadding} ${rightPadding}
           `}
         />
-
         {/* right buttons */}
         {showBtn && (
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
-            <button
-              type="button"
-              disabled={disabled}
-              onClick={onMicClick}
-              className="h-9 w-9 rounded-full grid place-items-center bg-violet-100 hover:bg-violet-200 transition disabled:opacity-40"
-            >
+            <button type="button" disabled={disabled} onClick={onMicClick} className="h-9 w-9 rounded-full grid place-items-center bg-violet-100 hover:bg-violet-200 transition disabled:opacity-40">
               <img src={Mic_On} alt="mic" className="w-4 h-4" />
             </button>
 
-            <button
-              type="button"
-              disabled={disabled}
-              onClick={onSendClick}
-              className="h-9 w-9 rounded-full grid place-items-center bg-violet-100 hover:bg-violet-200 transition disabled:opacity-40"
-            >
+            <button type="button" disabled={disabled} onClick={onSendClick} className="h-9 w-9 rounded-full grid place-items-center bg-violet-100 hover:bg-violet-200 transition disabled:opacity-40">
               <img src={Send} alt="send" className="w-4 h-4" />
             </button>
           </div>
