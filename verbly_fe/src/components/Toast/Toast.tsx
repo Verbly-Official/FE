@@ -35,7 +35,7 @@ const VARIANT_CONFIG: Record<ToastVariant, ToastVariantConfig> = {
   },
 } as const;
 
-const Toast: React.FC<ToastProps> = React.memo(({ variant = "default", message, className = "" }) => {
+const Toast: React.FC<ToastProps> = React.memo(({ variant = "positive", message, className = "" }) => {
   const config = VARIANT_CONFIG[variant];
   const displayMessage = message ?? config.defaultMessage;
 
