@@ -5,7 +5,12 @@ import TrendingTag from '../../components/TrendingTag/TrendingTag';
 import { TodayReviewBanner } from './components/TodayReviewBanner';
 import { MyLibrarySection } from './components/MyLibrarySection';
 import { UserStatsCard } from './components/UserStatsCard';
-import { MOCK_LIBRARY_WORDS, MOCK_USER_PROFILE, MOCK_USER_STATS } from './mockData';
+import { 
+    MOCK_LIBRARY_WORDS, 
+    MOCK_USER_PROFILE, 
+    MOCK_USER_STATS, 
+    MOCK_TODAY_REVIEW_STATS 
+} from './mockData';
 
 const LibraryPage: React.FC = () => {
     return (
@@ -25,7 +30,7 @@ const LibraryPage: React.FC = () => {
 
                     {/* Center Content */}
                     <div className="flex-1 flex flex-col gap-[20px] md:gap-[24px] lg:gap-[28px] min-w-0">
-                        <TodayReviewBanner />
+                        <TodayReviewBanner stats={MOCK_TODAY_REVIEW_STATS} />
                         <MyLibrarySection words={MOCK_LIBRARY_WORDS} />
                     </div>
 

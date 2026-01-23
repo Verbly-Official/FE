@@ -126,3 +126,17 @@
   font-weight: 500;
   line-height: 120%;
 }
+
+.text-title-bold40 {
+  font-family: "Pretendard";
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 100%;
+}
+
+.text-subtitle-semi20 {
+  font-family: "Pretendard";
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 100%;
+}

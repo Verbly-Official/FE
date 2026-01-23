@@ -1,9 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import FirePurpleIcon from '../../../assets/emoji/fire-purple.svg';
 import OutlinedButton from '../../../components/Button/OutlinedButton';
 import BannerEmoji from '../../../components/Mypage/img/BannerEmoji.svg';
 
-export const TodayReviewBanner: React.FC = () => {
+interface TodayReviewBannerProps {
+    stats: {
+        wordsRemaining: number;
+        accuracy: number;
+        totalSaved: number;
+    };
+}
+
+export const TodayReviewBanner: React.FC<TodayReviewBannerProps> = ({ stats }) => {
+    const navigate = useNavigate();
+
+    const handleStartClick = () => {
+        navigate('/review');
+    };
+
     return (
         <div
             className="w-full rounded-[12px] p-[32px] flex justify-between items-center text-white relative overflow-hidden"
@@ -14,14 +29,16 @@ export const TodayReviewBanner: React.FC = () => {
         >
             <div className="flex flex-col gap-[8px] z-10">
                 <h2 className="text-title-bold28 text-white">Today's Review</h2>
-                <p className="text-btn-medium14 text-violet-100">Keep up your streak! 24 words remaining today</p>
+                <p className="text-btn-medium14 text-violet-100">
+                    Keep up your streak! {stats.wordsRemaining} words remaining today
+                </p>
                 <div className="flex gap-[24px] mt-[8px]">
                     <div className="flex flex-col">
-                        <span className="text-subtitle-semi24 text-white">76%</span>
+                        <span className="text-subtitle-semi24 text-white">{stats.accuracy}%</span>
                         <span className="text-cap-medium11 text-white">Accuracy</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-subtitle-semi24 text-white">120</span>
+                        <span className="text-subtitle-semi24 text-white">{stats.totalSaved}</span>
                         <span className="text-cap-medium11 text-white">Total Saved</span>
                     </div>
                 </div>
@@ -44,7 +61,7 @@ export const TodayReviewBanner: React.FC = () => {
                     variant="primary"
                     size="large"
                     className="!bg-white !text-violet-50 text-subtitle-semi18 !rounded-[12px] !h-auto !py-[12px] !px-[32px] shadow-sm"
-                    onClick={() => console.log('Start clicked')}
+                    onClick={handleStartClick}
                 />
             </div>
         </div>
