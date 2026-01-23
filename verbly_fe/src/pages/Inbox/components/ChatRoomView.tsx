@@ -18,6 +18,7 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
 }) => {
     const { messages, partner, isLoading, sendMessage } = useChatroom(chatroomId);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     // Map Message[] to ChatMessage[] for the common ChatList component
     const chatMessages = useMemo((): ChatMessage[] => {
@@ -36,9 +37,11 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
         }));
     }, [messages, partner]);
 
-    // Auto-scroll to bottom when messages change
+    // Auto-scroll to bottom when messages change - 컨테이너 내부에서만 스크롤
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     }, [messages]);
 
     if (isLoading && messages.length === 0) {
@@ -67,9 +70,8 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
             />
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto min-h-0">
+            <div ref={messagesContainerRef} className="flex-1 overflow-y-auto min-h-0">
                 <ChatList messages={chatMessages} />
-                <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}

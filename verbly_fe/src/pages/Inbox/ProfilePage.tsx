@@ -56,10 +56,10 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC]">
+        <div className="flex flex-col flex-1 bg-[#F8FAFC] overflow-hidden">
             <Header />
 
-            <div className="flex w-full max-w-[1920px] mx-auto h-[calc(100vh-64px)]">
+            <div className="flex flex-1 w-full overflow-hidden">
                 <SideMenu variant="default" />
 
                 <div className="flex-1 overflow-y-auto px-10 py-8">

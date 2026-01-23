@@ -8,9 +8,13 @@ import InboxPage from "./pages/Inbox/InboxPage";
 import Home_Korean from "./pages/Home/Home_Korean";
 import Mypage from "./pages/My/MyPage";
 import Correction_Write from "./pages/Correction/WriteCorrectionPage";
-import ReviewPage from "./pages/Inbox/ReviewPage";
+import InboxReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
+import LibraryPage from "./pages/Library/LibraryPage";
+import ReviewPage from "./pages/Library/Review/ReviewPage";
+import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
+import { WordDetailPage } from "./pages/Library/WordDetailPage";
 
 function App() {
   return (
@@ -23,10 +27,13 @@ function App() {
         <Route path="/home-korean" element={<Home_Korean />} />
         <Route path="/correction/write" element={<Correction_Write />} />
         <Route path="/mypage" element={<Mypage />} />
-        <Route path="/inbox" element={<InboxPage />} />
-        <Route path="/review/:id" element={<ReviewPage />} />
+        <Route path="/review/:id" element={<InboxReviewPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/correction1" element={<Correction_NMain />} />
+        <Route path="/library" element={<LibraryPage />} />
+        <Route path="/library/word/:word" element={<WordDetailPage />} />
+        <Route path="/review" element={<ReviewPage />} />
+        <Route path="/review/result" element={<ReviewResultPage />} />
       </Routes>
     </BrowserRouter>
   );
