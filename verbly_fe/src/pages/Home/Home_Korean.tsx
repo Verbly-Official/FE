@@ -22,8 +22,8 @@ export default function Home_Korean() {
                   <Tabs tabs={["For You", "Hot Posts"]} />
                 </div>
                 <div className="flex flex-col gap-[20px]">
-                  <Home_Card isCorrected={false} />
-                  <Home_Card isCorrected={true} />
+                  <Home_Card varient="default" isCorrected={false} />
+                  <Home_Card varient="mini" isCorrected={true} />
                 </div>
               </div>
             </div>
