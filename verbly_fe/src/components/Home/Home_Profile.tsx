@@ -1,6 +1,6 @@
 import GNB from "../Nav/GNB";
 import SideMenu from "../Nav/SideMenu";
-import TrendingTag from "../TrendingTag/TrendingTag";
+//import TrendingTag from "../TrendingTag/TrendingTag";
 import ProfileImg from "../Profile/img/basicProfile.svg";
 import MessageImg from "../../assets/emoji/mail-purple.svg";
 import Check from "../../assets/emoji/checkbox-rounded.svg";

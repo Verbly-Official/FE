@@ -1,6 +1,6 @@
 import React from 'react';
 // 요청하신 basicProfile.svg 이미지를 import
-import BasicProfile from '../Profile/img/basicProfile.svg';
+import BasicProfile from '../../../components/Profile/img/basicProfile.svg';
 //import Fire from '../../assets/emoji/fire1.svg'; 
 
 interface AchievementBadge {

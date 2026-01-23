@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge } from "../Badge/ContentBadge"; // 경로가 맞는지 확인 필요
+import { Badge } from "../../../components/Badge/ContentBadge"; // 경로가 맞는지 확인 필요
 // import File from "../../assets/emoji/file.svg"; // 사용하지 않는다면 제거
 
 // 더미 데이터 인터페이스
