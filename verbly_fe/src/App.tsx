@@ -7,6 +7,7 @@ import Correction_Main from "./pages/Correction/CorrectionMainPage";
 import InboxPage from "./pages/Inbox/InboxPage";
 import Home_Korean from "./pages/Home/Home_Korean";
 import Home_Notification from "./pages/Home/Home_Notification";
+import Home_Profile from "./components/Home/Home_Profile";
 import Mypage from "./pages/My/MyPage";
 import Correction_Write from "./pages/Correction/WriteCorrectionPage";
 import ReviewPage from "./pages/Inbox/ReviewPage";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/home-korean" element={<Home_Korean />} />
         <Route path="/home-notification" element={<Home_Notification />} />
+        <Route path="/home-profile" element={<Home_Profile />} />
         <Route path="/correction/write" element={<Correction_Write />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/inbox" element={<InboxPage />} />
