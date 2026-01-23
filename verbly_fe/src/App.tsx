@@ -13,6 +13,7 @@ import Correction_Write from "./pages/Correction/WriteCorrectionPage";
 import EditProfilePage from "./pages/My/EditProfilePage";
 import ReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
+import PaymentPage from "./pages/My/PaymentPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/my-korean" element={<MyPage_Korean />} />
         <Route path="/my-foreigner" element={<MyPage_Foreigner />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
+        <Route path="/my-korean/payment" element={<PaymentPage />} />
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/review/:id" element={<ReviewPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />

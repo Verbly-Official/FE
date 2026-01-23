@@ -1,5 +1,3 @@
-import React from 'react';
-// 큰 영역에 들어가므로 large 이미지 사용
 import DefaultProfile from '../../../components/Profile/img/large.svg';
 import { TextButton } from '../../../components/Button';
 import { Badge } from '../../../components/Badge/ContentBadge'; 
@@ -20,26 +18,27 @@ const My_corrector: React.FC = () => {
   ];
 
   return (
-    <div className="w-full h-[60%] bg-white rounded-xl border border-gray-100 p-6 gap-4">
-      <div className="flex justify-between items-center mb-6 gap-2">
-        <h3 className="text-[20px] text-gray-9">
+    <div className="w-full h-[300px] bg-white rounded-xl border border-gray-100 p-4 md:p-6">
+      <div className="flex justify-between items-center mb-4 md:mb-6 gap-2">
+        <h3 className="text-lg md:text-[20px] text-gray-9">
           전문가 의뢰 관리
         </h3>
       </div>
 
-      <div className="flex overflow-x-auto gap-4 pb-2 scrollbar-hide"> 
+      {/* 그리드 레이아웃: 모바일 1열, 태블릿 2열, 데스크탑 3열 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"> 
         {correctors.map((corrector) => (
           <div 
             key={corrector.id} 
-            className="w-[272px] h-[192px] bg-white border border-gray-100 rounded-2xl flex flex-col p-3 hover:border-violet-100 hover:shadow-sm transition-all group"
+            className="bg-white border border-gray-100 rounded-xl md:rounded-2xl flex flex-col p-3 hover:border-violet-100 hover:shadow-sm transition-all group"
           >
             {/* 상단 이미지 영역 */}
-            <div className="relative w-full h-[110px] rounded-xl overflow-hidden bg-gray-50 mb-3">
+            <div className="relative w-full h-28 md:h-[110px] rounded-lg md:rounded-xl overflow-hidden bg-gray-50 mb-3">
               <div className="absolute top-2 left-2 z-10">
                 <Badge 
-                  content= "첨삭 완료"
+                  content="첨삭 완료"
                   size="small"
-                  className="!px-1.5 !py-0.5 !text-[14px] opacity-90"
+                  className="!px-1.5 !py-0.5 !text-xs md:!text-[14px] opacity-90"
                 />
               </div>
               
@@ -53,10 +52,10 @@ const My_corrector: React.FC = () => {
             {/* 하단 정보 */}
             <div className="flex justify-between items-end w-full mt-auto">
               <div className="flex flex-col text-left gap-0.5">
-                <p className="text-[17px] font-bold text-gray-900 truncate max-w-[80px]">
+                <p className="text-base md:text-[17px] font-bold text-gray-900 truncate max-w-[120px]">
                   {corrector.name}
                 </p>
-                <p className="text-[12px] text-gray-400 truncate max-w-[80px]">
+                <p className="text-xs md:text-[12px] text-gray-400 truncate max-w-[120px]">
                   {corrector.location}
                 </p>
               </div>
@@ -66,10 +65,10 @@ const My_corrector: React.FC = () => {
                   onClick={() => {}} 
                   variant="secondary" 
                   size="small"
-                  className="!text-[11px] !text-gray-400 hover:!text-violet-600 !p-0 gap-0.5"
+                  className="!text-[10px] md:!text-[11px] !text-gray-400 hover:!text-violet-600 !p-0 gap-0.5"
                 >
                   내역보기 
-                  <span className="text-[10px] ml-0.5">&gt;</span>
+                  <span className="text-[9px] md:text-[10px] ml-0.5">&gt;</span>
                 </TextButton>
               </div>
             </div>
