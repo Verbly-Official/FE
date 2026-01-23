@@ -1,6 +1,7 @@
 import Home_Card from "../../components/Home/Home_Card";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
+import SideMenu_Tab from "../../components/Nav/SideMenu_Tab";
 import Tabs from "../../components/Tab/Tabs";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
 export default function Home_Korean() {

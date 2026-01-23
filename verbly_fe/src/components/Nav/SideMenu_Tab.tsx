@@ -1,10 +1,13 @@
 type SideMenuProps = {
   label: string;
   isSelected: boolean;
+  icon?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
+
 export default function SideMenu_Tab({
   label,
   isSelected = false,
+  icon,
   className,
   ...props
 }: SideMenuProps) {
@@ -19,14 +22,7 @@ export default function SideMenu_Tab({
       ${className ?? ""}
       `}
     >
-      <img
-        src={`${
-          isSelected
-            ? "../../src/assets/emoji/checkbox-dashed-purple.svg"
-            : "../../src/assets/emoji/checkbox-dashed.svg"
-        }`}
-        className="w-[20px] h-[20px]"
-      />
+      {icon && <div className="w-[20px] h-[20px]">{icon}</div>}
       <span>{label}</span>
     </div>
   );
