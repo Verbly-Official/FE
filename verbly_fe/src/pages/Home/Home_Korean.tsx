@@ -23,7 +23,7 @@ export default function Home_Korean() {
                 </div>
                 <div className="flex flex-col gap-[20px]">
                   <Home_Card varient="default" isCorrected={false} />
-                  <Home_Card varient="mini" isCorrected={true} />
+                  <Home_Card varient="default" isCorrected={true} />
                 </div>
               </div>
             </div>
