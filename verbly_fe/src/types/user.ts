@@ -1,7 +1,8 @@
 export interface User {
-  id: number;           // 리스트 렌더링 시 key로 사용
+  id: string;           // 리스트 렌더링 시 key로 사용
   name: string;         // 이름
-  profileUrl: string;   // 이미지 주소
+  role: 'KOREAN' | 'FOREIGNER'; // 유저 역할
+  profileImg: string;   // 이미지 주소
   introduction: string; // Small
   lastActive?: string;  // Medium 
   level?: number;       // Large

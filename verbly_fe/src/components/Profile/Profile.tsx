@@ -14,21 +14,20 @@ const IMG_PIXELS = {
   large: 180,
 };
 
-export const UserProfile: React.FC<ProfileProps> = ({ 
-  data, 
-  size = 'small', 
-  // onFollow 
+export const UserProfile: React.FC<ProfileProps> = ({
+  data,
+  size = 'small',
 }) => {
   const renderImage = () => (
     <img
-      src={data.profileUrl}
+      src={data.profileImg}
       alt={`${data.name} profile`}
       className="rounded-full object-cover bg-gray-200"
       style={{ width: IMG_PIXELS[size], height: IMG_PIXELS[size] }}
     />
   );
 
-  // 1. Small: 이름 + 한줄 소개
+
   if (size === 'small') {
     return (
       <div className="flex items-center gap-3">
@@ -41,7 +40,6 @@ export const UserProfile: React.FC<ProfileProps> = ({
     );
   }
 
-  // 2. Medium: 이름 + 접속 시간
   if (size === 'medium') {
     return (
       <div className="flex items-center gap-4">
@@ -50,7 +48,8 @@ export const UserProfile: React.FC<ProfileProps> = ({
           <div className="flex items-center gap-2">
             <span className="font-bold text-lg text-gray-900">{data.name}</span>
           </div>
-          
+
+
           {data.lastActive && (
             <span className="text-sm text-gray-400">{data.lastActive}</span>
           )}
@@ -59,7 +58,6 @@ export const UserProfile: React.FC<ProfileProps> = ({
     );
   }
 
-  // 3. Large: 이름 + 레벨 + 뱃지(Small Size)
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       {renderImage()}

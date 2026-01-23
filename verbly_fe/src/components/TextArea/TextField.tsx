@@ -39,11 +39,9 @@ export const TextField: React.FC<TextFieldProps> = ({
         `}
       >
         {/* left plus */}
-        {showBtn && (
-          <button type="button" disabled={disabled} onClick={onPlusClick} className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 hover:opacity-70 transition disabled:opacity-40">
-            <img src={Plus} alt="plus" className="w-full h-full" draggable={false} />
-          </button>
-        )}
+        <button type="button" disabled={disabled} onClick={onPlusClick} className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 hover:opacity-70 transition disabled:opacity-40">
+          <img src={Plus} alt="plus" className="w-full h-full" draggable={false} />
+        </button>
 
         <input
           {...props}

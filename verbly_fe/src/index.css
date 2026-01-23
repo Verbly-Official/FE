@@ -8,10 +8,14 @@
   --color-violet-80: #d3c3f6;
   --color-violet-70: #b89bf8;
   --color-violet-60: #9a74ed;
-  --color-violet-50: #713de3; /* Main - normal */
-  --color-violet-40: #6637cc; /* hovered */
-  --color-violet-30: #552eaa; /* pressed */
-  --color-violet-20: #442588; /* selected */
+  --color-violet-50: #713de3;
+  /* Main - normal */
+  --color-violet-40: #6637cc;
+  /* hovered */
+  --color-violet-30: #552eaa;
+  /* pressed */
+  --color-violet-20: #442588;
+  /* selected */
   --color-violet-10: #331b66;
   --color-violet-5: #28154f;
 
@@ -19,10 +23,14 @@
   --color-pink-100: #fff7f9;
   --color-pink-80: #fff3f6;
   --color-pink-60: #ffe7ed;
-  --color-pink-50: #ffb1c4; /* Point - normal */
-  --color-pink-40: #ff7395; /* hovered */
-  --color-pink-30: #e32a57; /* pressed */
-  --color-pink-20: #df0036; /* selected */
+  --color-pink-50: #ffb1c4;
+  /* Point - normal */
+  --color-pink-40: #ff7395;
+  /* hovered */
+  --color-pink-30: #e32a57;
+  /* pressed */
+  --color-pink-20: #df0036;
+  /* selected */
   --color-pink-10: #ae002a;
   --color-pink-5: #600017;
 
@@ -31,10 +39,14 @@
   --color-blue-90: #e0ebff;
   --color-blue-80: #a2c0f6;
   --color-blue-70: #5a8ce8;
-  --color-blue-60: #4f46dd; /* Secondary - normal */
-  --color-blue-50: #473fc7; /* hovered */
-  --color-blue-40: #3f38b1; /* pressed */
-  --color-blue-30: #3b35a6; /* selected */
+  --color-blue-60: #4f46dd;
+  /* Secondary - normal */
+  --color-blue-50: #473fc7;
+  /* hovered */
+  --color-blue-40: #3f38b1;
+  /* pressed */
+  --color-blue-30: #3b35a6;
+  /* selected */
   --color-blue-20: #2f2a85;
   --color-blue-10: #241f63;
   --color-blue-5: #1c194d;
@@ -47,13 +59,17 @@
   --color-gray-1: #f3f3f3;
   --color-gray-2: #e6e6e6;
   --color-gray-3: #cbcbcb;
-  --color-gray-4: #c3c3c3; /* normal */
-  --color-gray-5: #9e9e9e; /* hover */
-  --color-gray-6: #777777; /* active */
+  --color-gray-4: #c3c3c3;
+  /* normal */
+  --color-gray-5: #9e9e9e;
+  /* hover */
+  --color-gray-6: #777777;
+  /* active */
   --color-gray-7: #585858;
   --color-gray-8: #424242;
   --color-gray-9: #353535;
-  --color-gray-10: #1f1f1f; /* Typo */
+  --color-gray-10: #1f1f1f;
+  /* Typo */
 
   /* Background */
   --color-bg0: #f8fafc;
@@ -65,4 +81,8 @@
   /* Stroke */
   --color-line1: #d9d9d9;
   --color-line2: #adadad;
+
+  /* Gradients */
+  --gradient-1-main: linear-gradient(90deg, #713de3 0%, #4f46dd 100%);
+  --gradient-4: linear-gradient(90deg, #713de3 0%, #ff7395 100%);
 }
