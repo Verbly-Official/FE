@@ -8,7 +8,7 @@ export default function Home_Korean() {
     <>
       <div className="min-h-screen">
         {/*GNB*/}
-        <div className="w-full max-w-[1920px] mx-auto">
+        <div className="w-full mx-auto">
           <GNB variant="home" />
         </div>
         <div>
