@@ -8,7 +8,13 @@ const MOCK_OPTIONS: Option[] = [
   { value: "private", label: "Private" },
 ];
 
-export default function Home_WriteModal() {
+type writeModalProp = {
+  variant: "KOREAN" | "NATIVE";
+};
+
+export default function Home_WriteModal({
+  variant = "KOREAN",
+}: writeModalProp) {
   const [singleValue, setSingleValue] = useState<string | number>("");
   const [multiValue, setMultiValue] = useState<(string | number)[]>([]);
 
@@ -20,14 +26,16 @@ export default function Home_WriteModal() {
           <div>Public Setting</div>
           <Select options={MOCK_OPTIONS} onChange={setSingleValue} />
         </div>
-        <div>
-          <div>Help Needed</div>
+        {variant === "KOREAN" && (
           <div>
-            원어민의 Need correction 피드에 노출되어 빠른 교정을 받을 수
-            있습니다.
+            <div>Help Needed</div>
+            <div>
+              원어민의 Need correction 피드에 노출되어 빠른 교정을 받을 수
+              있습니다.
+            </div>
+            <div></div>
           </div>
-          <div></div>
-        </div>
+        )}
         <div>
           <div>Tag</div>
           <Select

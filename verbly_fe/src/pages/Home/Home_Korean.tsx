@@ -3,6 +3,9 @@ import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import Tabs from "../../components/Tab/Tabs";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
+import { UserStatsCard } from "../Library/components/UserStatsCard";
+import { MOCK_USER_PROFILE, MOCK_USER_STATS } from "./mockData.ts";
+
 export default function Home_Korean() {
   return (
     <>
@@ -27,7 +30,10 @@ export default function Home_Korean() {
             </div>
             <div>
               <div className="mt-[32px] flex flex-col gap-[32px]">
-                <div className="bg-white w-[384px] h-[503px]">Profile</div>
+                <UserStatsCard
+                  userData={MOCK_USER_PROFILE}
+                  stats={MOCK_USER_STATS}
+                />
                 <TrendingTag />
               </div>
             </div>

@@ -3,6 +3,9 @@ import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import Tabs from "../../components/Tab/Tabs";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
+import { UserStatsCard } from "../Library/components/UserStatsCard";
+import { MOCK_USER_PROFILE, MOCK_USER_STATS } from "./mockData.ts";
+
 export default function Home_Native() {
   return (
     <>
@@ -14,7 +17,6 @@ export default function Home_Native() {
         <div>
           <div className="w-full min-h-screen bg-bg0 flex flex-row justify-between pr-[40px]">
             <SideMenu />
-
             <div className="bg-white p-[24px] w-[1120px] min-h-screen mt-[32px] rounded-[12px]">
               {/* Tab */}
               <div className="flex mb-[28px] justify-start gap-0">
@@ -27,7 +29,10 @@ export default function Home_Native() {
             </div>
             <div>
               <div className="mt-[32px] flex flex-col gap-[32px]">
-                <div className="bg-white w-[384px] h-[503px]">Profile</div>
+                <UserStatsCard
+                  userData={MOCK_USER_PROFILE}
+                  stats={MOCK_USER_STATS}
+                />
                 <TrendingTag />
               </div>
             </div>
