@@ -50,7 +50,7 @@ const Correction_NMain = () => {
           {activeIndex === null ? sentences.map((text, index) => <R_SentenceItem key={index} text={text} index={index} />) : <DetailSentence index={activeIndex} text={sentences[activeIndex]} />}
         </div>
 
-        {/* 우측 하단: 채팅 영역 (문장 미리보기일 때만 표시) */}
+        {/* 우측 하단: 채팅 영역 */}
         {activeIndex === null && (
           <div className="flex flex-col flex-1 bg-[#F8FAFC] h-full">
             <div className="bg-[#F1ECFC] flex p-6 justify-center items-center gap-[10px] w-full">
