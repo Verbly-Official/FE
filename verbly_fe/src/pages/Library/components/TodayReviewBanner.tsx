@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FirePurpleIcon from '../../../assets/emoji/fire-purple.svg';
 import OutlinedButton from '../../../components/Button/OutlinedButton';
-import BannerEmoji from '../../../components/Mypage/img/BannerEmoji.svg';
+import BannerEmoji from '../../My/img/BannerEmoji.svg';
 
 interface TodayReviewBannerProps {
     stats: {

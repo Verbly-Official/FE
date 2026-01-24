@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultBadgeIcon from '../../../components/Profile/img/medium.svg';
+import DefaultBadgeIcon from '../../../../components/Profile/img/medium.svg';
 
 interface AchievementBadge {
   id: string;
@@ -22,7 +22,7 @@ const My_badge: React.FC = () => {
       </div>
       
       {/* 그리드 레이아웃: 모바일 3열, 태블릿 4열, 데스크탑 5열 */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+      <div className="flex flex-start gap-3 md:gap-4">
         {badges.map((badge) => (
           <div 
             key={badge.id} 
@@ -43,15 +43,6 @@ const My_badge: React.FC = () => {
           </div>
         ))}
         
-        {/* 빈 슬롯 */}
-        {[...Array(5 - badges.length)].map((_, i) => (
-          <div key={`empty-${i}`} className="flex flex-col items-center gap-2 md:gap-3 opacity-30">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-[88px] md:h-[88px] rounded-lg md:rounded-[12px] bg-gray-100 flex items-center justify-center border border-gray-200">
-              <img src={DefaultBadgeIcon} alt="Locked" className="w-full h-full object-cover grayscale opacity-50" />
-            </div>
-            <span className="text-xs text-gray-400">-</span>
-          </div>
-        ))}
       </div>
     </div>
   );

@@ -14,10 +14,10 @@ import InboxPage from "./pages/Inbox/InboxPage";
 import ReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 
-import MyPage_Korean from "./pages/My/My_Korean";
-import MyPage_Foreigner from "./pages/My/My_Foreigner";
-import EditProfilePage from "./pages/My/EditProfilePage";
-import PaymentPage from "./pages/My/PaymentPage";
+import MyPage_Korean from "./pages/My/MyPage/My_Korean";
+import MyPage_Foreigner from "./pages/My/MyPage/My_Foreigner";
+import EditProfilePage from "./pages/My/EditProfilePage/EditProfilePage";
+import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 
