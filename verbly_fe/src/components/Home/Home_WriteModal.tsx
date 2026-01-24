@@ -5,6 +5,7 @@ import TextArea from "../TextArea/TextArea";
 import { SolidButton } from "../Button";
 import SendIcon from "../../assets/emoji/send-outlined.svg";
 import Switch from "../Switch/Switch";
+import Home_ChipBox from "./Home_ChipBox";
 
 const MOCK_OPTIONS: Option[] = [
   { value: "public", label: "Public" },
@@ -22,6 +23,7 @@ export default function Home_WriteModal({
 
   return (
     <div className="w-[956px] h-[462px] p-[24px] bg-gray-4 flex flex-row gap-[12px] rounded-[12px]">
+      {/* 마크다운 에디터 */}
       <div className="w-[638px] h-[414px]">
         <TextArea header="마크다운 에디터" />
       </div>
@@ -39,6 +41,7 @@ export default function Home_WriteModal({
               className="w-full h-[40px]"
             />
           </div>
+          {/* 한국인의 경우에만 렌더링 */}
           {variant === "KOREAN" && (
             <div className="w-full p-[8px] flex flex-col gap-[5px] bg-violet-100 rounded-[8px]">
               <div className="text-violet-20 font-semibold text-[16px] leading-[24px]">
@@ -52,22 +55,13 @@ export default function Home_WriteModal({
               <div></div>
             </div>
           )}
-          <div className="flex flex-col gap-[4px]">
-            <div className="text-violet-20 font-semibold text-[16px] leading-[24px]">
-              Tag
-            </div>
-            <Select
-              size="chip"
-              options={MOCK_OPTIONS}
-              value={multiValue}
-              onChange={setMultiValue}
-              placeholder="#tag"
-              className="w-full"
-            />
-          </div>
+
+          {/* Chip (Tags) */}
+          <Home_ChipBox />
+
+          {/* Post Now */}
+          <SolidButton label="Post Now" iconSrc={SendIcon} />
         </div>
-        {/* Post Now */}
-        <SolidButton label="Post Now" iconSrc={SendIcon} />
       </div>
     </div>
   );
