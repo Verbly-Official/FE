@@ -14,15 +14,16 @@ const InboxPage = () => {
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     return (
-        <div className="flex flex-col flex-1 bg-white overflow-hidden">
-            {/* Global Header - Fixed Top */}
-            <Header />
-
-            {/* Main Layout - Below Header */}
-            <div className="flex flex-1 min-h-0 overflow-hidden">
-                {/* Left Side Menu - Percentage width (20%) with min-width for stability */}
-                <div className={`${isSidebarOpen ? 'w-[96px]' : 'w-[20%] min-w-[300px]'} flex-shrink-0 border-r border-gray-200 h-full overflow-y-auto transition-all duration-300`}>
-                    <SideMenu variant={isSidebarOpen ? "small" : "default"} />
+        <div className="min-h-screen">
+              {/* 1. GNB */}
+              <div className="w-full max-w-[1920px] mx-auto">
+                <Header />
+              </div>
+        
+              {/* 2. 좌측 아이콘바 + 컨텐츠 */}
+              <div className="flex w-full max-w-[1920px] mx-auto">
+                {/* 가장 왼쪽 사이드바(컴포넌트) */}
+                <SideMenu />
                 </div>
 
                 {/* Content Area - Flex grow */}
@@ -57,7 +58,6 @@ const InboxPage = () => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 
