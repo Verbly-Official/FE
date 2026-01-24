@@ -1,4 +1,4 @@
-import { Badge } from "../../../components/Badge/ContentBadge";
+import { Badge } from "../../../../components/Badge/ContentBadge";
 
 interface CorrectionItemData {
   id: string;

@@ -1,7 +1,7 @@
 import React from 'react';
-import DefaultProfile from '../../../components/Profile/img/large.svg'; 
-import { OutlinedButton } from '../../../components/Button';
-import LinearProgress from '../../../components/ProgressIndicator/LinearProgress';
+import DefaultProfile from '../../../../components/Profile/img/large.svg'; 
+import { OutlinedButton } from '../../../../components/Button';
+import LinearProgress from '../../../../components/ProgressIndicator/LinearProgress';
 
 interface UserProfileProps {
   user?: {

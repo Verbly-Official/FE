@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import DefaultProfile from '../../../components/Profile/img/large.svg';
-import { TextButton } from '../../../components/Button';
-import { Badge } from '../../../components/Badge/ContentBadge'; 
+import DefaultProfile from '../../../../components/Profile/img/large.svg';
+import { TextButton } from '../../../../components/Button';
+import { Badge } from '../../../../components/Badge/ContentBadge'; 
 import KoreanHistoryModal from './KoreanHistoryModal';
 import ExpertHistoryModal from './ExpertHistoryModal';
 
