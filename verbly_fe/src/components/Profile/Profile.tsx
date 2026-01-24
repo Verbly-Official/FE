@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { type User } from '../../types/user';
 import { Badge } from '../Badge/ContentBadge';
+
+// 크기별 기본 이미지 Import
+import SmallProfile from './img/small.svg';
+import MediumProfile from './img/medium.svg';
+import LargeProfile from './img/large.svg';
 
 interface ProfileProps {
   data: User;
@@ -14,19 +19,38 @@ const IMG_PIXELS = {
   large: 180,
 };
 
+// 사이즈별 기본 이미지 매핑
+const DEFAULT_IMAGES = {
+  small: SmallProfile,
+  medium: MediumProfile,
+  large: LargeProfile,
+};
+
 export const UserProfile: React.FC<ProfileProps> = ({
   data,
   size = 'small',
 }) => {
+  // 이미지 소스 상태 관리 (프로필 이미지가 없으면 해당 사이즈의 기본 이미지 사용)
+  const [imgSrc, setImgSrc] = useState<string>(data.profileImg || DEFAULT_IMAGES[size]);
+
+  // data.profileImg가 변경될 때마다 상태 업데이트
+  useEffect(() => {
+    setImgSrc(data.profileImg || DEFAULT_IMAGES[size]);
+  }, [data.profileImg, size]);
+
+  const handleError = () => {
+    setImgSrc(DEFAULT_IMAGES[size]);
+  };
+
   const renderImage = () => (
     <img
-      src={data.profileImg}
+      src={imgSrc}
       alt={`${data.name} profile`}
-      className="rounded-full object-cover bg-gray-200"
+      onError={handleError}
+      className="rounded-full object-cover bg-gray-100" // 배경색 살짝 수정
       style={{ width: IMG_PIXELS[size], height: IMG_PIXELS[size] }}
     />
   );
-
 
   if (size === 'small') {
     return (
@@ -34,7 +58,10 @@ export const UserProfile: React.FC<ProfileProps> = ({
         {renderImage()}
         <div className="flex flex-col">
           <span className="font-bold text-gray-900">{data.name}</span>
-          <span className="text-sm text-gray-500">{data.introduction}</span>
+          {/* introduction이 있을 때만 렌더링하도록 조건부 처리 추천 */}
+          {data.introduction && (
+             <span className="text-sm text-gray-500 line-clamp-1">{data.introduction}</span>
+          )}
         </div>
       </div>
     );
@@ -49,7 +76,6 @@ export const UserProfile: React.FC<ProfileProps> = ({
             <span className="font-bold text-lg text-gray-900">{data.name}</span>
           </div>
 
-
           {data.lastActive && (
             <span className="text-sm text-gray-400">{data.lastActive}</span>
           )}
@@ -58,6 +84,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
     );
   }
 
+  // Large size
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       {renderImage()}
