@@ -4,14 +4,28 @@ interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
-  header?: string; // 헤더 존재 유무
+  header?: string;
   maxRows?: number;
+  /** true면 내용에 따라 높이 자동 조절, false면 부모/스타일에 맡김 */
+  autoResize?: boolean;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder = "텍스트를 입력하세요...", header, maxRows = 10, className = "", ...props }) => {
+const TextArea: React.FC<TextAreaProps> = ({
+  value = "",
+  onChange,
+  placeholder = "텍스트를 입력하세요...",
+  header,
+  maxRows = 10,
+  className = "",
+  autoResize = false, // 기본: 자동 리사이즈 끔 (부모 높이 채우기 용이)
+  style,
+  ...props
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const adjustHeight = useCallback(() => {
+    if (!autoResize) return;
+
     const el = textareaRef.current;
     if (!el) return;
 
@@ -27,7 +41,7 @@ const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder =
 
     const next = Math.min(Math.max(el.scrollHeight, minHeight), maxHeight);
     el.style.height = `${next}px`;
-  }, [maxRows]);
+  }, [autoResize, maxRows]);
 
   useEffect(() => {
     adjustHeight();
@@ -35,7 +49,9 @@ const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder =
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(e);
-    requestAnimationFrame(adjustHeight);
+    if (autoResize) {
+      requestAnimationFrame(adjustHeight);
+    }
   };
 
   return (
@@ -48,7 +64,8 @@ const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder =
 
       <textarea
         ref={textareaRef}
-        rows={1}
+        // autoResize=false일 때는 rows/height를 부모에서 제어 가능
+        rows={autoResize ? 1 : props.rows}
         className={`
           w-full p-4 text-base leading-6 
           bg-transparent border-0 resize-none
@@ -57,6 +74,7 @@ const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder =
           placeholder:text-gray-400 placeholder:font-medium
           ${className}
         `}
+        style={style}
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
