@@ -17,7 +17,6 @@ import PaymentPage from "./pages/My/PaymentPage";
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Correction_Templete from "./pages/Correction/WriteTemplete";
 import LibraryPage from "./pages/Library/LibraryPage";
-import ReviewPage from "./pages/Library/Review/ReviewPage";
 import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
 import { WordDetailPage } from "./pages/Library/WordDetailPage";
 
@@ -37,7 +36,6 @@ function App() {
         <Route path="/my-korean/payment" element={<PaymentPage />} />
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/review/:id" element={<ReviewPage />} />
-        <Route path="/mypage" element={<Mypage />} />
         <Route path="/review/:id" element={<InboxReviewPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/correction1" element={<Correction_NMain />} />
