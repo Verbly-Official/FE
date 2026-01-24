@@ -8,6 +8,7 @@ import { TextField } from "../../../components/TextArea/TextField";
 import { ChatList } from "../../../components/Chat";
 import type { ChatMessage } from "../../../types/chat";
 import DetailSentence from "../components_n/DetailSentence";
+import File from "../../../assets/emoji/file.svg";
 
 const sentences = [
   "I missed the bus because I was looking at my...",
@@ -41,13 +42,19 @@ const Correction_NMain = () => {
           </div>
         </div>
 
-        {/* 우측 상단: 문장 미리보기 / 상세 (항상 표시) */}
-        <div
-          className={`flex flex-col px-10 py-3 bg-[#F8FAFC] gap-[13px] h-full overflow-y-auto ${
-            activeIndex === null ? "flex-2" : "flex-[3]" // 상세일 때 더 넓게
-          }`}
-        >
-          {activeIndex === null ? sentences.map((text, index) => <R_SentenceItem key={index} text={text} index={index} />) : <DetailSentence index={activeIndex} text={sentences[activeIndex]} />}
+        {/* 우측 상단: 문장 미리보기 / 상세 */}
+        <div className={`flex flex-col px-10 py-3 bg-[#F8FAFC] gap-[13px] h-full overflow-y-auto relative ${activeIndex === null ? "flex-2" : "flex-[3]"}`}>
+          {activeIndex === null ? (
+            sentences.map((text, index) => <R_SentenceItem key={index} text={text} index={index} />)
+          ) : (
+            <>
+              <DetailSentence index={activeIndex} text={sentences[activeIndex]} />
+              {/* 패널 내부 우측 하단 고정 */}
+              <div className="absolute bottom-6 right-6 z-10">
+                <SolidButton label="Correction List" iconSrc={File} />
+              </div>
+            </>
+          )}
         </div>
 
         {/* 우측 하단: 채팅 영역 */}

@@ -61,7 +61,7 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ index, text }) => {
       {/* Toast 표시 (상단 중앙 고정) */}
       {showToast && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-          <Toast variant={toastVariant} message={`Sentence #${index + 1} sent successfully!`} />
+          <Toast variant={toastVariant} message={`Correction file sent!`} />
         </div>
       )}
     </>
