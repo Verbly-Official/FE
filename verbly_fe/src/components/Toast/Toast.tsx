@@ -2,6 +2,9 @@ import React from "react";
 import DefaultIcon from "../../assets/emoji/checkbox-dashed.svg";
 import CautionaryIcon from "../../assets/emoji/notice.svg";
 import PositiveIcon from "../../assets/emoji/checkbox-rounded.svg";
+import DefaultIcon from "../../assets/emoji/checkbox-dashed.svg";
+import CautionaryIcon from "../../assets/emoji/notice.svg";
+import PositiveIcon from "../../assets/emoji/checkbox-rounded.svg";
 
 type ToastVariant = "default" | "cautionary" | "positive";
 
@@ -23,23 +26,28 @@ const VARIANT_CONFIG: Record<ToastVariant, ToastVariantConfig> = {
     iconColor: "text-white",
     defaultMessage: "Post uploaded successfully.",
   },
+  },
   cautionary: {
     icon: CautionaryIcon,
     iconColor: "text-gray-900",
     defaultMessage: "Please check your input.",
+  },
   },
   positive: {
     icon: PositiveIcon,
     iconColor: "text-green-500",
     defaultMessage: "Post uploaded successfully!",
   },
+  },
 } as const;
 
+const Toast: React.FC<ToastProps> = React.memo(({ variant = "positive", message, className = "" }) => {
 const Toast: React.FC<ToastProps> = React.memo(({ variant = "positive", message, className = "" }) => {
   const config = VARIANT_CONFIG[variant];
   const displayMessage = message ?? config.defaultMessage;
 
   return (
+    <div className="flex items-center justify-center">
     <div className="flex items-center justify-center">
       <div
         className={`
