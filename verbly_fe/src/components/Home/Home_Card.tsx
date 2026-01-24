@@ -12,9 +12,10 @@ type HomeCardProps = {
 };
 
 const MOCK_USER: User = {
+  progress: 3,
+  stats: 3,
   id: "1",
   name: "김철수",
-  role: "KOREAN",
   profileImg: "https://via.placeholder.com/150",
   introduction: "안녕하세요! 프론트엔드 개발자입니다.",
   lastActive: "방금 전",

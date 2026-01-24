@@ -6,6 +6,14 @@ import { TextField } from '../../components/TextArea/TextField';
 import { GradientButton, IconButton, OutlinedButton } from '../../components/Button';
 import PricingCard from './components/PricingCard';
 import OrderSummary from './components/OrderSummary'; 
+<<<<<<< HEAD
+
+// 아이콘
+import CloseIcon from '../../assets/emoji/close.svg';
+import CardIcon from '../../assets/emoji/card.svg';
+import HomeIcon from '../../assets/emoji/home.svg'; 
+import { Badge } from '../../components/Badge/Badge';
+=======
 import { Badge } from '../../components/Badge/Badge';
 
 // 아이콘 및 이미지
@@ -14,6 +22,7 @@ import CardIcon from '../../assets/emoji/card.svg';
 import HomeIcon from '../../assets/emoji/home.svg'; 
 import NewspaperIcon from './img/L-Newspaper.svg';
 import AcademicIcon from './img/L-Academic.svg';
+>>>>>>> origin/dev
 
 interface PricingOption {
   id: string;
@@ -49,6 +58,24 @@ const PaymentPage: React.FC = () => {
   const [cvv, setCvv] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
+<<<<<<< HEAD
+  // 가격 및 기간 계산 로직 수정
+  const selectedOption = PRICING_OPTIONS.find(opt => opt.id === selectedPlan);
+  const isYearly = selectedPlan === 'yearly';
+  
+  // [수정됨] period 변수 정의
+  const period = selectedOption?.period || 'MONTHLY';
+
+  // [수정됨] 가격 계산 로직
+  // 연간 플랜 선택 시: 비교 기준 가격은 (월간 가격 * 12)입니다.
+  const monthlyPrice = 1.60;
+  const originalPrice = isYearly ? (monthlyPrice * 12) : monthlyPrice; // 19.20 or 1.60
+  
+  // 실제 결제할 금액
+  const finalPrice = selectedOption?.rawPrice || 0; 
+  
+  // 할인 금액 자동 계산 (19.20 - 9.60 = 9.60)
+=======
   // 가격 및 기간 계산 로직
   const selectedOption = PRICING_OPTIONS.find(opt => opt.id === selectedPlan);
   const isYearly = selectedPlan === 'yearly';
@@ -59,6 +86,7 @@ const PaymentPage: React.FC = () => {
   const originalPrice = isYearly ? (monthlyPrice * 12) : monthlyPrice; 
   const finalPrice = selectedOption?.rawPrice || 0; 
   
+>>>>>>> origin/dev
   const discount = originalPrice - finalPrice;
   const tax = 0;
   const total = finalPrice + tax;
@@ -91,7 +119,11 @@ const PaymentPage: React.FC = () => {
         </div>
 
         {/* Page Content */}
+<<<<<<< HEAD
+        <main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 md:py-8">
+=======
         <main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 md:py-8 overflow-hidden relative">
+>>>>>>> origin/dev
           {/* Quit Button */}
           <div className="flex items-center gap-2 mb-6">
             <IconButton 
@@ -104,8 +136,13 @@ const PaymentPage: React.FC = () => {
             <span className='text-sm text-gray-500'>Quit</span>
           </div>
 
+<<<<<<< HEAD
+          {/* Main Layout: 좌우 2단 (모바일은 1단) */}
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl">
+=======
           {/* Main Layout: 좌우 2단 */}
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl relative z-10">
+>>>>>>> origin/dev
             {/* Left Side: Plan Selection & Payment Info */}
             <div className="flex-1 space-y-6 lg:space-y-8">
               {/* Choose Your Plan */}
@@ -144,6 +181,23 @@ const PaymentPage: React.FC = () => {
                 {/* Payment Method Selection */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   <OutlinedButton 
+<<<<<<< HEAD
+                            variant='primary'
+                            size='large' 
+                            label='Credit Card' 
+                            iconSrc={CardIcon}
+                            onClick={() => setPaymentMethod('card')}
+                            className={paymentMethod === 'card' ? 'border-violet-50 bg-violet-100' : ''}
+                          />
+                    <OutlinedButton 
+                        variant='primary'
+                        size='large' 
+                        label='Paypal' 
+                        iconSrc={HomeIcon}
+                        onClick={() => setPaymentMethod('paypal')}
+                        className={paymentMethod === 'paypal' ? 'border-violet-50 bg-violet-100' : ''}
+                      />
+=======
                       variant='primary'
                       size='large' 
                       label='Credit Card' 
@@ -159,11 +213,16 @@ const PaymentPage: React.FC = () => {
                       onClick={() => setPaymentMethod('paypal')}
                       className={paymentMethod === 'paypal' ? 'border-violet-50 bg-violet-100' : ''}
                     />
+>>>>>>> origin/dev
                 </div>
 
                 {/* Card Form */}
                 {paymentMethod === 'card' && (
                   <div className="space-y-5">
+<<<<<<< HEAD
+                    {/* Name on Card */}
+=======
+>>>>>>> origin/dev
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Name on Card
@@ -175,6 +234,10 @@ const PaymentPage: React.FC = () => {
                       />
                     </div>
 
+<<<<<<< HEAD
+                    {/* Card Number */}
+=======
+>>>>>>> origin/dev
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Card Number
@@ -188,18 +251,31 @@ const PaymentPage: React.FC = () => {
                       />
                     </div>
 
+<<<<<<< HEAD
+                    {/* Expiration & CVV */}
+=======
+>>>>>>> origin/dev
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Expiration Date
                         </label>
                         <TextField 
+<<<<<<< HEAD
+                        shape='square'
+                        value={expirationDate}
+                        onChange={(e) => setExpirationDate(e.target.value)}
+                          placeholder="MM / YY"
+                          maxLength={5}
+                      />
+=======
                           shape='square'
                           value={expirationDate}
                           onChange={(e) => setExpirationDate(e.target.value)}
                           placeholder="MM / YY"
                           maxLength={5}
                         />
+>>>>>>> origin/dev
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -208,10 +284,17 @@ const PaymentPage: React.FC = () => {
                          <TextField 
                             shape='square'
                             value={cvv}
+<<<<<<< HEAD
+                          onChange={(e) => setCvv(e.target.value)}
+                          placeholder="123"
+                          maxLength={4}
+                         />
+=======
                             onChange={(e) => setCvv(e.target.value)}
                             placeholder="123"
                             maxLength={4}
                            />
+>>>>>>> origin/dev
                       </div>
                     </div>
                   </div>
@@ -219,6 +302,20 @@ const PaymentPage: React.FC = () => {
               </div>
             </div>
 
+<<<<<<< HEAD
+            {/* Right Side: Order Summary */}
+            <div className="lg:w-[400px] xl:w-[450px] space-y-6">
+              <OrderSummary
+                period={period}
+                basePrice={originalPrice}
+                discount={discount}
+                tax={tax}
+                total={total}
+              />
+
+              {/* Benefits & Subscribe */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+=======
             {/* Right Side: Order Summary & Decorative Icons */}
             {/* relative 클래스를 추가하여 내부 absolute 요소들의 기준점이 되게 함 */}
             <div className="lg:w-[400px] xl:w-[450px] space-y-6 relative">
@@ -253,6 +350,7 @@ const PaymentPage: React.FC = () => {
                 </div>
               {/* Benefits & Subscribe */}
               <div className="p-6 relative z-10">
+>>>>>>> origin/dev
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
                   PRO BENEFITS INCLUDED
                 </h3>
@@ -261,11 +359,18 @@ const PaymentPage: React.FC = () => {
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center flex-shrink-0">
+<<<<<<< HEAD
+=======
                          {/* 체크 아이콘 */}
+>>>>>>> origin/dev
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="white">
                           <path d="M10 3L4.5 8.5L2 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
+<<<<<<< HEAD
+                      {/* [수정됨] Grammer -> Grammar */}
+=======
+>>>>>>> origin/dev
                       <span className="text-sm text-gray-600">Unlimited AI Grammar</span>
                     </div>
                   ))}
@@ -284,6 +389,10 @@ const PaymentPage: React.FC = () => {
                     <a href="#" className="text-violet-500 hover:underline">Terms of Service</a>
                     {' '}and{' '}
                     <a href="#" className="text-violet-500 hover:underline">Privacy Policy</a>
+<<<<<<< HEAD
+                    {/* [수정됨] Subsription -> Subscription */}
+=======
+>>>>>>> origin/dev
                     {' '}Subscription auto-renew...
                   </span>
                 </label>
