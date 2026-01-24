@@ -6,8 +6,7 @@ interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   placeholder?: string;
   header?: string;
   maxRows?: number;
-  /** true면 내용에 따라 높이 자동 조절, false면 부모/스타일에 맡김 */
-  autoResize?: boolean;
+  maxWidth?: string; // 새로운 prop: 최대 너비 제어 (Tailwind 클래스나 CSS 값)
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -16,16 +15,13 @@ const TextArea: React.FC<TextAreaProps> = ({
   placeholder = "텍스트를 입력하세요...",
   header,
   maxRows = 10,
+  maxWidth = "max-w-2xl", // 기본 최대 너비 (672px), 필요시 변경
   className = "",
-  autoResize = false, // 기본: 자동 리사이즈 끔 (부모 높이 채우기 용이)
-  style,
   ...props
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const adjustHeight = useCallback(() => {
-    if (!autoResize) return;
-
     const el = textareaRef.current;
     if (!el) return;
 
@@ -41,7 +37,7 @@ const TextArea: React.FC<TextAreaProps> = ({
 
     const next = Math.min(Math.max(el.scrollHeight, minHeight), maxHeight);
     el.style.height = `${next}px`;
-  }, [autoResize, maxRows]);
+  }, [maxRows]);
 
   useEffect(() => {
     adjustHeight();
@@ -49,13 +45,11 @@ const TextArea: React.FC<TextAreaProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(e);
-    if (autoResize) {
-      requestAnimationFrame(adjustHeight);
-    }
+    requestAnimationFrame(adjustHeight);
   };
 
   return (
-    <div className="relative bg-[var(--color-bg1)] rounded-xl border-2 border-[var(--color-line1)] overflow-hidden">
+    <div className={`w-full ${maxWidth} bg-[var(--color-bg1)] rounded-xl border-2 border-[var(--color-line1)] overflow-hidden`}>
       {header && (
         <div className="p-4 bg-[var(--color-bg2)] border-b border-[var(--color-line1)]">
           <h3 className="text-[22px] leading-[22px] font-semibold text-[var(--Gray-10)] font-['Pretendard'] tracking-tight">{header}</h3>
@@ -64,8 +58,7 @@ const TextArea: React.FC<TextAreaProps> = ({
 
       <textarea
         ref={textareaRef}
-        // autoResize=false일 때는 rows/height를 부모에서 제어 가능
-        rows={autoResize ? 1 : props.rows}
+        rows={1}
         className={`
           w-full p-4 text-base leading-6 
           bg-transparent border-0 resize-none
@@ -74,7 +67,6 @@ const TextArea: React.FC<TextAreaProps> = ({
           placeholder:text-gray-400 placeholder:font-medium
           ${className}
         `}
-        style={style}
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
