@@ -13,7 +13,7 @@ export default function Sidebar() {
   const [active, setActive] = useState<MenuKey>("all");
 
   return (
-    <aside className="w-[240px] bg-white">
+    <aside className="bg-white p-3">
       <div className="mb-6">
         <p className="flex items-start text-[#9E9E9E] pb-[8px] text-[17px] font-semibold leading-[100%] font-pretendard">내 문서</p>
         <div className="space-y-2">

@@ -29,9 +29,7 @@ export default function SideMenu({ variant = "default" }) {
           </div>
           <div className="w-[221px] h-[60px] px-[32px] py-[20px] rounded-[8px] flex items-center justify-center gap-[8px] bg-gradient-to-r from-[#713DE3] to-[#4F46DD]">
             <img src="../../src/assets/emoji/feather-white.svg" />
-            <div className="text-white text-[24px] w-[125px] h-[24px] leading-none">
-              Write Post!
-            </div>
+            <div className="text-white text-[24px] w-[125px] h-[24px] leading-none">Write Post!</div>
           </div>
         </div>
       );
