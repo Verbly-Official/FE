@@ -6,7 +6,7 @@ import PositiveIcon from "../../assets/emoji/checkbox-rounded.svg";
 type ToastVariant = "default" | "cautionary" | "positive";
 
 interface ToastVariantConfig {
-  icon: string; // string 확정
+  icon: string;
   iconColor: string;
   defaultMessage: string;
 }
@@ -33,9 +33,9 @@ const VARIANT_CONFIG: Record<ToastVariant, ToastVariantConfig> = {
     iconColor: "text-green-500",
     defaultMessage: "Post uploaded successfully!",
   },
-};
+} as const;
 
-const Toast: React.FC<ToastProps> = React.memo(({ variant = "default", message, className = "" }) => {
+const Toast: React.FC<ToastProps> = React.memo(({ variant = "positive", message, className = "" }) => {
   const config = VARIANT_CONFIG[variant];
   const displayMessage = message ?? config.defaultMessage;
 
@@ -43,7 +43,7 @@ const Toast: React.FC<ToastProps> = React.memo(({ variant = "default", message, 
     <div className="flex items-center justify-center">
       <div
         className={`
-          flex items-center gap-7 p-6 rounded-xl bg-black/65 backdrop-blur-sm
+          flex items-center justify-center gap-7 p-6 rounded-xl bg-black/65 backdrop-blur-sm
           ${className}
         `}
         role="alert"
@@ -51,10 +51,10 @@ const Toast: React.FC<ToastProps> = React.memo(({ variant = "default", message, 
       >
         <img
           src={config.icon}
-          alt={`${variant} icon`}
+          alt=""
           className={`
             w-5 h-5 flex-shrink-0 
-            brightness-0 invert-[1] sepia-[1] saturate-[2]
+            brightness-0 invert-[1] sepia-[1] saturate-[5] 
             ${config.iconColor}
           `}
           draggable={false}
