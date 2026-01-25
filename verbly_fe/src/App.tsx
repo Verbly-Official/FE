@@ -20,6 +20,7 @@ import EditProfilePage from "./pages/My/EditProfilePage/EditProfilePage";
 import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
+import Home_Search from "./pages/Home/Home_Search";
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
         <Route path="/my-foreigner" element={<MyPage_Foreigner />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/my-korean/payment" element={<PaymentPage />} />
+
+        <Route path="/home-search" element={<Home_Search />} />
       </Routes>
     </BrowserRouter>
   );
