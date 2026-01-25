@@ -1,3 +1,5 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; // [추가] 라우팅 훅
 import SolidButton from '../../../../components/Button/SolidButton';
 import BannerIcon from '../../img/BannerEmoji.svg';
 import Banner2Icon from '../../img/Banner2.svg';
@@ -5,6 +7,13 @@ import EclipseIcon from '../../img/Banner_Eclipse.svg';
 import ChevIcon from '../../../../assets/emoji/chev-right.svg'
 
 const My_banner: React.FC = () => {
+  const navigate = useNavigate(); // [추가] navigate 함수 생성
+
+  // 결제 페이지로 이동하는 핸들러
+  const handlePaymentClick = () => {
+    navigate('/my-korean/payment'); // 실제 결제 페이지 경로에 맞게 수정해주세요 (예: '/payment', '/checkout' 등)
+  };
+
   return (
     <div className="relative w-full min-h-[100px] md:min-h-[124px] border border-pink-50 rounded-xl md:rounded-2xl bg-pink-100 shadow-sm overflow-hidden flex items-center">
       
@@ -32,7 +41,7 @@ const My_banner: React.FC = () => {
         <div className="shrink-0 w-full md:w-auto">
           <SolidButton 
             label="BUY NOW" 
-            onClick={() => {}} 
+            onClick={handlePaymentClick} // [수정] 클릭 이벤트 연결
             size="medium"
             variant="primary"
             className="bg-[image:var(--gradient-4)] !text-white !font-bold px-6 w-full md:w-auto"

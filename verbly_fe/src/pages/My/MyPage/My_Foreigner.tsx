@@ -13,6 +13,9 @@ import ExpertHistoryModal from './components/ExpertHistoryModal';
 import { useModal } from './hooks/useModal';
 import { MOCK_CORRECTIONS } from '../mockData';
 
+//icons
+import SortIcon from '../../../assets/emoji/sort.svg';
+
 const My_Foreigner: React.FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -45,30 +48,22 @@ const My_Foreigner: React.FC = () => {
           {/* 하단: 게시판 + 첨삭 내역 */}
           <div className="flex flex-col gap-[24px] flex-1 w-full min-w-0 pb-8">
             <div>
-              <div className="mb-4 text-lg font-bold text-gray-9">대시보드</div>
+              <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
+                <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
+                대시보드</div>
               <MyBoard />
             </div>
             
             <div>
-              <div className="mb-4 text-lg font-bold text-gray-9">Correction History</div>
-              <div 
-                onClick={openModal} 
-                className="cursor-pointer hover:opacity-90 transition-all active:scale-[0.99]"
-              >
-                <MyCorrected data={MOCK_CORRECTIONS} />
-              </div>
+              <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
+                <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
+                Correction History</div>
+              <MyCorrected data={MOCK_CORRECTIONS} />
             </div>
           </div>
 
         </main>
       </div>
-
-      {/* Modals */}
-      <ExpertHistoryModal 
-        isOpen={isModalOpen} 
-        onClose={closeModal}
-        expertName="Mark" 
-      />
     </div>
   );
 };

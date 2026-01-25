@@ -14,18 +14,19 @@ interface MyCorrectedListProps {
 const MyCorrected = ({ data = [] }: MyCorrectedListProps) => {
   if (!data || data.length === 0) {
     return (
-      <div className="flex flex-col h-48 md:h-[348px] items-center justify-center gap-3 self-stretch overflow-y-auto pr-1">
+      // 데이터가 없을 때도 고정 높이 대신 적절한 여백을 줌
+      <div className="flex flex-col items-center justify-center gap-3 self-stretch py-10 md:py-16">
         <p className="text-gray-400 text-sm md:text-base">아직 받은 첨삭이 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-auto max-h-[400px] md:h-[348px] items-start gap-2 md:gap-[12px] self-stretch overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+    <div className="flex flex-col w-full gap-2 md:gap-[12px]">
       {data.map((item) => (
         <div
           key={item.id}
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 md:p-6 gap-2 md:gap-3 self-stretch rounded-lg md:rounded-xl bg-white border border-[#F0F0F0] hover:border-[#7C4DFF] hover:shadow-[0_4px_12px_rgba(124,77,255,0.05)] transition-all duration-200"
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 md:p-6 gap-2 md:gap-3 w-full rounded-lg md:rounded-xl bg-white border border-[#F0F0F0] transition-all duration-200"
         >
           {/* 헤더 영역 */}
           <div className="flex flex-col w-full gap-1">

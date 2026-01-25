@@ -4,6 +4,8 @@ import { TextButton } from '../../../../components/Button';
 import { Badge } from '../../../../components/Badge/ContentBadge'; 
 import KoreanHistoryModal from './KoreanHistoryModal';
 import ExpertHistoryModal from './ExpertHistoryModal';
+import FileIcon from '../../../../assets/emoji/file.svg';
+import ChevIcon from '../../../../assets/emoji/chev-right.svg';
 
 interface Corrector {
   id: string;
@@ -14,7 +16,7 @@ interface Corrector {
 }
 
 interface MyCorrectorProps {
-  modalType?: 'korean' | 'foreigner'; // 어떤 모달을 사용할지 결정
+  modalType?: 'korean' | 'foreigner';
 }
 
 const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
@@ -24,17 +26,14 @@ const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
     { id: '3', name: 'CodeWriter', location: '서울, 한국', isPro: true },
   ];
 
-  // 모달 상태 관리
   const [selectedCorrector, setSelectedCorrector] = useState<Corrector | null>(null);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
-  // 내역보기 모달 열기 (버튼 클릭 시)
   const handleHistoryClick = (corrector: Corrector) => {
     setSelectedCorrector(corrector);
     setIsHistoryModalOpen(true);
   };
 
-  // 모달 닫기
   const handleCloseModal = () => {
     setIsHistoryModalOpen(false);
     setSelectedCorrector(null);
@@ -43,7 +42,8 @@ const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
   return (
     <>
       <div className="w-full h-[300px] bg-white rounded-xl border border-gray-100 p-4 md:p-6">
-        <div className="flex justify-between items-center mb-4 md:mb-6 gap-2">
+        <div className="flex justify-start items-center mb-4 md:mb-6 gap-[8px]">
+          <img src={FileIcon} alt="icon" className="w-6 h-6 md:w-8 md:h-8" />
           <h3 className="text-lg md:text-[20px] text-gray-9">
             전문가 의뢰 관리
           </h3>
@@ -73,31 +73,35 @@ const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
               </div>
               
               {/* 하단 정보 */}
-              <div className="flex justify-between items-end w-full mt-auto">
+              <div className="flex justify-between items-center w-full mt-auto">
                 <div className="flex flex-col text-left gap-0.5">
                   <p className="text-base md:text-[17px] font-bold text-gray-900 truncate max-w-[120px]">
                     {corrector.name}
                   </p>
-                  <p className="text-xs md:text-[12px] text-gray-400 truncate max-w-[120px]">
+                  <p className="text-xs md:text-[14px] text-gray-400 truncate max-w-[120px]">
                     {corrector.location}
                   </p>
                 </div>
 
                 <div 
-                  className="shrink-0 mb-0.5"
                   onClick={(e) => {
-                    e.stopPropagation(); // 카드 클릭 이벤트 전파 방지
-                    handleHistoryClick(corrector); // 내역보기 모달 열기
+                    e.stopPropagation();
+                    handleHistoryClick(corrector);
                   }}
                 >
                   <TextButton 
-                    onClick={() => {}} // 빈 함수 (이벤트 버블링 방지는 상위 div에서 처리)
+                    onClick={() => {}} 
                     variant="secondary" 
                     size="small"
-                    className="!text-[10px] md:!text-[11px] !text-gray-400 hover:!text-violet-600 !p-0 gap-0.5"
                   >
-                    내역보기 
-                    <span className="text-[9px] md:text-[10px] ml-0.5">&gt;</span>
+                    <div className="flex items-center gap-[4px]">
+                      <span>내역보기</span>
+                      <img 
+                        src={ChevIcon} 
+                        alt="arrow" 
+                        className="w-4 h-4 opacity-60" 
+                      />
+                    </div>
                   </TextButton>
                 </div>
               </div>
@@ -106,7 +110,6 @@ const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
         </div>
       </div>
 
-      {/* 모달 타입에 따라 다른 모달 렌더링 */}
       {modalType === 'korean' ? (
         <KoreanHistoryModal
           isOpen={isHistoryModalOpen}
