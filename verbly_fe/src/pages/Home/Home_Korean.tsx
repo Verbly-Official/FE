@@ -39,13 +39,6 @@ export default function Home_Korean() {
               <TrendingTag />
             </div>
           </div>
-<<<<<<< HEAD
-          <div className="mt-[32px] flex flex-col gap-[32px]">
-            <div className="bg-white w-[384px] h-[503px]">Profile</div>
-            {/*<TrendingTag />*/}
-          </div>
-=======
->>>>>>> 6aafb2d ([temp/#118] pull 받기 전 커밋)
         </div>
       </div>
     </div>
