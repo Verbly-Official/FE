@@ -15,9 +15,9 @@ interface OutlinedButtonProps {
 }
 
 const SIZE_STYLES: Record<ButtonSize, string> = {
-  large: "h-[60px] px-[20px] py-[32px] text-[18px] gap-[8px]",
-  medium: "h-[48px] px-[12px] py-[24px] text-[16px] gap-[8px]",
-  small: "h-[40px] px-[8px] py-[20px] text-[14px] gap-[8px]",
+  large: "h-[60px] px-[20px] text-[18px] gap-[8px]",
+  medium: "h-[48px] px-[12px] text-[16px] gap-[8px]",
+  small: "h-[40px] px-[8px] text-[14px] gap-[8px]",
 };
 
 const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
