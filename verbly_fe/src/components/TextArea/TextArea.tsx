@@ -4,11 +4,21 @@ interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
-  header?: string; // 헤더 존재 유무
+  header?: string;
   maxRows?: number;
+  maxWidth?: string; // 새로운 prop: 최대 너비 제어 (Tailwind 클래스나 CSS 값)
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder = "텍스트를 입력하세요...", header, maxRows = 10, className = "", ...props }) => {
+const TextArea: React.FC<TextAreaProps> = ({
+  value = "",
+  onChange,
+  placeholder = "텍스트를 입력하세요...",
+  header,
+  maxRows = 10,
+  maxWidth = "max-w-2xl", // 기본 최대 너비 (672px), 필요시 변경
+  className = "",
+  ...props
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const adjustHeight = useCallback(() => {
@@ -39,7 +49,7 @@ const TextArea: React.FC<TextAreaProps> = ({ value = "", onChange, placeholder =
   };
 
   return (
-    <div className="relative bg-[var(--color-bg1)] rounded-xl border-2 border-[var(--color-line1)] overflow-hidden">
+    <div className={`w-full ${maxWidth} bg-[var(--color-bg1)] rounded-xl border-2 border-[var(--color-line1)] overflow-hidden`}>
       {header && (
         <div className="p-4 bg-[var(--color-bg2)] border-b border-[var(--color-line1)]">
           <h3 className="text-[22px] leading-[22px] font-semibold text-[var(--Gray-10)] font-['Pretendard'] tracking-tight">{header}</h3>
