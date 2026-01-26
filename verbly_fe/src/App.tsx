@@ -21,6 +21,7 @@ import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Home_Search from "./pages/Home/Home_Search";
+import Correction_NList from "./pages/Correction/Native/CorrectionListNativePage";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
 
         <Route path="/correction" element={<Correction_Main />} />
         <Route path="/correction/write" element={<Correction_Write />} />
-        <Route path="/correction1" element={<Correction_NMain />} />
+        <Route path="/correction/native" element={<Correction_NMain />} />
 
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/review/:id" element={<ReviewPage />} />
@@ -47,6 +48,7 @@ function App() {
         <Route path="/my-korean/payment" element={<PaymentPage />} />
 
         <Route path="/home-search" element={<Home_Search />} />
+        <Route path="/correction/native/list" element={<Correction_NList />} />
       </Routes>
     </BrowserRouter>
   );

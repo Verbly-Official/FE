@@ -41,7 +41,7 @@ const Correction_Main = () => {
             {/* 왼쪽 메뉴 카드 (고정폭 유지) */}
             <div className="w-[250px] h-[940px] px-[20px] py-9 bg-white rounded-l-[12px] border border-r-0 border-[#E5E7EB] flex-shrink-0">
               <SolidButton size="large" className="w-full mb-8" iconSrc={plusSrc} label="새 글 작성하기" onClick={handleNewPost} />
-              <Sidebar />
+              <Sidebar locale="ko" />
             </div>
 
             {/* 메인 카드 */}

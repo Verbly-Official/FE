@@ -1,35 +1,83 @@
-import React, { useState } from "react";
-import { IconButton } from "../../components/Button";
-import { TextButton } from "../../components/Button/TextButton";
+import React, { useMemo, useState } from "react";
 import SideMenu_Tab from "../../components/Nav/SideMenu_Tab";
-import DocIcon from "../../assets/emoji/file.svg";
-import StarIcon from "../../assets/emoji/star-false.svg";
-import RecentIcon from "../../assets/emoji/reload.svg";
-import FolderIcon from "../../assets/emoji/folder.svg";
+import DocIcon from "../../assets/emoji/file.svg?react";
+import StarIcon from "../../assets/emoji/star-false.svg?react";
+import RecentIcon from "../../assets/emoji/reload.svg?react";
+import FolderIcon from "../../assets/emoji/folder.svg?react";
 
 type MenuKey = "all" | "favorites" | "recent" | "drafts" | "templates";
+type Locale = "ko" | "en";
 
-export default function Sidebar() {
-  const [active, setActive] = useState<MenuKey>("all");
+type SidebarItem = {
+  key: MenuKey;
+  label: string;
+  icon: React.ReactNode;
+};
+
+type SidebarSection = {
+  title: string;
+  items: SidebarItem[];
+};
+
+type SidebarProps = {
+  locale: Locale;
+  defaultActive?: MenuKey;
+  onChangeActive?: (key: MenuKey) => void;
+};
+
+const SIDEBAR_CONTENT: Record<Locale, SidebarSection[]> = {
+  ko: [
+    {
+      title: "내 문서",
+      items: [
+        { key: "all", label: "전체", icon: <DocIcon className="w-4 h-[20px]" /> },
+        { key: "favorites", label: "즐겨찾기", icon: <StarIcon className="w-4 h-[20px]" /> },
+        { key: "recent", label: "최근", icon: <RecentIcon className="w-4 h-[20px]" /> },
+      ],
+    },
+    {
+      title: "내 폴더",
+      items: [
+        { key: "drafts", label: "임시저장", icon: <FolderIcon className="w-4 h-[20px]" /> },
+        { key: "templates", label: "템플릿", icon: <FolderIcon className="w-4 h-[20px]" /> },
+      ],
+    },
+  ],
+  en: [
+    {
+      title: "My Docs",
+      items: [
+        { key: "all", label: "All", icon: <DocIcon className="w-4 h-[20px]" /> },
+        { key: "favorites", label: "Favorites", icon: <StarIcon className="w-4 h-[20px]" /> },
+        { key: "recent", label: "Recent", icon: <RecentIcon className="w-4 h-[20px]" /> },
+      ],
+    },
+  ],
+};
+
+export default function Sidebar({ locale, defaultActive = "all", onChangeActive }: SidebarProps) {
+  const [active, setActive] = useState<MenuKey>(defaultActive);
+
+  const sections = useMemo(() => SIDEBAR_CONTENT[locale], [locale]);
+
+  const handleClick = (key: MenuKey) => {
+    setActive(key);
+    onChangeActive?.(key);
+  };
 
   return (
     <aside className="bg-white p-3">
-      <div className="mb-6">
-        <p className="flex items-start text-[#9E9E9E] pb-[8px] text-[17px] font-semibold leading-[100%] font-pretendard">내 문서</p>
-        <div className="space-y-2">
-          <SideMenu_Tab label="전체" isSelected={active === "all"} onClick={() => setActive("all")}></SideMenu_Tab>
-          <SideMenu_Tab label="즐겨찾기" isSelected={active === "favorites"} onClick={() => setActive("favorites")} />
-          <SideMenu_Tab label="최근" isSelected={active === "recent"} onClick={() => setActive("recent")} />
-        </div>
-      </div>
+      {sections.map((section) => (
+        <div key={section.title} className="mb-6 last:mb-0">
+          <p className="flex items-start text-[#9E9E9E] pb-[8px] text-[17px] font-semibold leading-[100%] font-pretendard">{section.title}</p>
 
-      <div>
-        <p className="flex items-start text-[#9E9E9E] pb-[8px] text-[17px] font-semibold leading-[100%] font-pretendard">내 폴더</p>
-        <div className="space-y-2">
-          <SideMenu_Tab label="임시저장" isSelected={active === "drafts"} onClick={() => setActive("drafts")} />
-          <SideMenu_Tab label="템플릿" isSelected={active === "templates"} onClick={() => setActive("templates")} />
+          <div className="space-y-2">
+            {section.items.map((item) => (
+              <SideMenu_Tab key={item.key} label={item.label} isSelected={active === item.key} onClick={() => handleClick(item.key)} icon={item.icon} />
+            ))}
+          </div>
         </div>
-      </div>
+      ))}
     </aside>
   );
 }
