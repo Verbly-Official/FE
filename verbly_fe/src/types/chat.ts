@@ -1,7 +1,7 @@
 export type ChatFrom = "me" | "other";
 
 export interface ChatMessage {
-    id: string;
+    id: number;
     from: ChatFrom;
     text: string;
     time?: string;

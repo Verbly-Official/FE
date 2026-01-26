@@ -1,8 +1,11 @@
 export interface User {
+  progress?: any;
+  stats?: any;
   id: string;           // 리스트 렌더링 시 key로 사용
   name: string;         // 이름
-  role: 'KOREAN' | 'FOREIGNER'; // 유저 역할
   profileImg: string;   // 이미지 주소
+  email?: string;    // Small
+  phone?: string;    // Small
   introduction: string; // Small
   lastActive?: string;  // Medium 
   level?: number;       // Large

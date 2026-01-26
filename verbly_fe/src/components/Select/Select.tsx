@@ -8,7 +8,7 @@ export interface Option {
   label: string;
 }
 
-type SelectSize = 'small' | 'medium' | 'large' | 'chip';
+type SelectSize = "small" | "medium" | "large" | "chip";
 
 interface SelectProps {
   options: Option[];
@@ -41,7 +41,9 @@ const Select: React.FC<SelectProps> = ({
 
   const selectedValues = Array.isArray(value) ? value : value ? [value] : [];
   const selectedSingleValue = Array.isArray(value) ? value[0] : value;
-  const selectedOption = options.find((opt) => opt.value === selectedSingleValue);
+  const selectedOption = options.find(
+    (opt) => opt.value === selectedSingleValue,
+  );
 
   const handleToggle = () => {
     if (!disabled) {
@@ -64,7 +66,10 @@ const Select: React.FC<SelectProps> = ({
     }
   };
 
-  const handleRemoveChip = (e: React.MouseEvent, valToRemove: string | number) => {
+  const handleRemoveChip = (
+    e: React.MouseEvent,
+    valToRemove: string | number,
+  ) => {
     e.stopPropagation();
     const newValues = selectedValues.filter((v) => v !== valToRemove);
     onChange(newValues);
@@ -87,27 +92,34 @@ const Select: React.FC<SelectProps> = ({
 
   const getSizeClass = () => {
     switch (size) {
-      case 'small': return 'h-[40px] px-3 text-sm rounded-xl';
-      case 'medium': return 'h-[48px] px-4 text-base rounded-xl';
-      case 'chip': 
-        return 'h-[36px] px-2 text-sm rounded-xl';
-      case 'large':
-      default: return 'h-[60px] px-4 text-lg rounded-xl';
+      case "small":
+        return "h-[40px] px-3 text-sm rounded-xl";
+      case "medium":
+        return "h-[48px] px-4 text-base rounded-xl";
+      case "chip":
+        return "h-[36px] px-2 text-sm rounded-xl";
+      case "large":
+      default:
+        return "h-[60px] px-4 text-lg rounded-xl";
     }
   };
 
   const getDropdownItemClass = () => {
     switch (size) {
-      case 'small': return 'py-2 px-3 text-sm';
-      case 'chip': 
-      case 'medium': return 'py-2.5 px-4 text-base';
-      case 'large':
-      default: return 'py-3 px-4 text-lg';
+      case "small":
+        return "py-2 px-3 text-sm";
+      case "chip":
+      case "medium":
+        return "py-2.5 px-4 text-base";
+      case "large":
+      default:
+        return "py-3 px-4 text-lg";
     }
   };
 
   const getBorderClass = () => {
-    if (disabled) return "bg-gray-1 cursor-not-allowed opacity-70 border-gray-2";
+    if (disabled)
+      return "bg-gray-1 cursor-not-allowed opacity-70 border-gray-2";
     if (error) return "border-red-500";
     if (isOpen) return "border-blue-40";
     return "border-gray-3 hover:border-gray-9";
@@ -135,8 +147,8 @@ const Select: React.FC<SelectProps> = ({
                 const opt = options.find((o) => o.value === val);
                 if (!opt) return null;
                 return (
-                  <div 
-                    key={val} 
+                  <div
+                    key={val}
                     onClick={(e) => handleRemoveChip(e, val)}
                     className="shrink-0"
                   >
@@ -148,13 +160,16 @@ const Select: React.FC<SelectProps> = ({
           ) : (
             <span
               className={`truncate ${
-                (isChipMode ? selectedValues.length > 0 : selectedOption) ? "text-gray-10" : "text-gray-5"
+                (isChipMode ? selectedValues.length > 0 : selectedOption)
+                  ? "text-gray-10"
+                  : "text-gray-5"
               }`}
             >
-              {isChipMode && selectedValues.length > 0 
-                 ? "" 
-                 : (selectedOption ? selectedOption.label : placeholder)
-              }
+              {isChipMode && selectedValues.length > 0
+                ? ""
+                : selectedOption
+                  ? selectedOption.label
+                  : placeholder}
             </span>
           )}
         </div>
@@ -169,10 +184,10 @@ const Select: React.FC<SelectProps> = ({
       {isOpen && !disabled && (
         <ul className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-3 rounded-xl shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
           {options.map((option) => {
-            const isSelected = isMultiSelect 
+            const isSelected = isMultiSelect
               ? selectedValues.includes(option.value)
               : option.value === value;
-              
+
             return (
               <li
                 key={option.value}
