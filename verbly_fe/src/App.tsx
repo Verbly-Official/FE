@@ -21,10 +21,6 @@ import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Home_Search from "./pages/Home/Home_Search";
-import Correction_Templete from "./pages/Correction/WriteTemplete";
-import LibraryPage from "./pages/Library/LibraryPage";
-import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
-import { WordDetailPage } from "./pages/Library/WordDetailPage";
 
 function App() {
   return (
@@ -51,16 +47,6 @@ function App() {
         <Route path="/my-korean/payment" element={<PaymentPage />} />
 
         <Route path="/home-search" element={<Home_Search />} />
-        <Route path="/inbox" element={<InboxPage />} />
-        <Route path="/review/:id" element={<ReviewPage />} />
-        <Route path="/review/:id" element={<InboxReviewPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
-        <Route path="/correction1" element={<Correction_NMain />} />
-        <Route path="/library" element={<LibraryPage />} />
-        <Route path="/library/word/:word" element={<WordDetailPage />} />
-        <Route path="/review" element={<ReviewPage />} />
-        <Route path="/review/result" element={<ReviewResultPage />} />
-        <Route path="/correction/write/templete" element={<Correction_Templete />} />
       </Routes>
     </BrowserRouter>
   );
