@@ -7,6 +7,7 @@ import Sidebar from "./SideBar";
 import { TextField } from "../../components/TextArea/TextField";
 import TextArea from "../../components/TextArea/TextArea";
 import PlusSrc from "../../assets/emoji/plus.svg";
+import BtnTab from "../../components/Tab/BtnTab";
 
 const Correction_Write = () => {
   const [text, setText] = useState("");
@@ -42,7 +43,7 @@ const Correction_Write = () => {
         {/* 컨텐츠 영역 */}
         <div className="flex-1 px-[1.75rem] py-[1.875rem] bg-[#F8FAFC]">
           {/* 버튼 탭 영역 (상단만 둥글게) */}
-          <div className="h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white" />
+          <div className="h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white">{/* <BtnTab /> */}</div>
 
           <div className="flex">
             {/* 왼쪽 메뉴 카드 */}
