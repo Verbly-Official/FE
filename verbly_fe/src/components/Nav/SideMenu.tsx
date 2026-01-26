@@ -5,9 +5,7 @@ import SideMenu_Tab from "./SideMenu_Tab";
 export default function SideMenu({ variant = "default" }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const renderIcon = (src: string) => (
-    <img src={src} className="w-full h-full" />
-  );
+  const renderIcon = (src: string) => <img src={src} className="w-full h-full" />;
 
   const menus = [
     {
@@ -37,13 +35,7 @@ export default function SideMenu({ variant = "default" }) {
       return (
         <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
           {menus.map((menu, index) => (
-            <SideMenu_Tab
-              key={menu.label}
-              label={menu.label}
-              isSelected={selectedIndex === index}
-              onClick={() => setSelectedIndex(index)}
-              icon={renderIcon(menu.icon)}
-            />
+            <SideMenu_Tab key={menu.label} label={menu.label} isSelected={selectedIndex === index} onClick={() => setSelectedIndex(index)} icon={renderIcon(menu.icon)} />
           ))}
 
           <GradientButton>Write Post!</GradientButton>
