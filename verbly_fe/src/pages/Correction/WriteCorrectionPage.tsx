@@ -13,6 +13,7 @@ const Correction_Write = () => {
   const [text, setText] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const [showResult, setShowResult] = useState(false);
+  const [activeMode, setActiveMode] = useState<"write" | "template">("write");
 
   const [selectedTones, setSelectedTones] = useState({
     toneAndManner: false,
@@ -43,7 +44,10 @@ const Correction_Write = () => {
         {/* 컨텐츠 영역 */}
         <div className="flex-1 px-[1.75rem] py-[1.875rem] bg-[#F8FAFC]">
           {/* 버튼 탭 영역 (상단만 둥글게) */}
-          <div className="h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white">{/* <BtnTab /> */}</div>
+          <div className="h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white">
+            <BtnTab label="Write" isSelected={activeMode === "write"} onClick={() => setActiveMode("write")} />
+            <BtnTab label="Template" isSelected={activeMode === "template"} onClick={() => setActiveMode("template")} />
+          </div>
 
           <div className="flex">
             {/* 왼쪽 메뉴 카드 */}
