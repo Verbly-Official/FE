@@ -16,8 +16,8 @@ interface ToastProps {
   variant?: ToastVariant;
   message?: string;
   className?: string;
-  iconColorClassName?: string; // 아이콘 색
-  bgClassName?: string; // 배경 색
+  iconColorClassName?: string;
+  bgClassName?: string;
 }
 
 const VARIANT_CONFIG: Record<ToastVariant, ToastVariantConfig> = {
@@ -30,43 +30,49 @@ const VARIANT_CONFIG: Record<ToastVariant, ToastVariantConfig> = {
   cautionary: {
     icon: CautionaryIcon,
     iconColor: "text-gray-900",
-    bgColor: "bg-yellow-100",
+    bgColor: "bg-yellow-100/90",
     defaultMessage: "Please check your input.",
   },
   positive: {
     icon: PositiveIcon,
     iconColor: "text-green-500",
-    bgColor: "bg-black/65",
+    bgColor: "bg-emerald-500/10",
     defaultMessage: "Post uploaded successfully!",
   },
 } as const;
 
-const Toast: React.FC<ToastProps> = React.memo(({ variant = "positive", message, className = "", iconColorClassName, bgClassName }) => {
-  const config = VARIANT_CONFIG[variant];
-  const displayMessage = message ?? config.defaultMessage;
+const Toast: React.FC<ToastProps> = React.memo(
+  ({
+    variant = "positive",
+    message,
+    className = "",
+    iconColorClassName, // undefined면 기본값
+    bgClassName, // undefined면 기본값
+  }) => {
+    const config = VARIANT_CONFIG[variant];
+    const displayMessage = message ?? config.defaultMessage;
 
-  const iconColor = iconColorClassName ?? config.iconColor;
-  const bgColor = bgClassName ?? config.bgColor;
+    // 사용자 지정 있으면 그거, 없으면 variant 기본값
+    const finalIconColor = iconColorClassName || config.iconColor;
+    const finalBgColor = bgClassName || config.bgColor;
 
-  return (
-    <div className="flex items-center justify-center">
-      <div className="flex items-center justify-center">
+    return (
+      <div className={`flex items-center justify-center p-6 ${className}`}>
         <div
           className={`
-              flex items-center gap-7 p-6 rounded-xl backdrop-blur-sm
-              ${bgColor}
-              ${className}
-            `}
-          role="alert"
-          aria-live="polite"
+        flex items-center gap-7 rounded-xl backdrop-blur-sm
+        ${finalBgColor}  // 동적 배경!
+      `}
         >
-          <img src={config.icon} alt="" className={`w-5 h-5 flex-shrink-0 ${iconColor}`} aria-hidden="true" />
-          <span className="text-white font-pretendard text-[16px] font-semibold leading-none flex-1 min-w-0 max-w-[320px]">{displayMessage}</span>
+          {/* SVG는 fill="currentColor"로 수정 필요 */}
+          <img src={config.icon} className={`w-5 h-5 flex-shrink-0 ${finalIconColor}`} aria-hidden="true" />
+
+          <span className="text-white font-semibold text-sm flex-1">{displayMessage}</span>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 Toast.displayName = "Toast";
 
