@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextField } from '../../../../components/TextArea/TextField';
-import Select, { type Option } from '../../../../components/Select/Select';
-import CloseIcon from '../../../../assets/emoji/close.svg'; // 닫기 아이콘 import (경로 확인 필요)
+import { TextField } from '../../../components/TextArea/TextField';
+import Select, { type Option } from '../../../components/Select/Select';
+import CloseIcon from '../../../assets/emoji/close.svg'; // 닫기 아이콘 import (경로 확인 필요)
 
 interface EmailFormProps {
   emailId: string;

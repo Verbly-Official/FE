@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextField } from '../../../../components/TextArea/TextField';
-import OutlinedButton from '../../../../components/Button/OutlinedButton';
+import { TextField } from '../../../components/TextArea/TextField';
+import OutlinedButton from '../../../components/Button/OutlinedButton';
 
 interface PhoneVerificationFormProps {
   phone: string;

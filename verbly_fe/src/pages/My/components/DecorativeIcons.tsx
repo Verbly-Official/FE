@@ -1,6 +1,6 @@
 import React from 'react';
-import NewspaperIcon from '../../img/L-Newspaper.svg';
-import AcademicIcon from '../../img/L-Academic.svg';
+import NewspaperIcon from '../img/L-Newspaper.svg';
+import AcademicIcon from '../img/L-Academic.svg';
 
 export const DecorativeIcons: React.FC = () => {
   return (

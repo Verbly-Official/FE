@@ -1,13 +1,13 @@
 import React from 'react';
-import DefaultBadgeIcon from '../../../../components/Profile/img/medium.svg';
-import FireIcon from '../../../../assets/emoji/fire1.svg';
+import DefaultBadgeIcon from '../../../components/Profile/img/medium.svg';
+import FireIcon from '../../../assets/emoji/fire1.svg';
 
 interface AchievementBadge {
   id: string;
   name: string;
 }
 
-const My_badge: React.FC = () => {
+const BadgeSection: React.FC = () => {
   const badges: AchievementBadge[] = [
     { id: '1', name: '첫 가입' },
     { id: '2', name: '7일 연속' },
@@ -50,4 +50,4 @@ const My_badge: React.FC = () => {
   );
 };
 
-export default My_badge;
+export default BadgeSection;

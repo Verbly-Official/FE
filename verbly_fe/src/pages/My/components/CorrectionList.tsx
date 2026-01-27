@@ -1,4 +1,4 @@
-import { Badge } from "../../../../components/Badge/ContentBadge";
+import { Badge } from "../../../components/Badge/ContentBadge";
 
 interface CorrectionItemData {
   id: string;
@@ -7,11 +7,11 @@ interface CorrectionItemData {
   correctorName: string;
 }
 
-interface MyCorrectedListProps {
+interface ExpertListProps {
   data?: CorrectionItemData[];
 }
 
-const MyCorrected = ({ data = [] }: MyCorrectedListProps) => {
+const ExpertList = ({ data = [] }: ExpertListProps) => {
   if (!data || data.length === 0) {
     return (
       // 데이터가 없을 때도 고정 높이 대신 적절한 여백을 줌
@@ -46,4 +46,4 @@ const MyCorrected = ({ data = [] }: MyCorrectedListProps) => {
   );
 };
 
-export default MyCorrected;
+export default ExpertList;

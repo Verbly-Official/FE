@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 컴포넌트
-import GNB from '../../../components/Nav/GNB';
-import SideMenu from '../../../components/Nav/SideMenu';
-import OutlinedButton from '../../../components/Button/OutlinedButton';
-import { IconButton } from '../../../components/Button';
-import { Toast } from '../../../components/Toast/Toast';
+import GNB from '../../components/Nav/GNB';
+import SideMenu from '../../components/Nav/SideMenu';
+import OutlinedButton from '../../components/Button/OutlinedButton';
+import { IconButton } from '../../components/Button';
+import { Toast } from '../../components/Toast/Toast';
 
 // 페이지 전용 컴포넌트
 import { ProfileImageSection } from './components/ProfileImageSection';
@@ -18,14 +18,14 @@ import { PhoneVerificationForm } from './components/PhoneVerificationForm';
 import { useProfileForm } from './hooks/useProfileForm';
 
 // 타입 & 상수
-import type { User } from '../../../types/user';
-import type { Option } from '../../../components/Select/Select';
-import PersonIcon from '../../../assets/emoji/person.svg';
-import CloseIcon from '../../../assets/emoji/close.svg';
+import type { User } from '../../types/user';
+import type { Option } from '../../components/Select/Select';
+import PersonIcon from '../../assets/emoji/person.svg';
+import CloseIcon from '../../assets/emoji/close.svg';
 
 const INITIAL_USER: User = {
   id: "user1",
-  name: "",
+  name: "Alice",
   profileImg: "",
   introduction: "안녕하세요! 함께 성장하는 코딩 파트너입니다.",
 };
@@ -75,9 +75,7 @@ const EditProfilePage = () => {
   };
 
   const handleCancel = () => {
-    if (window.confirm("수정을 취소하고 이전 페이지로 돌아가시겠습니까?")) {
       navigate(-1);
-    }
   };
 
   return (
@@ -184,7 +182,6 @@ const EditProfilePage = () => {
           <Toast 
             variant={toastMessage.variant}
             message={toastMessage.message}
-            // [수정] Toast 커스텀 스타일 전달
             bgClassName={toastMessage.bgClassName}
             iconColorClassName={toastMessage.iconColorClassName}
           />

@@ -1,19 +1,19 @@
 import React from 'react';
 // Components
-import GNB from '../../../components/Nav/GNB';
-import SideMenu from '../../../components/Nav/SideMenu';
-import ProfileCard from './components/My_profilecard';
-import MyBadge from './components/My_badge';
-import MyCorrector from './components/My_corrector';
-import MyBanner from './components/My_banner';
-import MyCorrected from './components/My_corrected';
-import MyBoard from './components/My_board';
+import GNB from '../../components/Nav/GNB';
+import SideMenu from '../../components/Nav/SideMenu';
+import ProfileCard from './components/Profilecard';
+import Badge from './components/BadgeSection';
+import ExpertList from './components/ExpertList';
+import Banner from './components/Banner';
+import CorrectionList from './components/CorrectionList';
+import Board from './components/Board';
 
 // Hooks & Data
-import { MOCK_CORRECTIONS } from '../mockData';
+import { MOCK_CORRECTIONS } from './mockData';
 
 //icons
-import SortIcon from '../../../assets/emoji/sort.svg';
+import SortIcon from '../../assets/emoji/sort.svg';
 
 const My_Korean: React.FC = () => {
   return (
@@ -31,25 +31,25 @@ const My_Korean: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-[24px] flex-1 min-w-0">
-              <MyBadge />
-              <MyCorrector modalType="korean" />
+              <Badge />
+              <ExpertList modalType="korean" />
             </div>
           </div>
 
-          <MyBanner />
+          <Banner />
             
             <div>
               <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
                 <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
                 대시보드</div>
-              <MyBoard />
+              <Board />
             </div>
             
             <div>
               <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
                 <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
                 Correction History</div>
-              <MyCorrected data={MOCK_CORRECTIONS} />
+              <CorrectionList data={MOCK_CORRECTIONS} />
             </div>
 
         </main>

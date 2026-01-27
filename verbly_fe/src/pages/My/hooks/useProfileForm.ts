@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { User } from '../../../../types/user';
-import type { Option } from '../../../../components/Select/Select';
+import type { User } from '../../../types/user';
+import type { Option } from '../../../components/Select/Select';
 
 const VERIFICATION_TIMEOUT = 180;
 const TOAST_DURATION = 3000;

@@ -1,7 +1,8 @@
 import React from 'react';
-import DefaultProfile from '../../../../components/Profile/img/large.svg'; 
-import { OutlinedButton } from '../../../../components/Button';
-import LinearProgress from '../../../../components/ProgressIndicator/LinearProgress';
+import { useNavigate } from 'react-router-dom'; // [추가] 라우팅 훅 임포트
+import DefaultProfile from '../../../components/Profile/img/large.svg'; 
+import { OutlinedButton } from '../../../components/Button';
+import LinearProgress from '../../../components/ProgressIndicator/LinearProgress';
 
 interface UserProfileProps {
   user?: {
@@ -14,7 +15,9 @@ interface UserProfileProps {
   };
 }
 
-const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
+const Profilecard: React.FC<UserProfileProps> = ({ user }) => {
+  const navigate = useNavigate(); // [추가] navigate 함수 생성
+
   const userData = user || {
     name: "Alice",
     profileImage: null,
@@ -45,7 +48,8 @@ const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
           <div className="mb-0.5 md:mb-1">
             <OutlinedButton
               label="프로필 수정" 
-              onClick={() => {}} 
+              // [수정] 클릭 시 프로필 수정 페이지로 이동
+              onClick={() => navigate('/edit-profile')} 
               size="small" 
               variant="assistive"
               className="!px-2.5 !py-1 md:!px-3 md:!py-1.5 !text-[11px] sm:!text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
@@ -94,4 +98,4 @@ const My_profilecard: React.FC<UserProfileProps> = ({ user }) => {
   );
 };
 
-export default My_profilecard;
+export default Profilecard;

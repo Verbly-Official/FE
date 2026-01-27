@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // [추가] 라우팅 훅
-import SolidButton from '../../../../components/Button/SolidButton';
-import BannerIcon from '../../img/BannerEmoji.svg';
-import Banner2Icon from '../../img/Banner2.svg';
-import EclipseIcon from '../../img/Banner_Eclipse.svg';
-import ChevIcon from '../../../../assets/emoji/chev-right.svg'
+import SolidButton from '../../../components/Button/SolidButton';
+import BannerIcon from '../img/BannerEmoji.svg';
+import Banner2Icon from '../img/Banner2.svg';
+import EclipseIcon from '../img/Banner_Eclipse.svg';
+import ChevIcon from '../../../assets/emoji/chev-right.svg'
 
-const My_banner: React.FC = () => {
+const Banner: React.FC = () => {
   const navigate = useNavigate(); // [추가] navigate 함수 생성
 
   // 결제 페이지로 이동하는 핸들러
@@ -93,4 +93,4 @@ if (subscription.isPremium) {
     </div>
     );
   }*/}
-export default My_banner;
+export default Banner;

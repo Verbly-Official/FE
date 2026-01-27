@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text } from '../../../../../components/Text/Text';
-import { UserProfile } from '../../../../../components/Profile/Profile';
-import type { User } from '../../../../../types/user';
+import { Text } from '../../../components/Text/Text';
+import { UserProfile } from '../../../components/Profile/Profile';
+import type { User } from '../../../types/user';
 
 interface CorrectionContentProps {
   correction: {

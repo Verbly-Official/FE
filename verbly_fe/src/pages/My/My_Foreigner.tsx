@@ -1,18 +1,18 @@
 import React from 'react';
 // Components
-import GNB from '../../../components/Nav/GNB';
-import SideMenu from '../../../components/Nav/SideMenu';
-import ProfileCard from './components/My_profilecard';
-import MyBadge from './components/My_badge';
-import MyCorrector from './components/My_corrector';
-import MyCorrected from './components/My_corrected';
-import MyBoard from './components/My_board';
+import GNB from '../../components/Nav/GNB';
+import SideMenu from '../../components/Nav/SideMenu';
+import ProfileCard from './components/Profilecard';
+import Badge from './components/BadgeSection';
+import CorrectionList from './components/CorrectionList';
+import ExpertList from './components/ExpertList';
+import Board from './components/Board';
 
 // Hooks & Data
-import { MOCK_CORRECTIONS } from '../mockData';
+import { MOCK_CORRECTIONS } from './mockData';
 
 //icons
-import SortIcon from '../../../assets/emoji/sort.svg';
+import SortIcon from '../../assets/emoji/sort.svg';
 
 const My_Foreigner: React.FC = () => {
 
@@ -37,8 +37,8 @@ const My_Foreigner: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-[24px] flex-1 min-w-0">
-              <MyBadge />
-              <MyCorrector modalType="foreigner" />
+              <Badge />
+              <ExpertList modalType="foreigner" />
             </div>
           </div>
 
@@ -46,14 +46,14 @@ const My_Foreigner: React.FC = () => {
             <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
               <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
               대시보드</div>
-            <MyBoard />
+            <Board />
           </div>
             
           <div>
             <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
               <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
               Correction History</div>
-            <MyCorrected data={MOCK_CORRECTIONS} />
+            <CorrectionList data={MOCK_CORRECTIONS} />
           </div>
 
         </main>

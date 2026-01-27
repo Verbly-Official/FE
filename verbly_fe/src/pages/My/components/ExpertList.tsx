@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import DefaultProfile from '../../../../components/Profile/img/large.svg';
-import { TextButton } from '../../../../components/Button';
-import { Badge } from '../../../../components/Badge/ContentBadge'; 
+import DefaultProfile from '../../../components/Profile/img/large.svg';
+import { TextButton } from '../../../components/Button';
+import { Badge } from '../../../components/Badge/ContentBadge'; 
 import KoreanHistoryModal from './KoreanHistoryModal';
 import ExpertHistoryModal from './ExpertHistoryModal';
-import FileIcon from '../../../../assets/emoji/file.svg';
-import ChevIcon from '../../../../assets/emoji/chev-right.svg';
+import FileIcon from '../../../assets/emoji/file.svg';
+import ChevIcon from '../../../assets/emoji/chev-right.svg';
 
 interface Corrector {
   id: string;
@@ -15,11 +15,11 @@ interface Corrector {
   isPro?: boolean;
 }
 
-interface MyCorrectorProps {
+interface MyCorrectionProps {
   modalType?: 'korean' | 'foreigner';
 }
 
-const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
+const CorrectionList: React.FC<MyCorrectionProps> = ({ modalType = 'korean' }) => {
   const correctors: Corrector[] = [
     { id: '1', name: 'EnglishPro', location: '뉴욕, 미국', isPro: true },
     { id: '2', name: 'Sarah T.', location: '런던, 영국', isPro: false },
@@ -127,4 +127,4 @@ const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
   );
 };
 
-export default My_corrector;
+export default CorrectionList;
