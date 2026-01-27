@@ -22,7 +22,7 @@ const My_Foreigner: React.FC = () => {
       <GNB />
 
       {/* Main Content Wrapper */}
-      <div className="w-full flex flex-col justify-center md:flex-row flex-1 overflow-hidden max-w-[1920px] mx-auto">
+      <div className="w-full flex flex-col justify-center md:flex-row flex-1 overflow-hidden mx-auto">
         
         {/* Left Sidebar */}
         <SideMenu variant="default" />
@@ -42,21 +42,18 @@ const My_Foreigner: React.FC = () => {
             </div>
           </div>
 
-          {/* 하단: 게시판 + 첨삭 내역 */}
-          <div className="flex flex-col gap-[24px] flex-1 w-full min-w-0 pb-8">
-            <div>
-              <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
-                <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
-                대시보드</div>
-              <MyBoard />
-            </div>
+          <div>
+            <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
+              <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
+              대시보드</div>
+            <MyBoard />
+          </div>
             
-            <div>
-              <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
-                <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
-                Correction History</div>
-              <MyCorrected data={MOCK_CORRECTIONS} />
-            </div>
+          <div>
+            <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
+              <img src={SortIcon} alt="sort" className="w-6 h-6 md:w-8 md:h-8" />
+              Correction History</div>
+            <MyCorrected data={MOCK_CORRECTIONS} />
           </div>
 
         </main>

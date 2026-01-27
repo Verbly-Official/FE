@@ -25,8 +25,8 @@ import CloseIcon from '../../../assets/emoji/close.svg';
 
 const INITIAL_USER: User = {
   id: "user1",
-  name: "코딩파트너",
-  profileImg: "https://via.placeholder.com/150",
+  name: "",
+  profileImg: "",
   introduction: "안녕하세요! 함께 성장하는 코딩 파트너입니다.",
 };
 
@@ -81,7 +81,7 @@ const EditProfilePage = () => {
       <GNB />
       
             {/* Main Content Wrapper - 반응형 구조 */}
-            <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden max-w-[1920px] mx-auto">
+            <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
               
               {/* Left Sidebar - 요청하신 반응형 스타일 적용 */}
               <SideMenu variant="default" />

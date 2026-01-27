@@ -68,7 +68,7 @@ const PaymentPage: React.FC = () => {
       <GNB />
       
       {/* Main Content Wrapper - 반응형 구조 */}
-      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden max-w-[1920px] mx-auto">
+      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
               
         {/* Left Sidebar - 요청하신 반응형 스타일 적용 */}
         <SideMenu variant="default" />

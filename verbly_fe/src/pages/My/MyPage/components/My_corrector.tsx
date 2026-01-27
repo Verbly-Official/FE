@@ -49,11 +49,11 @@ const My_corrector: React.FC<MyCorrectorProps> = ({ modalType = 'korean' }) => {
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"> 
+        <div className=" gap-3 flex flex-start"> 
           {correctors.map((corrector) => (
             <div 
               key={corrector.id} 
-              className="bg-white border border-gray-100 rounded-xl md:rounded-2xl flex flex-col p-3 hover:border-violet-100 hover:shadow-sm transition-all group cursor-pointer"
+              className="bg-white border border-gray-100 rounded-xl flex flex-col p-3 w-[272px] transition-all group cursor-pointer"
             >
               {/* 상단 이미지 영역 */}
               <div className="relative w-full h-28 md:h-[110px] rounded-lg md:rounded-xl overflow-hidden bg-gray-50 mb-3">

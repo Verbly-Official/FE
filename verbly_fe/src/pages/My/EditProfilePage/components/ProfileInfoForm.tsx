@@ -25,7 +25,7 @@ export const ProfileInfoForm: React.FC<ProfileInfoFormProps> = ({
           <TextField
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
-            placeholder="Alice"
+            placeholder="Name"
             className="w-full"
           />
         </div>

@@ -20,7 +20,7 @@ const My_Korean: React.FC = () => {
     <div className="w-full bg-[#F8FAFC] flex flex-col flex-1 overflow-hidden min-h-screen">
       <GNB />
 
-      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden max-w-[1920px] mx-auto">
+      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
         <SideMenu variant="default" />
 
         <main className="flex-1 flex flex-col gap-[38px] px-4 sm:px-6 md:px-8 lg:px-12 py-6 md:py-8 overflow-y-auto">
@@ -36,8 +36,7 @@ const My_Korean: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-[24px] flex-1 w-full min-w-0 pb-8">
-            <MyBanner />
+          <MyBanner />
             
             <div>
               <div className="mb-4 text-lg font-bold text-gray-9 flex flex-start gap-[8px]"> 
@@ -52,7 +51,6 @@ const My_Korean: React.FC = () => {
                 Correction History</div>
               <MyCorrected data={MOCK_CORRECTIONS} />
             </div>
-          </div>
 
         </main>
       </div>

@@ -94,8 +94,6 @@ export const EmailForm: React.FC<EmailFormProps> = ({
           </div>
         </div>
       </div>
-      
-      {/* 기존에 하단에 있던 직접입력 필드는 삭제됨 (위쪽으로 통합) */}
     </div>
   );
 };

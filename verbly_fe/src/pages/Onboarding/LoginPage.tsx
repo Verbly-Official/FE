@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     // 실제 로그인 로직 처리 후 이동하거나, 바로 이동
-    navigate("/select-language");
+    navigate("/login/select-language");
   };
 
   return (
@@ -33,7 +33,7 @@ const LoginPage = () => {
             <SolidButton
               variant="assistive"
               size="large"
-              iconSrc={googleIcon}
+              Icon={googleIcon}
               className="justify-center !text-gray-9 text-opacity-85"
               onClick={handleLogin}
               label='Continue with Google'
@@ -43,10 +43,10 @@ const LoginPage = () => {
             <SolidButton
               variant="assistive"
               size="large"
-              iconSrc={kakaoIcon}
+              Icon={kakaoIcon}
               className="!bg-[#FFE100]"
               onClick={handleLogin}
-              label='Continue with Kakap talk'
+              label='Continue with Kakao talk'
             />
           </div>
         </div>
