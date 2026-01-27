@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 컴포넌트
@@ -40,6 +40,9 @@ const EMAIL_OPTIONS: Option[] = [
 const EditProfilePage = () => {
   const navigate = useNavigate();
   
+  // 화면 표시용 이름 상태 (저장 버튼 누르기 전까지 유지)
+  const [displayName, setDisplayName] = useState(INITIAL_USER.name);
+
   const {
     user,
     setUser,
@@ -65,6 +68,8 @@ const EditProfilePage = () => {
   const handleSave = () => {
     const savedData = validateAndSave();
     if (savedData) {
+      // 저장이 성공했을 때만 화면 표시 이름 업데이트
+      setDisplayName(savedData.name);
       alert("프로필이 성공적으로 저장되었습니다.");
     }
   };
@@ -80,11 +85,11 @@ const EditProfilePage = () => {
       {/* Header */}
       <GNB />
       
-            {/* Main Content Wrapper - 반응형 구조 */}
-            <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
-              
-              {/* Left Sidebar - 요청하신 반응형 스타일 적용 */}
-              <SideMenu variant="default" />
+      {/* Main Content Wrapper */}
+      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
+        
+        {/* Left Sidebar */}
+        <SideMenu variant="default" />
 
         {/* Page Content */}
         <main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-[60px] py-6 md:py-8 lg:py-[40px]">
@@ -107,7 +112,8 @@ const EditProfilePage = () => {
               <img src={PersonIcon} alt="icon" className="w-6 h-6 md:w-7 md:h-7 lg:w-[28px] lg:h-[28px]" />
               프로필 수정
             </h1>
-            <p className='text-xs md:text-sm lg:text-[14px] text-gray-500'>{user.name} 프로필 관리</p>
+            {/* user.name 대신 displayName 사용 */}
+            <p className='text-xs md:text-sm lg:text-[14px] text-gray-500'>{displayName} 프로필 관리</p>
           </div>
 
           {/* Main Cards */}
@@ -178,6 +184,9 @@ const EditProfilePage = () => {
           <Toast 
             variant={toastMessage.variant}
             message={toastMessage.message}
+            // [수정] Toast 커스텀 스타일 전달
+            bgClassName={toastMessage.bgClassName}
+            iconColorClassName={toastMessage.iconColorClassName}
           />
         </div>
       )}

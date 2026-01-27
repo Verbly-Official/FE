@@ -8,6 +8,9 @@ const TOAST_DURATION = 3000;
 interface ToastMessage {
   variant: 'cautionary' | 'positive';
   message: string;
+  // Toast.tsx를 수정하지 않고 스타일을 덮어씌우기 위한 옵션
+  bgClassName?: string;
+  iconColorClassName?: string;
 }
 
 export const useProfileForm = (initialUser: User) => {
@@ -53,8 +56,13 @@ export const useProfileForm = (initialUser: User) => {
     return () => clearTimeout(timeout);
   }, [toastMessage]);
 
-  const showToast = (variant: 'cautionary' | 'positive', message: string) => {
-    setToastMessage({ variant, message });
+  // 스타일 옵션을 받을 수 있도록 함수 파라미터 확장
+  const showToast = (
+    variant: 'cautionary' | 'positive', 
+    message: string, 
+    options?: { bgClassName?: string; iconColorClassName?: string }
+  ) => {
+    setToastMessage({ variant, message, ...options });
   };
 
   const handleImageUpload = (file: File) => {
@@ -62,14 +70,14 @@ export const useProfileForm = (initialUser: User) => {
     setPreviewImg(objectUrl);
   };
 
+  // 전화번호 입력 확인 로직 삭제
   const handleSendVerification = () => {
-    if (!phone.trim()) {
-      showToast('cautionary', '전화번호를 입력해주세요.');
-      return;
-    }
+    // 전화번호 입력 여부와 상관없이 바로 전송 로직 수행
 
     setIsVerificationSent(true);
     setTimer(VERIFICATION_TIMEOUT);
+    
+    // positive variant 사용 - Toast.tsx의 기본 positive 아이콘(초록색 체크박스)이 표시됨
     showToast('positive', '인증번호 전송완료');
   };
 
@@ -85,7 +93,11 @@ export const useProfileForm = (initialUser: User) => {
 
   const validateAndSave = () => {
     if (!user.name.trim()) {
-      showToast('cautionary', '필수 입력칸 미입력입니다. 다시 확인해주세요.');
+      // 이름 미입력 시 붉은 배경/흰색 아이콘 적용
+      showToast('cautionary', '필수 입력칸 미입력입니다. 다시 확인해주세요.', {
+        bgClassName: 'bg-[#FF6363]',
+        iconColorClassName: 'text-white'
+      });
       return false;
     }
 
@@ -101,7 +113,6 @@ export const useProfileForm = (initialUser: User) => {
   };
 
   return {
-    // State
     user,
     setUser,
     previewImg,
@@ -118,8 +129,6 @@ export const useProfileForm = (initialUser: User) => {
     isVerificationSent,
     timer,
     toastMessage,
-
-    // Methods
     handleImageUpload,
     handleSendVerification,
     validateAndSave,
