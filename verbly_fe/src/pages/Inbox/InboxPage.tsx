@@ -14,20 +14,19 @@ const InboxPage = () => {
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     return (
-        <div className="min-h-screen">
-              {/* 1. GNB */}
-              <div className="w-full max-w-[1920px] mx-auto">
-                <Header />
-              </div>
-        
-              {/* 2. 좌측 아이콘바 + 컨텐츠 */}
-              <div className="flex w-full max-w-[1920px] mx-auto">
-                {/* 가장 왼쪽 사이드바(컴포넌트) */}
-                <SideMenu />
+        <div className="flex flex-col h-screen bg-bg0">
+            {/* 1. GNB */}
+            <Header />
+
+            {/* 2. Main Content Wrapper */}
+            <div className="flex flex-1 overflow-hidden">
+                {/* 3. Sidebar */}
+                <div className="hidden md:flex flex-shrink-0 w-[200px] lg:w-[250px] xl:w-[280px] bg-white border-r border-line1">
+                    <SideMenu />
                 </div>
 
-                {/* Content Area - Flex grow */}
-                <div className="flex-1 flex min-w-0 h-full overflow-hidden">
+                {/* 4. Content Area - Flex grow */}
+                <div className="flex-1 flex min-w-0 h-full overflow-hidden bg-white">
                     {/* Split View Content */}
                     <div className="flex-1 flex min-h-0 overflow-hidden">
                         {/* Chat List Panel - Percentage Width (25%) */}
@@ -58,6 +57,7 @@ const InboxPage = () => {
                     </div>
                 </div>
             </div>
+        </div>
     );
 };
 
