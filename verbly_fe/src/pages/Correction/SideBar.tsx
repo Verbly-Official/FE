@@ -45,7 +45,7 @@ const SIDEBAR_CONTENT: Record<Locale, SidebarSection[]> = {
   ],
   en: [
     {
-      title: "My Docs",
+      title: "My correction",
       items: [
         { key: "all", label: "All", icon: <DocIcon className="w-4 h-[20px]" /> },
         { key: "favorites", label: "Favorites", icon: <StarIcon className="w-4 h-[20px]" /> },
