@@ -45,7 +45,7 @@ export default function SideMenu({ variant = "default" }) {
     case "default":
       return (
         <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
-          {menus.map((menu, index) => (
+          {menus.map((menu) => (
             <SideMenu_Tab
               key={menu.label}
               label={menu.label}
@@ -63,7 +63,7 @@ export default function SideMenu({ variant = "default" }) {
     case "small":
       return (
         <div className="w-[96px] min-h-screen px-[20px] py-[50px] flex flex-col gap-[28px]">
-          {menus.map((menu, index) => (
+          {menus.map((menu) => (
             <div
               key={menu.label}
               onClick={() => {
