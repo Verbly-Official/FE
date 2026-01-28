@@ -26,6 +26,7 @@ import LibraryPage from "./pages/Library/LibraryPage";
 import LibraryReviewPage from "./pages/Library/Review/ReviewPage";
 import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
 import { WordDetailPage } from "./pages/Library/WordDetailPage";
+import Home_Profile from "./pages/Home/Home_Profile";
 function App() {
   return (
     <BrowserRouter>
@@ -33,9 +34,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/select-language" element={<SelectLangPage />} />
 
-        <Route path="/home-korean" element={<Home_Korean />} />
-        <Route path="/home-native" element={<Home_Native />} />
-        <Route path="/home-notification" element={<Home_Notification />} />
+        <Route path="/home/korean" element={<Home_Korean />} />
+        <Route path="/home/native" element={<Home_Native />} />
+        <Route path="/home/notification" element={<Home_Notification />} />
 
         <Route path="/correction" element={<Correction_Main />} />
         <Route path="/correction/write" element={<Correction_Write />} />
@@ -56,6 +57,8 @@ function App() {
         <Route path="/library/word/:word" element={<WordDetailPage />} />
         <Route path="/review" element={<LibraryReviewPage />} />
         <Route path="/review/result" element={<ReviewResultPage />} />
+
+        <Route path="/home/profile" element={<Home_Profile />} />
       </Routes>
     </BrowserRouter>
   );
