@@ -1,9 +1,13 @@
-import { useState } from "react";
+//import { useState } from "react";
 import { GradientButton } from "../Button";
 import SideMenu_Tab from "./SideMenu_Tab";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function SideMenu({ variant = "default" }) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  //const [selectedIndex, setSelectedIndex] = useState(0);
 
   const renderIcon = (src: string) => (
     <img src={src} className="w-full h-full" />
@@ -13,22 +17,27 @@ export default function SideMenu({ variant = "default" }) {
     {
       label: "Home",
       icon: "../../src/assets/emoji/home.svg",
+      path: "/home-korean",
     },
     {
       label: "Library",
       icon: "../../src/assets/emoji/folder.svg",
+      path: "/library",
     },
     {
       label: "Correction",
       icon: "../../src/assets/emoji/edit.svg",
+      path: "/correction",
     },
     {
       label: "Inbox",
       icon: "../../src/assets/emoji/message1.svg",
+      path: "/inbox",
     },
     {
       label: "Profile",
       icon: "../../src/assets/emoji/person.svg",
+      path: "/my-korean",
     },
   ];
 
@@ -40,8 +49,10 @@ export default function SideMenu({ variant = "default" }) {
             <SideMenu_Tab
               key={menu.label}
               label={menu.label}
-              isSelected={selectedIndex === index}
-              onClick={() => setSelectedIndex(index)}
+              isSelected={location.pathname === menu.path}
+              onClick={() => {
+                navigate(menu.path);
+              }}
               icon={renderIcon(menu.icon)}
             />
           ))}
@@ -55,11 +66,13 @@ export default function SideMenu({ variant = "default" }) {
           {menus.map((menu, index) => (
             <div
               key={menu.label}
-              onClick={() => setSelectedIndex(index)}
+              onClick={() => {
+                navigate(menu.path);
+              }}
               className={`w-[56px] h-[56px] px-[16px] py-[16px]
               flex items-center justify-center
               rounded-[12px] cursor-pointer
-              ${selectedIndex === index ? "bg-violet-100 border border-violet-50" : "bg-transparent"}
+              ${location.pathname === menu.path ? "bg-violet-100 border border-violet-50" : "bg-transparent"}
             `}
             >
               {renderIcon(menu.icon)}
