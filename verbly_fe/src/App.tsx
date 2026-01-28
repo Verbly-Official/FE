@@ -11,7 +11,7 @@ import Home_Native from "./pages/Home/Home_Native";
 import Home_Notification from "./pages/Home/Home_Notification";
 
 import InboxPage from "./pages/Inbox/InboxPage";
-import ReviewPage from "./pages/Inbox/ReviewPage";
+import InboxReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 
 import MyPage_Korean from "./pages/My/MyPage/My_Korean";
@@ -22,6 +22,10 @@ import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Home_Search from "./pages/Home/Home_Search";
 
+import LibraryPage from "./pages/Library/LibraryPage";
+import LibraryReviewPage from "./pages/Library/Review/ReviewPage";
+import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
+import { WordDetailPage } from "./pages/Library/WordDetailPage";
 function App() {
   return (
     <BrowserRouter>
@@ -38,7 +42,7 @@ function App() {
         <Route path="/correction1" element={<Correction_NMain />} />
 
         <Route path="/inbox" element={<InboxPage />} />
-        <Route path="/review/:id" element={<ReviewPage />} />
+        <Route path="/review/:id" element={<InboxReviewPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
 
         <Route path="/my-korean" element={<MyPage_Korean />} />
@@ -47,6 +51,11 @@ function App() {
         <Route path="/my-korean/payment" element={<PaymentPage />} />
 
         <Route path="/home-search" element={<Home_Search />} />
+
+        <Route path="/library" element={<LibraryPage />} />
+        <Route path="/library/word/:word" element={<WordDetailPage />} />
+        <Route path="/review" element={<LibraryReviewPage />} />
+        <Route path="/review/result" element={<ReviewResultPage />} />
       </Routes>
     </BrowserRouter>
   );
