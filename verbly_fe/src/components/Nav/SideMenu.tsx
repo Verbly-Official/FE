@@ -3,7 +3,15 @@ import { GradientButton } from "../Button";
 import SideMenu_Tab from "./SideMenu_Tab";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function SideMenu({ variant = "default" }) {
+interface SideMenuProps {
+  variant?: "default" | "small";
+  onWriteClick?: () => void;
+}
+
+export default function SideMenu({
+  variant = "default",
+  onWriteClick,
+}: SideMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -57,7 +65,7 @@ export default function SideMenu({ variant = "default" }) {
             />
           ))}
 
-          <GradientButton>Write Post!</GradientButton>
+          <GradientButton onClick={onWriteClick}>Write Post!</GradientButton>
         </div>
       );
     case "small":
