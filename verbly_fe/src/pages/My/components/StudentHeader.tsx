@@ -1,8 +1,8 @@
 import React from 'react';
-import { InteractionIcon } from '../../../../../components/Interaction/InteractionIcon';
-import SolidButton from '../../../../../components/Button/SolidButton';
-import { UserProfile } from '../../../../../components/Profile/Profile';
-import type { User } from '../../../../../types/user';
+import { InteractionIcon } from '../../../components/Interaction/InteractionIcon';
+import SolidButton from '../../../components/Button/SolidButton';
+import { UserProfile } from '../../../components/Profile/Profile';
+import type { User } from '../../../types/user';
 
 interface StudentHeaderProps {
   student: User;

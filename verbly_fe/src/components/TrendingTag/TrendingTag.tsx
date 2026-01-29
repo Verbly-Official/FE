@@ -2,10 +2,8 @@ import { TextButton } from "../Button";
 
 export default function TrendingTag() {
   return (
-    <div className="flex flex-col p-[24px] gap-[16px] w-[384px] h-stretch bg-white rounded-[8px]">
-      <div className="text-title2-bold28 text-gray-10">
-        Trending Tags
-      </div>
+    <div className="flex flex-col p-[24px] gap-[16px] w-[384px] h-stretch bg-white rounded-[8px] border-[1px] border-line1">
+      <div className="text-title2-bold28 text-gray-10">Trending Tags</div>
       <div className="flex flex-col gap-[32px]">
         <div className="flex flex-col gap-[4px]">
           <div className="text-subtitle-semi22 text-gray-9">#English</div>
