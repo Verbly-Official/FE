@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { IconButton } from '../../../../components/Button/IconButton';
-import EditIcon from '../../../../assets/emoji/edit.svg';
+import { IconButton } from '../../../components/Button/IconButton';
+import EditIcon from '../../../assets/emoji/edit.svg';
 
 interface ProfileImageSectionProps {
   previewImg: string;
