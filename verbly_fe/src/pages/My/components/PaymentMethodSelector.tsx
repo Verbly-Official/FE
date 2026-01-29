@@ -1,7 +1,7 @@
 import React from 'react';
-import { OutlinedButton } from '../../../../components/Button';
-import CardIcon from '../../../../assets/emoji/card.svg';
-import HomeIcon from '../../../../assets/emoji/home.svg';
+import { OutlinedButton } from '../../../components/Button';
+import CardIcon from '../../../assets/emoji/card.svg';
+import HomeIcon from '../../../assets/emoji/home.svg';
 
 interface PaymentMethodSelectorProps {
   selectedMethod: 'card' | 'paypal';
@@ -18,7 +18,7 @@ export const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         variant='primary'
         size='large' 
         label='Credit Card' 
-        iconSrc={CardIcon}
+        Icon={() => <img src={CardIcon} alt="card" className="w-5 h-5" />}
         onClick={() => onMethodChange('card')}
         className={selectedMethod === 'card' ? 'border-violet-50 bg-violet-100' : ''}
       />
@@ -26,7 +26,7 @@ export const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         variant='primary'
         size='large' 
         label='Paypal' 
-        iconSrc={HomeIcon}
+        Icon={() => <img src={HomeIcon} alt="paypal" className="w-5 h-5" />}
         onClick={() => onMethodChange('paypal')}
         className={selectedMethod === 'paypal' ? 'border-violet-50 bg-violet-100' : ''}
       />

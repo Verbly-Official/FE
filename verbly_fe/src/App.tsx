@@ -14,10 +14,8 @@ import InboxPage from "./pages/Inbox/InboxPage";
 import InboxReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 
-import MyPage_Korean from "./pages/My/MyPage/My_Korean";
-import MyPage_Foreigner from "./pages/My/MyPage/My_Foreigner";
-import EditProfilePage from "./pages/My/EditProfilePage/EditProfilePage";
-import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
+import MyPage_Foreigner from "./pages/My/My_Foreigner";
+import EditProfilePage from "./pages/My/EditProfilePage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Home_Search from "./pages/Home/Home_Search";
@@ -26,6 +24,10 @@ import LibraryPage from "./pages/Library/LibraryPage";
 import LibraryReviewPage from "./pages/Library/Review/ReviewPage";
 import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
 import { WordDetailPage } from "./pages/Library/WordDetailPage";
+
+import MyPage_Korean from "./pages/My/My_Korean";
+import PaymentPage from "./pages/My/PaymentPage";
+
 function App() {
   return (
     <BrowserRouter>

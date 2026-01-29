@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '../../../../components/TextArea/TextField';
+import { TextField } from '../../../components/TextArea/TextField';
 
 interface CardFormProps {
   cardName: string;
