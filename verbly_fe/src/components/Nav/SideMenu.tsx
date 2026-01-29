@@ -17,9 +17,7 @@ export default function SideMenu({
 
   //const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const renderIcon = (src: string) => (
-    <img src={src} className="w-full h-full" />
-  );
+  const renderIcon = (src: string) => <img src={src} className="w-full h-full" />;
 
   const menus = [
     {

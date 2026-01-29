@@ -53,7 +53,7 @@ const Correction_Write = () => {
             {/* 왼쪽 메뉴 카드 */}
             <div className="w-[278px] h-[940px] px-[1.25rem] py-9 bg-white border border-r-0 border-[#E5E7EB]">
               <SolidButton size="large" className="w-full mb-8" iconSrc={PlusSrc} label="새 글 작성하기" />
-              <Sidebar />
+              <Sidebar locale="ko" />
             </div>
 
             {/* 메인 카드 */}

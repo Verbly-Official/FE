@@ -19,6 +19,7 @@ import EditProfilePage from "./pages/My/EditProfilePage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Home_Search from "./pages/Home/Home_Search";
+import Correction_NList from "./pages/Correction/Native/CorrectionListNativePage";
 
 import LibraryPage from "./pages/Library/LibraryPage";
 import LibraryReviewPage from "./pages/Library/Review/ReviewPage";
@@ -41,7 +42,7 @@ function App() {
 
         <Route path="/correction" element={<Correction_Main />} />
         <Route path="/correction/write" element={<Correction_Write />} />
-        <Route path="/correction1" element={<Correction_NMain />} />
+        <Route path="/correction/native" element={<Correction_NMain />} />
 
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/review/:id" element={<InboxReviewPage />} />
@@ -58,6 +59,7 @@ function App() {
         <Route path="/library/word/:word" element={<WordDetailPage />} />
         <Route path="/review" element={<LibraryReviewPage />} />
         <Route path="/review/result" element={<ReviewResultPage />} />
+        <Route path="/correction/native/list" element={<Correction_NList />} />
       </Routes>
     </BrowserRouter>
   );
