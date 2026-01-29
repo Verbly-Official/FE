@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 컴포넌트
-import GNB from '../../../components/Nav/GNB';
-import SideMenu from '../../../components/Nav/SideMenu';
-import OutlinedButton from '../../../components/Button/OutlinedButton';
-import { IconButton } from '../../../components/Button';
-import { Toast } from '../../../components/Toast/Toast';
+import GNB from '../../components/Nav/GNB';
+import SideMenu from '../../components/Nav/SideMenu';
+import OutlinedButton from '../../components/Button/OutlinedButton';
+import { IconButton } from '../../components/Button';
+import { Toast } from '../../components/Toast/Toast';
 
 // 페이지 전용 컴포넌트
 import { ProfileImageSection } from './components/ProfileImageSection';
@@ -18,15 +18,15 @@ import { PhoneVerificationForm } from './components/PhoneVerificationForm';
 import { useProfileForm } from './hooks/useProfileForm';
 
 // 타입 & 상수
-import type { User } from '../../../types/user';
-import type { Option } from '../../../components/Select/Select';
-import PersonIcon from '../../../assets/emoji/person.svg';
-import CloseIcon from '../../../assets/emoji/close.svg';
+import type { User } from '../../types/user';
+import type { Option } from '../../components/Select/Select';
+import PersonIcon from '../../assets/emoji/person.svg';
+import CloseIcon from '../../assets/emoji/close.svg';
 
 const INITIAL_USER: User = {
   id: "user1",
-  name: "코딩파트너",
-  profileImg: "https://via.placeholder.com/150",
+  name: "Alice",
+  profileImg: "",
   introduction: "안녕하세요! 함께 성장하는 코딩 파트너입니다.",
 };
 
@@ -40,6 +40,9 @@ const EMAIL_OPTIONS: Option[] = [
 const EditProfilePage = () => {
   const navigate = useNavigate();
   
+  // 화면 표시용 이름 상태 (저장 버튼 누르기 전까지 유지)
+  const [displayName, setDisplayName] = useState(INITIAL_USER.name);
+
   const {
     user,
     setUser,
@@ -65,14 +68,14 @@ const EditProfilePage = () => {
   const handleSave = () => {
     const savedData = validateAndSave();
     if (savedData) {
+      // 저장이 성공했을 때만 화면 표시 이름 업데이트
+      setDisplayName(savedData.name);
       alert("프로필이 성공적으로 저장되었습니다.");
     }
   };
 
   const handleCancel = () => {
-    if (window.confirm("수정을 취소하고 이전 페이지로 돌아가시겠습니까?")) {
       navigate(-1);
-    }
   };
 
   return (
@@ -80,11 +83,11 @@ const EditProfilePage = () => {
       {/* Header */}
       <GNB />
       
-            {/* Main Content Wrapper - 반응형 구조 */}
-            <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden max-w-[1920px] mx-auto">
-              
-              {/* Left Sidebar - 요청하신 반응형 스타일 적용 */}
-              <SideMenu variant="default" />
+      {/* Main Content Wrapper */}
+      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
+        
+        {/* Left Sidebar */}
+        <SideMenu variant="default" />
 
         {/* Page Content */}
         <main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-[60px] py-6 md:py-8 lg:py-[40px]">
@@ -107,7 +110,8 @@ const EditProfilePage = () => {
               <img src={PersonIcon} alt="icon" className="w-6 h-6 md:w-7 md:h-7 lg:w-[28px] lg:h-[28px]" />
               프로필 수정
             </h1>
-            <p className='text-xs md:text-sm lg:text-[14px] text-gray-500'>{user.name} 프로필 관리</p>
+            {/* user.name 대신 displayName 사용 */}
+            <p className='text-xs md:text-sm lg:text-[14px] text-gray-500'>{displayName} 프로필 관리</p>
           </div>
 
           {/* Main Cards */}
@@ -178,6 +182,8 @@ const EditProfilePage = () => {
           <Toast 
             variant={toastMessage.variant}
             message={toastMessage.message}
+            bgClassName={toastMessage.bgClassName}
+            iconColorClassName={toastMessage.iconColorClassName}
           />
         </div>
       )}

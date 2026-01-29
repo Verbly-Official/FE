@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconButton } from '../../../../../components/Button/IconButton';
-import CloseIcon from '../../../../../assets/emoji/close.svg';
+import { IconButton } from '../../../components/Button/IconButton';
+import CloseIcon from '../../../assets/emoji/close.svg';
 
 interface ModalWrapperProps {
   isOpen: boolean;

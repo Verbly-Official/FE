@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextField } from '../../../../components/TextArea/TextField';
-import OutlinedButton from '../../../../components/Button/OutlinedButton';
+import { TextField } from '../../../components/TextArea/TextField';
+import OutlinedButton from '../../../components/Button/OutlinedButton';
 
 interface PhoneVerificationFormProps {
   phone: string;
@@ -38,7 +38,7 @@ export const PhoneVerificationForm: React.FC<PhoneVerificationFormProps> = ({
           <TextField
             value={phone}
             onChange={(e) => onPhoneChange(e.target.value)}
-            placeholder="+82 010-1234-5678"
+            placeholder="010-0000-0000"
             className="w-full"
           />
         </div>
@@ -60,7 +60,7 @@ export const PhoneVerificationForm: React.FC<PhoneVerificationFormProps> = ({
               <TextField
                 value={verificationCode}
                 onChange={(e) => onVerificationCodeChange(e.target.value)}
-                placeholder="인증번호 입력"
+                placeholder="직접 입력"
                 className="w-full"
                 disabled={!isVerificationSent}
               />

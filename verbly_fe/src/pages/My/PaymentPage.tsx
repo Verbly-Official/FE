@@ -1,8 +1,8 @@
 import React from 'react';
-import GNB from '../../../components/Nav/GNB';
-import SideMenu from '../../../components/Nav/SideMenu';
-import { IconButton, GradientButton } from '../../../components/Button';
-import { SectionHeader } from './components/shared/SectionHeader';
+import GNB from '../../components/Nav/GNB';
+import SideMenu from '../../components/Nav/SideMenu';
+import { IconButton, GradientButton } from '../../components/Button';
+import { SectionHeader } from './components/SectionHeader';
 import PricingCard from './components/PricingCard';
 import OrderSummary from './components/OrderSummary';
 import { PaymentMethodSelector } from './components/PaymentMethodSelector';
@@ -11,7 +11,7 @@ import { BenefitsList } from './components/BenefitsList';
 import { TermsCheckbox } from './components/TermsCheckbox';
 import { DecorativeIcons } from './components/DecorativeIcons';
 import { usePaymentForm } from './hooks/usePaymentForm';
-import CloseIcon from '../../../assets/emoji/close.svg';
+import CloseIcon from '../../assets/emoji/close.svg';
 
 interface PricingOption {
   id: string;
@@ -68,7 +68,7 @@ const PaymentPage: React.FC = () => {
       <GNB />
       
       {/* Main Content Wrapper - 반응형 구조 */}
-      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden max-w-[1920px] mx-auto">
+      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
               
         {/* Left Sidebar - 요청하신 반응형 스타일 적용 */}
         <SideMenu variant="default" />

@@ -1,3 +1,5 @@
+import React from 'react';
+
 type ButtonVariant = "primary" | "secondary" | "assistive";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonInteraction = "normal" | "hovered" | "pressed" | "disabled";
@@ -9,7 +11,7 @@ interface OutlinedButtonProps {
   error?: boolean;
   interaction?: ButtonInteraction;
   className?: string;
-  iconSrc?: string;
+  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>; // 변경됨
   variant?: ButtonVariant;
   size?: ButtonSize;
 }
@@ -21,9 +23,9 @@ const SIZE_STYLES: Record<ButtonSize, string> = {
 };
 
 const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
-  large: "w-auto h-[24px]",
-  medium: "w-auto h-[20px]",
-  small: "w-auto h-[16px]",
+  large: "w-[24px] h-[24px]",
+  medium: "w-[20px] h-[20px]",
+  small: "w-[16px] h-[16px]",
 };
 
 const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
@@ -59,7 +61,7 @@ export default function OutlinedButton({
   error = false,
   interaction = "normal",
   className = "",
-  iconSrc,
+  Icon, 
   variant = "primary",
   size = "large",
   label,
@@ -94,11 +96,9 @@ export default function OutlinedButton({
         ${className}
       `}
     >
-      {iconSrc && (
-        <img
-          src={iconSrc}
-          alt="icon"
-          className={`${ICON_SIZE_STYLES[size]} object-contain`}
+      {Icon && (
+        <Icon
+          className={`${ICON_SIZE_STYLES[size]} fill-current`} 
         />
       )}
       {label && <span>{label}</span>}

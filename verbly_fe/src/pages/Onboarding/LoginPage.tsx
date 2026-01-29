@@ -33,7 +33,7 @@ const LoginPage = () => {
             <SolidButton
               variant="assistive"
               size="large"
-              iconSrc={googleIcon}
+              Icon={googleIcon}
               className="justify-center !text-gray-9 text-opacity-85"
               onClick={handleLogin}
               label='Continue with Google'
@@ -43,7 +43,7 @@ const LoginPage = () => {
             <SolidButton
               variant="assistive"
               size="large"
-              iconSrc={kakaoIcon}
+              Icon={kakaoIcon}
               className="!bg-[#FFE100]"
               onClick={handleLogin}
               label='Continue with Kakao talk'

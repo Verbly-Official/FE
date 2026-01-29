@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ModalWrapper } from './shared/ModalWrapper';
-import { StudentHeader } from './shared/StudentHeader';
-import { CorrectionContent } from './shared/CorrectionContent';
-import type { User } from '../../../../types/user';
+import { ModalWrapper } from './ModalWrapper';
+import { StudentHeader } from './StudentHeader';
+import { CorrectionContent } from './CorrectionContent';
+import type { User } from '../../../types/user';
 
 // Mock Data
 const MOCK_EXPERT_DATA = {

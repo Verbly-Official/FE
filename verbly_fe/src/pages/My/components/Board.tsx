@@ -5,7 +5,7 @@ interface RecentCountCardProps {
   imageSrc?: string;
 }
 
-const My_board: React.FC<RecentCountCardProps> = ({ 
+const Board: React.FC<RecentCountCardProps> = ({ 
   title = '도움 준 글',
   count = 45,
   unit = '개',
@@ -41,4 +41,4 @@ const My_board: React.FC<RecentCountCardProps> = ({
   );
 };
 
-export default My_board;
+export default Board;
