@@ -28,6 +28,7 @@ import { WordDetailPage } from "./pages/Library/WordDetailPage";
 
 import MyPage_Korean from "./pages/My/My_Korean";
 import PaymentPage from "./pages/My/PaymentPage";
+import OAuthCallbackPage from "./pages/Onboarding/OAuthCallbackPage";
 
 function App() {
   return (
@@ -60,6 +61,8 @@ function App() {
         <Route path="/review" element={<LibraryReviewPage />} />
         <Route path="/review/result" element={<ReviewResultPage />} />
         <Route path="/correction/native/list" element={<Correction_NList />} />
+
+        <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
       </Routes>
     </BrowserRouter>
   );
