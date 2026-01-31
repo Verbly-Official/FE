@@ -6,8 +6,8 @@ import { OutlinedButton } from "../../components/Button";
 import Sidebar from "./SideBar";
 import { TextField } from "../../components/TextArea/TextField";
 import TextArea from "../../components/TextArea/TextArea";
-import PlusSrc from "../../assets/emoji/plus.svg";
-import BtnTab from "../../components/Tab/BtnTab";
+import PlusIcon from "../../assets/emoji/plus.svg?react";
+import BtnTabs from "../../components/Tab/BtnTabs";
 
 const Correction_Write = () => {
   const [text, setText] = useState("");
@@ -20,13 +20,6 @@ const Correction_Write = () => {
     suggestion: false,
     expression: false,
   });
-
-  const toggleTone = (tone: keyof typeof selectedTones) => {
-    setSelectedTones((prev) => ({
-      ...prev,
-      [tone]: !prev[tone],
-    }));
-  };
 
   const isAnySelected = Object.values(selectedTones).some((v) => v);
 
@@ -45,20 +38,20 @@ const Correction_Write = () => {
         <div className="flex-1 px-[1.75rem] py-[1.875rem] bg-[#F8FAFC]">
           {/* 버튼 탭 영역 (상단만 둥글게) */}
           <div className="h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white">
-            <BtnTab label="Write" isSelected={activeMode === "write"} onClick={() => setActiveMode("write")} />
-            <BtnTab label="Template" isSelected={activeMode === "template"} onClick={() => setActiveMode("template")} />
+            <BtnTabs btnTabs={["Write", "Template"]} />
           </div>
 
+          {/* 좌우 3개 카드 영역 - 모니터 높이에 맞춰 자동 확장 */}
           <div className="flex">
             {/* 왼쪽 메뉴 카드 */}
-            <div className="w-[278px] h-[940px] px-[1.25rem] py-9 bg-white border border-r-0 border-[#E5E7EB]">
-              <SolidButton size="large" className="w-full mb-8" iconSrc={PlusSrc} label="새 글 작성하기" />
+            <div className="w-[200px] flex-1 px-[1.25rem] py-9 bg-white border border-r-0 border-[#E5E7EB]">
+              <SolidButton size="large" className="w-full mb-8" Icon={PlusIcon} label="새 글 작성하기" />
               <Sidebar locale="ko" />
             </div>
 
             {/* 메인 카드 */}
-            <div className="flex-2 px-[2.5rem] py-6 min-h-[940px] border border-r-0 border-[#E5E7EB] bg-[#FBFBFB] items-center">
-              <div className="text-black font-pretendard text-[1.75rem] font-bold leading-none">Title</div>
+            <div className="flex-4 px-[2.5rem] py-6 border border-r-0 border-[#E5E7EB] bg-[#FBFBFB] items-center">
+              <div className="text-lg md:text-xl lg:text-2xl font-pretendard font-bold leading-none">Title</div>
 
               <div className="flex items-center gap-2 my-[1.25rem]">
                 <span className="text-black font-pretendard text-[1.25rem] leading-none">Tag:</span>
@@ -71,32 +64,15 @@ const Correction_Write = () => {
             </div>
 
             {/* AI section */}
-            <div className="flex flex-col flex-1 px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
+            <div className="flex flex-col flex-1.5 px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
               <div className="text-black font-pretendard text-[1.75rem] font-bold leading-none bg-[linear-gradient(90deg,#713DE3_0%,#4F46DD_100%)] bg-clip-text text-transparent">AI 도우미</div>
 
               {/* 세 버튼 - 토글 */}
               {!showResult && (
                 <div className="w-full flex flex-col gap-4">
-                  <OutlinedButton
-                    variant="assistive"
-                    className={`w-full justify-start ${selectedTones.toneAndManner ? "bg-violet-100 text-violet-50" : ""}`}
-                    onClick={() => toggleTone("toneAndManner")}
-                    label="Tone&Manner"
-                  />
-
-                  <OutlinedButton
-                    variant="assistive"
-                    className={`w-full justify-start ${selectedTones.suggestion ? "bg-violet-100 text-violet-50" : ""}`}
-                    onClick={() => toggleTone("suggestion")}
-                    label="수정 제안"
-                  />
-
-                  <OutlinedButton
-                    variant="assistive"
-                    className={`w-full justify-start ${selectedTones.expression ? "bg-violet-100 text-violet-50" : ""}`}
-                    onClick={() => toggleTone("expression")}
-                    label="추천 표현"
-                  />
+                  <OutlinedButton variant="assistive" className={`w-full justify-start`} label="Tone&Manner" />
+                  <OutlinedButton variant="assistive" className={`w-full justify-start`} label="수정 제안" />
+                  <OutlinedButton variant="assistive" className={`w-full justify-start`} label="추천 표현" />
                 </div>
               )}
 
@@ -109,7 +85,7 @@ const Correction_Write = () => {
                   <div className="flex gap-3">
                     <SolidButton variant="secondary" className="flex-1 !h-[60px]" label="임시저장" />
 
-                    <OutlinedButton className="flex-2 !h-[60px]" disabled={!isAnySelected || aiLoading} label={aiLoading ? "처리 중..." : "AI 첨삭하기"} />
+                    <OutlinedButton className="flex-1 !h-[60px]" label={aiLoading ? "처리 중..." : "AI 첨삭하기"} />
                   </div>
                 </div>
               )}
