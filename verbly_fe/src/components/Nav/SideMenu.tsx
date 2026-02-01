@@ -8,10 +8,7 @@ interface SideMenuProps {
   onWriteClick?: () => void;
 }
 
-export default function SideMenu({
-  variant = "default",
-  onWriteClick,
-}: SideMenuProps) {
+export default function SideMenu({ variant = "default", onWriteClick }: SideMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
