@@ -5,8 +5,10 @@ import Correction_NMain from "../pages/Correction/Native/CorrectionMainNativePag
 import Correction_NList from "../pages/Correction/Native/CorrectionListNativePage";
 
 export const correctionRoutes: RouteObject[] = [
-  { path: "/correction", element: <Correction_Main /> },
-  { path: "/correction/write", element: <Correction_Write /> },
-  { path: "/correction/native", element: <Correction_NMain /> },
-  { path: "/correction/native/list", element: <Correction_NList /> },
+  { path: "/", element: <Correction_Main /> },
+
+  { path: "correction", element: <Correction_Main /> },
+  { path: "correction/write", element: <Correction_Write /> },
+  { path: "correction/native", element: <Correction_NMain /> },
+  { path: "correction/native/list", element: <Correction_NList /> },
 ];

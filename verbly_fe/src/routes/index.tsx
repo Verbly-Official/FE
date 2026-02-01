@@ -1,7 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import { correctionRoutes } from "./correction";
+import { onboardingRoutes } from "./onboarding";
 
-// (선택) 404 페이지 추가
-const NotFound = () => <div style={{ padding: 24 }}>404 - Not Found</div>;
-
-export const router = createBrowserRouter([...correctionRoutes, { path: "*", element: <NotFound /> }]);
+export const router = createBrowserRouter([...onboardingRoutes, ...correctionRoutes]);
