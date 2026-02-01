@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { OutlinedButton } from "../../../components/Button";
 import { SolidButton } from "../../../components/Button";
-import SendIcon from "../../../assets/emoji/send-outlined.svg";
+import SendIcon from "../../../assets/emoji/send-outlined.svg?react";
 import { Toast } from "../../../components/Toast/Toast";
 
 interface DetailSentenceProps {
@@ -15,7 +15,7 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ index, text }) => {
 
   // Send 버튼 핸들러
   const handleSend = () => {
-    // 실제 send 로직...
+    // 실제 send 로직
     console.log("Sending sentence", index);
 
     setToastVariant("positive");
@@ -53,7 +53,7 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ index, text }) => {
 
           <div className="flex w-full gap-[10px] justify-end">
             <OutlinedButton label="Cancel" className="h-[60px]" onClick={handleCancel} />
-            <SolidButton label="Send" iconSrc={SendIcon} className="h-[60px]" onClick={handleSend} />
+            <SolidButton label="Send" Icon={SendIcon} className="h-[60px]" onClick={handleSend} />
           </div>
         </div>
       </div>

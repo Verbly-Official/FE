@@ -6,7 +6,7 @@ import L_SentenceItem from "../components/L_SentenceItem";
 import R_SentenceItem from "../components/R_SentenceItem";
 import { TextField } from "../../../components/TextArea/TextField";
 import DetailSentence from "../components/DetailSentence";
-import File from "../../../assets/emoji/file.svg";
+import File from "../../../assets/emoji/file.svg?react";
 
 const sentences = [
   "I missed the bus because I was looking at my...",
@@ -49,7 +49,7 @@ const Correction_NList = () => {
               <DetailSentence index={activeIndex} text={sentences[activeIndex]} />
               {/* 패널 내부 우측 하단 고정 */}
               <div className="absolute bottom-6 right-6 z-10">
-                <SolidButton label="Correction List" iconSrc={File} />
+                <SolidButton label="Correction List" Icon={File} />
               </div>
             </>
           )}
