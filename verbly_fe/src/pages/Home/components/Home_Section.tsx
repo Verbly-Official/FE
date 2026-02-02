@@ -2,15 +2,15 @@ import Home_Card from "../../../components/Home/Home_Card";
 import Tabs from "../../../components/Tab/Tabs";
 
 interface sectionProps {
-  variant: "KOREAN" | "NATIVE";
+  variant: "kr" | "en";
 }
 
-export default function Home_Section({ variant = "KOREAN" }: sectionProps) {
+export default function Home_Section({ variant = "kr" }: sectionProps) {
   return (
     <div className="bg-white flex-1 p-[24px] w-full min-h-screen my-[32px] rounded-[12px] mx-[38px]">
       {/* Tab */}
       <div className="flex mb-[28px] justify-start gap-0 border-b-[1px] border-line2">
-        {variant === "KOREAN" ? (
+        {variant === "kr" ? (
           <Tabs tabs={["For You", "Hot Posts"]} />
         ) : (
           <Tabs tabs={["For You", "Hot Posts", "Need Correction"]} />

@@ -5,7 +5,7 @@ import TrendingTag from "../../components/TrendingTag/TrendingTag";
 import { UserStatsCard } from "../Library/components/UserStatsCard";
 import { MOCK_USER_PROFILE, MOCK_USER_STATS } from "./mockData.ts";
 import Home_WriteModal from "../../components/Home/Home_WriteModal.tsx";
-import Home_Section from "./components/Home_section.tsx";
+import Home_Section from "./components/Home_Section.tsx";
 
 export default function Home_Native() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,13 +28,16 @@ export default function Home_Native() {
                 className="w-full absolute inset-0 bg-[rgba(0,0,0,0.40)] z-20"
                 onClick={() => setModalOpen(false)}
               />
-              <div className="absolute inset-0 flex justify-center items-center z-30">
+              <div
+                className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Home_WriteModal variant="KOREAN" />
               </div>
             </>
           )}
           {/* 홈 내용 */}
-          <Home_Section variant="NATIVE" />
+          <Home_Section variant="en" />
 
           {/* 사이드 */}
           <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
