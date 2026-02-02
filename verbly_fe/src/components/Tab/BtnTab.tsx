@@ -1,10 +1,16 @@
 type BtnTabProps = {
   label: string;
+  iconSrc: string;
   isSelected: boolean;
   onClick: () => void;
 };
 
-export default function BtnTab({ label, isSelected, onClick }: BtnTabProps) {
+export default function BtnTab({
+  label,
+  iconSrc,
+  isSelected,
+  onClick,
+}: BtnTabProps) {
   return (
     <div
       onClick={onClick}
@@ -12,14 +18,7 @@ export default function BtnTab({ label, isSelected, onClick }: BtnTabProps) {
         isSelected ? "bg-violet-50 text-white" : "bg-transparent text-gray-6"
       }`}
     >
-      <img
-        src={
-          isSelected
-            ? "../../src/assets/emoji/checkbox-dashed-white.svg"
-            : "../../src/assets/emoji/checkbox-dashed-gray.svg"
-        }
-        className="w-[24px] h-[24px]"
-      />
+      <img src={iconSrc} className="w-[24px] h-[24px]" />
       <span>{label}</span>
     </div>
   );
