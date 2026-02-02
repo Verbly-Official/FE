@@ -3,7 +3,7 @@ import Select from "../Select/Select";
 import type { Option } from "../Select/Select";
 import TextArea from "../TextArea/TextArea";
 import { SolidButton } from "../Button";
-import { ReactComponent as SendIcon } from "../../assets/emoji/send-outlined.svg";
+import SendIcon from "../../assets/emoji/send-outlined.svg";
 import Switch from "../Switch/Switch";
 import Home_ChipBox from "./Home_ChipBox";
 
@@ -64,7 +64,7 @@ export default function Home_WriteModal({
         </div>
 
         {/* Post Now */}
-        <SolidButton label="Post Now" iconSrc={SendIcon} />
+        <SolidButton label="Post Now" Icon={SendIcon} />
       </div>
     </div>
   );
