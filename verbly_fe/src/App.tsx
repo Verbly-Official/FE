@@ -14,19 +14,23 @@ import InboxPage from "./pages/Inbox/InboxPage";
 import InboxReviewPage from "./pages/Inbox/ReviewPage";
 import ProfilePage from "./pages/Inbox/ProfilePage";
 
-import MyPage_Korean from "./pages/My/MyPage/My_Korean";
-import MyPage_Foreigner from "./pages/My/MyPage/My_Foreigner";
-import EditProfilePage from "./pages/My/EditProfilePage/EditProfilePage";
-import PaymentPage from "./pages/My/PaymentPage/PaymentPage";
+import MyPage_Foreigner from "./pages/My/My_Foreigner";
+import EditProfilePage from "./pages/My/EditProfilePage";
 
 import Correction_NMain from "./pages/Correction/Native/CorrectionMainNativePage";
 import Home_Search from "./pages/Home/Home_Search";
+import Correction_NList from "./pages/Correction/Native/CorrectionListNativePage";
 
 import LibraryPage from "./pages/Library/LibraryPage";
 import LibraryReviewPage from "./pages/Library/Review/ReviewPage";
 import { ReviewResultPage } from "./pages/Library/Review/ReviewResultPage";
 import { WordDetailPage } from "./pages/Library/WordDetailPage";
 import Home_Profile from "./pages/Home/Home_Profile";
+
+import MyPage_Korean from "./pages/My/My_Korean";
+import PaymentPage from "./pages/My/PaymentPage";
+import OAuthCallbackPage from "./pages/Onboarding/OAuthCallbackPage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -40,7 +44,7 @@ function App() {
 
         <Route path="/correction" element={<Correction_Main />} />
         <Route path="/correction/write" element={<Correction_Write />} />
-        <Route path="/correction1" element={<Correction_NMain />} />
+        <Route path="/correction/native" element={<Correction_NMain />} />
 
         <Route path="/inbox" element={<InboxPage />} />
         <Route path="/review/:id" element={<InboxReviewPage />} />
@@ -59,6 +63,9 @@ function App() {
         <Route path="/review/result" element={<ReviewResultPage />} />
 
         <Route path="/home/profile" element={<Home_Profile />} />
+        <Route path="/correction/native/list" element={<Correction_NList />} />
+
+        <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
       </Routes>
     </BrowserRouter>
   );
