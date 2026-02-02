@@ -30,7 +30,7 @@ const SIDEBAR_CONTENT: Record<Locale, SidebarSection[]> = {
     {
       title: "내 문서",
       items: [
-        { key: "all", label: "전체", icon: <DocIcon className="w-4 h-[20px]" /> },
+        { key: "all", label: "전체", icon: <DocIcon className="w-5 h-5" /> },
         { key: "favorites", label: "즐겨찾기", icon: <StarIcon className="w-4 h-[20px]" /> },
         { key: "recent", label: "최근", icon: <RecentIcon className="w-4 h-[20px]" /> },
       ],
@@ -73,7 +73,7 @@ export default function Sidebar({ locale, defaultActive = "all", onChangeActive 
 
           <div className="space-y-2">
             {section.items.map((item) => (
-              <SideMenu_Tab key={item.key} label={item.label} isSelected={active === item.key} onClick={() => handleClick(item.key)} icon={item.icon} />
+              <SideMenu_Tab key={item.key} label={item.label} isSelected={active === item.key} onClick={() => handleClick(item.key)} icon={item.icon} className="w-full" />
             ))}
           </div>
         </div>
