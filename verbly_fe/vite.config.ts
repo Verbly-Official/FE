@@ -16,4 +16,13 @@ export default defineConfig({
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
   },
+  server: {
+    proxy: {
+      "/oauth2": {
+        target: "https://3.35.202.0:443",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });
