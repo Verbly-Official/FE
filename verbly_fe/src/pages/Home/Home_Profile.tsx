@@ -80,7 +80,7 @@ export default function Home_Profile() {
                     <FollowButton size="large" className="w-[508px]" />
                     <OutlinedButton
                       label="Message"
-                      iconSrc={MessageImg}
+                      Icon={MessageImg}
                       size="large"
                     />
                   </div>
