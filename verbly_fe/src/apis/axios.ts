@@ -1,86 +1,101 @@
-import axios from 'axios';
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 
+// 1. Axios 인스턴스 생성
 export const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // 쿠키 전송을 위해 추가
+  withCredentials: true,
+  timeout: 10000,
 });
 
-// 요청 인터셉터: localStorage의 accessToken을 Authorization 헤더에 추가
+// 2. 요청 인터셉터
 instance.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const { accessToken } = useAuthStore.getState();
     if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// 응답 인터셉터: 401 발생 시 재발급 로직
+// 3. 응답 인터셉터 (토큰 재발급)
 instance.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    // 401 에러이고 재시도하지 않은 요청인 경우
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
-      const { refreshToken, logout, login } = useAuthStore.getState();
 
-      if (refreshToken) {
-        try {
-          // 1. 새 토큰 재발급 요청
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/auth/reissue`,
-            {
-              headers: {
-                Authorization: `Bearer ${refreshToken}`,
-              },
-            }
-          );
+      const authStore = useAuthStore.getState();
+      // userInfo도 구조분해 할당으로 가져옵니다.
+      const { refreshToken, logout, login, userInfo } = authStore; 
 
-          if (response.data.isSuccess) {
-            const newAccessToken = response.data.result.accessToken;
-            const newRefreshToken = response.data.result.refreshToken || refreshToken;
+      if (!refreshToken) {
+        handleLogout(logout);
+        return Promise.reject(error);
+      }
 
-            // 2. 스토어 갱신
-            login(newAccessToken, newRefreshToken);
-
-            // 3. 원래 요청의 헤더를 새 토큰으로 교체 후 재요청
-            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-            return instance(originalRequest);
-          } else {
-            // 재발급 실패
-            throw new Error('Token reissue failed');
+      try {
+        console.log('🔄 토큰 재발급 시도...');
+        
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/auth/reissue`,
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+            withCredentials: true,
           }
-        } catch (reissueError) {
-          // 재발급 실패 시 로그아웃 및 로그인 페이지로 이동
-          console.error('❌ 토큰 재발급 실패:', reissueError);
-          logout();
+        );
+
+        if (response.data.isSuccess) {
+          console.log('✅ 토큰 재발급 성공');
           
-          // 로컬 스토리지의 추가 정보도 삭제
-          localStorage.removeItem('userId');
-          localStorage.removeItem('provider');
-          localStorage.removeItem('nickname');
-          localStorage.removeItem('profileImage');
-          localStorage.removeItem('email');
-          
-          window.location.href = '/login';
-          return Promise.reject(reissueError);
+          const newAccessToken = response.data.result.accessToken;
+          const newRefreshToken = response.data.result.refreshToken || refreshToken;
+
+          // 🛠️ 수정된 부분: userInfo 객체 내부 값에 접근
+          // 기존 userInfo가 null일 경우를 대비해 안전하게 접근하거나 빈 값을 할당
+          const currentUserInfo = {
+            userId: userInfo?.userId || '',
+            nickname: userInfo?.nickname || '',
+            profileImage: userInfo?.profileImage || '',
+            email: userInfo?.email,
+            provider: userInfo?.provider, // 👈 authStore.provider -> userInfo.provider 로 변경
+            status: userInfo?.status,
+            nativeLang: userInfo?.nativeLang,
+            learningLang: userInfo?.learningLang
+          };
+
+          // 스토어 갱신
+          login(newAccessToken, newRefreshToken, currentUserInfo);
+
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return instance(originalRequest);
+        } else {
+          throw new Error('Token reissue failed');
         }
-      } else {
-        // refreshToken이 없는 경우
-        logout();
-        window.location.href = '/login';
+      } catch (reissueError) {
+        console.error('❌ 토큰 재발급 실패:', reissueError);
+        handleLogout(logout);
+        return Promise.reject(reissueError);
       }
     }
+
     return Promise.reject(error);
   }
 );
+
+const handleLogout = (logoutAction: () => void) => {
+  logoutAction();
+  localStorage.removeItem('auth-storage');
+  window.location.href = '/login';
+};
 
 export default instance;
