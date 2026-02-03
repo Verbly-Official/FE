@@ -5,6 +5,8 @@ import SolidButton from '../../components/Button/SolidButton';
 import OutlinedButton from '../../components/Button/OutlinedButton';
 import Logo from '../../components/Logo/Logo';
 import { Text } from '../../components/Text/Text';
+import { useAuthStore } from '../../store/useAuthStore';
+import instance from '../../apis/axios';
 
 // 언어 선택 옵션 정의
 const LANGUAGE_OPTIONS = [
@@ -14,34 +16,75 @@ const LANGUAGE_OPTIONS = [
 
 const SelectLangPage = () => {
   const navigate = useNavigate();
+  const logout = useAuthStore((state) => state.logout);
   
   // 상태 관리
   const [learningLang, setLearningLang] = useState<string>('');
   const [nativeLang, setNativeLang] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
-  const handleComplete = () => {
-    if (learningLang && nativeLang) {
-      console.log('Learning:', learningLang, 'Native:', nativeLang);
-      // 로컬 스토리지 저장 등의 로직 추가 가능
-      navigate('/home'); 
+  const handleComplete = async () => {
+    if (!learningLang || !nativeLang) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // 백엔드로 온보딩 정보 전송 (API 명세에 맞게 수정 필요)
+      const response = await instance.post('/user/onboarding', {
+        learningLanguage: learningLang,
+        nativeLanguage: nativeLang,
+      });
+
+      if (response.data.isSuccess) {
+        console.log('✅ 온보딩 완료:', response.data);
+        
+        // 로컬 스토리지에 언어 설정 저장 (선택사항)
+        localStorage.setItem('learningLanguage', learningLang);
+        localStorage.setItem('nativeLanguage', nativeLang);
+
+        // 홈 화면으로 이동
+        navigate('/home-korean', { replace: true });
+      } else {
+        setError(response.data.message || '온보딩 처리에 실패했습니다.');
+      }
+    } catch (err: any) {
+      console.error('❌ 온보딩 API 호출 실패:', err);
+      setError(
+        err.response?.data?.message || '온보딩 처리 중 오류가 발생했습니다.'
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleLogout = () => {
-    navigate('/login');
+    // Zustand 스토어 초기화
+    logout();
+    
+    // 로컬 스토리지의 추가 정보도 삭제
+    localStorage.removeItem('userId');
+    localStorage.removeItem('provider');
+    localStorage.removeItem('nickname');
+    localStorage.removeItem('profileImage');
+    localStorage.removeItem('email');
+    localStorage.removeItem('learningLanguage');
+    localStorage.removeItem('nativeLanguage');
+    
+    navigate('/login', { replace: true });
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-5 py-10">
-      {/* 모바일 대응을 위한 최대 너비 설정 컨테이너 */}
       <div className="flex flex-col items-center w-full max-w-[500px] gap-10">
         
-        {/* 1. Logo Section */}
+        {/* 로고 Section */}
         <div className="flex flex-col items-center justify-center w-full mb-2">
           <Logo variant="hori" />
         </div>
 
-        {/* 2. Form Section */}
+        {/* Form Section */}
         <div className="flex flex-col w-full gap-6">
           
           {/* Learning Language Select */}
@@ -69,17 +112,24 @@ const SelectLangPage = () => {
               className="!w-full"
             />
           </div>
+
+          {/* 에러 메시지 표시 */}
+          {error && (
+            <div className="w-full p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
         </div>
 
-        {/* 3. Button Section */}
+        {/* Button Section */}
         <div className="flex flex-col w-full gap-3 mt-4">
           {/* Complete Button */}
           <SolidButton 
             variant="primary" 
             size="large" 
             className="w-full"
-            label='Complete'
-            disabled={!learningLang || !nativeLang}
+            label={isLoading ? 'Processing...' : 'Complete'}
+            disabled={!learningLang || !nativeLang || isLoading}
             onClick={handleComplete}
           />
 
@@ -90,6 +140,7 @@ const SelectLangPage = () => {
             className="w-full"
             label='Logout'
             onClick={handleLogout}
+            disabled={isLoading}
           />
         </div>
 
