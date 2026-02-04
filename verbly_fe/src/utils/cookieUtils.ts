@@ -26,3 +26,22 @@ export const deleteCookie = (name: string): void => {
 export const deleteMultipleCookies = (names: string[]): void => {
   names.forEach((name) => deleteCookie(name));
 };
+
+/**
+ * 백엔드가 설정한 OAuth 관련 쿠키들을 정리합니다
+ * 참고: accessToken, refreshToken은 HttpOnly이므로 프론트에서 삭제 불가
+ *       백엔드의 /auth/logout API에서 삭제 처리
+ */
+export const clearOAuthInfoCookies = (): void => {
+  const cookiesToClear = [
+    'status',      // 백엔드가 설정한 사용자 상태
+    'userId',      // 백엔드가 설정한 사용자 ID
+    'provider',    // OAuth 제공자
+    'nickname',    // 사용자 닉네임
+    'profileImage',// 프로필 이미지
+    'email',       // 이메일
+  ];
+  
+  deleteMultipleCookies(cookiesToClear);
+  console.log('🗑️ OAuth 정보 쿠키 정리 완료');
+};

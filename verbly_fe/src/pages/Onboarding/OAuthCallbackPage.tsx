@@ -1,108 +1,95 @@
-import { useEffect, useState, useRef } from 'react'; // useRef 추가
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
-import { getCookie, deleteMultipleCookies } from '../../utils/cookieUtils';
+import { getMyProfileApi } from '../../apis/auth';
+import { getCookie } from '../../utils/cookieUtils';
 import loadingVideo from './video/loading.mp4';
 
 const OAuthCallbackPage = () => {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  
-  // 중복 실행 방지를 위한 ref
   const isProcessing = useRef(false);
 
   useEffect(() => {
-    // 이미 처리 중이거나 처리가 완료되었다면 중단
+    // React Strict Mode 중복 실행 방지
     if (isProcessing.current) return;
     isProcessing.current = true;
 
-    const processOAuthCallback = async () => {
+    const processLogin = async () => {
+      console.log('🔐 OAuth 콜백 처리 시작');
+
+      // 1. 쿠키 도착 대기 (백엔드 리다이렉트 후 쿠키 설정 시간 고려)
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // 2. 쿠키 존재 여부 우선 확인 (개발 환경 디버깅용)
+      // 배포 환경에서는 HttpOnly 쿠키라 안 보일 수 있지만, 로컬에서는 확인 가능할 수 있음
+      const hasCookie = document.cookie.includes('accessToken') || document.cookie.includes('isSuccess');
+      if (!hasCookie && import.meta.env.DEV) {
+         console.warn('⚠️ 경고: 브라우저에서 accessToken 쿠키가 감지되지 않았습니다.');
+      }
+
       try {
-        console.log('🔹 OAuth Callback 처리 시작');
+        console.log('📡 사용자 정보 조회 시도... GET /api/user/me');
+        const response = await getMyProfileApi();
 
-        // 1. 쿠키에서 인증 정보 및 사용자 정보 추출
-        const accessToken = getCookie('accessToken');
-        const refreshToken = getCookie('refreshToken');
-        const status = getCookie('status');
-        
-        const userId = getCookie('userId');
-        const provider = getCookie('provider');
-        const nickname = getCookie('nickname');
-        const profileImage = getCookie('profileImage');
-        const email = getCookie('email');
-
-        console.log('📦 쿠키 데이터 확인:', {
-          hasAccessToken: !!accessToken,
-          hasRefreshToken: !!refreshToken,
-          status,
-        });
-
-        // 2. 토큰 유효성 검증
-        if (!accessToken || !refreshToken) {
-          console.error('❌ 토큰이 쿠키에 없습니다');
-          setErrorMessage('로그인 처리에 실패했습니다. 정보를 불러오지 못했습니다.');
-          
-          // 실패 시에도 혹시 모를 잔여 쿠키 삭제
-          deleteMultipleCookies([
-            'accessToken', 'refreshToken', 'userId', 'provider', 
-            'nickname', 'profileImage', 'email', 'status'
-          ]);
-
-          setTimeout(() => {
-            navigate('/login', { replace: true });
-          }, 3000);
-          return;
+        if (!response || !response.isSuccess) {
+          throw new Error(response?.message || '로그인에 실패했습니다.');
         }
 
-        // 3. 스토어에 저장
-        console.log('✅ 인증 정보를 스토어에 저장합니다');
-        login(accessToken, refreshToken, {
-          // 필수값(Required)들이 null이면 빈 문자열('')로 처리하여 타입 에러 방지
-          userId: userId || '', 
-          nickname: nickname || '',
-          profileImage: profileImage || '',
-          
-          // 선택값(Optional)들이 null이면 undefined로 처리
-          email: email || undefined,
-          provider: provider || undefined, // 👈 수정된 부분 (null -> undefined 변환)
-        });
+        const userInfo = response.result;
+        login(userInfo);
 
-        // 4. 쿠키 삭제 (중요: 저장 후 삭제)
-        deleteMultipleCookies([
-          'accessToken', 'refreshToken', 'userId', 'provider', 
-          'nickname', 'profileImage', 'email', 'status'
-        ]);
+        console.log('✅ 로그인 성공! 상태:', userInfo.status);
 
-        // 5. 페이지 이동
-        console.log('🚀 페이지 이동:', status);
-        if (status === 'NEED_ONBOARDING') {
+        if (userInfo.status === 'NEED_ONBOARDING') {
           navigate('/login/select-language', { replace: true });
         } else {
-          navigate('/home-korean', { replace: true });
+          const homePath = userInfo.nativeLang === 'ko' ? '/home-korean' : '/home-native';
+          navigate(homePath, { replace: true });
         }
 
-      } catch (error) {
-        console.error('❌ OAuth 콜백 처리 중 오류:', error);
-        setErrorMessage('로그인 처리 중 오류가 발생했습니다.');
+      } catch (error: any) {
+        console.error('❌ 로그인 처리 중 오류 발생:', error);
         
-        // 에러 발생 시 쿠키 청소
-        deleteMultipleCookies([
-          'accessToken', 'refreshToken', 'userId', 'provider', 
-          'nickname', 'profileImage', 'email', 'status'
-        ]);
+        // -------------------------------------------------------------
+        // 🚨 [에러 분석 및 처리]
+        // -------------------------------------------------------------
+        let errorMsg = '로그인 처리 중 문제가 발생했습니다.';
         
-        setTimeout(() => {
-          navigate('/login', { replace: true });
-        }, 3000);
+        // CASE 1: 401 Unauthorized (쿠키 없음)
+        if (error.response?.status === 401) {
+            console.error('🚨 인증 실패: 서버로부터 쿠키(Token)를 받지 못했습니다.');
+            errorMsg = '서버로부터 인증 정보를 받지 못했습니다. (Set-Cookie 누락)';
+        }
+        // CASE 2: 404 Not Found (신규 유저 아님, 그냥 API 못 찾음)
+        else if (error.response?.status === 404) {
+            // 백엔드가 HTML(에러페이지)을 줬을 가능성 높음
+            console.error('🚨 404 발생: API 경로가 잘못되었거나 유저 정보가 없습니다.');
+            
+            // 혹시라도 신규 유저 코드가 들어있는지 확인
+            const resData = error.response?.data;
+            if (resData?.code === 'USER2001' || getCookie('userStatus') === 'NEED_ONBOARDING') {
+                navigate('/login/select-language', { replace: true });
+                return;
+            }
+            errorMsg = '계정 정보를 찾을 수 없습니다. (404)';
+        }
+        // CASE 3: HTML 응답이 와서 JSON 파싱 에러가 난 경우
+        else if (error.message?.includes('JSON') || error.response?.headers?.['content-type']?.includes('text/html')) {
+            console.error('🚨 서버 응답 형식이 잘못되었습니다. (HTML 반환됨)');
+            errorMsg = '서버 에러가 발생했습니다. (잘못된 응답 형식)';
+        }
+
+        // 로그인 페이지로 돌려보내면서 에러 메시지 전달
+        navigate(`/login?error=${encodeURIComponent(errorMsg)}`, { replace: true });
       }
     };
 
-    processOAuthCallback();
+    processLogin();
   }, [navigate, login]);
 
   return (
-    <div className="flex flex-col items-center justify-center bg-[#FBFBFB] w-full min-h-screen gap-[46px]">
+    <div className="flex flex-col items-center justify-center bg-[#FBFBFB] w-full min-h-screen gap-[46px] p-[110px_646px_390px];">
        {/* 스타일 일부 수정: 화면 중앙 정렬을 위해 min-h-screen과 padding 조정 권장 */}
       <video 
         src={loadingVideo}
@@ -110,14 +97,11 @@ const OAuthCallbackPage = () => {
         loop 
         muted 
         playsInline
-        className="w-[200px] h-auto" // 크기 제어 클래스 추가 권장
+        className="w-[400px] h-auto" // 크기 제어 클래스 추가 권장
       />
       <div className='flex w-auto flex-col justify-center items-center gap-[16px]'>
-        <span className='text-[24px] font-bold'>홈 화면으로 이동 중이에요</span>
-        <span className='text-[18px] text-gray-500'>잠시만 기다려 주세요...</span>
-        {errorMessage && (
-          <span className='text-red-500 text-[16px] mt-2 font-medium'>{errorMessage}</span>
-        )}
+        <span className='text-[24px]'>홈 화면으로 이동 중이에요</span>
+        <span className='text-[24px]'>잠시만 기다려 주세요...</span>
       </div>
     </div>
   );

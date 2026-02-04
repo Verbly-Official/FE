@@ -1,162 +1,179 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Select from '../../components/Select/Select';
+import SolidButton from '../../components/Button/SolidButton';
+import OutlinedButton from '../../components/Button/OutlinedButton';
+import Logo from '../../components/Logo/Logo';
+import { Text } from '../../components/Text/Text';
 import { useAuthStore } from '../../store/useAuthStore';
-import { saveOnboardingApi } from '../../apis/user';
-import { logoutApi } from '../../apis/auth';
+import { saveOnboardingApi, validateLanguageSelection } from '../../apis/user';
+import { logoutApi, getMyProfileApi } from '../../apis/auth'; // ✅ API 추가
+
+const LANGUAGE_OPTIONS = [
+  { label: '한국어', value: 'kr' },
+  { label: 'English', value: 'en' },
+];
 
 const SelectLangPage = () => {
   const navigate = useNavigate();
-  const { setUserInfo, logout } = useAuthStore();
-  
-  // 백엔드 규격(@Size max=3)에 맞는 코드값 사용 ("ko", "en")
-  const [nativeLang, setNativeLang] = useState<string>(''); 
   const [learningLang, setLearningLang] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [nativeLang, setNativeLang] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const { logout: logoutStore, updateUserInfo, login } = useAuthStore();
 
-  // ✅ 유효성 검사: 둘 다 선택되어야 함 (빈 문자열이면 false)
-  // nativeLang과 learningLang이 같으면 안 된다는 로직도 추가 가능
-  const isValid = nativeLang !== '' && learningLang !== '' && (nativeLang !== learningLang);
+  const validation = validateLanguageSelection(nativeLang, learningLang);
+  const isButtonDisabled = !validation.isValid || isLoading;
 
-  const handleStart = async () => {
-    // 버튼이 disabled 상태여도 엔터키 등으로 실행되는 것 방지
-    if (!isValid || isLoading) return;
-    
+  /**
+   * 온보딩 완료 핸들러
+   */
+  const handleComplete = async () => {
+    if (!validation.isValid) {
+      setError(validation.error || '입력값을 확인해주세요.');
+      return;
+    }
+
     setIsLoading(true);
+    setError('');
 
     try {
-      console.log('📡 온보딩 정보 전송:', { nativeLang, learningLang });
-
-      // 1. API 호출
-      const data = await saveOnboardingApi({
+      console.log('📄 온보딩 정보 저장 시도...');
+      
+      const response = await saveOnboardingApi({
         nativeLang,
         learningLang,
       });
 
-      if (data.isSuccess) {
-        console.log('✅ 온보딩 완료:', data.result);
+      if (response.isSuccess) {
+        console.log('✅ 온보딩 성공');
+        updateUserInfo({ nativeLang, learningLang, status: 'ACTIVE' });
+        localStorage.setItem('learningLanguage', learningLang);
+        localStorage.setItem('nativeLanguage', nativeLang);
 
-        // 2. 스토어 정보 갱신 (status: "ACTIVE"로 변경된 정보 저장)
-        setUserInfo(data.result);
-
-        // 3. 홈 화면 이동 (모국어에 따라 분기)
-        if (data.result.nativeLang === 'ko') { // "ko" 확인
-          navigate('/home-korean', { replace: true });
-        } else {
-          navigate('/home-native', { replace: true });
-        }
-      } else {
-        alert(data.message || '정보 저장에 실패했습니다.');
+        const homePath = nativeLang === 'kr' ? '/home-korean' : '/home-native';
+        navigate(homePath, { replace: true });
       }
-    } catch (error) {
-      console.error('❌ 온보딩 에러:', error);
-      alert('오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+
+    } catch (err: any) {
+      console.error('❌ 온보딩 에러:', err);
+
+      // ------------------------------------------------------------------
+      // ✅ [핵심 수정] 400 에러 발생 시 (이미 온보딩된 유저일 가능성 높음)
+      // ------------------------------------------------------------------
+      if (err.response?.status === 400) {
+        console.log('⚠️ 400 에러 감지 - 유저 상태 재확인 중...');
+        
+        try {
+          // 내 최신 정보 조회
+          const profileRes = await getMyProfileApi();
+          
+          if (profileRes.isSuccess && profileRes.result.status === 'ACTIVE') {
+            console.log('🚀 확인 완료: 이미 활동 중인 유저입니다. 홈으로 이동합니다.');
+            
+            // 최신 정보로 스토어 업데이트
+            login(profileRes.result);
+            
+            // 홈으로 강제 이동
+            const homePath = profileRes.result.nativeLang === 'kr' ? '/home-korean' : '/home-native';
+            navigate(homePath, { replace: true });
+            return;
+          }
+        } catch (checkErr) {
+          console.error('상태 재확인 실패:', checkErr);
+        }
+      }
+
+      // 진짜 에러인 경우 메시지 표시
+      const errorMessage = err.response?.data?.message 
+        || '이미 처리되었거나 잘못된 요청입니다.';
+      setError(errorMessage);
+      
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 로그아웃 (이전 단계 코드 유지)
   const handleLogout = async () => {
-    await logoutApi();
-    logout();
-    localStorage.removeItem('auth-storage');
-    navigate('/login', { replace: true });
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      await logoutApi();
+    } finally {
+      logoutStore();
+      navigate('/login', { replace: true });
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen px-5 py-10 bg-white relative">
-      {/* 상단 로그아웃 */}
-      <div className="absolute top-6 right-6">
-        <button onClick={handleLogout} className="text-gray-400 text-sm underline">
-          로그아웃
-        </button>
-      </div>
-
-      <div className="flex flex-col items-center mt-20 gap-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-gray-900">
-          어떤 언어로<br />학습하시겠어요?
-        </h1>
-
-        {/* 1. 모국어 선택 */}
-        <div className="w-full">
-          <p className="mb-2 font-bold text-gray-700">나의 모국어</p>
-          <div className="flex gap-3">
-            <LanguageButton 
-              label="한국어" 
-              value="ko" // 👈 백엔드 규격에 맞춰 "ko" 사용
-              isSelected={nativeLang === 'ko'} 
-              onClick={setNativeLang} 
-            />
-            <LanguageButton 
-              label="English" 
-              value="en" 
-              isSelected={nativeLang === 'en'} 
-              onClick={setNativeLang} 
-            />
-          </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-5 py-10">
+      <div className="flex flex-col items-center w-full max-w-[500px] gap-10">
+        <div className="flex flex-col items-center justify-center w-full mb-2">
+          <Logo variant="hori" />
         </div>
 
-        {/* 2. 학습 언어 선택 */}
-        <div className="w-full">
-          <p className="mb-2 font-bold text-gray-700">배우고 싶은 언어</p>
-          <div className="flex gap-3">
-            <LanguageButton 
-              label="한국어" 
-              value="ko" 
-              isSelected={learningLang === 'ko'} 
-              onClick={setLearningLang}
-              disabled={nativeLang === 'ko'} // 모국어와 같으면 선택 불가 처리
-            />
-            <LanguageButton 
-              label="English" 
-              value="en" 
-              isSelected={learningLang === 'en'} 
-              onClick={setLearningLang}
-              disabled={nativeLang === 'en'}
+        <div className="flex flex-col w-full gap-6">
+          <div className="flex flex-col w-full gap-2">
+            <Text size="medium" state="default">Learning</Text>
+            <Select
+              placeholder="언어를 선택해주세요"
+              options={LANGUAGE_OPTIONS}
+              value={learningLang}
+              onChange={(val) => { setLearningLang(val); if (error) setError(''); }}
+              size="large"
+              className="!w-full"
             />
           </div>
+
+          <div className="flex flex-col w-full gap-2">
+            <Text size="medium" state="default">Native Language</Text>
+            <Select
+              placeholder="언어를 선택해주세요"
+              options={LANGUAGE_OPTIONS}
+              value={nativeLang}
+              onChange={(val) => { setNativeLang(val); if (error) setError(''); }}
+              size="large"
+              className="!w-full"
+            />
+          </div>
+
+          {error && (
+            <div className="w-full p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+          
+          {!validation.isValid && nativeLang && learningLang && (
+            <div className="w-full">
+               <p className="text-sm text-orange-500 text-center">
+                 {validation.error || '모국어와 학습 언어는 달라야 합니다.'}
+               </p>
+            </div>
+          )}
         </div>
 
-        {/* 시작하기 버튼 */}
-        <button
-          onClick={handleStart}
-          disabled={!isValid} // 👈 값이 없으면 버튼 비활성화 (백엔드 400 에러 방지)
-          className={`w-full py-4 rounded-xl text-lg font-bold mt-10 transition-all duration-200
-            ${isValid 
-              ? 'bg-[#7C51D2] text-white hover:bg-[#6A43B5] shadow-lg cursor-pointer' 
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
-        >
-          {isLoading ? '저장 중...' : '시작하기'}
-        </button>
+        <div className="flex flex-col w-full gap-3 mt-4">
+          <SolidButton 
+            variant="primary" 
+            size="large" 
+            className="w-full"
+            label={isLoading ? 'Processing...' : 'Complete'}
+            disabled={isButtonDisabled} 
+            onClick={handleComplete}
+          />
+          <OutlinedButton 
+            variant="secondary"
+            size="large"
+            className="w-full"
+            label='Logout'
+            onClick={handleLogout}
+            disabled={isLoading}
+          />
+        </div>
       </div>
     </div>
   );
 };
-
-// 버튼 UI 컴포넌트
-interface LangButtonProps {
-  label: string;
-  value: string;
-  isSelected: boolean;
-  onClick: (val: string) => void;
-  disabled?: boolean;
-}
-
-const LanguageButton = ({ label, value, isSelected, onClick, disabled }: LangButtonProps) => (
-  <button
-    onClick={() => onClick(value)}
-    disabled={disabled}
-    className={`flex-1 py-4 border rounded-xl font-bold transition-all duration-200
-      ${isSelected 
-        ? 'border-[#7C51D2] bg-[#F5F1FF] text-[#7C51D2] ring-1 ring-[#7C51D2]' 
-        : 'border-gray-200 text-gray-500 bg-white hover:border-gray-300'
-      }
-      ${disabled ? 'opacity-40 cursor-not-allowed bg-gray-50 border-gray-100' : ''}
-    `}
-  >
-    {label}
-  </button>
-);
 
 export default SelectLangPage;
