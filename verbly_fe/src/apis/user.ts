@@ -1,6 +1,7 @@
 // src/apis/user.ts
 import instance from './axios';
 import { type OnboardingRequest, type ApiResponse, type OnboardingResult, type UserInfo } from '../types/user';
+
 /**
  * 온보딩 정보 저장
  * 백엔드 엔드포인트: POST /api/user/onboarding
@@ -12,9 +13,9 @@ import { type OnboardingRequest, type ApiResponse, type OnboardingResult, type U
 export const saveOnboardingApi = async (
   data: OnboardingRequest
 ): Promise<ApiResponse<OnboardingResult>> => {
-  // 혹시 백엔드 경로가 /api/user/onboarding 인지 확인
+  // ✅ 수정: /api 접두사 제거 (baseURL에 이미 포함됨)
   const response = await instance.post<ApiResponse<OnboardingResult>>(
-    '/api/user/onboarding', 
+    '/user/onboarding',  // ❌ 기존: '/api/user/onboarding'
     data
   );
   return response.data;
@@ -56,9 +57,11 @@ export const validateLanguageSelection = (
 
   return { isValid: true };
 };
+
 /**
- * [추가] 회원 탈퇴 API
- * 백엔드 엔드포인트: DELETE /api/user (예시, 백엔드 명세 확인 필요)
+ * 회원 탈퇴 API
+ * 백엔드 엔드포인트: DELETE /api/user
+ * ⚠️ 백엔드 명세 확인 필요
  */
 export const withdrawApi = async (): Promise<ApiResponse<void>> => {
   const response = await instance.delete<ApiResponse<void>>('/user');
@@ -66,11 +69,12 @@ export const withdrawApi = async (): Promise<ApiResponse<void>> => {
 };
 
 /**
- * [추가] 프로필 수정 API
+ * 프로필 수정 API
  * ⚠️ 백엔드 명세 특이사항 반영:
  * - 텍스트 정보(nickname, bio 등) -> Query Parameter로 전송
  * - 이미지 파일(profileImage) -> Multipart/form-data Body로 전송
- * * @param params 수정할 텍스트 정보 (닉네임, 소개, 이메일, 전화번호)
+ * 
+ * @param params 수정할 텍스트 정보 (닉네임, 소개, 이메일, 전화번호)
  * @param imageFile 수정할 프로필 이미지 파일 (없으면 null)
  */
 export interface UpdateProfileParams {
@@ -94,7 +98,7 @@ export const updateUserProfileApi = async (
   // 2. Query Parameter와 Multipart Body를 함께 전송
   // instance.patch(url, body, config) 형태
   const response = await instance.patch<ApiResponse<UserInfo>>(
-    '/user/profile', // 엔드포인트 URL (백엔드 명세에 맞게 수정 필요)
+    '/user/profile', // ⚠️ 백엔드 API 명세에 맞게 경로 확인 필요
     formData,        // Body: 이미지 파일
     {
       headers: {

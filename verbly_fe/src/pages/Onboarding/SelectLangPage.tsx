@@ -7,10 +7,10 @@ import Logo from '../../components/Logo/Logo';
 import { Text } from '../../components/Text/Text';
 import { useAuthStore } from '../../store/useAuthStore';
 import { saveOnboardingApi, validateLanguageSelection } from '../../apis/user';
-import { logoutApi, getMyProfileApi } from '../../apis/auth'; // ✅ API 추가
+import { handleLogout, getMyProfileApi } from '../../apis/auth'; // ✅ handleLogout import 추가
 
 const LANGUAGE_OPTIONS = [
-  { label: '한국어', value: 'kr' },
+  { label: '한국어', value: 'ko' },  // ✅ 'kr' -> 'ko' 수정
   { label: 'English', value: 'en' },
 ];
 
@@ -20,7 +20,7 @@ const SelectLangPage = () => {
   const [nativeLang, setNativeLang] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const { logout: logoutStore, updateUserInfo, login } = useAuthStore();
+  const { updateUserInfo, login } = useAuthStore();
 
   const validation = validateLanguageSelection(nativeLang, learningLang);
   const isButtonDisabled = !validation.isValid || isLoading;
@@ -38,7 +38,7 @@ const SelectLangPage = () => {
     setError('');
 
     try {
-      console.log('📄 온보딩 정보 저장 시도...');
+      console.log('📝 온보딩 정보 저장 시도...');
       
       const response = await saveOnboardingApi({
         nativeLang,
@@ -51,16 +51,14 @@ const SelectLangPage = () => {
         localStorage.setItem('learningLanguage', learningLang);
         localStorage.setItem('nativeLanguage', nativeLang);
 
-        const homePath = nativeLang === 'kr' ? '/home-korean' : '/home-native';
+        const homePath = nativeLang === 'ko' ? '/home-korean' : '/home-native';
         navigate(homePath, { replace: true });
       }
 
     } catch (err: any) {
       console.error('❌ 온보딩 에러:', err);
 
-      // ------------------------------------------------------------------
-      // ✅ [핵심 수정] 400 에러 발생 시 (이미 온보딩된 유저일 가능성 높음)
-      // ------------------------------------------------------------------
+      // ✅ 400 에러 발생 시 (이미 온보딩된 유저일 가능성)
       if (err.response?.status === 400) {
         console.log('⚠️ 400 에러 감지 - 유저 상태 재확인 중...');
         
@@ -75,7 +73,7 @@ const SelectLangPage = () => {
             login(profileRes.result);
             
             // 홈으로 강제 이동
-            const homePath = profileRes.result.nativeLang === 'kr' ? '/home-korean' : '/home-native';
+            const homePath = profileRes.result.nativeLang === 'ko' ? '/home-korean' : '/home-native';
             navigate(homePath, { replace: true });
             return;
           }
@@ -94,15 +92,18 @@ const SelectLangPage = () => {
     }
   };
 
-  const handleLogout = async () => {
+  /**
+   * 로그아웃 핸들러 (auth.ts의 통합 함수 사용)
+   */
+  const handleLogoutClick = async () => {
     if (isLoading) return;
     setIsLoading(true);
+    
     try {
-      await logoutApi();
-    } finally {
-      logoutStore();
-      navigate('/login', { replace: true });
-      setIsLoading(false);
+      await handleLogout(true); // ✅ auth.ts의 통합 함수 호출
+    } catch (error) {
+      console.error('로그아웃 처리 중 오류:', error);
+      // handleLogout 내부에서 이미 리다이렉트 처리됨
     }
   };
 
@@ -167,7 +168,7 @@ const SelectLangPage = () => {
             size="large"
             className="w-full"
             label='Logout'
-            onClick={handleLogout}
+            onClick={handleLogoutClick}
             disabled={isLoading}
           />
         </div>
