@@ -10,75 +10,51 @@ const OAuthCallbackPage = () => {
   const isProcessing = useRef(false);
 
   useEffect(() => {
-    // React Strict Mode 중복 실행 방지
     if (isProcessing.current) return;
     isProcessing.current = true;
 
     const processLogin = async () => {
-      console.log('🔐 OAuth 콜백 처리 시작');
-
-      // 쿠키 도착 대기 (백엔드 리다이렉트 후 쿠키 설정 시간 고려)
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      // HttpOnly 쿠키는 document.cookie로 확인 불가능하므로
-      // 직접 API 요청으로 인증 상태를 확인
-      if (import.meta.env.DEV) {
-        console.log('🔐 쿠키 기반 인증 확인 중... (HttpOnly 쿠키는 JS에서 직접 확인 불가)');
-      }
+      console.log('🔐 OAuth 콜백 처리 시작 (API 인증 방식)');
 
       try {
-        console.log('📡 사용자 정보 조회 시도... GET /user/me');
+        // 1. 쿠키 설정 대기 (0.5초)
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // 2. JS로 쿠키를 읽는 건 포기하고(불가능하니), 바로 서버에 물어봅니다.
+        // 브라우저가 알아서 쿠키를 실어 보내줍니다.
+        console.log('📡 내 정보 조회 요청: GET /user/me');
         const response = await getMyProfileApi();
 
-        if (!response || !response.isSuccess) {
-          throw new Error(response?.message || '로그인에 실패했습니다.');
-        }
+        if (response.isSuccess) {
+          const userInfo = response.result;
+          login(userInfo);
 
-        const userInfo = response.result;
-        login(userInfo);
-
-        console.log('✅ 로그인 성공! 상태:', userInfo.status);
-
-        if (userInfo.status === 'NEED_ONBOARDING') {
-          navigate('/login/select-language', { replace: true });
-        } else {
-          const homePath = userInfo.nativeLang === 'ko' ? '/home-korean' : '/home-native';
-          navigate(homePath, { replace: true });
-        }
-
-      } catch (error: any) {
-        console.error('❌ 로그인 처리 중 오류 발생:', error);
-        
-        let errorMsg = '로그인 처리 중 문제가 발생했습니다.';
-        
-        // CASE 1: 401 Unauthorized (쿠키 없음 또는 만료)
-        if (error.response?.status === 401) {
-          console.error('🚨 인증 실패: 서버로부터 유효한 인증 정보를 받지 못했습니다.');
-          errorMsg = '인증에 실패했습니다. 다시 로그인해주세요.';
-        }
-        // CASE 2: 404 Not Found
-        else if (error.response?.status === 404) {
-          console.error('🚨 404 발생: 사용자 정보를 찾을 수 없습니다.');
-          
-          // 신규 유저인 경우 온보딩으로
-          const resData = error.response?.data;
-          if (resData?.code === 'USER2001' || resData?.result?.status === 'NEED_ONBOARDING') {
+          // 정상적인 응답(200) 안에 상태값이 있다면 그걸로 분기
+          if (userInfo.status === 'NEED_ONBOARDING') {
             navigate('/login/select-language', { replace: true });
-            return;
+          } else {
+            const homePath = userInfo.nativeLang === 'ko' ? '/home-korean' : '/home-native';
+            navigate(homePath, { replace: true });
           }
-          errorMsg = '계정 정보를 찾을 수 없습니다.';
         }
-        // CASE 3: HTML 응답 (서버 에러)
-        else if (
-          error.message?.includes('JSON') || 
-          error.response?.headers?.['content-type']?.includes('text/html')
-        ) {
-          console.error('🚨 서버가 HTML을 반환했습니다. (서버 내부 오류 가능성)');
-          errorMsg = '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+      } catch (error: any) {
+        console.error('❌ 로그인 확인 중 응답:', error);
+
+        // ✅ 핵심: 404 에러는 "인증은 됐으나 유저 정보가 없는 상태" -> 온보딩으로 이동
+        if (error.response?.status === 404) {
+           console.log('👶 신규 유저(404) -> 온보딩 페이지로 이동');
+           navigate('/login/select-language', { replace: true });
+           return;
+        }
+        
+        // 401 에러라면 진짜 인증 실패 (쿠키 안 넘어감)
+        if (error.response?.status === 401) {
+            navigate('/login?error=인증_실패(쿠키없음)', { replace: true });
+            return;
         }
 
-        // 에러 발생 시 로그인 페이지로 리다이렉트
-        navigate(`/login?error=${encodeURIComponent(errorMsg)}`, { replace: true });
+        // 기타 에러
+        navigate('/login?error=로그인_처리_실패', { replace: true });
       }
     };
 

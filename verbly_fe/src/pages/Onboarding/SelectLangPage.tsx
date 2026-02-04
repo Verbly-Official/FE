@@ -10,7 +10,7 @@ import { saveOnboardingApi, validateLanguageSelection } from '../../apis/user';
 import { handleLogout, getMyProfileApi } from '../../apis/auth'; // ✅ handleLogout import 추가
 
 const LANGUAGE_OPTIONS = [
-  { label: '한국어', value: 'ko' },  // ✅ 'kr' -> 'ko' 수정
+  { label: '한국어', value: 'kr' },  // ✅ 'kr' -> 'ko' 수정
   { label: 'English', value: 'en' },
 ];
 
@@ -51,7 +51,7 @@ const SelectLangPage = () => {
         localStorage.setItem('learningLanguage', learningLang);
         localStorage.setItem('nativeLanguage', nativeLang);
 
-        const homePath = nativeLang === 'ko' ? '/home-korean' : '/home-native';
+        const homePath = nativeLang === 'kr' ? '/home-korean' : '/home-native';
         navigate(homePath, { replace: true });
       }
 

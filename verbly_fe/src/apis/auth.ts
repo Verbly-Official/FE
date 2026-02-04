@@ -10,7 +10,7 @@ import { withdrawApi } from './user';
  * 백엔드 엔드포인트: GET /user/me
  */
 export const getMyProfileApi = async () => {
-  const response = await instance.get<ApiResponse<UserInfo>>('/user/me');
+  const response = await instance.get<ApiResponse<UserInfo>>('/api/user/me');
   return response.data;
 };
 

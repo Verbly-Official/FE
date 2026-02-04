@@ -15,7 +15,7 @@ export const saveOnboardingApi = async (
 ): Promise<ApiResponse<OnboardingResult>> => {
   // ✅ 수정: /api 접두사 제거 (baseURL에 이미 포함됨)
   const response = await instance.post<ApiResponse<OnboardingResult>>(
-    '/user/onboarding',  // ❌ 기존: '/api/user/onboarding'
+    '/api/user/onboarding',  // ❌ 기존: '/api/user/onboarding'
     data
   );
   return response.data;
