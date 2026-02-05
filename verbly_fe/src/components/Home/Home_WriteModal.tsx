@@ -22,12 +22,9 @@ export default function Home_WriteModal({
   const [multiValue, setMultiValue] = useState<(string | number)[]>([]);
 
   return (
-    <div className="w-[956px] h-[462px] p-[24px] bg-gray-4 flex flex-row gap-[12px] rounded-[12px]">
+    <div className="w-[956px] h-[462px] p-[24px] bg-white flex flex-row gap-[12px] rounded-[12px]">
       {/* 마크다운 에디터 */}
-      <div className="w-[638px] h-[414px]">
-        <TextArea header="마크다운 에디터" />
-      </div>
-
+      <TextArea header="마크다운 에디터" className="w-full h-full" />
       {/* Side */}
       <div className="w-[258px] h-[414px] p-[12px] gap-[60px] rounded-[12px] flex flex-col bg-violet-110">
         {/* Settings */}
@@ -67,7 +64,7 @@ export default function Home_WriteModal({
         </div>
 
         {/* Post Now */}
-        <SolidButton label="Post Now" iconSrc={SendIcon} />
+        <SolidButton label="Post Now" Icon={SendIcon} />
       </div>
     </div>
   );
