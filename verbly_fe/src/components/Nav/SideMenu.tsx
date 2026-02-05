@@ -12,15 +12,15 @@ export default function SideMenu({ variant = "default", onWriteClick }: SideMenu
   const navigate = useNavigate();
   const location = useLocation();
 
-  //const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const renderIcon = (src: string) => <img src={src} className="w-full h-full" />;
+  const renderIcon = (src: string) => (
+    <img src={src} className="w-full h-full" />
+  );
 
   const menus = [
     {
       label: "Home",
       icon: "../../src/assets/emoji/home.svg",
-      path: "/home-korean",
+      path: "/home/korean",
     },
     {
       label: "Library",
