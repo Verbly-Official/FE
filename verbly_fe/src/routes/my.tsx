@@ -7,6 +7,6 @@ import EditProfile from "../pages/My/EditProfilePage";
 export const myRoutes: RouteObject[] = [
   { path: "my/korean", element: <My_Korean /> },
   { path: "my/native", element: <My_Native /> },
-  { path: "editProfile", element: <EditProfile /> },
+  { path: "my/editProfile", element: <EditProfile /> },
   { path: "my/korean/payment", element: <Payment /> },
 ];
