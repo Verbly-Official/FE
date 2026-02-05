@@ -49,7 +49,7 @@ const Profilecard: React.FC<UserProfileProps> = ({ user }) => {
             <OutlinedButton
               label="프로필 수정" 
               // [수정] 클릭 시 프로필 수정 페이지로 이동
-              onClick={() => navigate('/edit-profile')} 
+              onClick={() => navigate('/editProfile')} 
               size="small" 
               variant="assistive"
               className="!px-2.5 !py-1 md:!px-3 md:!py-1.5 !text-[11px] sm:!text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"

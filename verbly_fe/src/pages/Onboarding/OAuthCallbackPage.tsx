@@ -31,9 +31,9 @@ const OAuthCallbackPage = () => {
 
           // 정상적인 응답(200) 안에 상태값이 있다면 그걸로 분기
           if (userInfo.status === 'NEED_ONBOARDING') {
-            navigate('/login/select-language', { replace: true });
+            navigate('/login/selectLanguage', { replace: true });
           } else {
-            const homePath = userInfo.nativeLang === 'ko' ? '/home-korean' : '/home-native';
+            const homePath = userInfo.nativeLang === 'ko' ? '/home/korean' : '/home/native';
             navigate(homePath, { replace: true });
           }
         }
@@ -43,7 +43,7 @@ const OAuthCallbackPage = () => {
         // ✅ 핵심: 404 에러는 "인증은 됐으나 유저 정보가 없는 상태" -> 온보딩으로 이동
         if (error.response?.status === 404) {
            console.log('👶 신규 유저(404) -> 온보딩 페이지로 이동');
-           navigate('/login/select-language', { replace: true });
+           navigate('/login/selectLanguage', { replace: true });
            return;
         }
         
@@ -69,11 +69,11 @@ const OAuthCallbackPage = () => {
         loop 
         muted 
         playsInline
-        className="w-full max-w-[400px] h-auto"
+        className="w-auto max-w-[400px] h-auto"
       />
       <div className="flex flex-col justify-center items-center gap-4">
-        <span className="text-2xl font-medium">홈 화면으로 이동 중이에요</span>
-        <span className="text-2xl font-medium">잠시만 기다려 주세요...</span>
+        <span className="text-[24px]">홈 화면으로 이동 중이에요</span>
+        <span className="text-[24px]">잠시만 기다려 주세요...</span>
       </div>
     </div>
   );
