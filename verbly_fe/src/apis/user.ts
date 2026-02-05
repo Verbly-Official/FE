@@ -64,7 +64,7 @@ export const validateLanguageSelection = (
  * ⚠️ 백엔드 명세 확인 필요
  */
 export const withdrawApi = async (): Promise<ApiResponse<void>> => {
-  const response = await instance.delete<ApiResponse<void>>('/user');
+  const response = await instance.delete<ApiResponse<void>>('/api/user');
   return response.data;
 };
 
@@ -98,7 +98,7 @@ export const updateUserProfileApi = async (
   // 2. Query Parameter와 Multipart Body를 함께 전송
   // instance.patch(url, body, config) 형태
   const response = await instance.patch<ApiResponse<UserInfo>>(
-    '/user/profile', // ⚠️ 백엔드 API 명세에 맞게 경로 확인 필요
+    '/api/user', // ⚠️ 백엔드 API 명세에 맞게 경로 확인 필요
     formData,        // Body: 이미지 파일
     {
       headers: {
