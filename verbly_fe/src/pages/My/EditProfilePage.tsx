@@ -18,7 +18,7 @@ import { PhoneVerificationForm } from './components/PhoneVerificationForm';
 import { useProfileForm } from './hooks/useProfileForm';
 
 // 타입 & 상수
-import type { User } from '../../types/user';
+import type { UserInfo } from '../../types/user';
 import type { Option } from '../../components/Select/Select';
 import PersonIcon from '../../assets/emoji/person.svg';
 import CloseIcon from '../../assets/emoji/close.svg';
@@ -70,7 +70,6 @@ const EditProfilePage = () => {
     if (savedData) {
       // 저장이 성공했을 때만 화면 표시 이름 업데이트
       setDisplayName(savedData.name);
-      alert("프로필이 성공적으로 저장되었습니다.");
     }
   };
 

@@ -5,6 +5,6 @@ import OAuthCallbackPage from "../pages/Onboarding/OAuthCallbackPage";
 
 export const onboardingRoutes: RouteObject[] = [
   { path: "login", element: <LoginPage /> },
-  { path: "login/select-language", element: <SelectLangPage /> },
-  { path: "oauth/callback", element: <OAuthCallbackPage /> },
+  { path: "login/selectLanguage", element: <SelectLangPage /> },
+  { path: "login/callback", element: <OAuthCallbackPage /> },
 ];

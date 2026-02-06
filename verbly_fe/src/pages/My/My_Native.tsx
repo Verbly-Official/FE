@@ -14,7 +14,7 @@ import { MOCK_CORRECTIONS } from './mockData';
 //icons
 import SortIcon from '../../assets/emoji/sort.svg';
 
-const My_Foreigner: React.FC = () => {
+const My_Native: React.FC = () => {
 
   return (
     <div className="w-full bg-[#F8FAFC] flex flex-col flex-1 overflow-hidden min-h-screen">
@@ -62,4 +62,4 @@ const My_Foreigner: React.FC = () => {
   );
 };
 
-export default My_Foreigner;
+export default My_Native;

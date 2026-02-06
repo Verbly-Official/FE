@@ -1,53 +1,80 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
+import { getMyProfileApi } from '../../apis/auth';
+import loadingVideo from './video/loading.mp4';
 
 const OAuthCallbackPage = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const login = useAuthStore((state) => state.login);
+  const isProcessing = useRef(false);
 
   useEffect(() => {
-    // 1. URL 쿼리 파라미터에서 값 추출
-    const accessToken = searchParams.get('accessToken');
-    const refreshToken = searchParams.get('refreshToken');
-    const isSuccess = searchParams.get('isSuccess'); // 백엔드가 보내준다면 확인 가능 (선택사항)
+    if (isProcessing.current) return;
+    isProcessing.current = true;
 
-    console.log("🔹 OAuth Callback 진입");
-    console.log("Params Check:", { accessToken, refreshToken, isSuccess });
+    const processLogin = async () => {
+      console.log('🔐 OAuth 콜백 처리 시작 (API 인증 방식)');
 
-    // 2. 토큰 유효성 검사 및 로그인 처리
-    if (accessToken && refreshToken) {
-      console.log("✅ 로그인 성공! 토큰을 스토어에 저장합니다.");
-      
-      // Zustand 스토어에 토큰 저장 (타입 단언 as string 사용)
-      login(accessToken as string, refreshToken as string);
+      try {
+        // 1. 쿠키 설정 대기 (0.5초)
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-      // 3. 페이지 이동 로직
-      // (기존 회원은 홈으로, 신규 회원은 온보딩으로 보내는 구분 값 'status'가 있다면 활용)
-      const status = searchParams.get('status'); 
-      
-      if (status === 'NEED_ONBOARDING') {
-        navigate('/login/select-language', { replace: true });
-      } else {
-        navigate('/home-korean', { replace: true });
+        // 2. JS로 쿠키를 읽는 건 포기하고(불가능하니), 바로 서버에 물어봅니다.
+        // 브라우저가 알아서 쿠키를 실어 보내줍니다.
+        console.log('📡 내 정보 조회 요청: GET /user/me');
+        const response = await getMyProfileApi();
+
+        if (response.isSuccess) {
+          const userInfo = response.result;
+          login(userInfo);
+
+          // 정상적인 응답(200) 안에 상태값이 있다면 그걸로 분기
+          if (userInfo.status === 'NEED_ONBOARDING') {
+            navigate('/login/selectLanguage', { replace: true });
+          } else {
+            const homePath = userInfo.nativeLang === 'ko' ? '/home/korean' : '/home/native';
+            navigate(homePath, { replace: true });
+          }
+        }
+      } catch (error: any) {
+        console.error('❌ 로그인 확인 중 응답:', error);
+
+        // ✅ 핵심: 404 에러는 "인증은 됐으나 유저 정보가 없는 상태" -> 온보딩으로 이동
+        if (error.response?.status === 404) {
+           console.log('👶 신규 유저(404) -> 온보딩 페이지로 이동');
+           navigate('/login/selectLanguage', { replace: true });
+           return;
+        }
+        
+        // 401 에러라면 진짜 인증 실패 (쿠키 안 넘어감)
+        if (error.response?.status === 401) {
+            navigate('/login?error=인증_실패(쿠키없음)', { replace: true });
+            return;
+        }
+
+        // 기타 에러
+        navigate('/login?error=로그인_처리_실패', { replace: true });
       }
+    };
 
-    } else {
-      // ❌ 실패 케이스
-      console.error("❌ 로그인 실패: 토큰이 URL에 없습니다.");
-      console.log("Current URL:", window.location.href); // 디버깅용 현재 주소 출력
-      
-      alert("로그인 처리에 실패했습니다. 다시 시도해 주세요.");
-      navigate('/login', { replace: true });
-    }
-  }, [navigate, login, searchParams]);
+    processLogin();
+  }, [navigate, login]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-white">
-      {/* 로딩 스피너 */}
-      <div className="w-12 h-12 border-4 border-gray-200 rounded-full animate-spin border-t-primary-500"></div>
-      <p className="mt-4 text-lg font-medium text-gray-600">로그인 처리 중...</p>
+    <div className="flex flex-col items-center justify-center bg-[#FBFBFB] w-full min-h-screen gap-12 px-4">
+      <video 
+        src={loadingVideo}
+        autoPlay 
+        loop 
+        muted 
+        playsInline
+        className="w-auto max-w-[400px] h-auto"
+      />
+      <div className="flex flex-col justify-center items-center gap-4">
+        <span className="text-[24px]">홈 화면으로 이동 중이에요</span>
+        <span className="text-[24px]">잠시만 기다려 주세요...</span>
+      </div>
     </div>
   );
 };

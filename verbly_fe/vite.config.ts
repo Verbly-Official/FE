@@ -1,28 +1,15 @@
-import { defineConfig } from "vite";
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import svgr from 'vite-plugin-svgr';
 import tailwindcss from "@tailwindcss/vite";
-import svgr from "vite-plugin-svgr";
-import path from "path";
 
 export default defineConfig({
-  assetsInclude: ["**/*.svg"],
   plugins: [
+    react(),
     tailwindcss(),
     svgr({
-      svgrOptions: {
-        exportType: "default",
-      },
+      include: '**/*.svg?react',
     }),
   ],
-  resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
-  },
-  server: {
-    proxy: {
-      "/oauth2": {
-        target: "https://3.35.202.0:443",
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
 });
