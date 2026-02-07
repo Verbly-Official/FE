@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import SolidButton from "../../components/Button/SolidButton";
@@ -7,14 +9,16 @@ import BtnTab_C from "./BtnTab_c";
 import Sidebar from "./SideBar";
 import DocumentTable from "./DocumentTable";
 import type { DocumentRow } from "./DocumentTable";
+import { addCorrectionBookmark, removeCorrectionBookmark } from "../../apis/correction";
 
 import File from "../../assets/emoji/file.svg?react";
 import { Pagination } from "../../components/Pagination/Pagination";
-import { useNavigate } from "react-router-dom";
 import { getCorrections } from "../../apis/correction";
 
 const Correction_Main = () => {
-  const [page, setPage] = useState(1);
+  const SERVER_PAGE_IS_ZERO_BASED = true;
+
+  const [page, setPage] = useState(1); // UI는 1부터
   const [selectedTab, setSelectedTab] = useState(0);
   const tabs = ["All", "Completed", "In Progress", "Pending"];
 
@@ -23,9 +27,9 @@ const Correction_Main = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   const navigate = useNavigate();
-
   const handleNewPost = () => navigate("/correction/write");
 
+  // 첨삭자 필터
   const [correctorKey, setCorrectorKey] = useState<"all" | "ai" | "native">("all");
 
   const correctorQuery = useMemo(() => {
@@ -39,27 +43,62 @@ const Correction_Main = () => {
     if (selectedTab === 1) return "COMPLETED";
     if (selectedTab === 2) return "IN_PROGRESS";
     if (selectedTab === 3) return "PENDING";
-    return undefined;
+    return undefined; // All이면 undefined
   }, [selectedTab]);
 
+  const handleToggleBookmark = async (id: number) => {
+    const current = documents.find((d) => d.id === id);
+    if (!current) return;
+
+    // 낙관적 업데이트(바로 UI 반영)
+    setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: !d.isStarred } : d)));
+
+    try {
+      if (current.isStarred) {
+        await removeCorrectionBookmark(id);
+      } else {
+        await addCorrectionBookmark(id);
+      }
+    } catch (e) {
+      // 실패 시 롤백
+      setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: current.isStarred } : d)));
+      console.error(e);
+      alert("북마크 변경에 실패했어요.");
+    }
+  };
+
+  // 탭 변경 시 페이지 1로 리셋
   useEffect(() => {
-    // 탭 변경 시 페이지 1로 리셋
     setPage(1);
   }, [selectedTab]);
+
+  // correctorKey 변경 시에도 페이지 1로 리셋(필터 바뀌면 UX 상 자연스러움)
+  useEffect(() => {
+    setPage(1);
+  }, [correctorKey]);
 
   useEffect(() => {
     const run = async () => {
       try {
-        const params: any = { page, size: 10, sort: true };
-        if (statusQuery) params.status = statusQuery; // ✅ All이면 안 보냄
+        const apiPage = SERVER_PAGE_IS_ZERO_BASED ? Math.max(page - 1, 0) : page;
+
+        const params: any = { page: apiPage, size: 10, sort: true };
+
+        // All이면 안 보내기
+        if (statusQuery) params.status = statusQuery;
+
+        // corrector 필터 실제로 서버에 전달 (API 타입에서 corrector 키 사용)
+        if (correctorQuery) params.corrector = correctorQuery;
 
         const res = await getCorrections(params);
+
+        console.log("getCorrections normalized res:", res);
 
         setTotalPages(res.totalPages ?? 1);
         setTotalCount(res.totalElements ?? 0);
 
         const rows: DocumentRow[] = (res.items ?? []).map((item: any) => {
-          const created = item.createdAt ? new Date(item.createdAt) : null;
+          const created = item.correctionCreatedAt ? new Date(item.correctionCreatedAt) : null;
           const dateText = created ? created.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "-";
 
           const author = item.correctorName ?? (item.correctorType === "AI_ASSISTANT" ? "AI Assistant" : item.correctorType === "NATIVE_SPEAKER" ? "Native Speaker" : "Unknown");
@@ -67,15 +106,17 @@ const Correction_Main = () => {
           const statusText = item.status === "COMPLETED" ? "Completed" : item.status === "IN_PROGRESS" ? "In Progress" : item.status === "PENDING" ? "Pending" : String(item.status ?? "-");
 
           return {
-            id: item.id,
+            id: item.correctionId,
             title: item.title ?? "(no title)",
             author,
             date: dateText,
             status: statusText,
-            words: item.wordCount ?? 0,
-            isStarred: Boolean(item.bookmarked),
+            words: item.wordCount ?? 0, // 서버에 없으면 0 처리
+            isStarred: Boolean(item.bookmark),
           };
         });
+
+        console.log("DocumentTable rows:", rows);
 
         setDocuments(rows);
       } catch (e) {
@@ -87,7 +128,7 @@ const Correction_Main = () => {
     };
 
     run();
-  }, [page, statusQuery]);
+  }, [page, statusQuery, correctorQuery]);
 
   return (
     <div className="min-h-screen">
@@ -134,7 +175,7 @@ const Correction_Main = () => {
 
               <div className="w-full overflow-x-auto">
                 <div className="min-w-[900px]">
-                  <DocumentTable documents={documents} />
+                  <DocumentTable documents={documents} onToggleBookmark={handleToggleBookmark} />
                 </div>
               </div>
 

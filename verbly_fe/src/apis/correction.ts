@@ -31,8 +31,19 @@ export type PageResponse<T> = {
 };
 
 function normalizePageResponse(raw: any): PageResponse<CorrectionItem> {
+  // 케이스0) { isSuccess, result: [...] }
+  const d0 = raw?.data ?? raw;
+  if (Array.isArray(d0?.result)) {
+    return {
+      items: d0.result,
+      page: 1,
+      totalPages: 1,
+      totalElements: d0.result.length,
+    };
+  }
+
   // 케이스1) { data: { items, page, totalPages, totalElements } }
-  const d = raw?.data ?? raw;
+  const d = d0;
   if (d?.items && typeof d?.totalPages === "number") return d;
 
   // 케이스2) Spring Pageable: { content, number, totalPages, totalElements }
@@ -58,4 +69,14 @@ export async function getCorrections(params: any) {
 
   const res = await api.get("/api/correction", { params: cleaned });
   return normalizePageResponse(res.data);
+}
+
+export async function addCorrectionBookmark(correctionId: number) {
+  const res = await api.patch(`/api/correction/${correctionId}/bookmark`);
+  return res.data;
+}
+
+export async function removeCorrectionBookmark(correctionId: number) {
+  const res = await api.delete(`/api/correction/${correctionId}/bookmark`);
+  return res.data;
 }

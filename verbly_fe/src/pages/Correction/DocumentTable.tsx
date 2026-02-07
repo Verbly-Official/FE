@@ -12,7 +12,7 @@ export type DocumentRow = {
   isStarred: boolean;
 };
 
-export default function DocumentTable({ documents }: { documents: DocumentRow[] }) {
+export default function DocumentTable({ documents, onToggleBookmark }: { documents: DocumentRow[]; onToggleBookmark: (id: number) => void }) {
   const StatusBadge = ({ status }: { status: string }) => {
     const getVariantClass = (status: string) => {
       switch (status.toLowerCase()) {
@@ -35,22 +35,31 @@ export default function DocumentTable({ documents }: { documents: DocumentRow[] 
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
-            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[20px] font-medium leading-none text-[var(--Gray-7,#585858)]">Document Name</th>
-            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[20px] font-medium leading-none text-[var(--Gray-7,#585858)]">Author</th>
-            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[20px] font-medium leading-none text-[var(--Gray-7,#585858)]">Date</th>
-            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[20px] font-medium leading-none text-[var(--Gray-7,#585858)]">Status</th>
+            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[18px] font-medium leading-none text-[var(--Gray-7,#585858)]">Document Name</th>
+            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[18px] font-medium leading-none text-[var(--Gray-7,#585858)]">Author</th>
+            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[18px] font-medium leading-none text-[var(--Gray-7,#585858)]">Date</th>
+            <th className="px-[20px] py-4 text-left font-['Pretendard'] text-[18px] font-medium leading-none text-[var(--Gray-7,#585858)]">Status</th>
           </tr>
         </thead>
 
         <tbody className="divide-y divide-gray-100 bg-white">
           {documents.map((doc) => (
             <tr key={doc.id} className="hover:bg-gray-50">
-              <td className="px-[20px] py-7">
+              <td className="px-[20px] py-5">
                 <div className="flex items-center">
-                  <img src={doc.isStarred ? Star_t : Star_f} className="w-6 h-6 flex-shrink-0 pr-3 [filter:brightness(0)_saturate(100%)_invert(62%)]" alt="Star" />
+                  <img
+                    src={doc.isStarred ? Star_t : Star_f}
+                    className="w-7 h-7 flex-shrink-0 pr-3 cursor-pointer
+             [filter:brightness(0)_saturate(100%)_invert(62%)]"
+                    alt="Star"
+                    onClick={(e) => {
+                      e.stopPropagation(); // row 클릭 이벤트 생기면 대비
+                      onToggleBookmark(doc.id);
+                    }}
+                  />
 
                   <div className="min-w-0 flex-1">
-                    <p className="overflow-hidden text-[var(--Gray-10,#1F1F1F)] truncate font-['Pretendard'] text-[24px] font-bold leading-none">{doc.title}</p>
+                    <p className="p-1 overflow-hidden text-[var(--Gray-10,#1F1F1F)] truncate font-['Pretendard'] text-[20px] font-bold leading-none">{doc.title}</p>
                     <div>
                       <span className="text-gray-500 text-[14px] leading-none">•</span>
                       <span className="text-[var(--Gray-7,#585858)] font-['Pretendard'] text-[15px] font-semibold leading-[150%]"> {doc.words} words</span>
@@ -59,9 +68,9 @@ export default function DocumentTable({ documents }: { documents: DocumentRow[] 
                 </div>
               </td>
 
-              <td className="text-[var(--Gray-10,#1F1F1F)] font-['Pretendard'] text-[20px] font-medium leading-none">{doc.author}</td>
-              <td className="text-[var(--Gray-10,#1F1F1F)] font-['Pretendard'] text-[20px] font-medium leading-none">{doc.date}</td>
-              <td className="whitespace-nowrap px-6 py-7">
+              <td className="px-[20px] text-[var(--Gray-10,#1F1F1F)] font-['Pretendard'] text-[16px] font-medium leading-none">{doc.author}</td>
+              <td className="px-[20px] text-[var(--Gray-10,#1F1F1F)] font-['Pretendard'] text-[16px] font-medium leading-none">{doc.date}</td>
+              <td className="px-[20px] whitespace-nowrap px-6 py-7">
                 <StatusBadge status={doc.status} />
               </td>
             </tr>
