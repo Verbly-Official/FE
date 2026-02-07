@@ -68,9 +68,7 @@ const Correction_NMain = () => {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <div className="min-w-[900px]">
-                  <DocumentTable />
-                </div>
+                <div className="min-w-[900px]">{/* <DocumentTable /> */}</div>
               </div>
 
               <Pagination currentPage={page} totalPages={10} onChange={setPage} shape="num" className="flex items-center justify-center pt-[8px]" />
