@@ -29,14 +29,14 @@ const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onC
   };
 
   return (
-    <div className="flex flex-col flex-1.5 px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
+    <div className="flex flex-col flex-[2] px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
       <div className="text-black font-pretendard text-[1.75rem] font-bold leading-none bg-[linear-gradient(90deg,#713DE3_0%,#4F46DD_100%)] bg-clip-text text-transparent">AI 도우미</div>
 
       {showResult ? (
         <div className="w-full flex-1">{result ?? <div className="w-full h-full flex items-center justify-center text-sm text-[#6B7280]">AI 결과 영역 (추후 구현)</div>}</div>
       ) : (
         <>
-          <div className="w-full flex flex-col gap-4">
+          <div className={`w-full flex flex-col gap-4 ${showResult ? "invisible" : ""}`}>
             <OutlinedButton
               variant="assistive"
               className={`w-full justify-start ${selectedTones.toneAndManner ? "!border-[#713DE3]" : ""}`}
@@ -49,13 +49,14 @@ const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onC
         </>
       )}
 
-      <div className="w-full mt-auto">
-        <SolidButton className="w-full mb-3" label="원어민에게 첨삭 요청하기" Icon={SendIcon} onClick={onClickRequestNative} />
+      <div className="w-full mt-auto flex flex-col gap-3">
+        {/* 1줄: AI 첨삭하기 (누른 후에는 숨김) */}
+        {!showResult && <OutlinedButton className="w-full !h-[60px]" label={aiLoading ? "처리 중..." : "AI 첨삭하기"} Icon={AIIcon} onClick={onClickAiCorrect} />}
 
+        {/* 2줄: 임시저장 + 원어민 요청 (항상 표시) */}
         <div className="flex gap-3">
-          <SolidButton variant="secondary" className="flex-1 !h-[60px]" label="임시저장" />
-
-          <OutlinedButton className="flex-1 !h-[60px]" label={aiLoading ? "처리 중..." : "AI 첨삭하기"} Icon={AIIcon} onClick={onClickAiCorrect} />
+          <SolidButton variant="secondary" className="flex-[1.2] !h-[60px]" label="임시저장" />
+          <SolidButton className="flex-[1.8] !h-[60px]" label="원어민에게 첨삭 요청하기" Icon={SendIcon} onClick={onClickRequestNative} />
         </div>
       </div>
     </div>

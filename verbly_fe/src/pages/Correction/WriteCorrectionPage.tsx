@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { instance } from "../../apis/axios";
+
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import SolidButton from "../../components/Button/SolidButton";
-import { OutlinedButton } from "../../components/Button";
 import Sidebar from "./SideBar";
 import TextArea from "../../components/TextArea/TextArea";
 import PlusIcon from "../../assets/emoji/plus.svg?react";
@@ -19,6 +21,34 @@ const Correction_Write = () => {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
+
+  const navigate = useNavigate();
+
+  const requestNativeCorrection = async () => {
+    try {
+      // 쿠키 기반이면 Bearer 필요 없음
+      const payload = {
+        title: title.trim(),
+        tags,
+        content: text,
+        folderId: null,
+        templateId: null,
+      };
+
+      const res = await instance.post("/api/correction", payload);
+      // 성공 후 이동
+      navigate("/correction");
+    } catch (e: any) {
+      // 401이면 로그인 상태 아님(쿠키 없음/만료)
+      if (e.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+      console.error(e);
+      alert("첨삭 요청 중 오류가 발생했어요.");
+    }
+  };
 
   const normalizeTag = (raw: string) => {
     const trimmed = raw.trim();
@@ -129,21 +159,15 @@ const Correction_Write = () => {
             </div>
 
             {/* AI section */}
-            {/* AI section */}
             <AiSection
               showResult={showResult}
               aiLoading={aiLoading}
               selectedTones={selectedTones}
               setSelectedTones={setSelectedTones}
-              onClickRequestNative={() => {
-                // TODO: 원어민 첨삭 요청 API 연결
-                console.log("request native");
-              }}
+              onClickRequestNative={requestNativeCorrection}
               onClickAiCorrect={() => {
-                // TODO: AI 첨삭 API 연결
                 setAiLoading(true);
 
-                // 테스트용 (API 연결되면 제거)
                 setTimeout(() => {
                   setAiLoading(false);
                   setShowResult(true);
