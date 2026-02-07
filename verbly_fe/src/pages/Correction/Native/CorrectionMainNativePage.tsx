@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import GNB from "../../../components/Nav/GNB";
 import SideMenu from "../../../components/Nav/SideMenu";
 import Tab from "../../../components/Tab/Tab";
-import BtnTab_C from "../BtnTab_c";
+import { getNativeCorrections } from "../../../apis/correctionNative";
 import Sidebar from "../SideBar";
 import DocumentTable from "../DocumentTable";
 import File from "../../../assets/emoji/file.svg?react";
@@ -67,14 +67,8 @@ const Correction_NMain = () => {
                 <span className="w-full border-b border-[var(--Strok-line2,#ADADAD)]" />
               </div>
 
-              <div className="pt-7 pb-3">
-                <BtnTab_C />
-              </div>
-
               <div className="w-full overflow-x-auto">
-                <div className="min-w-[900px]">
-                  <DocumentTable />
-                </div>
+                <div className="min-w-[900px]">{/* <DocumentTable /> */}</div>
               </div>
 
               <Pagination currentPage={page} totalPages={10} onChange={setPage} shape="num" className="flex items-center justify-center pt-[8px]" />
