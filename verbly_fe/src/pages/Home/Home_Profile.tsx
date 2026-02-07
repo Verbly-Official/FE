@@ -1,12 +1,14 @@
-import GNB from "../Nav/GNB";
-import SideMenu from "../Nav/SideMenu";
-import TrendingTag from "../TrendingTag/TrendingTag";
-import ProfileImg from "../Profile/img/basicProfile.svg";
+import GNB from "../../components/Nav/GNB";
+import SideMenu from "../../components/Nav/SideMenu";
+import TrendingTag from "../../components/TrendingTag/TrendingTag";
+import ProfileImg from "../../components/Profile/img/large.svg";
 import MessageImg from "../../assets/emoji/mail-purple.svg";
 import Check from "../../assets/emoji/checkbox-rounded.svg";
-import { FollowButton, OutlinedButton } from "../Button";
-import Tabs from "../Tab/Tabs";
-import Home_Card from "./Home_Card";
+import { FollowButton, OutlinedButton } from "../../components/Button";
+import Tabs from "../../components/Tab/Tabs";
+import Home_Card from "../../components/Home/Home_Card";
+import { UserStatsCard } from "../Library/components/UserStatsCard";
+import { MOCK_USER_PROFILE, MOCK_USER_STATS } from "./mockData.ts";
 
 export default function Home_Profile() {
   return (
@@ -20,6 +22,7 @@ export default function Home_Profile() {
           <div className="w-full min-h-screen bg-bg0 flex flex-row justify-between pr-[40px]">
             <SideMenu />
             <div className="bg-white p-[24px] w-[1120px] min-h-screen mt-[32px] rounded-[12px]">
+              {/* Profile */}
               <div className="w-full h-stretch p-[20px] flex flex-row gap-[52px]">
                 <img
                   src={ProfileImg}
@@ -74,15 +77,16 @@ export default function Home_Profile() {
                     </div>
                   </div>
                   <div className="flex flex-row gap-[20px]">
-                    <FollowButton size="large" className="w-[508px] h-[65px]" />
+                    <FollowButton size="large" className="w-[508px]" />
                     <OutlinedButton
                       label="Message"
-                      iconSrc={MessageImg}
+                      Icon={MessageImg}
                       size="large"
                     />
                   </div>
                 </div>
               </div>
+              {/* Tabs */}
               <Tabs tabs={["Posts"]} />
               <section className="p-[28px] flex flex-col gap-[20px]">
                 <Home_Card varient="default" isCorrected />
@@ -93,7 +97,10 @@ export default function Home_Profile() {
             {/* Right Side */}
             <div>
               <div className="mt-[32px] flex flex-col gap-[32px]">
-                <div className="bg-white w-[384px] h-[503px]">Profile</div>
+                <UserStatsCard
+                  userData={MOCK_USER_PROFILE}
+                  stats={MOCK_USER_STATS}
+                />
                 <TrendingTag />
               </div>
             </div>

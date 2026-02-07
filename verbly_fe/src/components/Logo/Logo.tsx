@@ -21,7 +21,7 @@ export default function Logo({ variant = "small" }: LogoProps) {
   const logoSrc = logoMap[variant];
 
   return (
-    <div onClick={() => navigate("/home-korean")} className="cursor-pointer">
+    <div onClick={() => navigate("/home/korean")} className="cursor-pointer">
       <img src={logoSrc} alt={`logo ${variant}`} />
     </div>
   );

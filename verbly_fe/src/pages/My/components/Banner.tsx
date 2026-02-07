@@ -11,7 +11,7 @@ const Banner: React.FC = () => {
 
   // 결제 페이지로 이동하는 핸들러
   const handlePaymentClick = () => {
-    navigate('/my-korean/payment'); // 실제 결제 페이지 경로에 맞게 수정해주세요 (예: '/payment', '/checkout' 등)
+    navigate('/my/korean/payment'); // 실제 결제 페이지 경로에 맞게 수정해주세요 (예: '/payment', '/checkout' 등)
   };
 
   return (

@@ -33,7 +33,7 @@ export default function GNB_Alarm() {
         </div>
       </div>
       <div
-        onClick={() => navigate("/home-notification")}
+        onClick={() => navigate("/home/notification")}
         className="text-center text-[14px] text-gray-6 font-medium cursor-pointer"
       >
         View all notifications
