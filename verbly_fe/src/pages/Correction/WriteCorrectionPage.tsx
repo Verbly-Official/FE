@@ -4,16 +4,52 @@ import SideMenu from "../../components/Nav/SideMenu";
 import SolidButton from "../../components/Button/SolidButton";
 import { OutlinedButton } from "../../components/Button";
 import Sidebar from "./SideBar";
-import { TextField } from "../../components/TextArea/TextField";
 import TextArea from "../../components/TextArea/TextArea";
 import PlusIcon from "../../assets/emoji/plus.svg?react";
 import BtnTabs from "../../components/Tab/BtnTabs";
+import WriteIcon from "../../assets/emoji/write.svg";
+import TempleteIcon from "../../assets/emoji/template.svg";
+import Chip from "../../components/Chip/Chip";
+import AiSection from "./AISection";
 
 const Correction_Write = () => {
   const [text, setText] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [activeMode, setActiveMode] = useState<"write" | "template">("write");
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+
+  const normalizeTag = (raw: string) => {
+    const trimmed = raw.trim();
+    if (!trimmed) return "";
+    const noSpaces = trimmed.replace(/\s+/g, ""); // 중간 공백 제거
+    const withoutHash = noSpaces.startsWith("#") ? noSpaces.slice(1) : noSpaces;
+    if (!withoutHash) return "";
+    return `#${withoutHash}`;
+  };
+
+  const addTag = () => {
+    const next = normalizeTag(tagInput);
+    if (!next) return;
+
+    setTags((prev) => (prev.includes(next) ? prev : [...prev, next]));
+    setTagInput("");
+  };
+
+  const handleTagKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      addTag();
+      return;
+    }
+
+    // 입력이 비어있을 때 Backspace로 마지막 태그 삭제
+    if (e.key === "Backspace" && tagInput.trim() === "" && tags.length > 0) {
+      e.preventDefault();
+      setTags((prev) => prev.slice(0, -1));
+    }
+  };
 
   const [selectedTones, setSelectedTones] = useState({
     toneAndManner: false,
@@ -37,8 +73,8 @@ const Correction_Write = () => {
         {/* 컨텐츠 영역 */}
         <div className="flex-1 px-[1.75rem] py-[1.875rem] bg-[#F8FAFC]">
           {/* 버튼 탭 영역 (상단만 둥글게) */}
-          <div className="h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white">
-            <BtnTabs btnTabs={["Write", "Template"]} />
+          <div className="flex items-center p-4 h-[72px] w-full rounded-t-[0.75rem] border border-[#E5E7EB] border-b-0 bg-white">
+            <BtnTabs btnTabs={["Write", "Template"]} iconSrcs={[WriteIcon, TempleteIcon]} />
           </div>
 
           {/* 좌우 3개 카드 영역 - 모니터 높이에 맞춰 자동 확장 */}
@@ -51,11 +87,40 @@ const Correction_Write = () => {
 
             {/* 메인 카드 */}
             <div className="flex-4 px-[2.5rem] py-6 border border-r-0 border-[#E5E7EB] bg-[#FBFBFB] items-center">
-              <div className="text-lg md:text-xl lg:text-2xl font-pretendard font-bold leading-none">Title</div>
-
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Title"
+                className="w-full bg-transparent border-none outline-none text-lg md:text-xl lg:text-2xl font-pretendard font-bold leading-none"
+              />
               <div className="flex items-center gap-2 my-[1.25rem]">
                 <span className="text-black font-pretendard text-[1.25rem] leading-none">Tag:</span>
-                <TextField placeholder="" />
+
+                {/* 고정 높이 + 가로 스크롤 */}
+                <div
+                  className="flex items-center gap-2 px-3 h-[44px] w-full border border-[#E5E7EB] rounded-[0.5rem] bg-white overflow-x-auto overflow-y-hidden"
+                  onClick={() => {
+                    const el = document.getElementById("tag-input");
+                    (el as HTMLInputElement | null)?.focus();
+                  }}
+                >
+                  {/* chips는 줄바꿈 없이 한 줄로 */}
+                  <div className="flex items-center gap-2 flex-nowrap shrink-0">
+                    {tags.map((t) => (
+                      <Chip key={t} label={t} />
+                    ))}
+                  </div>
+
+                  {/* input 높이 고정 */}
+                  <input
+                    id="tag-input"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                    className="h-full min-w-[140px] flex-1 border-none outline-none bg-transparent font-pretendard text-[0.95rem]"
+                  />
+                </div>
               </div>
 
               <div className="w-full">
@@ -64,32 +129,27 @@ const Correction_Write = () => {
             </div>
 
             {/* AI section */}
-            <div className="flex flex-col flex-1.5 px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
-              <div className="text-black font-pretendard text-[1.75rem] font-bold leading-none bg-[linear-gradient(90deg,#713DE3_0%,#4F46DD_100%)] bg-clip-text text-transparent">AI 도우미</div>
+            {/* AI section */}
+            <AiSection
+              showResult={showResult}
+              aiLoading={aiLoading}
+              selectedTones={selectedTones}
+              setSelectedTones={setSelectedTones}
+              onClickRequestNative={() => {
+                // TODO: 원어민 첨삭 요청 API 연결
+                console.log("request native");
+              }}
+              onClickAiCorrect={() => {
+                // TODO: AI 첨삭 API 연결
+                setAiLoading(true);
 
-              {/* 세 버튼 - 토글 */}
-              {!showResult && (
-                <div className="w-full flex flex-col gap-4">
-                  <OutlinedButton variant="assistive" className={`w-full justify-start`} label="Tone&Manner" />
-                  <OutlinedButton variant="assistive" className={`w-full justify-start`} label="수정 제안" />
-                  <OutlinedButton variant="assistive" className={`w-full justify-start`} label="추천 표현" />
-                </div>
-              )}
-
-              {/* AI 결과 표시 - 추후 추가 */}
-
-              {!showResult && (
-                <div className="w-full mt-auto">
-                  <SolidButton className="w-full mb-3" label="원어민에게 첨삭 요청하기" />
-
-                  <div className="flex gap-3">
-                    <SolidButton variant="secondary" className="flex-1 !h-[60px]" label="임시저장" />
-
-                    <OutlinedButton className="flex-1 !h-[60px]" label={aiLoading ? "처리 중..." : "AI 첨삭하기"} />
-                  </div>
-                </div>
-              )}
-            </div>
+                // 테스트용 (API 연결되면 제거)
+                setTimeout(() => {
+                  setAiLoading(false);
+                  setShowResult(true);
+                }, 800);
+              }}
+            />
           </div>
         </div>
       </div>
