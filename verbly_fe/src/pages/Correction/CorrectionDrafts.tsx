@@ -1,21 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import GNB from "../../components/Nav/GNB";
-import SideMenu from "../../components/Nav/SideMenu";
-import SolidButton from "../../components/Button/SolidButton";
-import Tab from "../../components/Tab/Tab";
-import BtnTab_C from "./components/BtnTab_c";
-import Sidebar from "./components/SideBar";
 import DocumentTable from "./components/DocumentTable";
 import type { DocumentRow } from "./components/DocumentTable";
-import { addCorrectionBookmark, removeCorrectionBookmark } from "../../apis/correction";
-
-import File from "../../assets/emoji/file.svg?react";
 import { Pagination } from "../../components/Pagination/Pagination";
-import { getCorrections } from "../../apis/correction";
+import { getDraftCorrections } from "../../apis/correction";
 
-const Correction_Main = () => {
+const Correction_drafts = () => {
   const SERVER_PAGE_IS_ZERO_BASED = true;
 
   const [page, setPage] = useState(1); // UI는 1부터
@@ -46,27 +37,6 @@ const Correction_Main = () => {
     return undefined; // All이면 undefined
   }, [selectedTab]);
 
-  const handleToggleBookmark = async (id: number) => {
-    const current = documents.find((d) => d.id === id);
-    if (!current) return;
-
-    // 낙관적 업데이트(바로 UI 반영)
-    setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: !d.isStarred } : d)));
-
-    try {
-      if (current.isStarred) {
-        await removeCorrectionBookmark(id);
-      } else {
-        await addCorrectionBookmark(id);
-      }
-    } catch (e) {
-      // 실패 시 롤백
-      setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: current.isStarred } : d)));
-      console.error(e);
-      alert("북마크 변경에 실패했어요.");
-    }
-  };
-
   // 탭 변경 시 페이지 1로 리셋
   useEffect(() => {
     setPage(1);
@@ -86,11 +56,9 @@ const Correction_Main = () => {
 
         // All이면 안 보내기
         if (statusQuery) params.status = statusQuery;
-
-        // corrector 필터 실제로 서버에 전달 (API 타입에서 corrector 키 사용)
         if (correctorQuery) params.corrector = correctorQuery;
 
-        const res = await getCorrections(params);
+        const res = await getDraftCorrections(params);
 
         console.log("getCorrections normalized res:", res);
 
@@ -132,45 +100,17 @@ const Correction_Main = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="flex min-w-0">
-        <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
-          <div className="flex px-6 py-9 items-center gap-[20px] rounded-[12px] border border-[#D9D9D9] bg-white">
-            <div className="flex items-center gap-[10px] p-2 rounded-[8px] bg-[var(--Point-Blue-90,#E0EBFF)]">
-              <File className="w-[26.667px] h-[33.333px] text-[#353535]" />
-            </div>
-            <div>
-              <div className="flex items-start text-[#9E9E9E] text-[17px] font-semibold leading-[100%] font-pretendard">Total Request</div>
-              <div className="text-[#353535] font-pretendard text-4xl font-bold leading-none">{totalCount}</div>
-            </div>
+      <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[900px]">
+            <DocumentTable documents={documents} showAuthor={false} showStar={false} showWords={false} />
           </div>
-
-          <div className="flex mt-8 overflow-x-auto whitespace-nowrap">
-            {tabs.map((label, index) => (
-              <Tab key={index} label={label} isSelected={index === selectedTab} onClick={() => setSelectedTab(index)} />
-            ))}
-            <span className="w-full border-b border-[var(--Strok-line2,#ADADAD)]" />
-          </div>
-
-          <div className="pt-7 pb-3">
-            <BtnTab_C
-              onChange={(key) => {
-                setCorrectorKey(key as any);
-                setPage(1);
-              }}
-            />
-          </div>
-
-          <div className="w-full overflow-x-auto">
-            <div className="min-w-[900px]">
-              <DocumentTable documents={documents} onToggleBookmark={handleToggleBookmark} />
-            </div>
-          </div>
-
-          <Pagination currentPage={page} totalPages={totalPages} onChange={setPage} shape="num" className="flex items-center justify-center pt-[8px]" />
         </div>
+
+        <Pagination currentPage={page} totalPages={totalPages} onChange={setPage} shape="num" className="flex items-center justify-center pt-[8px]" />
       </div>
     </div>
   );
 };
 
-export default Correction_Main;
+export default Correction_drafts;

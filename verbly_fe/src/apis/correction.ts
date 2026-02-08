@@ -80,3 +80,10 @@ export async function removeCorrectionBookmark(correctionId: number) {
   const res = await api.delete(`/api/correction/${correctionId}/bookmark`);
   return res.data;
 }
+
+export async function getDraftCorrections(params: any) {
+  const res = await api.get("/api/temp-posts", {
+    params,
+  });
+  return res.data;
+}
