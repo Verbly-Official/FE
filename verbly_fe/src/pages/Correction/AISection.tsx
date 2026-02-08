@@ -21,6 +21,7 @@ type Props = {
   onClickAiCorrect: () => void;
 
   result?: React.ReactNode;
+  className?: string;
 };
 
 const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onClickRequestNative, onClickAiCorrect, result }: Props) => {
@@ -29,8 +30,10 @@ const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onC
   };
 
   return (
-    <div className="flex flex-col flex-[2] px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
-      <div className="text-black font-pretendard text-[1.75rem] font-bold leading-none bg-[linear-gradient(90deg,#713DE3_0%,#4F46DD_100%)] bg-clip-text text-transparent">AI 도우미</div>
+    <div className="flex flex-col flex-1 min-w-[24rem] px-[2.5rem] py-6 rounded-r-[0.75rem] border border-[#E5E7EB] bg-[#FBF9FF] items-start gap-4">
+      <div className="text-black font-pretendard text-[length:var(--fs-title1)] font-bold leading-[var(--lh-title)] bg-[linear-gradient(90deg,#713DE3_0%,#4F46DD_100%)] bg-clip-text text-transparent w-full">
+        AI 도우미
+      </div>
 
       {showResult ? (
         <div className="w-full flex-1">{result ?? <div className="w-full h-full flex items-center justify-center text-sm text-[#6B7280]">AI 결과 영역 (추후 구현)</div>}</div>

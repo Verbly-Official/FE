@@ -75,7 +75,7 @@ const Correction_Write = () => {
   });
 
   return (
-    <>
+    <div className="flex w-full">
       {/* 메인 카드 */}
       <div className="flex-4 px-[2.5rem] py-6 border border-r-0 border-[#E5E7EB] bg-[#FBFBFB] items-center">
         <input
@@ -83,11 +83,25 @@ const Correction_Write = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
-          className="w-full bg-transparent border-none outline-none text-lg md:text-xl lg:text-2xl font-pretendard font-bold leading-none"
+          className="
+            w-full bg-transparent border-none outline-none
+            font-pretendard font-bold text-black
+            text-[length:var(--fs-title1)]
+            leading-[var(--lh-title)]
+          "
         />
 
         <div className="flex items-center gap-2 my-[1.25rem]">
-          <span className="text-black font-pretendard text-[1.25rem] leading-none">Tag:</span>
+          {/* Figma: Subtitle/Medium 20 → fs-subtitle1 + font-medium */}
+          <span
+            className="
+              text-black font-pretendard font-medium
+              text-[length:var(--fs-subtitle1)]
+              leading-[var(--lh-title)]
+            "
+          >
+            Tag:
+          </span>
 
           <div
             className="flex items-center gap-2 px-3 h-[44px] w-full border border-[#E5E7EB] rounded-[0.5rem] bg-white overflow-x-auto overflow-y-hidden"
@@ -107,7 +121,13 @@ const Correction_Write = () => {
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleTagKeyDown}
-              className="h-full min-w-[140px] flex-1 border-none outline-none bg-transparent font-pretendard text-[0.95rem]"
+              className="
+                h-full min-w-[140px] flex-1
+                border-none outline-none bg-transparent
+                font-pretendard text-black
+                text-[length:var(--fs-body2)]
+                leading-[var(--lh-body)]
+              "
             />
           </div>
         </div>
@@ -132,7 +152,7 @@ const Correction_Write = () => {
           }, 800);
         }}
       />
-    </>
+    </div>
   );
 };
 
