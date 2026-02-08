@@ -1,43 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { instance } from "../../apis/axios";
-
 import TextArea from "../../components/TextArea/TextArea";
 import Chip from "../../components/Chip/Chip";
-import AiSection from "./AISection";
+import AiTemplateSection from "./AITemplate";
 
-const Correction_Write = () => {
-  const [text, setText] = useState("");
-  const [aiLoading, setAiLoading] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+const Correction_Template: React.FC = () => {
+  const [text, setText] = useState<string>("");
+
+  // Write 스타일과 동일한 입력 상태
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-
-  const navigate = useNavigate();
-
-  const requestNativeCorrection = async () => {
-    try {
-      const payload = {
-        title: title.trim(),
-        tags,
-        content: text,
-        folderId: null,
-        templateId: null,
-      };
-
-      await instance.post("/api/correction", payload);
-      navigate("/correction");
-    } catch (e: any) {
-      if (e.response?.status === 401) {
-        alert("로그인이 필요합니다.");
-        navigate("/login");
-        return;
-      }
-      console.error(e);
-      alert("첨삭 요청 중 오류가 발생했어요.");
-    }
-  };
 
   const normalizeTag = (raw: string) => {
     const trimmed = raw.trim();
@@ -68,16 +40,11 @@ const Correction_Write = () => {
     }
   };
 
-  const [selectedTones, setSelectedTones] = useState({
-    toneAndManner: false,
-    suggestion: false,
-    expression: false,
-  });
-
   return (
     <div className="flex w-full">
-      {/* 메인 카드 */}
+      {/* 메인 카드 (Title 입력 + Tag 입력) */}
       <div className="flex-4 px-[2.5rem] py-6 border border-r-0 border-[#E5E7EB] bg-[#FBFBFB] items-center">
+        {/* Title 입력 */}
         <input
           type="text"
           value={title}
@@ -91,11 +58,12 @@ const Correction_Write = () => {
           "
         />
 
+        {/* Tag 입력 (칩 + 입력창) */}
         <div className="flex items-center gap-2 my-[1.25rem]">
-          {/* Figma: Subtitle/Medium 20 → fs-subtitle1 + font-medium */}
+          {/* Label: Figma Subtitle/Medium 20 → fs-subtitle1 + font-medium */}
           <span
             className="
-              text-black font-pretendard font-medium
+              text-black font-pretendard font-medium shrink-0
               text-[length:var(--fs-subtitle1)]
               leading-[var(--lh-title)]
             "
@@ -104,7 +72,11 @@ const Correction_Write = () => {
           </span>
 
           <div
-            className="flex items-center gap-2 px-3 h-[44px] w-full border border-[#E5E7EB] rounded-[0.5rem] bg-white overflow-x-auto overflow-y-hidden"
+            className="
+              flex items-center gap-2 px-3 h-[44px] w-full
+              border border-[#E5E7EB] rounded-[0.5rem] bg-white
+              overflow-x-auto overflow-y-hidden
+            "
             onClick={() => {
               const el = document.getElementById("tag-input");
               (el as HTMLInputElement | null)?.focus();
@@ -132,28 +104,20 @@ const Correction_Write = () => {
           </div>
         </div>
 
-        <div className="w-full">
-          <TextArea header="마크다운에디터" value={text} rows={18} onChange={(e) => setText(e.target.value)} maxRows={20} maxWidth="" />
-        </div>
+        {/* 본문 */}
+        <TextArea header="마크다운에디터" value={text} rows={18} onChange={(e) => setText(e.target.value)} maxRows={20} />
       </div>
 
       {/* AI section */}
-      <AiSection
-        showResult={showResult}
-        aiLoading={aiLoading}
-        selectedTones={selectedTones}
-        setSelectedTones={setSelectedTones}
-        onClickRequestNative={requestNativeCorrection}
-        onClickAiCorrect={() => {
-          setAiLoading(true);
-          setTimeout(() => {
-            setAiLoading(false);
-            setShowResult(true);
-          }, 800);
+      <AiTemplateSection
+        title="AI 실시간 템플릿화"
+        resultText="변환 결과"
+        onClickConvert={() => {
+          // 변환 로직
         }}
       />
     </div>
   );
 };
 
-export default Correction_Write;
+export default Correction_Template;
