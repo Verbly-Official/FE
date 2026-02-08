@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SolidButton from "../../components/Button/SolidButton";
 import TextArea from "../../components/TextArea/TextArea";
 import Chip from "../../components/Chip/Chip";
 import AiTemplateSection from "./AITemplate";
@@ -113,7 +112,6 @@ const Correction_Template: React.FC = () => {
       <AiTemplateSection
         title="AI 실시간 템플릿화"
         resultText="변환 결과"
-        buttonLabel="템플릿 변환"
         onClickConvert={() => {
           // 변환 로직
         }}
