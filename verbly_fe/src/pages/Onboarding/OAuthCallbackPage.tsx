@@ -33,7 +33,7 @@ const OAuthCallbackPage = () => {
           if (userInfo.status === 'NEED_ONBOARDING') {
             navigate('/login/selectLanguage', { replace: true });
           } else {
-            const homePath = userInfo.nativeLang === 'ko' ? '/my/korean' : '/my/native';
+            const homePath = userInfo.nativeLang === 'ko' ? '/home/korean' : '/home/native';
             navigate(homePath, { replace: true });
           }
         }
