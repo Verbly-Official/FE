@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField } from '../../../components/TextArea/TextField';
 import Select, { type Option } from '../../../components/Select/Select';
-import CloseIcon from '../../../assets/emoji/close.svg'; // 닫기 아이콘 import (경로 확인 필요)
+import CloseIcon from '../../../assets/emoji/close.svg';
 
 interface EmailFormProps {
   emailId: string;
@@ -26,9 +26,12 @@ export const EmailForm: React.FC<EmailFormProps> = ({
   const isDirectInput = emailDomain?.value === 'write';
 
   const handleDomainChange = (selectedValue: string | number) => {
-    const selectedOption = emailOptions.find((opt) => opt.value === selectedValue) || null;
+    // [Type Safety 수정] find가 undefined를 반환할 경우 null로 명시적 변환
+    const selectedOption = emailOptions.find((opt) => opt.value === selectedValue) ?? null;
+    
     onEmailDomainChange(selectedOption);
 
+    // 직접 입력 모드가 아닐 경우 커스텀 도메인 값 초기화
     if (selectedValue !== 'write') {
       onCustomDomainChange('');
     }
@@ -40,6 +43,7 @@ export const EmailForm: React.FC<EmailFormProps> = ({
     onCustomDomainChange('');  // 입력값 초기화
   };
 
+  // UI 구조는 원본과 100% 동일하게 유지
   return (
     <div className="mb-8 md:mb-10 lg:mb-[40px]">
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 md:gap-7 lg:gap-[28px] mb-3">
@@ -58,17 +62,16 @@ export const EmailForm: React.FC<EmailFormProps> = ({
             />
           </div>
           
-          <span className="text-gray-400 text-base hidden sm:inline">@</span>
-          
           {/* 도메인 선택 영역 (조건부 렌더링) */}
           <div className="w-full sm:flex-1 relative">
             {isDirectInput ? (
-              // 1. 직접 입력 모드일 때: TextField + 취소 버튼 표시
+              // 1. 직접 입력 모드일 때
               <div className="relative w-full">
                 <TextField
                   value={customEmailDomain}
                   onChange={(e) => onCustomDomainChange(e.target.value)}
-                  placeholder="example.com"
+                  // 원본 UI 의도대로 @를 포함한 예시 유지
+                  placeholder="@example.com"
                   className="w-full"
                 />
                 {/* 원래대로(Select) 돌아가는 버튼 */}
@@ -85,10 +88,12 @@ export const EmailForm: React.FC<EmailFormProps> = ({
               // 2. 일반 모드일 때: Select 컴포넌트 표시
               <Select
                 options={emailOptions}
-                value={emailDomain?.value}
+                // 값이 없을 때 null 대신 '' 처리 (Select 컴포넌트 타입에 따라 조정)
+                value={emailDomain?.value ?? ''}
                 placeholder="직접입력"
                 size='medium'
                 onChange={handleDomainChange}
+                className='w-full'
               />
             )}
           </div>

@@ -1,51 +1,55 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ModalWrapper } from './ModalWrapper';
 import { StudentHeader } from './StudentHeader';
 import { CorrectionContent } from './CorrectionContent';
 import type { User } from '../../../types/user';
-
-// Mock Data
-const MOCK_EXPERT_DATA = {
-  student: {
-    id: 'student1',
-    name: '김철수',
-    profileImg: '',
-    introduction: '영어 공부 중입니다.',
-  } as User,
-  correction: {
-    original: {
-      textBefore: 'I am ',
-      wrongText: 'looking forward to meet',
-      textAfter: ' you next week.'
-    },
-    corrected: {
-      textBefore: 'I am ',
-      correctText: 'looking forward to meeting',
-      textAfter: ' you next week.'
-    }
-  },
-  expert: {
-    id: 'expert1',
-    name: 'Mark',
-    profileImg: '',
-    introduction: 'Native Speaker',
-    comment: 'After "look forward to", we always use a noun or gerund (-ing), not the base form of the verb. "To" here is a preposition, not part of the infinitive.'
-  } as User & { comment: string }
-};
+import { useAuthStore } from '../../../store/useAuthStore';
 
 interface ExpertHistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  expertName?: string;
+  data: any;
 }
 
 export default function ExpertHistoryModal({ 
   isOpen, 
   onClose,
-  expertName = "Mark"
+  data
 }: ExpertHistoryModalProps) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const data = MOCK_EXPERT_DATA;
+  
+  const { userInfo } = useAuthStore();
+
+  if (!data) return null;
+
+  const modalContent = {
+    // ✅ [수정] introduction -> bio 로 변경
+    student: {
+      id: userInfo?.userId.toString() || 'guest',
+      name: userInfo?.nickname || 'Guest',
+      profileImg: userInfo?.profileImage || '',
+      bio: userInfo?.bio || '', // 여기가 수정됨
+    } as User,
+    
+    correction: {
+      original: {
+        textBefore: '',
+        wrongText: data.originalText || 'No content',
+        textAfter: ''
+      },
+      corrected: {
+        textBefore: '',
+        correctText: data.correctedText || 'No content',
+        textAfter: ''
+      }
+    },
+    expert: {
+      id: 'expert',
+      name: data.expertName || 'Expert',
+      profileImg: data.imageUrl || '',
+      bio: data.location || 'Native Speaker', // 전문가 정보도 bio 사용 권장
+      comment: data.comment || 'No comment provided.'
+    } as any
+  };
 
   return (
     <ModalWrapper 
@@ -54,14 +58,14 @@ export default function ExpertHistoryModal({
       title="의견관리"
     >
       <StudentHeader 
-        student={data.student}
-        isBookmarked={isBookmarked}
-        onBookmarkToggle={setIsBookmarked}
+        student={modalContent.student}
+        isBookmarked={false}
+        onBookmarkToggle={() => {}}
         showActions={false}
       />
       <CorrectionContent 
-        correction={data.correction}
-        expert={data.expert}
+        correction={modalContent.correction}
+        expert={modalContent.expert}
       />
     </ModalWrapper>
   );

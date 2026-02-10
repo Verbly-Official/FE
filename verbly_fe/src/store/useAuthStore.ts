@@ -45,7 +45,7 @@ export const useAuthStore = create<AuthState>()(
 
       login: (userInfo) => {
         console.log('✅ 로그인 성공 - 사용자 정보 저장');
-        console.log('- memberId:', userInfo.memberId);
+        console.log('- userId:', userInfo.userId);
         console.log('- status:', userInfo.status);
         
         set({ 
