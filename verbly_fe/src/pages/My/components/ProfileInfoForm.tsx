@@ -27,6 +27,7 @@ export const ProfileInfoForm: React.FC<ProfileInfoFormProps> = ({
             onChange={(e) => onNameChange(e.target.value)}
             placeholder="Name"
             className="w-full"
+            maxLength={10} // ✅ 10자 제한
           />
         </div>
       </div>
@@ -42,6 +43,7 @@ export const ProfileInfoForm: React.FC<ProfileInfoFormProps> = ({
             onChange={(e) => onIntroChange(e.target.value)}
             placeholder="자기소개"
             className="w-full"
+            maxLength={150} // ✅ 150자 제한
           />
         </div>
       </div>

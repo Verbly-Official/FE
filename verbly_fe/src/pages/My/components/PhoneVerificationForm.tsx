@@ -38,8 +38,9 @@ export const PhoneVerificationForm: React.FC<PhoneVerificationFormProps> = ({
           <TextField
             value={phone}
             onChange={(e) => onPhoneChange(e.target.value)}
-            placeholder="010-0000-0000"
+            placeholder="+8201000000000"
             className="w-full"
+            maxLength={20}
           />
         </div>
       </div>

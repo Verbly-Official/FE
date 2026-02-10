@@ -63,96 +63,99 @@ const PaymentPage: React.FC = () => {
   } = usePaymentForm(PRICING_OPTIONS);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="w-full bg-[#F8FAFC] flex flex-col flex-1 overflow-hidden min-h-screen">
       {/* Header */}
       <GNB />
       
       {/* Main Content Wrapper - 반응형 구조 */}
       <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
               
-        {/* Left Sidebar - 요청하신 반응형 스타일 적용 */}
+        {/* Left Sidebar */}
         <SideMenu variant="default" />
 
         {/* Page Content */}
-        <main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 md:py-8 overflow-hidden relative">
-          {/* Quit Button */}
-          <div className="flex items-center gap-2 mb-6">
-            <IconButton 
-              iconSrc={CloseIcon} 
-              ariaLabel='quit'
-              size="small" 
-              shape="square" 
-              onClick={() => window.history.back()} 
-            />
-            <span className='text-sm text-gray-500'>Quit</span>
-          </div>
-
-          {/* Main Layout */}
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl relative z-10">
+        <main className="flex-1 flex flex-col overflow-y-auto">
+          <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 relative">
             
-            {/* Left Side: Plan Selection & Payment Info */}
-            <div className="flex-1 space-y-6 lg:space-y-8">
-              {/* Choose Your Plan */}
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
-                <SectionHeader number={1} title="Choose Your plan" />
-                <PricingCard 
-                  options={PRICING_OPTIONS}
-                  selectedId={selectedPlan}
-                  onSelect={setSelectedPlan}
-                />
-              </div>
-
-              {/* Payment Information */}
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
-                <SectionHeader number={2} title="Payment Information" />
-                
-                <PaymentMethodSelector 
-                  selectedMethod={paymentMethod}
-                  onMethodChange={setPaymentMethod}
-                />
-
-                {paymentMethod === 'card' && (
-                  <CardForm
-                    cardName={cardName}
-                    cardNumber={cardNumber}
-                    expirationDate={expirationDate}
-                    cvv={cvv}
-                    onCardNameChange={setCardName}
-                    onCardNumberChange={setCardNumber}
-                    onExpirationDateChange={setExpirationDate}
-                    onCvvChange={setCvv}
-                  />
-                )}
-              </div>
+            {/* Quit Button */}
+            <div className="flex items-center gap-2 mb-6">
+              <IconButton 
+                iconSrc={CloseIcon} 
+                ariaLabel='quit'
+                size="small" 
+                shape="square" 
+                onClick={() => window.history.back()} 
+              />
+              <span className='text-sm text-gray-500'>Quit</span>
             </div>
 
-            {/* Right Side: Order Summary & Benefits */}
-            <div className="lg:w-[400px] xl:w-[450px] space-y-6 relative">
-              <DecorativeIcons />
+            {/* Main Layout */}
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl relative z-10">
+              
+              {/* Left Side: Plan Selection & Payment Info */}
+              <div className="flex-1 space-y-6 lg:space-y-8">
+                {/* Choose Plan */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                  <SectionHeader number={1} title="Choose Your plan" />
+                  <PricingCard 
+                    options={PRICING_OPTIONS}
+                    selectedId={selectedPlan}
+                    onSelect={setSelectedPlan}
+                  />
+                </div>
 
-              <div className="relative z-10">
-                <OrderSummary
-                  period={period}
-                  basePrice={originalPrice}
-                  discount={discount}
-                  tax={tax}
-                  total={total}
-                />
+                {/* Payment Information */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                  <SectionHeader number={2} title="Payment Information" />
+                  
+                  <PaymentMethodSelector 
+                    selectedMethod={paymentMethod}
+                    onMethodChange={setPaymentMethod}
+                  />
+
+                  {paymentMethod === 'card' && (
+                    <CardForm
+                      cardName={cardName}
+                      cardNumber={cardNumber}
+                      expirationDate={expirationDate}
+                      cvv={cvv}
+                      onCardNameChange={setCardName}
+                      onCardNumberChange={setCardNumber}
+                      onExpirationDateChange={setExpirationDate}
+                      onCvvChange={setCvv}
+                    />
+                  )}
+                </div>
               </div>
 
-              <div className="p-6 relative z-10">
-                <BenefitsList />
-                <TermsCheckbox 
-                  checked={agreedToTerms}
-                  onChange={setAgreedToTerms}
-                />
-                <GradientButton 
-                  size='large'
-                  className="w-full justify-center gap-2 h-[3.5rem]"
-                  onClick={handleSubscribe}
-                >
-                  Subscribe Now
-                </GradientButton>
+              {/* Right Side: Order Summary & Benefits */}
+              <div className="lg:w-[400px] xl:w-[450px] space-y-6 relative">
+                <DecorativeIcons />
+
+                <div className="relative z-10">
+                  <OrderSummary
+                    period={period}
+                    basePrice={originalPrice}
+                    discount={discount}
+                    tax={tax}
+                    total={total}
+                  />
+                </div>
+
+                <div className="p-6 relative z-10">
+                  <BenefitsList />
+                  <TermsCheckbox 
+                    checked={agreedToTerms}
+                    onChange={setAgreedToTerms}
+                  />
+                  <GradientButton 
+                    size='large'
+                    className="w-full justify-center gap-2 h-[3.5rem]"
+                    onClick={handleSubscribe}
+                  >
+                    Subscribe Now
+                  </GradientButton>
+                </div>
               </div>
             </div>
           </div>

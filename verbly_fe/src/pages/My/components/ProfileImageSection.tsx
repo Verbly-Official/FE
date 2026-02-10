@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { IconButton } from '../../../components/Button/IconButton';
 import EditIcon from '../../../assets/emoji/edit.svg';
+// ✅ [추가] 기본 프로필 이미지 임포트
+import DefaultProfile from '../../../components/Profile/img/large.svg';
 
 interface ProfileImageSectionProps {
   previewImg: string;
@@ -28,9 +30,14 @@ export const ProfileImageSection: React.FC<ProfileImageSectionProps> = ({
       
       <div className="relative w-full sm:w-auto">
         <img 
-          src={previewImg} 
+          // ✅ [수정] previewImg가 빈 문자열이면 DefaultProfile 사용
+          src={previewImg || DefaultProfile} 
           alt="프로필 이미지" 
-          className="w-32 h-32 md:w-40 md:h-40 lg:w-[160px] lg:h-[160px] rounded-full object-cover border-2 border-gray-200 mx-auto sm:mx-0" 
+          className="w-32 h-32 md:w-40 md:h-40 lg:w-[160px] lg:h-[160px] rounded-full object-cover border-2 border-gray-200 mx-auto sm:mx-0 bg-gray-50" 
+          // ✅ [추가] 이미지 로드 실패 시에도 기본 이미지로 대체
+          onError={(e) => {
+            e.currentTarget.src = DefaultProfile;
+          }}
         />
         <input
           type="file"

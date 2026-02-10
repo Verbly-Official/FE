@@ -11,7 +11,6 @@ const LoginPage = () => {
   const [searchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // ✅ 환경 변수에서 기본 URL 가져오기
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
@@ -23,9 +22,7 @@ const LoginPage = () => {
     }
   }, [searchParams]);
 
-  // ✅ 환경 변수를 사용한 동적 URL 할당
   const handleGoogleLogin = () => {
-    // 기존 코드의 'agoogle' 오타 수정 -> 'google'
     window.location.href = `${BASE_URL}/oauth2/authorization/google`;
   };
 

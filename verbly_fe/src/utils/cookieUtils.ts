@@ -1,5 +1,3 @@
-// src/utils/cookieUtils.ts
-
 /**
  * 쿠키에서 특정 키의 값을 가져옵니다
  */
@@ -11,6 +9,27 @@ export const getCookie = (name: string): string | null => {
     return cookieValue ? decodeURIComponent(cookieValue) : null;
   }
   return null;
+};
+
+/**
+ * 쿠키를 설정합니다
+ */
+export const setCookie = (name: string, value: string, options: any = {}) => {
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+  
+  if (!options.path) {
+    options.path = '/';
+  }
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
 };
 
 /**
@@ -28,18 +47,16 @@ export const deleteMultipleCookies = (names: string[]): void => {
 };
 
 /**
- * 백엔드가 설정한 OAuth 관련 쿠키들을 정리합니다
- * 참고: accessToken, refreshToken은 HttpOnly이므로 프론트에서 삭제 불가
- *       백엔드의 /auth/logout API에서 삭제 처리
+ * OAuth 임시 정보 삭제 (토큰 제외)
  */
 export const clearOAuthInfoCookies = (): void => {
   const cookiesToClear = [
-    'status',      // 백엔드가 설정한 사용자 상태
-    'userId',      // 백엔드가 설정한 사용자 ID
-    'provider',    // OAuth 제공자
-    'nickname',    // 사용자 닉네임
-    'profileImage',// 프로필 이미지
-    'email',       // 이메일
+    'status',
+    'userId',
+    'provider',
+    'nickname',
+    'profileImage',
+    'email',
   ];
   
   deleteMultipleCookies(cookiesToClear);

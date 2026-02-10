@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
-import { getMyProfileApi } from '../../apis/auth';
+import { getMyProfileApi } from '../../apis/user';
 import loadingVideo from './video/loading.mp4';
 
 const OAuthCallbackPage = () => {
@@ -33,14 +33,14 @@ const OAuthCallbackPage = () => {
           if (userInfo.status === 'NEED_ONBOARDING') {
             navigate('/login/selectLanguage', { replace: true });
           } else {
-            const homePath = userInfo.nativeLang === 'ko' ? '/home/korean' : '/home/native';
+            const homePath = userInfo.nativeLang === 'ko' ? '/my/korean' : '/my/native';
             navigate(homePath, { replace: true });
           }
         }
       } catch (error: any) {
         console.error('❌ 로그인 확인 중 응답:', error);
 
-        // ✅ 핵심: 404 에러는 "인증은 됐으나 유저 정보가 없는 상태" -> 온보딩으로 이동
+        // 404 에러는 "인증은 됐으나 유저 정보가 없는 상태" -> 온보딩으로 이동
         if (error.response?.status === 404) {
            console.log('👶 신규 유저(404) -> 온보딩 페이지로 이동');
            navigate('/login/selectLanguage', { replace: true });

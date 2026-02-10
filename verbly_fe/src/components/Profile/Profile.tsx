@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { type User } from '../../types/user';
+import { type User, type UserInfo } from '../../types/user';
 import { Badge } from '../Badge/ContentBadge';
+import FollowButton from '../Button/FollowButton';
 
-// 크기별 기본 이미지 Import
 import SmallProfile from './img/small.svg';
 import MediumProfile from './img/medium.svg';
 import LargeProfile from './img/large.svg';
 
+/**
+ * 프로필 데이터 타입
+ * - User(프론트), UserInfo(백엔드) 호환
+ * - isFollowing, userId 등 팔로우 기능에 필요한 필드 포함
+ */
+type ProfileData = Partial<User> & Partial<UserInfo> & {
+  badges?: string;
+  lastActive?: string;
+  introduction?: string;
+  isFollowing?: boolean; 
+};
+
 interface ProfileProps {
-  data: User;
+  data: ProfileData;
   size?: 'small' | 'medium' | 'large';
-  onFollow?: () => void;
+  onFollow?: (isFollowing: boolean) => void; 
+  className?: string;
 }
 
 const IMG_PIXELS = {
@@ -19,7 +32,6 @@ const IMG_PIXELS = {
   large: 180,
 };
 
-// 사이즈별 기본 이미지 매핑
 const DEFAULT_IMAGES = {
   small: SmallProfile,
   medium: MediumProfile,
@@ -29,14 +41,20 @@ const DEFAULT_IMAGES = {
 export const UserProfile: React.FC<ProfileProps> = ({
   data,
   size = 'small',
+  onFollow,
+  className = '',
 }) => {
-  // 이미지 소스 상태 관리 (프로필 이미지가 없으면 해당 사이즈의 기본 이미지 사용)
-  const [imgSrc, setImgSrc] = useState<string>(data.profileImg || DEFAULT_IMAGES[size]);
+  // 데이터 필드 호환성 처리
+  const displayName = data.nickname || data.name || "User";
+  const displayImage = data.profileImage || data.profileImg;
+  const displayBio = data.bio || data.introduction;
+  
+  // 이미지 소스 상태 관리
+  const [imgSrc, setImgSrc] = useState<string>(displayImage || DEFAULT_IMAGES[size]);
 
-  // data.profileImg가 변경될 때마다 상태 업데이트
   useEffect(() => {
-    setImgSrc(data.profileImg || DEFAULT_IMAGES[size]);
-  }, [data.profileImg, size]);
+    setImgSrc(displayImage || DEFAULT_IMAGES[size]);
+  }, [displayImage, size]);
 
   const handleError = () => {
     setImgSrc(DEFAULT_IMAGES[size]);
@@ -45,51 +63,60 @@ export const UserProfile: React.FC<ProfileProps> = ({
   const renderImage = () => (
     <img
       src={imgSrc}
-      alt={`${data.name} profile`}
+      alt={`${displayName} profile`}
       onError={handleError}
-      className="rounded-full object-cover bg-gray-100" // 배경색 살짝 수정
+      className="rounded-full object-cover bg-gray-100 flex-shrink-0"
       style={{ width: IMG_PIXELS[size], height: IMG_PIXELS[size] }}
     />
   );
 
+  // [Small Size]
   if (size === 'small') {
     return (
-      <div className="flex items-center gap-3">
+      <div className={`flex items-center gap-3 ${className}`}>
         {renderImage()}
         <div className="flex flex-col">
-          <span className="font-bold text-gray-900">{data.name}</span>
-          {/* introduction이 있을 때만 렌더링하도록 조건부 처리 추천 */}
-          {data.introduction && (
-             <span className="text-sm text-gray-500 line-clamp-1">{data.introduction}</span>
+          <span className="font-bold text-gray-900">{displayName}</span>
+          {displayBio && (
+            <span className="text-sm text-gray-500 line-clamp-1">
+              {displayBio}
+            </span>
           )}
         </div>
       </div>
     );
   }
 
+  // [Medium Size]
   if (size === 'medium') {
     return (
-      <div className="flex items-center gap-4">
+      <div className={`flex items-center gap-4 ${className}`}>
         {renderImage()}
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-lg text-gray-900">{data.name}</span>
+            <span className="font-bold text-lg text-gray-900">{displayName}</span>
           </div>
-
           {data.lastActive && (
             <span className="text-sm text-gray-400">{data.lastActive}</span>
           )}
         </div>
+        
+        {/* userId가 있어야 API 호출 가능, 없으면 UI만 동작 */}
+        <FollowButton 
+          userId={data.userId} 
+          initialIsFollowing={data.isFollowing} 
+          onToggle={onFollow}
+        />
       </div>
     );
   }
 
-  // Large size
+  // [Large Size]
   return (
-    <div className="flex flex-col items-center gap-4 text-center">
+    <div className={`flex flex-col items-center gap-4 text-center ${className}`}>
       {renderImage()}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">{data.name}</h2>
+        <h2 className="text-2xl font-bold text-gray-900">{displayName}</h2>
         <div className="flex items-center justify-center gap-2 mt-1">
           {data.level !== undefined && (
             <span className="text-gray-600">LV.{data.level}</span>
@@ -102,3 +129,5 @@ export const UserProfile: React.FC<ProfileProps> = ({
     </div>
   );
 };
+
+export default UserProfile;
