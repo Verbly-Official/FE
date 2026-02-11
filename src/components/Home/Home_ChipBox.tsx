@@ -1,22 +1,26 @@
 import { useState } from "react";
 import Chip from "../Chip/Chip";
 
-export default function Home_ChipBox() {
-  const [chips, setChips] = useState<string[]>([]);
+interface HomeChipBoxProps {
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function Home_ChipBox({ tags, setTags }: HomeChipBoxProps) {
   const [inputValue, setInputValue] = useState("");
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key !== "Enter") return;
 
     const value = inputValue.trim();
-    if (!value || chips.includes(value)) return;
+    if (!value || tags.includes(value)) return;
 
-    setChips([...chips, value]);
+    setTags((prev) => [...prev, value]);
     setInputValue("");
   }
 
   function removeChip(index: number) {
-    setChips(chips.filter((_, i) => i !== index));
+    setTags((prev) => prev.filter((_, i) => i !== index));
   }
 
   return (
@@ -31,10 +35,10 @@ export default function Home_ChipBox() {
         />
         <div className="flex flex-1 flex-row gap-[4px]">
           {/* Chip Elements */}
-          {chips.map((chip, index) => (
+          {tags.map((tag, index) => (
             <Chip
-              key={chip}
-              label={`${chip}`}
+              key={tag}
+              label={`${tag}`}
               onRemove={() => removeChip(index)}
             />
           ))}
