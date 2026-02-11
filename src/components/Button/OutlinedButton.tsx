@@ -11,21 +11,21 @@ interface OutlinedButtonProps {
   error?: boolean;
   interaction?: ButtonInteraction;
   className?: string;
-  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>; // 변경됨
+  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   variant?: ButtonVariant;
   size?: ButtonSize;
 }
 
 const SIZE_STYLES: Record<ButtonSize, string> = {
-  large: "h-[60px] px-[20px] text-[18px] gap-[8px]",
-  medium: "h-[48px] px-[12px] text-[16px] gap-[8px]",
-  small: "h-[40px] px-[8px] text-[14px] gap-[8px]",
+  large: "h-[60px] px-[32px] text-[length:var(--fs-subtitle1)] gap-[8px]",
+  medium: "h-[48px] px-[24px] text-[length:var(--fs-subtitle2)] gap-[8px]",
+  small: "h-[40px] px-[20px] text-[length:var(--fs-body2)] gap-[8px]",
 };
 
 const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
-  large: "w-[24px] h-[24px]",
-  medium: "w-[20px] h-[20px]",
-  small: "w-[16px] h-[16px]",
+  large: "w-auto h-[24px]",
+  medium: "w-auto h-[20px]",
+  small: "w-auto h-[16px]",
 };
 
 const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
@@ -36,15 +36,15 @@ const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = 
     disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
   },
   secondary: {
-    normal: "border border-[#D9D9D9] text-violet-50 bg-white",
-    hovered: "border border-[#D9D9D9] text-violet-50 bg-gray-1",
-    pressed: "border border-[#D9D9D9] text-violet-50 bg-gray-2",
+    normal: "border border-line1 text-violet-50 bg-white",
+    hovered: "border border-line1 text-violet-50 bg-gray-1",
+    pressed: "border border-line1 text-violet-50 bg-gray-2",
     disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
   },
   assistive: {
-    normal: "border border-[#D9D9D9] text-gray-9 bg-white",
-    hovered: "border border-[#D9D9D9] text-gray-9 bg-gray-1",
-    pressed: "border border-[#D9D9D9] text-gray-9 bg-gray-2",
+    normal: "border border-line1 text-gray-9 bg-white",
+    hovered: "border border-line1 text-gray-9 bg-gray-1",
+    pressed: "border border-line1 text-gray-9 bg-gray-2",
     disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
   },
 };
@@ -71,7 +71,7 @@ export default function OutlinedButton({
 
   const getColorStyle = () => {
     if (error) {
-      return "border border-[#EF1111] bg-gray-1 text-[#EF1111]";
+      return "border border-pink-20 bg-gray-1 text-pink-20";
     }
     
     const baseStyle = STATIC_STYLES[variant][effectiveInteraction];

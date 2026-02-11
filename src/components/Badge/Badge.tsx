@@ -41,7 +41,7 @@ export const Badge: React.FC<BadgeProps> = ({
       className={`
         ${baseStyles}
         w-[18px] h-[18px]
-        text-[14px] leading-none
+        text-[length:var(--fs-body2)] leading-none
         ${variantStyles[variant]}
         ${className}
       `}
