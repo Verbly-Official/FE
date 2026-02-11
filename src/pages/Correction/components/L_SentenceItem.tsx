@@ -12,9 +12,9 @@ const SentenceItem: React.FC<SentenceItemProps> = ({ text, index, active = false
       ${active ? "border border-[#D9D9D9] bg-[#F1ECFC]" : "border border-[#D9D9D9] bg-white"}
     `}
   >
-    <div className="truncate text-[#1F1F1F] font-pretendard text-lg font-semibold leading-none overflow-hidden">Sentence #{index + 1}</div>
+    <div className="truncate text-[#1F1F1F] font-pretendard text-[length:var(--fs-title4)] font-semibold leading-none overflow-hidden">Sentence #{index + 1}</div>
 
-    <p className="text-[#585858] font-pretendard text-base font-semibold leading-[150%]">{text}</p>
+    <p className="text-[#585858] font-pretendard text-[length:var(--fs-subtitle3)] font-semibold leading-[150%]">{text}</p>
   </div>
 );
 

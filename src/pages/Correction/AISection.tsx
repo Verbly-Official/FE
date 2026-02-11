@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import SolidButton from "../../components/Button/SolidButton";
 import { OutlinedButton } from "../../components/Button";
 import AIIcon from "../../assets/emoji/ai.svg?react";
@@ -19,12 +20,13 @@ type Props = {
 
   onClickRequestNative: () => void;
   onClickAiCorrect: () => void;
+  onClickTempSave: () => void;
 
   result?: React.ReactNode;
   className?: string;
 };
 
-const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onClickRequestNative, onClickAiCorrect, result }: Props) => {
+const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onClickRequestNative, onClickAiCorrect, onClickTempSave, result }: Props) => {
   const toggleTone = (key: keyof SelectedTones) => {
     setSelectedTones((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -53,13 +55,10 @@ const AiSection = ({ showResult, aiLoading, selectedTones, setSelectedTones, onC
       )}
 
       <div className="w-full mt-auto flex flex-col gap-3">
-        {/* 1줄: AI 첨삭하기 (누른 후에는 숨김) */}
-        {!showResult && <OutlinedButton className="w-full !h-[60px]" label={aiLoading ? "처리 중..." : "AI 첨삭하기"} Icon={AIIcon} onClick={onClickAiCorrect} />}
-
-        {/* 2줄: 임시저장 + 원어민 요청 (항상 표시) */}
+        <SolidButton className="w-full" label="원어민에게 첨삭 요청하기" Icon={SendIcon} onClick={onClickRequestNative} />
         <div className="flex gap-3">
-          <SolidButton variant="secondary" className="flex-[1.2] !h-[60px]" label="임시저장" />
-          <SolidButton className="flex-[1.8] !h-[60px]" label="원어민에게 첨삭 요청하기" Icon={SendIcon} onClick={onClickRequestNative} />
+          <SolidButton variant="secondary" className="flex-[1] !h-[60px]" label="임시저장" onClick={onClickTempSave} />
+          <OutlinedButton className="!h-[60px]" label={aiLoading ? "처리 중..." : "AI 첨삭하기"} Icon={AIIcon} onClick={onClickAiCorrect} />
         </div>
       </div>
     </div>

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { getDraftCorrection } from "../../apis/correction";
+import { removeDraftCorrection } from "../../apis/correction";
 import { instance } from "../../apis/axios";
-
 import TextArea from "../../components/TextArea/TextArea";
 import Chip from "../../components/Chip/Chip";
 import AiSection from "./AISection";
@@ -15,6 +17,24 @@ const Correction_Write = () => {
   const [tagInput, setTagInput] = useState("");
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const draftId = searchParams.get("draftId");
+
+  const handleDeleteDraft = async () => {
+    if (!draftId) return;
+
+    const ok = window.confirm("이 임시저장 글을 삭제할까요?");
+    if (!ok) return;
+
+    try {
+      await removeDraftCorrection(Number(draftId));
+      alert("삭제되었어요.");
+      navigate("/correction/draft");
+    } catch (e) {
+      console.error(e);
+      alert("삭제에 실패했어요.");
+    }
+  };
 
   const requestNativeCorrection = async () => {
     try {
@@ -36,6 +56,27 @@ const Correction_Write = () => {
       }
       console.error(e);
       alert("첨삭 요청 중 오류가 발생했어요.");
+    }
+  };
+
+  const saveDraft = async () => {
+    try {
+      const payload = {
+        title: title.trim(),
+        content: text,
+      };
+
+      await instance.post("/api/temp-posts", payload);
+      navigate("/correction/draft"); // 이동할 경로
+    } catch (e: any) {
+      if (e.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+      console.error(e);
+      alert("임시저장 중 오류가 발생했어요.");
+      navigate("/correction/draft");
     }
   };
 
@@ -73,6 +114,23 @@ const Correction_Write = () => {
     suggestion: false,
     expression: false,
   });
+
+  useEffect(() => {
+    const run = async () => {
+      if (!draftId) return;
+      try {
+        const res = await getDraftCorrection(Number(draftId));
+        const item = res?.result ?? res; // 서버 응답 형태에 맞춰 조정
+
+        setTitle(item.title ?? "");
+        setText(item.content ?? "");
+      } catch (e) {
+        console.error(e);
+        alert("임시저장 글을 불러오지 못했어요.");
+      }
+    };
+    run();
+  }, [draftId]);
 
   return (
     <div className="flex w-full">
@@ -151,6 +209,7 @@ const Correction_Write = () => {
             setShowResult(true);
           }, 800);
         }}
+        onClickTempSave={saveDraft}
       />
     </div>
   );

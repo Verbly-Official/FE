@@ -6,7 +6,6 @@ import Correction_Main from "../pages/Correction/CorrectionMainPage";
 import Correction_Drafts from "../pages/Correction/CorrectionDrafts";
 
 import Correction_Write from "../pages/Correction/WriteCorrectionPage";
-import Correction_Templete from "../pages/Correction/WriteTemplate";
 
 import Correction_NMain from "../pages/Correction/Native/CorrectionMainNativePage";
 import Correction_NList from "../pages/Correction/Native/CorrectionListNativePage";
@@ -34,9 +33,10 @@ export const correctionRoutes: RouteObject[] = [
         element: <CorrectionNativeLayout />,
         children: [
           { index: true, element: <Correction_NMain /> }, // /correction/native
-          { path: "list", element: <Correction_NList /> }, // /correction/native/list
         ],
       },
+
+      { path: "native/list", element: <Correction_NList /> },
     ],
   },
 
@@ -44,9 +44,6 @@ export const correctionRoutes: RouteObject[] = [
   {
     path: "correction/write",
     element: <CorrectionWriteLayout />,
-    children: [
-      { index: true, element: <Correction_Write /> },
-      { path: "template", element: <Correction_Templete /> },
-    ],
+    children: [{ index: true, element: <Correction_Write /> }],
   },
 ];
