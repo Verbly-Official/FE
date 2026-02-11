@@ -1,25 +1,52 @@
 import type { RouteObject } from "react-router-dom";
+import CorrectionMainLayout from "../pages/Correction/layout/CorrectionMainLayout";
+import CorrectionWriteLayout from "../pages/Correction/layout/CorrectionWriteLayout";
+
 import Correction_Main from "../pages/Correction/CorrectionMainPage";
+import Correction_Drafts from "../pages/Correction/CorrectionDrafts";
+
 import Correction_Write from "../pages/Correction/WriteCorrectionPage";
+import Correction_Templete from "../pages/Correction/WriteTemplate";
+
 import Correction_NMain from "../pages/Correction/Native/CorrectionMainNativePage";
 import Correction_NList from "../pages/Correction/Native/CorrectionListNativePage";
-import Correction_Templete from "../pages/Correction/WriteTemplate";
-import CorrectionWriteLayout from "../pages/Correction/CorrectionWriteLayout";
+
+import CorrectionKoLayout from "../pages/Correction/layout/CorrectionKoLayout";
+import CorrectionNativeLayout from "../pages/Correction/layout/CorrectionEnLayout";
 
 export const correctionRoutes: RouteObject[] = [
-  { path: "/", element: <Correction_Main /> },
+  {
+    path: "correction",
+    element: <CorrectionMainLayout />,
+    children: [
+      /* ===== KO ===== */
+      {
+        element: <CorrectionKoLayout />,
+        children: [
+          { index: true, element: <Correction_Main /> }, // /correction
+          { path: "draft", element: <Correction_Drafts /> }, // /correction/draft
+        ],
+      },
 
-  { path: "correction", element: <Correction_Main /> },
+      /* ===== NATIVE ===== */
+      {
+        path: "native",
+        element: <CorrectionNativeLayout />,
+        children: [
+          { index: true, element: <Correction_NMain /> }, // /correction/native
+          { path: "list", element: <Correction_NList /> }, // /correction/native/list
+        ],
+      },
+    ],
+  },
 
+  /* ===== WRITE ===== */
   {
     path: "correction/write",
     element: <CorrectionWriteLayout />,
     children: [
-      { index: true, element: <Correction_Write /> }, // /correction/write
-      { path: "template", element: <Correction_Templete /> }, // /correction/write/template
+      { index: true, element: <Correction_Write /> },
+      { path: "template", element: <Correction_Templete /> },
     ],
   },
-
-  { path: "correction/native", element: <Correction_NMain /> },
-  { path: "correction/native/list", element: <Correction_NList /> },
 ];

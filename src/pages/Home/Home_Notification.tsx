@@ -21,7 +21,7 @@ export default function Home_Notification() {
                   src="../../src/assets/emoji/check-purple.svg"
                   className="w-[24px] h-[24px]"
                 />
-                <div className="font-semibold text-violet-50 text-[18px]">
+                <div className="font-semibold text-violet-50 text-[length:var(--fs-subtitle1)]">
                   Mark All read
                 </div>
               </div>
@@ -33,8 +33,10 @@ export default function Home_Notification() {
                   <div className="flex flex-row gap-[20px]">
                     <div className="w-[85px] h-[85px] rounded-[171px] bg-gray-10" />
                     <div className="flex flex-col gap-[3px] py-[18px]">
-                      <div className="text-[22px] font-semibold">Contents</div>
-                      <div className="text-[16px] font-normal leading-[24px] text-gray-5">
+                      <div className="text-[length:var(--fs-title2)] font-semibold">
+                        Contents
+                      </div>
+                      <div className="text-[length:var(--fs-subtitle2)] font-normal leading-[24px] text-gray-5">
                         10min
                       </div>
                     </div>
@@ -57,8 +59,10 @@ export default function Home_Notification() {
                   <div className="flex flex-row gap-[20px]">
                     <div className="w-[85px] h-[85px] rounded-[171px] bg-gray-10" />
                     <div className="flex flex-col gap-[3px] py-[18px]">
-                      <div className="text-[22px] font-semibold">Contents</div>
-                      <div className="text-[16px] font-normal leading-[24px] text-gray-5">
+                      <div className="text-[length:var(--fs-title1)] font-semibold">
+                        Contents
+                      </div>
+                      <div className="text-[length:var(--fs-subtitle2)] font-normal leading-[24px] text-gray-5">
                         10min
                       </div>
                     </div>

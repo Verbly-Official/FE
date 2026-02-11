@@ -14,7 +14,7 @@ export default function BtnTab({
   return (
     <div
       onClick={onClick}
-      className={`inline-flex items-center gap-[4px] px-[12px] py-[8px] rounded-[24px] cursor-pointer ${
+      className={`inline-flex items-center gap-[4px] px-[12px] py-[8px] rounded-[24px] text-[length:var(--fs-subtitle2)] cursor-pointer ${
         isSelected ? "bg-violet-50 text-white" : "bg-transparent text-gray-6"
       }`}
     >
