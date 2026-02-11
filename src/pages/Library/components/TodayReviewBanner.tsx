@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FirePurpleIcon from '../../../assets/emoji/fire-purple.svg';
-import OutlinedButton from '../../../components/Button/OutlinedButton';
 import BannerEmoji from '../../My/img/BannerEmoji.svg';
+import { startQuizSession } from '../Review/api';
 
 interface TodayReviewBannerProps {
     stats: {
@@ -14,9 +14,20 @@ interface TodayReviewBannerProps {
 
 export const TodayReviewBanner: React.FC<TodayReviewBannerProps> = ({ stats }) => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleStartClick = () => {
-        navigate('/review');
+    const handleStartClick = async () => {
+        setIsLoading(true);
+        try {
+            const session = await startQuizSession();
+            // Navigate to review page with session data
+            navigate('/review', { state: { session } });
+        } catch (error) {
+            console.error('Failed to start quiz session:', error);
+            alert('Failed to start quiz session. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -55,15 +66,16 @@ export const TodayReviewBanner: React.FC<TodayReviewBannerProps> = ({ stats }) =
 
             {/* START Button */}
             <div className="z-10">
-                <OutlinedButton
-                    label="START"
-                    iconSrc={FirePurpleIcon}
-                    variant="primary"
-                    size="large"
-                    className="!bg-white !text-violet-50 text-subtitle-semi18 !rounded-[12px] !h-auto !py-[12px] !px-[32px] shadow-sm"
+                <button
                     onClick={handleStartClick}
-                />
+                    disabled={isLoading}
+                    className="inline-flex justify-center items-center gap-[8px] px-[32px] py-[12px] bg-white text-violet-50 rounded-[12px] border border-violet-50 shadow-sm hover:bg-violet-100 active:bg-violet-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                    <img src={FirePurpleIcon} alt="fire" className="w-[24px] h-[24px]" />
+                    <span className="font-semibold">{isLoading ? "LOADING..." : "START"}</span>
+                </button>
             </div>
         </div>
     );
 };
+

@@ -1,42 +1,100 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header } from '../../../components/Header/Header';
 import SideMenu from '../../../components/Nav/SideMenu';
 import LinearProgress from '../../../components/ProgressIndicator/LinearProgress';
 import { QuizQuestionCard } from './components/QuizQuestionCard';
-import { MOCK_QUIZ_QUESTIONS, MOCK_DAILY_REVIEW_STATS } from './mockData';
+import { submitAnswer, quitQuizSession } from './api';
+import type { StartQuizSessionResponse, QuizQuestion } from './types';
 import CloseIcon from '../../../assets/emoji/close.svg';
 import ArrowIcon from '../../../assets/emoji/arrow-front.svg';
 import FireIcon from '../../../assets/emoji/fire1.svg';
 
 export const ReviewPage = () => {
   const navigate = useNavigate();
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const location = useLocation();
+  const [session, setSession] = useState<StartQuizSessionResponse | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string>();
-  const stats = MOCK_DAILY_REVIEW_STATS;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const currentQuestion = MOCK_QUIZ_QUESTIONS[currentQuestionIndex];
-  const progress = currentQuestionIndex + 1;
+  useEffect(() => {
+    // Get session data from navigation state
+    const sessionData = location.state?.session as StartQuizSessionResponse;
+    if (!sessionData) {
+      // No session data, redirect back to library
+      navigate('/library');
+      return;
+    }
+    setSession(sessionData);
+    setCurrentQuestion(sessionData.firstQuestion);
+  }, [location, navigate]);
 
   const handleSelectAnswer = (optionId: string) => {
     setSelectedAnswer(optionId);
   };
 
-  const handleNext = () => {
-    if (currentQuestionIndex < MOCK_QUIZ_QUESTIONS.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer(undefined);
-    } else {
-      // 퀴즈 완료 - 결과 페이지로 이동
-      navigate('/review/result');
+  const handleNext = async () => {
+    if (!session || !currentQuestion || !selectedAnswer) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await submitAnswer(
+        session.sessionId,
+        currentQuestion.questionId,
+        {
+          userAnswerJson: {
+            answer: selectedAnswer,
+          },
+        }
+      );
+
+      // Check if session is completed
+      if (response.sessionCompleted) {
+        // Navigate to result page with session ID
+        navigate('/review/result', { state: { sessionId: session.sessionId } });
+      } else if (response.nextQuestion) {
+        // Move to next question
+        setCurrentQuestion(response.nextQuestion);
+        setSelectedAnswer(undefined);
+        // Update current index in session
+        setSession(prev => prev ? { ...prev, currentIndex: response.currentIndex } : null);
+      }
+    } catch (error) {
+      console.error('Failed to submit answer:', error);
+      alert('Failed to submit answer. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleQuit = () => {
-    navigate('/library');
+  const handleQuit = async () => {
+    if (!session) {
+      navigate('/library');
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to quit? Your progress will be lost.')) {
+      try {
+        await quitQuizSession(session.sessionId);
+        navigate('/library');
+      } catch (error) {
+        console.error('Failed to quit session:', error);
+        navigate('/library');
+      }
+    }
   };
 
-  const progressPercentage = (progress / MOCK_QUIZ_QUESTIONS.length) * 100;
+  if (!session || !currentQuestion) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  const progress = session.currentIndex;
+  const progressPercentage = (progress / session.totalQuestions) * 100;
 
   return (
     <div className="flex flex-col flex-1 bg-bg0 overflow-hidden">
@@ -55,58 +113,60 @@ export const ReviewPage = () => {
           {/* Main Content (centered) */}
           <div className="flex-1 flex justify-center">
             <div className="w-full max-w-[980px] flex-1 flex flex-col gap-[20px] md:gap-[24px] lg:gap-[28px] min-w-0 overflow-hidden">
-            {/* Header with Quit Button */}
-            <div className="flex gap-[12px] items-center">
-              <button
-                onClick={handleQuit}
-                className="bg-violet-100 p-[8px] rounded-[8px] cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center w-[40px] h-[40px]"
-              >
-                <img src={CloseIcon} alt="Close" className="w-[16px] h-[16px]" style={{ filter: 'invert(30%) sepia(45%) saturate(1500%) hue-rotate(260deg)' }} />
-              </button>
-              <span className="text-subtitle6-semi18 text-gray-5">Quit</span>
-            </div>
-
-            {/* Quiz Container */}
-            <div className="flex flex-col gap-[34px] overflow-y-auto">
-              {/* Title */}
-              <div className="bg-gradient-to-r from-violet-50 to-pink-40 bg-clip-text text-transparent">
-                <h1 className="text-[40px] font-bold leading-none">Today's Review</h1>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="flex gap-[36px] items-center">
-                <div className="flex-1 max-w-[870px]">
-                  <LinearProgress value={progressPercentage} size="small" fillGradient="main" className="max-w-full" />
-                </div>
-
-                {/* Progress Text */}
-                <div className="flex gap-[8px] items-center text-title3-bold24 text-gray-9 flex-shrink-0">
-                  <span>{progress}</span>
-                  <span>/</span>
-                  <span>{MOCK_QUIZ_QUESTIONS.length}</span>
-                </div>
-              </div>
-
-              {/* Quiz Question Card */}
-              <QuizQuestionCard
-                question={currentQuestion}
-                onSelectAnswer={handleSelectAnswer}
-                selectedAnswer={selectedAnswer}
-              />
-
-              {/* Next Button */}
-              <div className="flex justify-end">
+              {/* Header with Quit Button */}
+              <div className="flex gap-[12px] items-center">
                 <button
-                  onClick={handleNext}
-                  disabled={!selectedAnswer}
-                  className="px-[32px] py-[20px] rounded-[8px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex gap-[6px] items-center justify-center h-[60px]"
-                  style={{ backgroundColor: '#713DE3' }}
+                  onClick={handleQuit}
+                  className="bg-violet-100 p-[8px] rounded-[8px] cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center w-[40px] h-[40px]"
                 >
-                  <img src={ArrowIcon} alt="Arrow" className="w-[18px] h-[18px]" style={{ filter: 'brightness(0) invert(1)' }} />
-                  <span className="text-white font-semibold text-[18px]">Next</span>
+                  <img src={CloseIcon} alt="Close" className="w-[16px] h-[16px]" style={{ filter: 'invert(30%) sepia(45%) saturate(1500%) hue-rotate(260deg)' }} />
                 </button>
+                <span className="text-subtitle6-semi18 text-gray-5">Quit</span>
               </div>
-            </div>
+
+              {/* Quiz Container */}
+              <div className="flex flex-col gap-[34px] overflow-y-auto">
+                {/* Title */}
+                <div className="bg-gradient-to-r from-violet-50 to-pink-40 bg-clip-text text-transparent">
+                  <h1 className="text-[40px] font-bold leading-none">Today's Review</h1>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="flex gap-[36px] items-center">
+                  <div className="flex-1 max-w-[870px]">
+                    <LinearProgress value={progressPercentage} size="small" fillGradient="main" className="max-w-full" />
+                  </div>
+
+                  {/* Progress Text */}
+                  <div className="flex gap-[8px] items-center text-title3-bold24 text-gray-9 flex-shrink-0">
+                    <span>{progress}</span>
+                    <span>/</span>
+                    <span>{session.totalQuestions}</span>
+                  </div>
+                </div>
+
+                {/* Quiz Question Card */}
+                <QuizQuestionCard
+                  question={currentQuestion}
+                  onSelectAnswer={handleSelectAnswer}
+                  selectedAnswer={selectedAnswer}
+                />
+
+                {/* Next Button */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleNext}
+                    disabled={!selectedAnswer || isSubmitting}
+                    className="px-[32px] py-[20px] rounded-[8px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex gap-[6px] items-center justify-center h-[60px]"
+                    style={{ backgroundColor: '#713DE3' }}
+                  >
+                    <img src={ArrowIcon} alt="Arrow" className="w-[18px] h-[18px]" style={{ filter: 'brightness(0) invert(1)' }} />
+                    <span className="text-white font-semibold text-[18px]">
+                      {isSubmitting ? 'Submitting...' : 'Next'}
+                    </span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -139,7 +199,7 @@ export const ReviewPage = () => {
                       r="110"
                       stroke="url(#gradient)"
                       strokeWidth="3"
-                      strokeDasharray={`${(stats.accuracy / 100) * 690} 690`}
+                      strokeDasharray={`${(progress / session.totalQuestions) * 690} 690`}
                       strokeLinecap="round"
                     />
                     <defs>
@@ -159,9 +219,9 @@ export const ReviewPage = () => {
                   {/* Center Text */}
                   <div className="absolute flex flex-col items-center gap-[5px]">
                     <span className="bg-gradient-to-r from-violet-50 to-pink-40 bg-clip-text text-transparent text-[24px] font-bold">
-                      {stats.accuracy}
+                      {progress}
                     </span>
-                    <span className="text-gray-5 text-btn1-semi14">/100 words</span>
+                    <span className="text-gray-5 text-btn1-semi14">/{session.totalQuestions} words</span>
                   </div>
                 </div>
               </div>
@@ -179,10 +239,10 @@ export const ReviewPage = () => {
 
                   <div className="flex flex-col gap-[4px]">
                     <div className="bg-gradient-to-r from-violet-50 to-blue-50 bg-clip-text text-transparent text-[20px] font-semibold">
-                      {stats.streak} in a row!
+                      Keep going!
                     </div>
                     <div className="text-blue-50 text-body2-semi15">
-                      Keep it up! {stats.streakBonus}
+                      You're doing great!
                     </div>
                   </div>
                 </div>

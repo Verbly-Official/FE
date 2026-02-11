@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 import { SearchBar } from '../../../components/SearchBar/SearchBar';
 import { WordCard } from './WordCard';
 import { TextButton } from '../../../components/Button/TextButton';
+import type { LibraryItem } from '../../../types/library';
 import FilterIcon from '../../../assets/emoji/filter.svg';
 
 interface MyLibrarySectionProps {
-    words: Array<{ word: string; translation: string }>;
+    items: LibraryItem[];
+    isLoading: boolean;
+    error: string | null;
+    onRefresh: () => void;
 }
 
-export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({ words }) => {
+export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({
+    items,
+    isLoading,
+    error,
+    onRefresh
+}) => {
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredWords = words.filter(item =>
-        item.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.translation.includes(searchTerm)
+    const filteredItems = items.filter(item =>
+        item.phrase.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.meaningKo.includes(searchTerm) ||
+        item.meaningEn.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -23,7 +33,7 @@ export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({ words }) => 
                     <h3 className="text-title3-bold24 text-gray-9">My Library</h3>
                     <p className="text-body-medium14 text-gray-7">
                         <span className="font-regular">You have saved </span>
-                        <span className="text-btn1-semi14 text-violet-50">{filteredWords.length}</span>
+                        <span className="text-btn1-semi14 text-violet-50">{filteredItems.length}</span>
                         <span className="font-regular"> items.</span>
                     </p>
                 </div>
@@ -54,12 +64,37 @@ export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({ words }) => 
                 </div>
             </div>
 
-            {/* Word Grid - 반응형 */}
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-[12px] w-full">
-                {filteredWords.map((item, index) => (
-                    <WordCard key={index} word={item.word} translation={item.translation} />
-                ))}
-            </div>
+            {/* Loading/Error/Content */}
+            {isLoading ? (
+                <div className="text-center py-10 text-gray-400">
+                    Loading library items...
+                </div>
+            ) : error ? (
+                <div className="text-center py-10">
+                    <p className="text-red-500 mb-4">{error}</p>
+                    <button
+                        onClick={onRefresh}
+                        className="text-violet-50 underline"
+                    >
+                        Try again
+                    </button>
+                </div>
+            ) : filteredItems.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-[12px] w-full">
+                    {filteredItems.map((item) => (
+                        <WordCard
+                            key={item.id}
+                            itemId={item.id}
+                            word={item.phrase}
+                            translation={item.meaningKo || item.meaningEn}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-10 text-gray-400">
+                    {searchTerm ? 'No items found' : 'No library items yet'}
+                </div>
+            )}
         </div>
     );
 };
