@@ -2,13 +2,21 @@
 import { GradientButton } from "../Button";
 import SideMenu_Tab from "./SideMenu_Tab";
 import { useNavigate, useLocation } from "react-router-dom";
+import HomeIcon from "../../assets/emoji/home.svg";
+import LibraryIcon from "../../assets/emoji/folder.svg";
+import CorrectionIcon from "../../assets/emoji/edit.svg";
+import InboxIcon from "../../assets/emoji/message1.svg";
+import ProfileIcon from "../../assets/emoji/person.svg";
 
 interface SideMenuProps {
   variant?: "default" | "small";
   onWriteClick?: () => void;
 }
 
-export default function SideMenu({ variant = "default", onWriteClick }: SideMenuProps) {
+export default function SideMenu({
+  variant = "default",
+  onWriteClick,
+}: SideMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,28 +27,28 @@ export default function SideMenu({ variant = "default", onWriteClick }: SideMenu
   const menus = [
     {
       label: "Home",
-      icon: "../../src/assets/emoji/home.svg",
+      icon: HomeIcon,
       path: "/home/korean",
     },
     {
       label: "Library",
-      icon: "../../src/assets/emoji/folder.svg",
+      icon: LibraryIcon,
       path: "/library",
     },
     {
       label: "Correction",
-      icon: "../../src/assets/emoji/edit.svg",
+      icon: CorrectionIcon,
       path: "/correction",
     },
     {
       label: "Inbox",
-      icon: "../../src/assets/emoji/message1.svg",
+      icon: InboxIcon,
       path: "/inbox",
     },
     {
       label: "Profile",
-      icon: "../../src/assets/emoji/person.svg",
-      path: "/my-korean",
+      icon: ProfileIcon,
+      path: "/my/korean",
     },
   ];
 
@@ -75,7 +83,11 @@ export default function SideMenu({ variant = "default", onWriteClick }: SideMenu
               className={`w-[56px] h-[56px] px-[16px] py-[16px]
               flex items-center justify-center
               rounded-[12px] cursor-pointer
-              ${location.pathname === menu.path ? "bg-violet-100 border border-violet-50" : "bg-transparent"}
+              ${
+                location.pathname === menu.path
+                  ? "bg-violet-100 border border-violet-50"
+                  : "bg-transparent"
+              }
             `}
             >
               {renderIcon(menu.icon)}
