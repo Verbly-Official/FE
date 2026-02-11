@@ -93,34 +93,34 @@ const Select: React.FC<SelectProps> = ({
   const getSizeClass = () => {
     switch (size) {
       case "small":
-        return "h-[40px] px-3 text-sm rounded-xl";
+        return "h-[40px] px-3 text-[length:var(--fs-body2)] rounded-xl";
       case "medium":
-        return "h-[48px] px-4 text-base rounded-xl";
+        return "h-[48px] px-4 text-[length:var(--fs-subtitle2)] rounded-xl";
       case "chip":
-        return "h-[36px] px-2 text-sm rounded-xl";
+        return "h-[36px] px-2 text-[length:var(--fs-body2)] rounded-xl";
       case "large":
       default:
-        return "h-[60px] px-4 text-lg rounded-xl";
+        return "h-[60px] px-4 text-[length:var(--fs-subtitle1)] rounded-xl";
     }
   };
 
   const getDropdownItemClass = () => {
     switch (size) {
       case "small":
-        return "py-2 px-3 text-sm";
+        return "py-2 px-3 text-[length:var(--fs-body2)]";
       case "chip":
       case "medium":
-        return "py-2.5 px-4 text-base";
+        return "py-2.5 px-4 text-[length:var(--fs-subtitle2)]";
       case "large":
       default:
-        return "py-3 px-4 text-lg";
+        return "py-3 px-4 text-[length:var(--fs-subtitle1)]";
     }
   };
 
   const getBorderClass = () => {
     if (disabled)
       return "bg-gray-1 cursor-not-allowed opacity-70 border-gray-2";
-    if (error) return "border-red-500";
+    if (error) return "border-pink-20"; 
     if (isOpen) return "border-blue-40";
     return "border-gray-3 hover:border-gray-9";
   };
@@ -161,7 +161,7 @@ const Select: React.FC<SelectProps> = ({
             <span
               className={`truncate ${
                 (isChipMode ? selectedValues.length > 0 : selectedOption)
-                  ? "text-gray-10"
+                  ? "text-gray-9"
                   : "text-gray-5"
               }`}
             >
@@ -208,7 +208,7 @@ const Select: React.FC<SelectProps> = ({
       )}
 
       {error && errorMessage && (
-        <span className="text-xs text-red-500 mt-1">{errorMessage}</span>
+        <span className="text-xs text-pink-20 mt-1">{errorMessage}</span>
       )}
     </div>
   );

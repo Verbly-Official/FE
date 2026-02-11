@@ -2,6 +2,11 @@
 import { GradientButton } from "../Button";
 import SideMenu_Tab from "./SideMenu_Tab";
 import { useNavigate, useLocation } from "react-router-dom";
+import HomeIcon from "../../assets/emoji/home.svg";
+import LibraryIcon from "../../assets/emoji/folder.svg";
+import CorrectionIcon from "../../assets/emoji/edit.svg";
+import InboxIcon from "../../assets/emoji/message1.svg";
+import ProfileIcon from "../../assets/emoji/person.svg";
 
 interface SideMenuProps {
   variant?: "default" | "small";
@@ -22,28 +27,28 @@ export default function SideMenu({
   const menus = [
     {
       label: "Home",
-      icon: "../../src/assets/emoji/home.svg",
+      icon: HomeIcon,
       path: "/home/korean",
     },
     {
       label: "Library",
-      icon: "../../src/assets/emoji/folder.svg",
+      icon: LibraryIcon,
       path: "/library",
     },
     {
       label: "Correction",
-      icon: "../../src/assets/emoji/edit.svg",
+      icon: CorrectionIcon,
       path: "/correction",
     },
     {
       label: "Inbox",
-      icon: "../../src/assets/emoji/message1.svg",
+      icon: InboxIcon,
       path: "/inbox",
     },
     {
       label: "Profile",
-      icon: "../../src/assets/emoji/person.svg",
-      path: "/my-korean",
+      icon: ProfileIcon,
+      path: "/my/korean",
     },
   ];
 
