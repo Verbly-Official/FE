@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Alarm from "./components/Alarm";
+import CheckIcon from "../../assets/emoji/check-purple.svg";
 
 export default function GNB_Alarm() {
   const navigate = useNavigate();
@@ -8,10 +9,7 @@ export default function GNB_Alarm() {
       <div className="flex flex-row justify-center items-center h-[28px] p-[14.5px]  gap-[92px]">
         <span className=" text-[24px] font-bold">Notification</span>
         <span className="flex flex-row items-center px-[4px] gap-[4px] text-[14px] text-violet-50 font-semibold">
-          <img
-            src="../../src/assets/emoji/check-purple.svg"
-            className="w-[20px] h-[20px]"
-          />
+          <img src={CheckIcon} className="w-[20px] h-[20px]" />
           Mark all read
         </span>
       </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Logo from "../Logo/Logo";
 import { SearchBar } from "../SearchBar/SearchBar";
 import GNB_Alarm from "./GNB_Alarm";
+import BellIcon from "../../assets/emoji/bell-on.svg";
 
 export default function GNB({ variant = "default" }) {
   const [isActive, setActive] = useState<boolean>(true);
@@ -35,7 +36,7 @@ export default function GNB({ variant = "default" }) {
                 isActive ? "bg-violet-90" : ""
               }`}
             >
-              <img src="../../src/assets/emoji/bell-on.svg" alt="bell" />
+              <img src={BellIcon} alt="bell" />
               <div
                 className={`w-[8px] h-[8px] absolute right-[10px] top-[10px] rounded-[12px] ${
                   isActive ? "bg-violet-50" : "bg-transparent"
