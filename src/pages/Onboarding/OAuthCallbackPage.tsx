@@ -39,7 +39,6 @@ const OAuthCallbackPage = () => {
         }
       } catch (error: any) {
         console.error('❌ 로그인 확인 중 응답:', error);
-
         // 404 에러는 "인증은 됐으나 유저 정보가 없는 상태" -> 온보딩으로 이동
         if (error.response?.status === 404) {
            console.log('👶 신규 유저(404) -> 온보딩 페이지로 이동');
@@ -53,7 +52,7 @@ const OAuthCallbackPage = () => {
             return;
         }
 
-        // 기타 에러
+        // 기타 에러        
         navigate('/login?error=로그인_처리_실패', { replace: true });
       }
     };
@@ -62,7 +61,7 @@ const OAuthCallbackPage = () => {
   }, [navigate, login]);
 
   return (
-    <div className="flex flex-col items-center justify-center bg-[#FBFBFB] w-full min-h-screen gap-12 px-4">
+    <div className="flex flex-col items-center justify-center bg-bg1 w-full min-h-screen gap-12 px-4">
       <video 
         src={loadingVideo}
         autoPlay 
@@ -72,8 +71,8 @@ const OAuthCallbackPage = () => {
         className="w-auto max-w-[400px] h-auto"
       />
       <div className="flex flex-col justify-center items-center gap-4">
-        <span className="text-[24px]">홈 화면으로 이동 중이에요</span>
-        <span className="text-[24px]">잠시만 기다려 주세요...</span>
+        <span className="text-[length:var(--fs-title1)]">홈 화면으로 이동 중이에요</span>
+        <span className="text-[length:var(--fs-title1)]">잠시만 기다려 주세요...</span>
       </div>
     </div>
   );
