@@ -34,7 +34,7 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({
   return (
     <div className="bg-white p-[20px] rounded-[12px] border border-line1 flex flex-col items-center gap-[12px] shadow-sm">
       {/* UserProfile - 180px 크기 */}
-      <div className="[&_img]:!w-[180px] [&_img]:!h-[180px] [&_h2]:!text-[24px] [&_span]:!text-[16px]">
+      <div className="[&_img]:!w-[180px] [&_img]:!h-[180px] [&_h2]:!text-[length:var(--fs-title1)] [&_span]:!text-[length:var(--fs-subtitle2)]">
         <UserProfile size="large" data={displayUser} />
       </div>
 

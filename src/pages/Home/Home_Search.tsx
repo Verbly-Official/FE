@@ -35,7 +35,7 @@ export default function Home_Search() {
               <span className="font-bold text-[40px] text-blue-60">
                 Korean Culture
               </span>
-              <span className="text-[24px] font-semibold text-[24px]">
+              <span className="text-[length:var(--fs-title1)] font-semibold">
                 에 대한 결과입니다.
               </span>
             </div>
