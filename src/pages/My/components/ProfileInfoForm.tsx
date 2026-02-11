@@ -16,9 +16,8 @@ export const ProfileInfoForm: React.FC<ProfileInfoFormProps> = ({
 }) => {
   return (
     <>
-      {/* 이름 입력 */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 md:gap-7 lg:gap-[28px] mb-6 md:mb-7 lg:mb-[28px]">
-        <label className="text-sm md:text-[14px] font-medium text-violet-500 w-full sm:w-20 lg:w-[80px] flex-shrink-0">
+        <label className="text-[length:var(--fs-body2)] text-violet-50 w-full sm:w-20 lg:w-[80px] flex-shrink-0">
           이름 (필수)
         </label>
         <div className="w-full">
@@ -27,14 +26,13 @@ export const ProfileInfoForm: React.FC<ProfileInfoFormProps> = ({
             onChange={(e) => onNameChange(e.target.value)}
             placeholder="Name"
             className="w-full"
-            maxLength={10} // ✅ 10자 제한
+            maxLength={10} 
           />
         </div>
       </div>
 
-      {/* 자기소개 입력 */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 md:gap-7 lg:gap-[28px]">
-        <label className="text-sm md:text-[14px] font-medium text-violet-500 w-full sm:w-20 lg:w-[80px] flex-shrink-0">
+        <label className="text-[length:var(--fs-body2)] text-violet-50 w-full sm:w-20 lg:w-[80px] flex-shrink-0">
           자기소개
         </label>
         <div className="w-full">
@@ -43,7 +41,7 @@ export const ProfileInfoForm: React.FC<ProfileInfoFormProps> = ({
             onChange={(e) => onIntroChange(e.target.value)}
             placeholder="자기소개"
             className="w-full"
-            maxLength={150} // ✅ 150자 제한
+            maxLength={150} 
           />
         </div>
       </div>

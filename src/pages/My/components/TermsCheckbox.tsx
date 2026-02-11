@@ -15,13 +15,13 @@ export const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 w-5 h-5 rounded border-2 border-gray-300 text-violet-500 focus:ring-2 focus:ring-violet-200 cursor-pointer"
+        className="mt-0.5 w-5 h-5 rounded border-2 border-gray-3 text-violet-50 focus:ring-2 focus:ring-violet-100 cursor-pointer"
       />
-      <span className="text-sm text-gray-600 leading-tight">
+      <span className="text-[length:var(--fs-body2)] text-gray-6 leading-tight">
         I agree to the{' '}
-        <a href="#" className="text-violet-500 hover:underline">Terms of Service</a>
+        <a href="#" className="text-violet-50 hover:underline">Terms of Service</a>
         {' '}and{' '}
-        <a href="#" className="text-violet-500 hover:underline">Privacy Policy</a>
+        <a href="#" className="text-violet-50 hover:underline">Privacy Policy</a>
         {' '}Subscription auto-renew...
       </span>
     </label>

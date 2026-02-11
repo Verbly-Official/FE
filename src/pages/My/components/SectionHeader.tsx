@@ -14,7 +14,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ number, title }) =
         variant='primary'
         count={number}
       />
-      <h2 className="text-[24px] text-gray-7 font-bold">
+      <h2 className="text-[length:var(--fs-title1)] text-gray-7 font-bold">
         {title}
       </h2>
     </div>

@@ -18,7 +18,7 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({
   showActions = false,
 }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4">
+    <div className="bg-[var(--color-white)] border border-gray-2 rounded-xl p-4 mb-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-3">
           <UserProfile 
@@ -33,13 +33,13 @@ export const StudentHeader: React.FC<StudentHeaderProps> = ({
                 variant="primary"
                 size="medium"
                 label='첨삭한 내용에 만족'
-                className="bg-purple-600 hover:bg-purple-700 text-white font-medium"
+                className="bg-violet-50 hover:bg-violet-40 text-[var(--color-white)]"
               />
               <SolidButton 
                 variant="primary"
                 size="medium"
                 label='추가 문의하기'
-                className="bg-purple-600 hover:bg-purple-700 text-white font-medium"
+                className="bg-violet-50 hover:bg-violet-40 text-[var(--color-white)]"
               />
             </>
           )}
