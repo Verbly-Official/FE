@@ -134,8 +134,9 @@ const Select: React.FC<SelectProps> = ({
         onClick={handleToggle}
         className={`
           flex items-center justify-between
-          bg-white border transition-all duration-200 cursor-pointer
+          border transition-all duration-200 cursor-pointer
           w-full 
+          bg-[var(--color-white)]
           ${getSizeClass()}
           ${getBorderClass()}
         `}
@@ -182,7 +183,7 @@ const Select: React.FC<SelectProps> = ({
       </div>
 
       {isOpen && !disabled && (
-        <ul className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-3 rounded-xl shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
+        <ul className="absolute top-full left-0 w-full mt-1 bg-[var(--color-white)] border border-gray-3 rounded-xl shadow-lg z-50 overflow-hidden max-h-60 overflow-y-auto">
           {options.map((option) => {
             const isSelected = isMultiSelect
               ? selectedValues.includes(option.value)

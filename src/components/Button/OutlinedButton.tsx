@@ -30,19 +30,19 @@ const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
 
 const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
   primary: {
-    normal: "border border-violet-50 text-violet-50 bg-white",
+    normal: "border border-violet-50 text-violet-50 bg-[var(--color-white)]",
     hovered: "border border-violet-50 text-violet-50 bg-violet-100",
     pressed: "border border-violet-50 text-violet-50 bg-violet-90",
     disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
   },
   secondary: {
-    normal: "border border-line1 text-violet-50 bg-white",
+    normal: "border border-line1 text-violet-50 bg-[var(--color-white)]",
     hovered: "border border-line1 text-violet-50 bg-gray-1",
     pressed: "border border-line1 text-violet-50 bg-gray-2",
     disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",
   },
   assistive: {
-    normal: "border border-line1 text-gray-9 bg-white",
+    normal: "border border-line1 text-gray-9 bg-[var(--color-white)]",
     hovered: "border border-line1 text-gray-9 bg-gray-1",
     pressed: "border border-line1 text-gray-9 bg-gray-2",
     disabled: "bg-gray-2 text-gray-9 cursor-not-allowed border-none",

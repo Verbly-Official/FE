@@ -30,9 +30,9 @@ const ICON_SIZE_STYLES: Record<ButtonSize, string> = {
 
 const STATIC_STYLES: Record<ButtonVariant, Record<ButtonInteraction, string>> = {
   primary: {
-    normal: "bg-violet-50 text-white",
-    hovered: "bg-violet-40 text-white",
-    pressed: "bg-violet-30 text-white",
+    normal: "bg-violet-50 text-[var(--color-white)]",
+    hovered: "bg-violet-40 text-[var(--color-white)]",
+    pressed: "bg-violet-30 text-[var(--color-white)]",
     disabled: "bg-gray-2 text-gray-4 cursor-not-allowed",
   },
   secondary: {

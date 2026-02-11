@@ -61,7 +61,7 @@ export default function FollowButton({
 
   const stateStyles = isFollowing
     ? "bg-gray-3 text-gray-6"
-    : "bg-violet-50 text-white";
+    : "bg-violet-50 text-[var(--color-white)]";
 
   const iconColorFilter = !isFollowing ? "invert" : "";
 
