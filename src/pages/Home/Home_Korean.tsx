@@ -12,6 +12,8 @@ import type { ViewerInfo } from "../../types/home.ts";
 
 export default function Home_Korean() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const [viewer, setViewer] = useState<ViewerInfo | null>(null);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function Home_Korean() {
         <div className={"w-full min-h-screen bg-bg0 z-10 relative"}>
           <div className="flex w-full">
             {/* 홈 내용 */}
-            <Home_Section variant="kr" />
+            <Home_Section variant="kr" refreshKey={refreshKey} />
 
             {/* 사이드 */}
             <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
@@ -77,7 +79,13 @@ export default function Home_Korean() {
                 className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                 onClick={(e) => e.stopPropagation()}
               >
-                <Home_WriteModal variant="KOREAN" />
+                <Home_WriteModal
+                  variant="KOREAN"
+                  onClose={() => setModalOpen(false)}
+                  onPostCreated={() => {
+                    setRefreshKey((prev) => prev + 1);
+                  }}
+                />
               </div>
             </>
           )}

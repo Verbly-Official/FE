@@ -5,7 +5,15 @@ import { getPosts, getHotPosts } from "../../../apis/post";
 import type { PostItem } from "../../../types/post";
 import { useEffect, useState } from "react";
 
-export default function Home_Section({ variant = "kr" }) {
+interface SectionProps {
+  variant: "kr" | "en";
+  refreshKey: number;
+}
+
+export default function Home_Section({
+  variant = "kr",
+  refreshKey,
+}: SectionProps) {
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
@@ -14,7 +22,7 @@ export default function Home_Section({ variant = "kr" }) {
   useEffect(() => {
     if (isHotPost) fetchHotPosts();
     else fetchPosts(0);
-  }, [isHotPost]);
+  }, [isHotPost, refreshKey]);
 
   const fetchPosts = async (pageNumber: number) => {
     try {

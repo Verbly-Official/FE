@@ -1,5 +1,6 @@
 import instance from "./axios";
 import type { PostSliceResponse } from "../types/post";
+import type { ApiResponse } from "../types/user";
 
 export const getPosts = async (page: number, size: number = 10) => {
   const res = await instance.get<PostSliceResponse>("/api/posts", {
@@ -30,6 +31,25 @@ export const getUserPosts = async (
       sort: "createdAt,DESC",
     },
   });
+
+  return res.data.result;
+};
+
+export interface CreatePostRequest {
+  content: string;
+  publicSetting: boolean;
+  tags: string[];
+}
+
+export interface CreatePostResult {
+  postId: number;
+  createdAt: string;
+}
+
+export type CreatePostResponse = ApiResponse<CreatePostResult>;
+
+export const createPost = async (body: CreatePostRequest) => {
+  const res = await instance.post<CreatePostResponse>("/api/posts/home", body);
 
   return res.data.result;
 };
