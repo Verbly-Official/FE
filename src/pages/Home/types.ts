@@ -17,13 +17,13 @@ export interface QuizSession {
 export interface QuizQuestion {
   id: string;
   questionId: string;
-  type: 'FILL_IN_BLANK' | 'MULTIPLE_CHOICE' | 'SHORT_ANSWER';
+  type: "FILL_IN_BLANK" | "MULTIPLE_CHOICE" | "SHORT_ANSWER";
   sentence: string;
   answer: string;
   options?: QuizOption[];
   highlighted: {
     text: string;
-    position: 'start' | 'middle' | 'end';
+    position: "start" | "middle" | "end";
   };
 }
 
@@ -97,7 +97,7 @@ export interface DailyReviewStats {
 /**
  * 퀴즈 진행 상태
  */
-export type QuizStatus = 'idle' | 'in-progress' | 'completed' | 'quit';
+export type QuizStatus = "idle" | "in-progress" | "completed" | "quit";
 
 /**
  * 퀴즈 세션 상태 (프론트엔드 상태 관리용)

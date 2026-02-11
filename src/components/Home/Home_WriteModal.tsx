@@ -62,7 +62,7 @@ export default function Home_WriteModal({
         {/* Settings */}
         <div className="flex flex-col gap-[20px] w-full">
           <div className="flex flex-col gap-[4px] w-full">
-            <div className="text-violet-20 font-semibold text-[16px] leading-[24px]">
+            <div className="text-violet-20 font-semibold text-[length:var(--fs-subtitle2)] leading-[24px]">
               Public Setting
             </div>
             <Select
@@ -75,10 +75,10 @@ export default function Home_WriteModal({
           {/* 한국인의 경우에만 렌더링 */}
           {variant === "KOREAN" && (
             <div className="w-full p-[8px] flex flex-col gap-[5px] bg-violet-100 rounded-[8px]">
-              <div className="text-violet-20 font-semibold text-[16px] leading-[24px]">
+              <div className="text-violet-20 font-semibold text-[length:var(--fs-subtitle2)] leading-[24px]">
                 Help Needed
               </div>
-              <div className="text-violet-20 font-normal text-[12px]">
+              <div className="text-violet-20 font-normal text-[length:var(--fs-button2)]">
                 원어민의 Need correction 피드에 노출되어 빠른 교정을 받을 수
                 있습니다.
               </div>
@@ -92,7 +92,7 @@ export default function Home_WriteModal({
 
           {/* Chip (Tags) */}
           <div className="flex flex-col gap-[4px]">
-            <div className="text-violet-20 font-semibold text-[16px] leading-[24px]">
+            <div className="text-violet-20 font-semibold text-[length:var(--fs-subtitle2)] leading-[24px]">
               Tag
             </div>
             <Home_ChipBox tags={tags} setTags={setTags} />
