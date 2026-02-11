@@ -21,20 +21,20 @@ const parseSentence = (sentence: string, highlightText: string): TextSegment[] =
   }
 
   const segments: TextSegment[] = [];
-  
+
   if (index > 0) {
     segments.push({ text: sentence.substring(0, index), isHighlight: false });
   }
-  
-  segments.push({ 
+
+  segments.push({
     text: sentence.substring(index, index + highlightText.length),
-    isHighlight: true 
+    isHighlight: true
   });
-  
+
   if (index + highlightText.length < sentence.length) {
-    segments.push({ 
+    segments.push({
       text: sentence.substring(index + highlightText.length),
-      isHighlight: false 
+      isHighlight: false
     });
   }
 
@@ -52,9 +52,9 @@ const ExampleSentence = ({ english, korean, highlight }: { english: string; kore
     if (index > 0) {
       segments.push({ text: english.substring(0, index) });
     }
-    segments.push({ 
+    segments.push({
       text: english.substring(index, index + highlight.length),
-      highlight: true 
+      highlight: true
     });
     if (index + highlight.length < english.length) {
       segments.push({ text: english.substring(index + highlight.length) });
@@ -69,11 +69,10 @@ const ExampleSentence = ({ english, korean, highlight }: { english: string; kore
         {segments.map((segment, idx) => (
           <span
             key={idx}
-            className={`text-[16px] font-semibold leading-[1.5] ${
-              segment.highlight 
-                ? 'bg-violet-90 px-[4px] py-[2px] text-gray-9' 
+            className={`text-[16px] font-semibold leading-[1.5] ${segment.highlight
+                ? 'bg-violet-90 px-[4px] py-[2px] text-gray-9'
                 : 'text-gray-9'
-            }`}
+              }`}
           >
             {segment.text}
           </span>
@@ -86,7 +85,7 @@ const ExampleSentence = ({ english, korean, highlight }: { english: string; kore
   );
 };
 
-export const WordDetailPage = () => {
+const WordDetailPage = () => {
   // const { word } = useParams(); // 나중에 API 연동 시 사용
   const data = MOCK_WORD_DATA;
 
@@ -220,3 +219,6 @@ export const WordDetailPage = () => {
     </div>
   );
 };
+
+export default WordDetailPage;
+

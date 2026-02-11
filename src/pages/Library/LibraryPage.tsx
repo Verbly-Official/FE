@@ -1,18 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../../components/Header/Header';
 import SideMenu from '../../components/Nav/SideMenu';
 import TrendingTag from '../../components/TrendingTag/TrendingTag';
 import { TodayReviewBanner } from './components/TodayReviewBanner';
 import { MyLibrarySection } from './components/MyLibrarySection';
 import { UserStatsCard } from './components/UserStatsCard';
-import { 
-    MOCK_LIBRARY_WORDS, 
-    MOCK_USER_PROFILE, 
-    MOCK_USER_STATS, 
-    MOCK_TODAY_REVIEW_STATS 
-} from './mockData';
+import { getLibraryItems } from '../../apis/library';
+import type { LibraryItem } from '../../types/library';
 
 const LibraryPage: React.FC = () => {
+    const [libraryItems, setLibraryItems] = useState<LibraryItem[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetchLibraryItems();
+    }, []);
+
+    const fetchLibraryItems = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response = await getLibraryItems({ page: 0, size: 100 });
+            setLibraryItems(response.content);
+        } catch (err) {
+            setError('Failed to load library items');
+            console.error('Error fetching library items:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Mock data for components that don't have API yet
+    const MOCK_USER_PROFILE = {
+        id: '1',
+        name: 'User',
+        level: 1,
+        profileImg: '',
+        introduction: 'LV.1',
+        role: 'FOREIGNER' as const,
+    };
+
+    const MOCK_USER_STATS = {
+        follow: 0,
+        streak: 0,
+        point: 0,
+        correctionReceived: 0,
+    };
+
+    const MOCK_TODAY_REVIEW_STATS = {
+        wordsRemaining: libraryItems.length,
+        accuracy: 0,
+        totalSaved: libraryItems.length,
+    };
+
     return (
         <div className="w-full bg-bg0 flex flex-col flex-1 overflow-hidden">
             {/* Header */}
@@ -31,7 +72,12 @@ const LibraryPage: React.FC = () => {
                     {/* Center Content */}
                     <div className="flex-1 flex flex-col gap-[20px] md:gap-[24px] lg:gap-[28px] min-w-0">
                         <TodayReviewBanner stats={MOCK_TODAY_REVIEW_STATS} />
-                        <MyLibrarySection words={MOCK_LIBRARY_WORDS} />
+                        <MyLibrarySection
+                            items={libraryItems}
+                            isLoading={isLoading}
+                            error={error}
+                            onRefresh={fetchLibraryItems}
+                        />
                     </div>
 
                     {/* Right Sidebar - 반응형 (lg 이상에서만 표시) */}

@@ -30,3 +30,38 @@ export interface Partner {
     status: "online" | "offline" | "away";
     isNativeSpeaker: boolean;
 }
+
+// API Response Types (from Swagger)
+export interface ChatroomListItem {
+    chatroomId: number;
+    chatroomName: string;
+    imageUrl: string;
+    chatMessage: string;
+    chatMessageCreatedAt: string;
+    unreadChatCount: number;
+}
+
+export interface ChatroomInfo {
+    chatroomName: string;
+    imageUrl: string;
+    lastReadAt: string;
+    nativeLang: string;
+}
+
+export interface ChatMessageItem {
+    senderName: string;
+    senderImageUrl: string;
+    chatContent: string;
+    createdAt: string;
+}
+
+export interface ChatProfile {
+    chatroomId: number;
+    chatroomName: string;
+    imageUrl: string;
+}
+
+export interface SearchResult {
+    chatProfileResponseDTOList: ChatProfile[];
+    outerChatroomInfoResponseDTOList: ChatroomListItem[];
+}

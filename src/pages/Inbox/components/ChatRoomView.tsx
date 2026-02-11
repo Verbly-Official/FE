@@ -17,27 +17,32 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
     isSidebarOpen
 }) => {
     const { messages, partner, isLoading, sendMessage } = useChatroom(chatroomId);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-    // Map Message[] to ChatMessage[] for the common ChatList component
+    // Map ChatMessageItem[] to ChatMessage[] for the common ChatList component
     const chatMessages = useMemo((): ChatMessage[] => {
         if (!partner) return [];
 
-        return messages.map(msg => ({
-            id: msg.id,
-            from: msg.role === 'user' ? 'me' : 'other',
-            text: msg.content,
-            time: new Date(msg.createdAt).toLocaleTimeString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-            }),
-            avatarUrl: msg.role === 'assistant' ? partner.avatarUrl : undefined
-        }));
+        // Get current user name from localStorage or auth store if available
+        // For now, we'll identify messages by checking if they have senderImageUrl
+        return messages.map((msg, index) => {
+            const isFromOther = msg.senderImageUrl !== undefined && msg.senderImageUrl !== '';
+
+            return {
+                id: index,
+                from: isFromOther ? 'other' : 'me',
+                text: msg.chatContent,
+                time: new Date(msg.createdAt).toLocaleTimeString('ko-KR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                }),
+                avatarUrl: isFromOther ? msg.senderImageUrl : undefined
+            };
+        });
     }, [messages, partner]);
 
-    // Auto-scroll to bottom when messages change - 컨테이너 내부에서만 스크롤
+    // Auto-scroll to bottom when messages change
     useEffect(() => {
         if (messagesContainerRef.current) {
             messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
