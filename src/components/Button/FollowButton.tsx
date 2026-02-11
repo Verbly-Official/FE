@@ -12,8 +12,8 @@ interface FollowButtonProps {
 }
 
 const SIZE_STYLES: Record<'small' | 'large', string> = {
-  small: "w-[80px] h-[24px] text-[12px] gap-[4px] rounded-[4px]",
-  large: "w-[150px] h-[60px] text-[18px] gap-[8px] rounded-[8px]",
+  small: "w-[80px] h-[24px] text-[length:var(--fs-button2)] gap-[4px] rounded-[4px]",
+  large: "w-[150px] h-[60px] text-[length:var(--fs-subtitle1)] gap-[8px] rounded-[8px]",
 };
 
 const ICON_SIZE_STYLES: Record<'small' | 'large', string> = {

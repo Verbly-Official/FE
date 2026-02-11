@@ -7,8 +7,8 @@ interface BadgeProps {
 }
 
 const BADGE_SIZES = {
-  small: 'h-[22px] px-2 text-xs',
-  medium: 'h-[32px] px-3 text-sm',
+  small: 'h-[22px] px-2 text-[length:var(--fs-button2)]', // 12px
+  medium: 'h-[32px] px-3 text-[length:var(--fs-body2)]',   // 14px
 };
 
 export const Badge: React.FC<BadgeProps> = ({ 

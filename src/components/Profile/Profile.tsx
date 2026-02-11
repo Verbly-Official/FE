@@ -7,11 +7,6 @@ import SmallProfile from './img/small.svg';
 import MediumProfile from './img/medium.svg';
 import LargeProfile from './img/large.svg';
 
-/**
- * 프로필 데이터 타입
- * - User(프론트), UserInfo(백엔드) 호환
- * - isFollowing, userId 등 팔로우 기능에 필요한 필드 포함
- */
 type ProfileData = Partial<User> & Partial<UserInfo> & {
   badges?: string;
   lastActive?: string;
@@ -44,12 +39,10 @@ export const UserProfile: React.FC<ProfileProps> = ({
   onFollow,
   className = '',
 }) => {
-  // 데이터 필드 호환성 처리
   const displayName = data.nickname || data.name || "User";
   const displayImage = data.profileImage || data.profileImg;
   const displayBio = data.bio || data.introduction;
   
-  // 이미지 소스 상태 관리
   const [imgSrc, setImgSrc] = useState<string>(displayImage || DEFAULT_IMAGES[size]);
 
   useEffect(() => {
@@ -65,7 +58,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
       src={imgSrc}
       alt={`${displayName} profile`}
       onError={handleError}
-      className="rounded-full object-cover bg-gray-100 flex-shrink-0"
+      className="rounded-full object-cover bg-gray-1 flex-shrink-0"
       style={{ width: IMG_PIXELS[size], height: IMG_PIXELS[size] }}
     />
   );
@@ -76,9 +69,9 @@ export const UserProfile: React.FC<ProfileProps> = ({
       <div className={`flex items-center gap-3 ${className}`}>
         {renderImage()}
         <div className="flex flex-col">
-          <span className="font-bold text-gray-900">{displayName}</span>
+          <span className="font-bold text-[length:var(--fs-subtitle2)] text-gray-9">{displayName}</span>
           {displayBio && (
-            <span className="text-sm text-gray-500 line-clamp-1">
+            <span className="text-[length:var(--fs-body2)] text-gray-5 line-clamp-1">
               {displayBio}
             </span>
           )}
@@ -94,14 +87,13 @@ export const UserProfile: React.FC<ProfileProps> = ({
         {renderImage()}
         <div className="flex flex-col flex-1">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-lg text-gray-900">{displayName}</span>
+            <span className="font-bold text-[length:var(--fs-subtitle1)] text-gray-9">{displayName}</span>
           </div>
           {data.lastActive && (
-            <span className="text-sm text-gray-400">{data.lastActive}</span>
+            <span className="text-[length:var(--fs-body2)] text-gray-4">{data.lastActive}</span>
           )}
         </div>
         
-        {/* userId가 있어야 API 호출 가능, 없으면 UI만 동작 */}
         <FollowButton 
           userId={data.userId} 
           initialIsFollowing={data.isFollowing} 
@@ -116,10 +108,10 @@ export const UserProfile: React.FC<ProfileProps> = ({
     <div className={`flex flex-col items-center gap-4 text-center ${className}`}>
       {renderImage()}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">{displayName}</h2>
+        <h2 className="text-[length:var(--fs-title1)] font-bold text-gray-9">{displayName}</h2>
         <div className="flex items-center justify-center gap-2 mt-1">
           {data.level !== undefined && (
-            <span className="text-gray-600">LV.{data.level}</span>
+            <span className="text-[length:var(--fs-subtitle2)] text-gray-6">LV.{data.level}</span>
           )}
           {data.badges && (
             <Badge content={data.badges} size="small" />
