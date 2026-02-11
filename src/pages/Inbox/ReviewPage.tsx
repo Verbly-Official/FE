@@ -1,16 +1,11 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import SideMenu from '../../components/Nav/SideMenu';
 import { Header } from '../../components/Header/Header';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { Badge } from '../../components/Badge/ContentBadge';
 import { StarRating } from '../../components/Rating/StarRating';
-import OutlinedButton from '../../components/Button/OutlinedButton';
 import { useChatroom } from '../../hooks/useChatroom';
-import { mockReviews } from './mocks/reviewData';
-import { useNavigate } from 'react-router-dom';
-
-import { mockChatrooms } from './mocks/chatData';
 import MessageIcon from '../../assets/emoji/message1.svg';
 import PersonPlusIcon from '../../assets/emoji/person-plus.svg';
 import PersonIcon from '../../assets/emoji/person.svg';
@@ -20,27 +15,80 @@ import LinearProgress from '../../components/ProgressIndicator/LinearProgress';
 import TextArea from '../../components/TextArea/TextArea';
 import { ReviewList } from './components/ReviewList';
 import RequestCorrectionButton from '../../components/Button/RequestCorrectionButton';
-
+import { getReviews, createReview, getReviewMeta } from '../../apis/review';
+import type { Review, ReviewMeta } from '../../types/review';
 
 const ReviewPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { partner: hookPartner, isLoading, error } = useChatroom(id || '');
+    const { partner, isLoading: isChatLoading, error } = useChatroom(id || '');
+
+    // Review State
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
-    const [reviews, setReviews] = useState(mockReviews);
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [reviewMeta, setReviewMeta] = useState<ReviewMeta | null>(null);
+    const [isReviewsLoading, setIsReviewsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
 
-    // Fallback partner lookup if hook fails
-    const partner = hookPartner || mockChatrooms.find(
-        (room) => room.id.toString() === id || room.partner.id === id
-    )?.partner;
+    const fetchReviewData = async () => {
+        if (!id) return;
 
-    console.log('ReviewPage - id:', id);
-    console.log('ReviewPage - hookPartner:', hookPartner);
-    console.log('ReviewPage - fallback partner:', partner);
+        setIsReviewsLoading(true);
+        try {
+            const numericId = parseInt(id, 10);
+            if (isNaN(numericId)) return;
 
-    if (isLoading) {
+            const [reviewsData, metaData] = await Promise.all([
+                getReviews(numericId),
+                getReviewMeta(numericId)
+            ]);
+
+            setReviews(reviewsData);
+            setReviewMeta(metaData);
+        } catch (err) {
+            console.error('Failed to fetch review data:', err);
+        } finally {
+            setIsReviewsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchReviewData();
+    }, [id]);
+
+    const handleSubmitReview = async () => {
+        if (rating === 0 || !comment.trim()) {
+            alert('별점과 리뷰 내용을 입력해주세요.');
+            return;
+        }
+
+        if (!id) return;
+
+        setIsSubmitting(true);
+        try {
+            const numericId = parseInt(id, 10);
+            await createReview(numericId, {
+                rating,
+                reviewContent: comment.trim()
+            });
+
+            alert('리뷰가 등록되었습니다!');
+            setRating(0);
+            setComment('');
+
+            // Refresh data
+            await fetchReviewData();
+        } catch (error) {
+            console.error('Failed to submit review:', error);
+            alert('리뷰 등록에 실패했습니다.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (isChatLoading) {
         return (
             <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
                 <div className="text-gray-400 text-lg">Loading...</div>
@@ -54,9 +102,6 @@ const ReviewPage = () => {
                 <div className="text-gray-400 text-lg">
                     {error || `Partner not found (ID: ${id})`}
                 </div>
-                <div className="text-xs text-gray-300">
-                    Available IDs: {mockChatrooms.map(r => r.partner.id).join(', ')}
-                </div>
                 <button
                     onClick={() => window.history.back()}
                     className="text-violet-600 font-medium hover:underline"
@@ -66,28 +111,6 @@ const ReviewPage = () => {
             </div>
         );
     }
-
-    const handleSubmitReview = () => {
-        if (rating === 0 || !comment.trim()) {
-            alert('별점과 리뷰 내용을 입력해주세요.');
-            return;
-        }
-
-        const newReview = {
-            id: Date.now(),
-            author: 'Me',
-            role: 'Student',
-            rating: rating,
-            date: 'Just now',
-            content: comment.trim(),
-            avatarUrl: ''
-        };
-
-        setReviews([newReview, ...reviews]);
-        setRating(0);
-        setComment('');
-        alert('리뷰가 등록되었습니다!');
-    };
 
     return (
         <div className="flex flex-col flex-1 bg-[#F8FAFC] overflow-hidden">
@@ -115,23 +138,28 @@ const ReviewPage = () => {
                                     <RequestCorrectionButton
                                         onClick={() => console.log('Request Correction clicked')}
                                     />
-                                    <OutlinedButton
-                                        size="medium"
-                                        iconSrc={MessageIcon}
-                                        label="Message"
-                                        className="!h-[48px] !px-8 !text-violet-50 !border-violet-50 !text-lg !font-semibold [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]"
+                                    <button
                                         onClick={() => navigate('/inbox')}
-                                    />
-                                    <OutlinedButton
-                                        size="medium"
-                                        iconSrc={isFollowing ? PersonIcon : PersonPlusIcon}
-                                        label={isFollowing ? 'Following' : 'Follow'}
-                                        className={`!h-[48px] !px-8 !text-lg !font-semibold transition-all ${isFollowing
-                                            ? '!bg-violet-50 !text-white !border-violet-50 [&>img]:brightness-0 [&>img]:invert'
-                                            : '!text-violet-50 !border-violet-50 [&>img]:[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]'
-                                            }`}
+                                        className="h-[48px] px-8 border border-violet-50 rounded-[8px] flex items-center gap-2 bg-white hover:bg-violet-50 transition-colors"
+                                    >
+                                        <img src={MessageIcon} alt="Message" className="w-5 h-5 [filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]" />
+                                        <span className="text-violet-50 text-lg font-semibold">Message</span>
+                                    </button>
+
+                                    <button
                                         onClick={() => setIsFollowing(!isFollowing)}
-                                    />
+                                        className={`h-[48px] px-8 border border-violet-50 rounded-[8px] flex items-center gap-2 transition-colors ${isFollowing
+                                                ? 'bg-violet-50 text-white hover:bg-violet-600'
+                                                : 'bg-white text-violet-50 hover:bg-violet-50'
+                                            }`}
+                                    >
+                                        <img
+                                            src={isFollowing ? PersonIcon : PersonPlusIcon}
+                                            alt={isFollowing ? 'Following' : 'Follow'}
+                                            className={`w-5 h-5 ${isFollowing ? 'brightness-0 invert' : '[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]'}`}
+                                        />
+                                        <span className="text-lg font-semibold">{isFollowing ? 'Following' : 'Follow'}</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +168,9 @@ const ReviewPage = () => {
                         <div className="flex gap-8">
                             {/* Left: Reviews */}
                             <div className="flex-1">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">Reviews ({reviews.length + 125})</h3>
+                                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                                    Reviews ({reviewMeta ? reviewMeta.reviewCount : 0})
+                                </h3>
                                 <div className="h-[1px] bg-gray-200 mb-6" />
 
                                 {/* Write Review Box */}
@@ -149,9 +179,10 @@ const ReviewPage = () => {
                                         <span className="text-sm font-medium text-gray-700">해당 튜터에 만족하셨나요?</span>
                                         <SolidButton
                                             size="small"
-                                            label="Completed"
+                                            label={isSubmitting ? "Submitting..." : "Completed"}
                                             onClick={handleSubmitReview}
                                             className="!rounded-lg !text-sm !font-bold"
+                                            disabled={isSubmitting}
                                         />
                                     </div>
                                     <div className="mb-4">
@@ -167,7 +198,13 @@ const ReviewPage = () => {
                                 </div>
 
                                 {/* Review List */}
-                                <ReviewList reviews={reviews} />
+                                {isReviewsLoading ? (
+                                    <div className="text-center py-10 text-gray-500">Loading reviews...</div>
+                                ) : reviews.length > 0 ? (
+                                    <ReviewList reviews={reviews} />
+                                ) : (
+                                    <div className="text-center py-10 text-gray-500">No reviews yet. Be the first to review!</div>
+                                )}
                             </div>
 
                             {/* Right: Sidebar Info */}
@@ -176,22 +213,28 @@ const ReviewPage = () => {
                                 <div className="bg-white rounded-xl border border-gray-200 p-6">
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">AVERAGE RATING</h4>
                                     <div className="flex items-center gap-4 mb-4">
-                                        <span className="text-4xl font-bold text-violet-600">4.9</span>
+                                        <span className="text-4xl font-bold text-violet-600">
+                                            {reviewMeta ? reviewMeta.reviewAverage.toFixed(1) : '0.0'}
+                                        </span>
                                         <div className="flex flex-col gap-1">
-                                            <StarRating rating={5} readonly size={24} gap={8} />
-                                            <span className="text-xs text-gray-400">128 Reviews</span>
+                                            <StarRating rating={reviewMeta ? Math.round(reviewMeta.reviewAverage) : 0} readonly size={24} gap={8} />
+                                            <span className="text-xs text-gray-400">
+                                                {reviewMeta ? reviewMeta.reviewCount : 0} Reviews
+                                            </span>
                                         </div>
                                     </div>
                                     <LinearProgress
-                                        value={85}
+                                        value={reviewMeta ? 100 - reviewMeta.rankPercentage : 0}
                                         size="small"
                                         fillGradient="point"
                                         className="mb-2"
                                     />
-                                    <span className="text-[10px] text-gray-400 block">Top 5% Rated</span>
+                                    <span className="text-[10px] text-gray-400 block">
+                                        Top {reviewMeta ? reviewMeta.rankPercentage : 0}% Rated
+                                    </span>
                                 </div>
 
-                                {/* Interests */}
+                                {/* Interests - Still hardcoded as API doesn't provide this yet */}
                                 <div className="bg-white rounded-xl border border-gray-200 p-6">
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">INTERESTS</h4>
                                     <div className="flex flex-wrap gap-2">

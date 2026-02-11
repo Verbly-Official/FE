@@ -1,47 +1,51 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header } from '../../../components/Header/Header';
 import SideMenu from '../../../components/Nav/SideMenu';
 import CircleProgress from '../../../components/ProgressIndicator/CircleProgress';
 import LinearProgress from '../../../components/ProgressIndicator/LinearProgress';
 import { ContentBadge } from './components/ContentBadge';
+import { getQuizResult, retryMistakes, startQuizSession } from './api';
+import type { QuizResultResponse } from './types';
 import CloseIcon from '../../../assets/emoji/close.svg';
 import Fire2Icon from '../../../assets/emoji/fire2.svg';
 import ReloadIcon from '../../../assets/emoji/reload.svg';
 import CautionIcon from '../../../assets/emoji/caution-outlined.svg';
 import CheckIcon from '../../../assets/emoji/check-purple.svg';
 import TrophyIcon from './emoji/trophy-3d.svg';
-import { MOCK_RESULT } from './mockData';
-
-interface ReviewMistake {
-  id: string;
-  word: string;
-  userAnswer: string;
-  correctAnswer: string;
-  sentence: string;
-  explanation?: string;
-}
 
 interface MistakeCardProps {
-  mistake: ReviewMistake;
+  mistake: {
+    questionId: number;
+    libraryItemId: number;
+    phrase: string;
+    prompt: string;
+    userAnswerJson: Record<string, any>;
+    correctAnswerKeyJson: Record<string, any>;
+    explanation: string;
+  };
   showExplanation?: boolean;
 }
 
 const MistakeCard = ({ mistake, showExplanation = false }: MistakeCardProps) => {
+  const userAnswer = mistake.userAnswerJson?.answer || 'No answer';
+  const correctAnswer = mistake.correctAnswerKeyJson?.answer || mistake.phrase;
+
   return (
     <div className="w-full bg-white border border-line1 rounded-[12px] p-[32px] flex flex-col gap-[24px] relative">
       {/* Red left border */}
       <div className="absolute left-0 top-0 bottom-0 w-[7px] bg-[#ef4444] rounded-l-[12px]" />
-      
+
       {/* Question */}
       <div className="flex items-center gap-[4px] text-subtitle-semi20">
         <span>Q.</span>
-        <span>{mistake.sentence}</span>
+        <span>{mistake.prompt}</span>
       </div>
 
       {/* Answer */}
       <div className="flex items-center gap-[4px]">
         <img src={CheckIcon} alt="check" className="w-[24px] h-[24px]" />
-        <span className="text-subtitle-semi20 text-[#047857]">{mistake.correctAnswer}</span>
+        <span className="text-subtitle-semi20 text-[#047857]">{correctAnswer}</span>
       </div>
 
       {/* Explanation */}
@@ -57,21 +61,67 @@ const MistakeCard = ({ mistake, showExplanation = false }: MistakeCardProps) => 
 
 export const ReviewResultPage = () => {
   const navigate = useNavigate();
-  const result = MOCK_RESULT;
+  const location = useLocation();
+  const [result, setResult] = useState<QuizResultResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const sessionId = location.state?.sessionId as number;
+    if (!sessionId) {
+      navigate('/library');
+      return;
+    }
+
+    fetchResult(sessionId);
+  }, [location, navigate]);
+
+  const fetchResult = async (sessionId: number) => {
+    setIsLoading(true);
+    try {
+      const data = await getQuizResult(sessionId);
+      setResult(data);
+    } catch (error) {
+      console.error('Failed to fetch quiz result:', error);
+      alert('Failed to load quiz result');
+      navigate('/library');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleQuit = () => {
     navigate('/library');
   };
 
-  const handleRetryMistakes = () => {
-    // 오답 재도전 로직
-    navigate('/review');
+  const handleRetryMistakes = async () => {
+    if (!result) return;
+
+    try {
+      const newSession = await retryMistakes(result.sessionId);
+      navigate('/review', { state: { session: newSession } });
+    } catch (error) {
+      console.error('Failed to retry mistakes:', error);
+      alert('Failed to start retry session');
+    }
   };
 
-  const handleNewSession = () => {
-    // 새로운 세션 시작
-    navigate('/review');
+  const handleNewSession = async () => {
+    try {
+      const newSession = await startQuizSession();
+      navigate('/review', { state: { session: newSession } });
+    } catch (error) {
+      console.error('Failed to start new session:', error);
+      alert('Failed to start new session');
+    }
   };
+
+  if (isLoading || !result) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading results...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col flex-1 bg-bg0 overflow-hidden">
@@ -116,12 +166,10 @@ export const ReviewResultPage = () => {
                   <div className="bg-violet-100 rounded-[12px] p-[8px]">
                     <div className="flex gap-[12px] items-center">
                       <div className="flex items-center gap-[4px]">
-                        <img src={CautionIcon} alt="time" className="w-[24px] h-[24px]" />
-                        <span className="text-body2-semi15 text-violet-20">Time : {result.time}</span>
-                      </div>
-                      <div className="flex items-center gap-[4px]">
                         <img src={Fire2Icon} alt="streak" className="w-[24px] h-[24px]" />
-                        <span className="text-body2-semi15 text-violet-20">Streak : {result.streak} Days</span>
+                        <span className="text-body2-semi15 text-violet-20">
+                          {result.correctCount} / {result.totalQuestions} Correct
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -129,30 +177,32 @@ export const ReviewResultPage = () => {
 
                 {/* Circle Progress */}
                 <div className="relative w-[114px] h-[114px]">
-                  <CircleProgress value={result.accuracy} size="small" />
+                  <CircleProgress value={result.accuracyPercent} size="small" />
                 </div>
               </div>
 
               {/* Mistakes Section */}
-              <div className="flex flex-col gap-[14px]">
-                <div className="flex items-center gap-[8px] p-[8px] rounded-[10px]">
-                  <img src={CautionIcon} alt="mistakes" className="w-[24px] h-[24px]" />
-                  <h2 className="text-title3-bold24 text-gray-7">
-                    Review Mistakes ({result.mistakes.length})
-                  </h2>
-                </div>
+              {result.mistakes.length > 0 && (
+                <div className="flex flex-col gap-[14px]">
+                  <div className="flex items-center gap-[8px] p-[8px] rounded-[10px]">
+                    <img src={CautionIcon} alt="mistakes" className="w-[24px] h-[24px]" />
+                    <h2 className="text-title3-bold24 text-gray-7">
+                      Review Mistakes ({result.mistakes.length})
+                    </h2>
+                  </div>
 
-                {/* Mistakes List */}
-                <div className="flex flex-col gap-[14px] max-h-[492px] overflow-y-auto">
-                  {result.mistakes.map((mistake, index) => (
-                    <MistakeCard
-                      key={mistake.id}
-                      mistake={mistake}
-                      showExplanation={index === 0}
-                    />
-                  ))}
+                  {/* Mistakes List */}
+                  <div className="flex flex-col gap-[14px] max-h-[492px] overflow-y-auto">
+                    {result.mistakes.map((mistake, index) => (
+                      <MistakeCard
+                        key={mistake.questionId}
+                        mistake={mistake}
+                        showExplanation={index === 0}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -167,35 +217,16 @@ export const ReviewResultPage = () => {
                   <img src={Fire2Icon} alt="fire" className="w-[24px] h-[24px]" />
                 </div>
                 <div className="flex flex-col gap-[4px]">
-                  <span className="text-subtitle-semi20 text-blue-10">+{result.xpEarned} XP</span>
+                  <span className="text-subtitle-semi20 text-blue-10">
+                    {result.accuracyPercent}% Accuracy
+                  </span>
                   <span className="text-body2-semi15 bg-gradient-4 bg-clip-text text-transparent">
-                    Daily Goal Achieved!
+                    {result.correctCount} out of {result.totalQuestions} correct!
                   </span>
                 </div>
               </div>
               {/* Progress Bar */}
-              <LinearProgress value={100} size="small" fillGradient="point" />
-            </div>
-
-            {/* Added Words Section */}
-            <div className="w-full bg-bg1 border border-line1 rounded-[12px] p-[24px] flex flex-col gap-[12px]">
-              <span className="text-body1-semi16 text-gray-5">ADDED TO REVIEW QUEUE</span>
-              
-              {result.addedWords.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between py-[16px] px-[24px] border-b border-line1"
-                >
-                  <button className="text-subtitle-semi18 text-violet-50 p-[4px] rounded-[4px]">
-                    {item.word}
-                  </button>
-                  <ContentBadge content={item.reviewDate} />
-                </div>
-              ))}
-
-              <button className="text-subtitle-semi18 text-gray-4 pt-[8px] text-center">
-                View more
-              </button>
+              <LinearProgress value={result.accuracyPercent} size="small" fillGradient="point" />
             </div>
 
             {/* Trophy Image */}
@@ -203,13 +234,15 @@ export const ReviewResultPage = () => {
 
             {/* Action Buttons */}
             <div className="w-full flex flex-col gap-[16px]">
-              <button
-                onClick={handleRetryMistakes}
-                className="w-full h-[60px] bg-violet-50 rounded-[8px] flex items-center justify-center gap-[6px] text-subtitle-semi18 text-white cursor-pointer hover:bg-violet-40"
-              >
-                <img src={ReloadIcon} alt="reload" className="w-[18px] h-[18px] brightness-0 invert" />
-                Try Mistakes Again
-              </button>
+              {result.mistakes.length > 0 && (
+                <button
+                  onClick={handleRetryMistakes}
+                  className="w-full h-[60px] bg-violet-50 rounded-[8px] flex items-center justify-center gap-[6px] text-subtitle-semi18 text-white cursor-pointer hover:bg-violet-40"
+                >
+                  <img src={ReloadIcon} alt="reload" className="w-[18px] h-[18px] brightness-0 invert" />
+                  Try Mistakes Again
+                </button>
+              )}
 
               <button
                 onClick={handleNewSession}

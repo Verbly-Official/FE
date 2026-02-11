@@ -1,12 +1,13 @@
-// import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from '../../components/Header/Header';
 import SideMenu from '../../components/Nav/SideMenu';
 import InfoIcon from '../../assets/emoji/info.svg';
-import { MOCK_WORD_DATA } from './mockData';
+import { getLibraryItemDetail } from '../../apis/library';
+import type { LibraryItemDetail } from '../../types/library';
 
 interface TextSegment {
   text: string;
-  highlight?: boolean;
   isHighlight?: boolean;
 }
 
@@ -42,52 +43,82 @@ const parseSentence = (sentence: string, highlightText: string): TextSegment[] =
 };
 
 const ExampleSentence = ({ english, korean, highlight }: { english: string; korean: string; highlight: string }) => {
-  // 하이라이트할 텍스트를 찾아서 세그먼트로 나누기
-  const segments: TextSegment[] = [];
-  const lowerEnglish = english.toLowerCase();
-  const lowerHighlight = highlight.toLowerCase();
-  const index = lowerEnglish.indexOf(lowerHighlight);
-
-  if (index !== -1) {
-    if (index > 0) {
-      segments.push({ text: english.substring(0, index) });
-    }
-    segments.push({
-      text: english.substring(index, index + highlight.length),
-      highlight: true
-    });
-    if (index + highlight.length < english.length) {
-      segments.push({ text: english.substring(index + highlight.length) });
-    }
-  } else {
-    segments.push({ text: english });
-  }
+  const segments = parseSentence(english, highlight);
 
   return (
-    <div className="flex flex-col gap-[8px] border-b border-line1 py-[12px]">
-      <div className="flex items-center gap-[4px] flex-wrap">
-        {segments.map((segment, idx) => (
+    <div className="flex flex-col gap-[8px]">
+      <div className="flex gap-[4px] items-center flex-wrap">
+        {segments.map((segment, index) => (
           <span
-            key={idx}
-            className={`text-[16px] font-semibold leading-[1.5] ${segment.highlight
-                ? 'bg-violet-90 px-[4px] py-[2px] text-gray-9'
-                : 'text-gray-9'
-              }`}
+            key={index}
+            className={
+              segment.isHighlight
+                ? 'text-subtitle6-semi18 text-violet-50'
+                : 'text-subtitle6-semi18 text-gray-9'
+            }
           >
             {segment.text}
           </span>
         ))}
       </div>
-      <p className="text-[16px] font-normal leading-[1.5] text-gray-10">
-        {korean}
-      </p>
+      <p className="text-body1-medium16 text-gray-6">{korean}</p>
     </div>
   );
 };
 
-const WordDetailPage = () => {
-  // const { word } = useParams(); // 나중에 API 연동 시 사용
-  const data = MOCK_WORD_DATA;
+export const WordDetailPage = () => {
+  const { itemId } = useParams<{ itemId: string }>();
+  const navigate = useNavigate();
+  const [data, setData] = useState<LibraryItemDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!itemId) {
+      navigate('/library');
+      return;
+    }
+
+    fetchItemDetail(parseInt(itemId));
+  }, [itemId, navigate]);
+
+  const fetchItemDetail = async (id: number) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const detail = await getLibraryItemDetail(id);
+      setData(detail);
+    } catch (err) {
+      console.error('Failed to fetch library item detail:', err);
+      setError('Failed to load item details');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error || 'Item not found'}</p>
+          <button
+            onClick={() => navigate('/library')}
+            className="px-4 py-2 bg-violet-600 text-white rounded-md"
+          >
+            Back to Library
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col flex-1 bg-bg0 overflow-hidden">
@@ -108,111 +139,84 @@ const WordDetailPage = () => {
             <div className="bg-white border border-line1 rounded-[12px] h-[140px] flex items-center px-[32px] py-[4px]">
               <div className="flex flex-col gap-[16px]">
                 <h1 className="text-[40px] font-bold leading-none bg-gradient-to-r from-violet-50 to-pink-40 bg-clip-text text-transparent">
-                  {data.word}
+                  {data.phrase}
                 </h1>
                 <p className="text-[20px] font-medium leading-none text-gray-7">
-                  {data.meaning}
+                  {data.meaningKo || data.meaningEn}
                 </p>
               </div>
             </div>
 
-            {/* Correction Details */}
-            {data.corrections.map((correction) => (
-              <div
-                key={correction.id}
-                className="bg-white border border-line1 rounded-[12px] p-[32px] flex flex-col gap-[24px]"
-              >
-                {/* Wrong and Correct Sentences */}
-                <div className="flex flex-col gap-[18px]">
-                  {/* Wrong Sentence */}
-                  <div className="flex items-center gap-[4px] flex-wrap">
-                    {parseSentence(correction.wrongSentence, correction.wrong).map((part, idx) => (
-                      <span
-                        key={idx}
-                        className={
-                          part.isHighlight
-                            ? "text-[24px] font-bold leading-none text-[#ef1111] line-through bg-pink-80 px-[8px] py-[4px] rounded-[4px]"
-                            : "text-[24px] font-semibold leading-none text-gray-9"
-                        }
-                      >
-                        {part.text}
-                      </span>
-                    ))}
-                  </div>
+            {/* Correction Details (Sources) */}
+            {data.sources && data.sources.length > 0 && (
+              <div className="bg-white border border-line1 rounded-[12px] p-[32px] flex flex-col gap-[32px]">
+                <h2 className="text-title3-bold24 text-gray-9">Corrections</h2>
+                {data.sources.map((source) => (
+                  <div key={source.id} className="flex flex-col gap-[24px] border-b border-line1 pb-[32px] last:border-b-0 last:pb-0">
+                    {/* Original vs Corrected */}
+                    <div className="flex gap-[24px]">
+                      {/* Wrong */}
+                      <div className="flex-1 bg-red-50 border border-red-200 rounded-[8px] p-[16px]">
+                        <div className="flex items-center gap-[8px] mb-[8px]">
+                          <span className="text-btn1-semi14 text-red-600">WRONG</span>
+                        </div>
+                        <p className="text-body1-medium16 text-gray-9 line-through">
+                          {source.originalSegment}
+                        </p>
+                      </div>
 
-                  {/* Correct Sentence */}
-                  <div className="flex flex-col gap-[8px]">
-                    <span className="text-[14px] font-semibold leading-none text-[#047857]">
-                      CORRECTED
-                    </span>
-                    <div className="flex items-center gap-[4px] flex-wrap">
-                      {parseSentence(correction.correctSentence, correction.correct).map((part, idx) => (
-                        <span
-                          key={idx}
-                          className={
-                            part.isHighlight
-                              ? "text-[24px] font-bold leading-none text-[#047857] bg-[#d1fae5] px-[8px] py-[4px] rounded-[4px]"
-                              : "text-[24px] font-semibold leading-none text-gray-9"
-                          }
-                        >
-                          {part.text}
-                        </span>
-                      ))}
+                      {/* Correct */}
+                      <div className="flex-1 bg-green-50 border border-green-200 rounded-[8px] p-[16px]">
+                        <div className="flex items-center gap-[8px] mb-[8px]">
+                          <span className="text-btn1-semi14 text-green-600">CORRECT</span>
+                        </div>
+                        <p className="text-body1-medium16 text-gray-9">
+                          {source.suggestionSegment}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Explanation Box */}
-                <div className="bg-blue-100 border-l-[6px] border-blue-60 p-[24px] flex flex-col gap-[15px]">
-                  {/* Corrector Profile */}
-                  <div className="flex items-center gap-[12px] h-[40px]">
-                    <div className="w-[40px] h-[40px] rounded-full bg-gray-3 flex items-center justify-center">
-                      <span className="text-[16px] font-medium text-gray-7">
-                        {correction.corrector.name[0]}
-                      </span>
-                    </div>
-                    <div className="flex items-end gap-[4px]">
-                      <span className="text-[20px] font-medium leading-none text-gray-10">
-                        {correction.corrector.name}
-                      </span>
-                      {correction.corrector.isNative && (
-                        <span className="text-[11px] font-medium leading-none text-gray-5">
-                          _Native Speaker
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Explanation Text */}
-                  <p className="text-[16px] font-normal leading-[1.5] text-gray-10">
-                    {correction.explanation}
-                  </p>
-                </div>
-              </div>
-            ))}
-
-            {/* More Examples Section */}
-            <div className="flex flex-col gap-[8px]">
-              {/* Section Header */}
-              <div className="flex items-center gap-[8px] p-[8px] rounded-[10px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]">
-                <img src={InfoIcon} alt="info" className="w-[24px] h-[24px]" />
-                <h2 className="text-[28px] font-bold leading-none text-gray-7">
-                  More Example
-                </h2>
-              </div>
-
-              {/* Examples List */}
-              <div className="bg-white border border-line1 rounded-[12px] p-[32px] flex flex-col gap-[24px]">
-                {data.examples.map((example) => (
-                  <ExampleSentence
-                    key={example.id}
-                    english={example.english}
-                    korean={example.korean}
-                    highlight={example.highlight}
-                  />
                 ))}
               </div>
-            </div>
+            )}
+
+            {/* Examples Section */}
+            {data.examples && data.examples.length > 0 && (
+              <div className="bg-white border border-line1 rounded-[12px] p-[32px] flex flex-col gap-[32px]">
+                <div className="flex items-center gap-[8px]">
+                  <img src={InfoIcon} alt="info" className="w-[24px] h-[24px]" />
+                  <h2 className="text-title3-bold24 text-gray-9">Examples</h2>
+                </div>
+
+                <div className="flex flex-col gap-[24px]">
+                  {data.examples.map((example) => (
+                    <div
+                      key={example.id}
+                      className="border-b border-line1 pb-[24px] last:border-b-0 last:pb-0"
+                    >
+                      <ExampleSentence
+                        english={example.exampleEn}
+                        korean={example.exampleKo}
+                        highlight={data.phrase}
+                      />
+                      <div className="mt-[8px]">
+                        <span className="text-cap-medium11 text-gray-5">
+                          Source: {example.source}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Back Button */}
+            <button
+              onClick={() => navigate('/library')}
+              className="self-start px-6 py-3 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors"
+            >
+              Back to Library
+            </button>
           </div>
         </div>
       </div>
@@ -221,4 +225,3 @@ const WordDetailPage = () => {
 };
 
 export default WordDetailPage;
-

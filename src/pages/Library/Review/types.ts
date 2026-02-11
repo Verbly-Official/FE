@@ -1,71 +1,121 @@
-// ===== API Response Types (백엔드 연결용) =====
+// ===== Quiz API Response Types (Swagger 기반) =====
 
 /**
- * 퀴즈 세션 정보
- * API: GET /api/quizzes/sessions
+ * 퀴즈 세션 시작 응답
+ * POST /api/quizzes/sessions
  */
-export interface QuizSession {
-  sessionId: string;
+export interface StartQuizSessionResponse {
+  sessionId: number;
   totalQuestions: number;
-  currentQuestionIndex: number;
-  questions: QuizQuestion[];
+  currentIndex: number;
+  firstQuestion: QuizQuestion;
+  createdAt: string;
 }
 
 /**
- * 퀴즈 질문 타입
+ * 퀴즈 질문
  */
 export interface QuizQuestion {
-  id: string;
-  questionId: string;
-  type: 'FILL_IN_BLANK' | 'MULTIPLE_CHOICE' | 'SHORT_ANSWER';
-  sentence: string;
-  answer: string;
-  options?: QuizOption[];
-  highlighted: {
-    text: string;
-    position: 'start' | 'middle' | 'end';
-  };
-}
-
-/**
- * 퀴즈 옵션
- */
-export interface QuizOption {
-  id: string;
-  text: string;
+  questionId: number;
+  libraryItemId: number;
+  phrase: string;
+  questionType: string;
+  prompt: string;
+  options: string[];
 }
 
 /**
  * 답변 제출 요청
- * API: POST /api/quizzes/sessions/{sessionId}/questions/{questionId}/answer
+ * POST /api/quizzes/sessions/{sessionId}/questions/{questionId}/answer
  */
 export interface SubmitAnswerRequest {
-  answer: string;
+  userAnswerJson: {
+    answer: string;
+  };
 }
 
 /**
  * 답변 제출 응답
  */
 export interface SubmitAnswerResponse {
+  questionId: number;
   isCorrect: boolean;
-  correctAnswer: string;
-  explanation?: string;
-}
-
-/**
- * 퀴즈 결과
- * API: GET /api/quizzes/sessions/{sessionId}/result
- */
-export interface QuizResult {
-  sessionId: string;
+  correctAnswerKeyJson: Record<string, any>;
+  explanation: string;
+  currentIndex: number;
   totalQuestions: number;
-  correctAnswers: number;
-  accuracy: number;
-  completedAt: string;
+  sessionCompleted: boolean;
+  nextQuestion?: QuizQuestion;
 }
 
 /**
- * Daily Goal 통계
+ * 힌트 요청 응답
+ * POST /api/quizzes/sessions/{sessionId}/questions/{questionId}/hint
+ */
+export interface HintResponse {
+  questionId: number;
+  hintUsed: number;
+  hintTotal: number;
+  hintRemaining: number;
+  hint: string;
+}
+
+/**
+ * 퀴즈 중단 응답
+ * POST /api/quizzes/sessions/{sessionId}/quit
+ */
+export interface QuitSessionResponse {
+  sessionId: number;
+  status: string;
+}
+
+/**
+ * 퀴즈 결과 조회 응답
+ * GET /api/quizzes/sessions/{sessionId}/result
+ */
+export interface QuizResultResponse {
+  sessionId: number;
+  totalQuestions: number;
+  correctCount: number;
+  wrongCount: number;
+  accuracyPercent: number;
+  mistakes: QuizMistake[];
+}
+
+/**
+ * 오답 정보
+ */
+export interface QuizMistake {
+  questionId: number;
+  libraryItemId: number;
+  phrase: string;
+  prompt: string;
+  userAnswerJson: Record<string, any>;
+  correctAnswerKeyJson: Record<string, any>;
+  explanation: string;
+}
+
+/**
+ * 오답 재도전 응답
+ * POST /api/quizzes/sessions/{sessionId}/mistakes/retry
+ */
+export interface RetryMistakesResponse {
+  sessionId: number;
+  totalQuestions: number;
+  currentIndex: number;
+  firstQuestion: QuizQuestion;
+  createdAt: string;
+}
+
+// ===== UI State Types =====
+
+/**
+ * 퀴즈 진행 상태
+ */
+export type QuizStatus = 'idle' | 'in-progress' | 'completed' | 'quit';
+
+/**
+ * Daily Goal 통계 (UI용)
  */
 export interface DailyGoalStats {
   currentWords: number;
@@ -74,7 +124,7 @@ export interface DailyGoalStats {
 }
 
 /**
- * Streak 정보
+ * Streak 정보 (UI용)
  */
 export interface StreakInfo {
   currentStreak: number;
@@ -90,23 +140,4 @@ export interface DailyReviewStats {
   accuracy: number;
   streak: number;
   streakBonus: string;
-}
-
-// ===== UI State Types =====
-
-/**
- * 퀴즈 진행 상태
- */
-export type QuizStatus = 'idle' | 'in-progress' | 'completed' | 'quit';
-
-/**
- * 퀴즈 세션 상태 (프론트엔드 상태 관리용)
- */
-export interface QuizSessionState {
-  sessionId: string | null;
-  status: QuizStatus;
-  currentQuestionIndex: number;
-  questions: QuizQuestion[];
-  answers: Record<string, string>; // questionId -> answer
-  results: Record<string, boolean>; // questionId -> isCorrect
 }

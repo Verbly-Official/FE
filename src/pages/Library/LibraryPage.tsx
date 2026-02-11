@@ -5,6 +5,7 @@ import TrendingTag from '../../components/TrendingTag/TrendingTag';
 import { TodayReviewBanner } from './components/TodayReviewBanner';
 import { MyLibrarySection } from './components/MyLibrarySection';
 import { UserStatsCard } from './components/UserStatsCard';
+import { LibraryItemCreateTest } from './components/LibraryItemCreateTest';
 import { getLibraryItems } from '../../apis/library';
 import type { LibraryItem } from '../../types/library';
 
@@ -12,6 +13,7 @@ const LibraryPage: React.FC = () => {
     const [libraryItems, setLibraryItems] = useState<LibraryItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showTest, setShowTest] = useState(false);
 
     useEffect(() => {
         fetchLibraryItems();
@@ -71,6 +73,19 @@ const LibraryPage: React.FC = () => {
 
                     {/* Center Content */}
                     <div className="flex-1 flex flex-col gap-[20px] md:gap-[24px] lg:gap-[28px] min-w-0">
+                        {/* Test Toggle Button */}
+                        <button
+                            onClick={() => setShowTest(!showTest)}
+                            className="self-start px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors text-sm font-medium"
+                        >
+                            {showTest ? '❌ 테스트 닫기' : '🧪 API 테스트 열기'}
+                        </button>
+
+                        {/* Test Component */}
+                        {showTest && (
+                            <LibraryItemCreateTest />
+                        )}
+
                         <TodayReviewBanner stats={MOCK_TODAY_REVIEW_STATS} />
                         <MyLibrarySection
                             items={libraryItems}
