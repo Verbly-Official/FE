@@ -24,11 +24,11 @@ export const CorrectionContent: React.FC<CorrectionContentProps> = ({
   expert,
 }) => {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4">
+    <div className="bg-[var(--color-white)] border border-gray-2 rounded-xl p-4">
       <div className="space-y-4">
         {/* Original */}
         <div>
-          <span className="text-base text-gray-900 leading-relaxed">
+          <span className="text-[length:var(--fs-subtitle2)] text-gray-9 leading-relaxed">
             {correction.original.textBefore}
             <Text size="medium" state="wrong">
               {correction.original.wrongText}
@@ -39,8 +39,8 @@ export const CorrectionContent: React.FC<CorrectionContentProps> = ({
 
         {/* Corrected */}
         <div>
-          <div className="text-xs font-bold text-teal-700 mb-1 tracking-wide">CORRECTED</div>
-          <span className="text-base text-gray-900 leading-relaxed">
+          <div className="text-[length:var(--fs-button2)] font-bold text-blue-50 mb-1 tracking-wide">CORRECTED</div>
+          <span className="text-[length:var(--fs-subtitle2)] text-gray-9 leading-relaxed">
             {correction.corrected.textBefore}
             <Text size="medium" state="right">
               {correction.corrected.correctText}
@@ -50,13 +50,13 @@ export const CorrectionContent: React.FC<CorrectionContentProps> = ({
         </div>
 
         {/* Expert Opinion */}
-        <div className="bg-blue-100 border-l-4 border-blue-50 p-3">
+        <div className="bg-blue-90 border-l-4 border-blue-50 p-3">
           <div className="flex items-start flex-col gap-3">
             <UserProfile 
               size='small'
               data={expert}
             />
-            <p className="text-xs text-gray-700 leading-relaxed mt-1">
+            <p className="text-[length:var(--fs-button2)] text-gray-7 leading-relaxed mt-1">
               {expert.comment}
             </p>
           </div>

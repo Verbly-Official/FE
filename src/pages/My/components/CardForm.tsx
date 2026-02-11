@@ -25,7 +25,7 @@ export const CardForm: React.FC<CardFormProps> = ({
   return (
     <div className="space-y-5">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-[length:var(--fs-body2)] font-medium text-gray-7 mb-2">
           Name on Card
         </label>
         <TextField 
@@ -36,7 +36,7 @@ export const CardForm: React.FC<CardFormProps> = ({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-[length:var(--fs-body2)] font-medium text-gray-7 mb-2">
           Card Number
         </label>
         <TextField 
@@ -50,7 +50,7 @@ export const CardForm: React.FC<CardFormProps> = ({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-[length:var(--fs-body2)] text-gray-7 mb-2">
             Expiration Date
           </label>
           <TextField 
@@ -62,7 +62,7 @@ export const CardForm: React.FC<CardFormProps> = ({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-[length:var(--fs-body2)] text-gray-7 mb-2">
             CVC / CC
           </label>
           <TextField 
