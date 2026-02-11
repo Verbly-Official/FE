@@ -8,7 +8,7 @@ export default function CorrectionKoLayout() {
   return (
     <>
       {/* 왼쪽 메뉴 카드 */}
-      <div className="w-[200px] flex-shrink-0 px-[1.25rem] py-9 bg-white border border-r-0 border-[#E5E7EB]">
+      <div className="w-[210px] flex-shrink-0 px-[1.25rem] py-9 bg-white border border-r-0 border-[#E5E7EB]">
         <SolidButton size="large" className="w-full mb-8" label="새 글 작성하기" onClick={() => navigate("/correction/write")} />
 
         <Sidebar

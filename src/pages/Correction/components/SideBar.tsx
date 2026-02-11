@@ -63,7 +63,7 @@ export default function Sidebar({ locale, defaultActive = "all", onChangeActive 
   };
 
   return (
-    <aside className="bg-white p-3">
+    <aside className="bg-white">
       {sections.map((section) => (
         <div key={section.title} className="mb-6 last:mb-0">
           <p

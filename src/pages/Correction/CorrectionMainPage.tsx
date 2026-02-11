@@ -1,12 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import GNB from "../../components/Nav/GNB";
-import SideMenu from "../../components/Nav/SideMenu";
-import SolidButton from "../../components/Button/SolidButton";
 import Tab from "../../components/Tab/Tab";
 import BtnTab_C from "./components/BtnTab_c";
-import Sidebar from "./components/SideBar";
 import DocumentTable from "./components/DocumentTable";
 import type { DocumentRow } from "./components/DocumentTable";
 import { addCorrectionBookmark, removeCorrectionBookmark } from "../../apis/correction";
@@ -98,11 +93,9 @@ const Correction_Main = () => {
         setTotalCount(res.totalElements ?? 0);
 
         const rows: DocumentRow[] = (res.items ?? []).map((item: any) => {
-          const created = item.correctionCreatedAt ? new Date(item.correctionCreatedAt) : null;
-          const dateText = created ? created.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "-";
+          const dateText = item.relativeTime ?? "-";
 
-          const author = item.correctorName ?? (item.correctorType === "AI_ASSISTANT" ? "AI Assistant" : item.correctorType === "NATIVE_SPEAKER" ? "Native Speaker" : "Unknown");
-
+          const author = item.correctorName ?? (item.correctorType === "AI_ASSISTANT" ? "AI Assistant" : item.correctorType === "NATIVE_SPEAKER" ? "Native Speaker" : "부여받지 않음");
           const statusText = item.status === "COMPLETED" ? "Completed" : item.status === "IN_PROGRESS" ? "In Progress" : item.status === "PENDING" ? "Pending" : String(item.status ?? "-");
 
           return {

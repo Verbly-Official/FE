@@ -11,23 +11,12 @@ const Correction_drafts = () => {
 
   const [page, setPage] = useState(1); // UI는 1부터
   const [selectedTab, setSelectedTab] = useState(0);
-  const tabs = ["All", "Completed", "In Progress", "Pending"];
-
   const [documents, setDocuments] = useState<DocumentRow[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
   const navigate = useNavigate();
   const handleNewPost = () => navigate("/correction/write");
-
-  // 첨삭자 필터
-  const [correctorKey, setCorrectorKey] = useState<"all" | "ai" | "native">("all");
-
-  const correctorQuery = useMemo(() => {
-    if (correctorKey === "ai") return "AI_ASSISTANT";
-    if (correctorKey === "native") return "NATIVE_SPEAKER";
-    return undefined;
-  }, [correctorKey]);
 
   const statusQuery = useMemo(() => {
     // 서버 enum: COMPLETED, IN_PROGRESS, PENDING
@@ -42,22 +31,12 @@ const Correction_drafts = () => {
     setPage(1);
   }, [selectedTab]);
 
-  // correctorKey 변경 시에도 페이지 1로 리셋(필터 바뀌면 UX 상 자연스러움)
-  useEffect(() => {
-    setPage(1);
-  }, [correctorKey]);
-
   useEffect(() => {
     const run = async () => {
       try {
         const apiPage = SERVER_PAGE_IS_ZERO_BASED ? Math.max(page - 1, 0) : page;
 
         const params: any = { page: apiPage, size: 10, sort: true };
-
-        // All이면 안 보내기
-        if (statusQuery) params.status = statusQuery;
-        if (correctorQuery) params.corrector = correctorQuery;
-
         const res = await getDraftCorrections(params);
 
         console.log("getCorrections normalized res:", res);
@@ -96,12 +75,13 @@ const Correction_drafts = () => {
     };
 
     run();
-  }, [page, statusQuery, correctorQuery]);
+  }, [page, statusQuery]);
 
   return (
     <div className="min-h-screen">
       <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
         <div className="w-full overflow-x-auto">
+          <div className="text-black font-pretendard text-[24px] font-bold leading-[100%] mb-6">임시저장</div>
           <div className="min-w-[900px]">
             <DocumentTable documents={documents} showAuthor={false} showStar={false} showWords={false} />
           </div>
