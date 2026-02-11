@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { ComponentType, SVGProps } from "react";
 
-import FileIcon from "../../assets/emoji/file.svg?react";
-import AIIcon from "../../assets/emoji/ai.svg?react";
-import PersonIcon from "../../assets/emoji/person.svg?react";
+import FileIcon from "../../../assets/emoji/file.svg?react";
+import AIIcon from "../../../assets/emoji/ai.svg?react";
+import PersonIcon from "../../../assets/emoji/person.svg?react";
 
 type BtnTabItem = {
   key: string;
@@ -12,7 +12,7 @@ type BtnTabItem = {
 };
 
 type BtnTabProps = {
-  onChange?: (key: string) => void; // 선택 값 외부로 전달용 (선택)
+  onChange?: (key: string) => void;
   className?: string;
 };
 
@@ -40,9 +40,14 @@ export default function BtnTab_C({ onChange, className = "" }: BtnTabProps) {
           <button
             key={tab.key}
             onClick={() => handleClick(tab.key)}
-            className={`inline-flex items-center gap-[6px] px-[14px] py-[8px] rounded-[24px]
-        border transition font-pretendard text-[14px] font-semibold
-        ${isSelected ? "bg-violet-50 border-violet-50 text-white" : "bg-white border-[#E5E7EB] text-[var(--gray-6-active,#777)]"}`}
+            className={`
+              inline-flex items-center gap-[6px]
+              px-[14px] py-[8px] rounded-[24px]
+              border transition
+              font-pretendard font-semibold
+              text-[length:var(--fs-button1)]
+              ${isSelected ? "bg-violet-50 border-violet-50 text-white" : "bg-white border-[#E5E7EB] text-[var(--gray-6-active,#777)]"}
+            `}
           >
             <Icon className="w-[18px] h-[18px]" />
             <span>{tab.label}</span>

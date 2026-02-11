@@ -1,13 +1,13 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import GNB from "../../components/Nav/GNB";
-import SideMenu from "../../components/Nav/SideMenu";
-import SolidButton from "../../components/Button/SolidButton";
-import Sidebar from "./SideBar";
+import GNB from "../../../components/Nav/GNB";
+import SideMenu from "../../../components/Nav/SideMenu";
+import SolidButton from "../../../components/Button/SolidButton";
+import Sidebar from "../components/SideBar";
 
-import BtnTabs from "../../components/Tab/BtnTabs";
-import WriteIcon from "../../assets/emoji/write.svg";
-import TempleteIcon from "../../assets/emoji/template.svg";
+import BtnTabs from "../../../components/Tab/BtnTabs";
+import WriteIcon from "../../../assets/emoji/write.svg";
+import TempleteIcon from "../../../assets/emoji/template.svg";
 
 const CorrectionWriteLayout = () => {
   const navigate = useNavigate();
