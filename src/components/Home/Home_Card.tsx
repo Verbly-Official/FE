@@ -1,68 +1,94 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "../Badge/ContentBadge";
 import { UserProfile } from "../Profile/Profile";
 import { CommentItem } from "../Comment/CommentItem";
 import { TextField } from "../TextArea/TextField";
 import { IconButton } from "../Button";
-import type { User } from "../../types/user";
+import HeartIcon from "../../assets/emoji/heart-false.svg";
+import CommentIcon from "../../assets/emoji/message1.svg";
+
+import type { PostItem } from "../../types/post";
+import type { CommentItemType } from "../../types/comment";
+import { getComments } from "../../apis/comment";
 
 type HomeCardProps = {
   varient: "default" | "mini";
   isCorrected: boolean;
-};
-
-const MOCK_USER: User = {
-  progress: 3,
-  stats: 3,
-  id: "1",
-  name: "김철수",
-  profileImg: "https://via.placeholder.com/150",
-  introduction: "안녕하세요! 프론트엔드 개발자입니다.",
-  lastActive: "방금 전",
-  level: 12,
-  badges: "Expert", // Badge 컴포넌트 타입에 맞춰 수정 필요
+  post: PostItem;
 };
 
 export default function Home_Card({
   varient = "default",
   isCorrected = true,
+  post,
 }: HomeCardProps) {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
+  const [comments, setComments] = useState<CommentItemType[]>([]);
+  const [commentPage, setCommentPage] = useState(0);
+  const [commentLast, setCommentLast] = useState(false);
+
+  useEffect(() => {
+    if (isCommentOpen) {
+      fetchComments(0);
+    }
+  }, [isCommentOpen]);
+
+  const fetchComments = async (pageNumber: number) => {
+    try {
+      const data = await getComments(post.postId, pageNumber);
+
+      setComments((prev) =>
+        pageNumber === 0 ? data.content : [...prev, ...data.content]
+      );
+
+      setCommentLast(data.last);
+      setCommentPage(data.number);
+
+      console.log("posts data:", data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   switch (varient) {
     case "default":
       return (
         <div className="flex flex-col bg-white w-full my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
-            <UserProfile data={MOCK_USER} size="medium" />
+            <UserProfile
+              size="medium"
+              data={{
+                id: post.uuid,
+                name: post.nickname,
+                profileImg: post.userImageUrl,
+                bio: "",
+              }}
+            />
             {!isCorrected && (
               <Badge content="Request Correction" size="medium" />
             )}
           </div>
           {/* Content */}
-          <div>
-            I worked all day and when I came home, I didn’t want to do anything.
-            Is this sentence natural? I worked all day and when I came home, I
-            didn’t want to do anything. Is this sentence natural?
-          </div>
+          <div>{post.content}</div>
           {/* Tags */}
           <div className="flex flex-row gap-[10px] text-blue-60">
-            <div>#Grammer</div>
-            <div>Daily</div>
-            <div>#English</div>
+            {post.tags.map((tag) => (
+              <div key={tag}>#{tag}</div>
+            ))}
           </div>
           {/* Like&Comment */}
           <div className="border-t-[1px] border-line2 py-[12px] gap-[12px] flex flex-row text-blue-60">
             <div className="flex flex-row gap-[4px]">
-              <img src="../../src/assets/emoji/heart-false.svg" />
-              <div>12</div>
+              <img src={HeartIcon} />
+              <div>{post.likesCount}</div>
             </div>
             <div
               onClick={() => setIsCommentOpen((prev) => !prev)}
               className="flex flex-row gap-[4px]"
             >
-              <img src="../../src/assets/emoji/message1.svg" />
-              <div>12</div>
+              <img src={CommentIcon} />
+              <div>{post.commentsCount}</div>
             </div>
           </div>
 
@@ -75,27 +101,18 @@ export default function Home_Card({
                     className="w-[20px] h-[20px]"
                   />
                   <div>COMMENTS</div>
-                  <div>(12)</div>
+                  <div>({post.commentsCount})</div>
                 </div>
                 <div className="flex flex-col gap-[16px]">
-                  <CommentItem
-                    author="Mark"
-                    time="30min"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    avatarUrl=""
-                  />
-                  <CommentItem
-                    author="Mark"
-                    time="30min"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    avatarUrl=""
-                  />
-                  <CommentItem
-                    author="Mark"
-                    time="30min"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    avatarUrl=""
-                  />
+                  {comments.map((comment) => (
+                    <CommentItem
+                      key={comment.uuid + comment.createdAt}
+                      author={comment.nickname}
+                      time={comment.createdAt}
+                      content={comment.content}
+                      avatarUrl={comment.userImageUrl}
+                    />
+                  ))}
                 </div>
               </div>
               <div className="flex flex-row items-center w-full gap-[12px]">
@@ -120,35 +137,39 @@ export default function Home_Card({
         <div className="flex flex-col bg-white w-[340px] h-auto my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
-            <UserProfile data={MOCK_USER} size="medium" />
+            <UserProfile
+              size="medium"
+              data={{
+                id: post.uuid,
+                name: post.nickname,
+                profileImg: post.userImageUrl,
+                bio: "",
+              }}
+            />
             {!isCorrected && (
               <Badge content="Request Correction" size="medium" />
             )}
           </div>
           {/* Content */}
-          <div>
-            I worked all day and when I came home, I didn’t want to do anything.
-            Is this sentence natural? I worked all day and when I came home, I
-            didn’t want to do anything. Is this sentence natural?
-          </div>
+          <div>{post.content}</div>
           {/* Tags */}
           <div className="flex flex-row gap-[10px] text-blue-60">
-            <div>#Grammer</div>
-            <div>Daily</div>
-            <div>#English</div>
+            {post.tags.map((tag) => (
+              <div key={tag}>#{tag}</div>
+            ))}
           </div>
           {/* Like&Comment */}
           <div className="border-t-[1px] border-line2 py-[12px] gap-[12px] flex flex-row text-blue-60">
             <div className="flex flex-row gap-[4px]">
               <img src="../../src/assets/emoji/heart-false.svg" />
-              <div>12</div>
+              <div>{post.likesCount}</div>
             </div>
             <div
               onClick={() => setIsCommentOpen((prev) => !prev)}
               className="flex flex-row gap-[4px]"
             >
               <img src="../../src/assets/emoji/message1.svg" />
-              <div>12</div>
+              <div>{post.commentsCount}</div>
             </div>
           </div>
 
@@ -161,27 +182,18 @@ export default function Home_Card({
                     className="w-[20px] h-[20px]"
                   />
                   <div>COMMENTS</div>
-                  <div>(12)</div>
+                  <div>({post.commentsCount})</div>
                 </div>
                 <div className="flex flex-col gap-[16px]">
-                  <CommentItem
-                    author="Mark"
-                    time="30min"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    avatarUrl=""
-                  />
-                  <CommentItem
-                    author="Mark"
-                    time="30min"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    avatarUrl=""
-                  />
-                  <CommentItem
-                    author="Mark"
-                    time="30min"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    avatarUrl=""
-                  />
+                  {comments.map((comment) => (
+                    <CommentItem
+                      key={comment.uuid + comment.createdAt}
+                      author={comment.nickname}
+                      time={comment.createdAt}
+                      content={comment.content}
+                      avatarUrl={comment.userImageUrl}
+                    />
+                  ))}
                 </div>
               </div>
               <div className="flex flex-row items-center w-full gap-[12px]">

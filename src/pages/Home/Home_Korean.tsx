@@ -1,18 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Home_WriteModal from "../../components/Home/Home_WriteModal.tsx";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
-import { UserStatsCard } from "../Library/components/UserStatsCard";
-import { MOCK_USER_PROFILE, MOCK_USER_STATS } from "./mockData.ts";
+import { UserStatsCard } from "./components/UserStatsCard.tsx";
+
 import Home_Section from "./components/Home_Section.tsx";
 
-interface userType {
-  nativeLang: "kr" | "en";
-}
+import { getViewerInfo } from "../../apis/home.ts";
+import type { ViewerInfo } from "../../types/home.ts";
 
 export default function Home_Korean() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [viewer, setViewer] = useState<ViewerInfo | null>(null);
+
+  useEffect(() => {
+    const fetchViewer = async () => {
+      try {
+        const data = await getViewerInfo();
+        setViewer(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchViewer();
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/*GNB*/}
@@ -33,8 +46,22 @@ export default function Home_Korean() {
             {/* 사이드 */}
             <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
               <UserStatsCard
-                userData={MOCK_USER_PROFILE}
-                stats={MOCK_USER_STATS}
+                userData={{
+                  id: "viewer",
+                  name: viewer?.nickname ?? "",
+                  level: viewer?.level
+                    ? parseInt(viewer.level.replace("LV", ""))
+                    : 1,
+                  profileImg: viewer?.imageUrl ?? "",
+                  introduction: "",
+                  role: "KOREAN",
+                }}
+                stats={{
+                  follow: viewer?.following ?? 0,
+                  streak: viewer?.streak ?? 0,
+                  point: viewer?.point ?? 0,
+                  correctionReceived: viewer?.correctionReceived ?? 0,
+                }}
               />
               <TrendingTag />
             </div>
