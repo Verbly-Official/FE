@@ -80,7 +80,7 @@ export default function Home_Profile() {
                   <img
                     src={Uuser?.imageUrl ?? ""}
                     alt="profile"
-                    className="w-[180px] h-[180px] rounded-full"
+                    className="size-[180px] rounded-full"
                   />
                   <div className="w-[1072px] flex flex-col flex-start gap-[16px]">
                     <div className="flex gap-[4px] flex-col">

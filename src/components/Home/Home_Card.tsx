@@ -152,7 +152,7 @@ export default function Home_Card({
             <div className="flex flex-row gap-[4px]">
               <InteractionIcon
                 type="heart"
-                selected={false}
+                selected={localPost.isLiked}
                 onToggle={handleLikeClick}
                 className="w-[20px] h-[20px] cursor-pointer"
               />
