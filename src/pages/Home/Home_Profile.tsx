@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { createOrEnterChatroom } from "../../apis/chatrooms";
 
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
@@ -52,11 +53,36 @@ export default function Home_Profile() {
     };
     const fetchUuser = async () => {
       const data = await getUuserInfo(userId);
+      console.log("Uuser data:", data); // ID 확인용 로그
       setUuser(data);
     };
     fetchPosts();
     fetchUuser();
   }, [userId]);
+
+  const navigate = useNavigate();
+
+  const handleMessage = async () => {
+    if (!userId) return;
+
+    // API expects a numeric ID (Integer), but we currently have a UUID.
+    // We try to parse it, but if it fails (NaN), we cannot proceed.
+    const numericUserId = Number(userId);
+
+    if (isNaN(numericUserId)) {
+      console.error(`Cannot create chatroom: User ID '${userId}' is not a number. Backend API requires a numeric ID.`);
+      alert("Cannot start chat: Invalid User ID format (Backend requires numeric ID).");
+      return;
+    }
+
+    try {
+      const chatroomId = await createOrEnterChatroom(numericUserId);
+      navigate(`/inbox/${chatroomId}`);
+    } catch (error) {
+      console.error("Failed to enter chatroom:", error);
+      alert("Failed to start chat.");
+    }
+  };
 
   return (
     <>
@@ -129,12 +155,20 @@ export default function Home_Profile() {
                       </span>
                     </div>
                   </div>
+
                   <div className="flex flex-row gap-[20px]">
-                    <FollowButton size="large" className="w-[508px]" />
+                    <FollowButton
+                      size="large"
+                      className="w-[508px]"
+                      userId={userId ? (isNaN(parseInt(userId)) ? userId : parseInt(userId)) : 0}
+                      initialIsFollowing={Uuser?.isFollowing}
+                    />
                     <OutlinedButton
                       label="Message"
                       Icon={MessageImg}
                       size="large"
+                      onClick={handleMessage}
+                      className="cursor-pointer hover:bg-violet-50 hover:text-white transition-colors"
                     />
                   </div>
                 </div>
@@ -148,6 +182,7 @@ export default function Home_Profile() {
                     varient="default"
                     isCorrected={post.status !== "PENDING"}
                     post={post}
+                    viewer={viewer}
                   />
                 ))}
               </section>
@@ -179,7 +214,7 @@ export default function Home_Profile() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }
