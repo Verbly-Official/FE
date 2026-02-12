@@ -148,6 +148,7 @@ export default function Home_Profile() {
                     varient="default"
                     isCorrected={post.status !== "PENDING"}
                     post={post}
+                    viewer={viewer}
                   />
                 ))}
               </section>
