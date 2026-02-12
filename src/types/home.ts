@@ -20,6 +20,7 @@ export interface ViewerInfo {
  * GET /api/home/users/{uuid}
  */
 export interface UuserInfo {
+  userId: number; // ✅ 백엔드 추가 예정
   imageUrl: string;
   nickname: string;
   nativeLang: string;

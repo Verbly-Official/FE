@@ -19,6 +19,7 @@ import { getViewerInfo, getUuserInfo } from "../../apis/home.ts";
 
 export default function Home_Profile() {
   const { userId } = useParams<{ userId: string }>();
+  const navigate = useNavigate();
 
   const [viewer, setViewer] = useState<ViewerInfo | null>(null);
   const [Uuser, setUuser] = useState<UuserInfo | null>(null);
@@ -60,23 +61,19 @@ export default function Home_Profile() {
     fetchUuser();
   }, [userId]);
 
-  const navigate = useNavigate();
 
   const handleMessage = async () => {
-    if (!userId) return;
+    // 1. 백엔드에서 userId(숫자)를 주기로 했으므로 Uuser 객체에서 확인
+    const targetUserId = Uuser?.userId;
 
-    // API expects a numeric ID (Integer), but we currently have a UUID.
-    // We try to parse it, but if it fails (NaN), we cannot proceed.
-    const numericUserId = Number(userId);
-
-    if (isNaN(numericUserId)) {
-      console.error(`Cannot create chatroom: User ID '${userId}' is not a number. Backend API requires a numeric ID.`);
-      alert("Cannot start chat: Invalid User ID format (Backend requires numeric ID).");
+    if (!targetUserId) {
+      console.error("Chat creation failed: 'userId' (numeric) is missing in User Profile data.");
+      alert("Cannot start chat: Missing User ID. Please verify backend API update.");
       return;
     }
 
     try {
-      const chatroomId = await createOrEnterChatroom(numericUserId);
+      const chatroomId = await createOrEnterChatroom(targetUserId);
       navigate(`/inbox/${chatroomId}`);
     } catch (error) {
       console.error("Failed to enter chatroom:", error);
