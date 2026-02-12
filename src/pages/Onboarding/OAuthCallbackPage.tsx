@@ -33,7 +33,7 @@ const OAuthCallbackPage = () => {
           if (userInfo.status === 'NEED_ONBOARDING') {
             navigate('/login/selectLanguage', { replace: true });
           } else {
-            const homePath = userInfo.nativeLang === 'ko' ? '/home/korean' : '/home/native';
+            const homePath = userInfo.nativeLang === 'kr' ? '/home/korean' : '/home/native';
             navigate(homePath, { replace: true });
           }
         }
@@ -68,7 +68,7 @@ const OAuthCallbackPage = () => {
         loop 
         muted 
         playsInline
-        className="w-auto max-w-[400px] h-auto"
+        className="w-auto max-w-[630px] h-auto"
       />
       <div className="flex flex-col justify-center items-center gap-4">
         <span className="text-[length:var(--fs-title1)]">홈 화면으로 이동 중이에요</span>
