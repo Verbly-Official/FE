@@ -136,7 +136,13 @@ export default function Home_Profile() {
                       </div>
                     </div>
                     <div className="flex flex-row gap-[20px]">
-                      <FollowButton size="large" className="w-[508px]" />
+                      <FollowButton
+                        size="large"
+                        className="w-[508px]"
+                        userId={Uuser?.userId}
+                        initialIsFollowing={Uuser?.isFollowing}
+                        onToggle={handleFollowToggle}
+                      />
                       <OutlinedButton
                         label="Message"
                         Icon={MessageImg}

@@ -7,6 +7,7 @@ import type { ApiResponse } from "./user";
  * GET /api/home/viewer/info
  */
 export interface ViewerInfo {
+  userId: number;
   imageUrl: string;
   nickname: string;
   following: number;
@@ -20,6 +21,7 @@ export interface ViewerInfo {
  * GET /api/home/users/{uuid}
  */
 export interface UuserInfo {
+  userId: number;
   imageUrl: string;
   nickname: string;
   nativeLang: string;

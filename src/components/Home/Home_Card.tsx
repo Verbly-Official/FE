@@ -131,7 +131,7 @@ export default function Home_Card({
             <UserProfile
               size="medium"
               data={{
-                id: post.uuid,
+                id: post.userIdId,
                 name: post.nickname,
                 profileImg: post.userImageUrl,
                 bio: "",
