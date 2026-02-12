@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { followUser, unfollowUser } from '../../apis/follow'; 
 import personPlusIcon from '../../assets/emoji/person-plus.svg';
 import person from '../../assets/emoji/person.svg';
@@ -31,29 +31,42 @@ export default function FollowButton({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isLoading, setIsLoading] = useState(false);
 
+  // userId가 유효한지 확인 (없거나 0이면 false)
+  const isValidUserId = userId && userId > 0;
+
+  useEffect(() => {
+    setIsFollowing(initialIsFollowing);
+  }, [initialIsFollowing]);
+
   const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
+    // [수정] ID가 없으면 클릭 막기
+    if (!isValidUserId) {
+      console.warn("FollowButton: 유효하지 않은 userId입니다.");
+      return;
+    }
+
     if (isLoading) return; 
     
     const previousState = isFollowing;
     const newState = !isFollowing;
+    
     setIsFollowing(newState);
     if (onToggle) onToggle(newState);
-
-    if (!userId) return;
-
     setIsLoading(true);
+
     try {
       if (newState) {
-        await followUser(userId);
+        await followUser(userId!);
       } else {
-        await unfollowUser(userId);
+        await unfollowUser(userId!);
       }
     } catch (error) {
       console.error("Follow toggle failed:", error);
       setIsFollowing(previousState);
       if (onToggle) onToggle(previousState);
+      alert("요청을 처리하는 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -63,19 +76,25 @@ export default function FollowButton({
     ? "bg-gray-3 text-gray-6"
     : "bg-violet-50 text-white";
 
-  const iconColorFilter = !isFollowing ? "invert" : "";
+  // [수정] 비활성화(ID 없음) 상태 스타일
+  const disabledStyles = !isValidUserId 
+    ? "cursor-not-allowed bg-gray-2 text-gray-4" 
+    : "cursor-pointer";
+
+  const iconColorFilter = !isFollowing && isValidUserId ? "invert" : "";
 
   return (
     <button
       onClick={handleClick}
-      disabled={isLoading}
+      // ID가 없거나 로딩 중이면 disabled 처리
+      disabled={!isValidUserId || isLoading}
       className={`
         flex justify-center items-center 
         font-medium transition-colors duration-200
         ${SIZE_STYLES[size]}
-        ${stateStyles}
+        ${!isValidUserId ? disabledStyles : stateStyles}
         ${className}
-        ${isLoading ? 'opacity-80 cursor-not-allowed' : 'cursor-pointer'}
+        ${isLoading ? 'cursor-not-allowed' : ''}
       `}
     >
       <img

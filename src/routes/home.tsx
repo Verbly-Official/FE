@@ -10,6 +10,6 @@ export const homeRoutes: RouteObject[] = [
   { path: "/home/korean", element: <Home_Korean /> },
   { path: "/home/native", element: <Home_Native /> },
   { path: "/home/notification", element: <Home_Notification /> },
-  { path: "/home/profile", element: <Home_Profile /> },
+  { path: "/home/profile/:userId", element: <Home_Profile /> },
   { path: "/home/search", element: <Home_Search /> },
 ];
