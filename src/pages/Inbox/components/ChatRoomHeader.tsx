@@ -29,7 +29,7 @@ export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
                 <Avatar src={partner.avatarUrl} className="w-[48px] h-[48px]" />
 
                 <div className="flex items-center gap-2">
-                    <span className="text-subtitle6-semi18 text-gray-900">
+                    <span className="text-[length:var(--fs-subtitle1)] font-semibold text-gray-900">
                         {partner.name}
                     </span>
 

@@ -21,8 +21,8 @@ export default function TrendingTag() {
   }, []);
 
   return (
-    <div className="flex flex-col p-[24px] gap-[16px] w-full h-stretch bg-white rounded-[8px] border-[1px] border-line1">
-      <div className="text-title2-bold28 text-gray-10">Trending Tags</div>
+    <div className="flex flex-col p-6 gap-4 w-full h-stretch bg-white rounded-[8px] border-[1px] border-line1">
+      <div className="text-[length:var(--fs-title1)] font-bold text-gray-10">Trending Tags</div>
       <div className="flex flex-col gap-[32px]">
         {tags.map((tag) => (
           <Tag key={tag.tagId} tag={tag} />

@@ -64,7 +64,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled = false }
                         }}
                     >
                         <img src={ClipIcon} alt="clip" className="w-5 h-5" />
-                        <span className="text-body1-medium16 text-gray-900">사진 및 파일 추가</span>
+                        <span className="text-[length:var(--fs-subtitle2)] font-medium text-gray-900">사진 및 파일 추가</span>
                     </button>
                 </div>
             )}

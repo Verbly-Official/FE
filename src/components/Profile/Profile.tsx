@@ -17,6 +17,7 @@ type ProfileData = Partial<User> &
     lastActive?: string;
     introduction?: string;
     isFollowing?: boolean;
+    role?: string;
   };
 
 interface ProfileProps {
@@ -126,12 +127,14 @@ export const UserProfile: React.FC<ProfileProps> = ({
           )}
         </div>
 
-        <FollowButton
-          key={targetUserId}
-          userId={targetUserId}
-          initialIsFollowing={data.isFollowing}
-          onToggle={onFollow}
-        />
+        {targetUserId && (
+          <FollowButton
+            key={targetUserId}
+            userId={targetUserId}
+            initialIsFollowing={data.isFollowing}
+            onToggle={onFollow}
+          />
+        )}
       </div>
     );
   }

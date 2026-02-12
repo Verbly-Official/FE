@@ -127,11 +127,11 @@ const ReviewPage = () => {
                             <Avatar src={partner.avatarUrl} className="w-[180px] h-[180px]" />
                             <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h1 className="text-[32px] font-bold text-gray-900">{partner.name}</h1>
+                                    <h1 className="text-[length:var(--fs-title1)] font-bold text-gray-900">{partner.name}</h1>
                                     <Badge content="Native (US)" size="medium" className="!bg-[#E6EEFF] !text-[#4D7CFF] !rounded-[4px]" />
                                     <Badge content="TOP TUTOR" size="medium" className="!bg-[#E6EEFF] !text-[#4D7CFF] !rounded-[4px]" />
                                 </div>
-                                <p className="text-lg text-gray-500 mb-8 max-w-[800px] leading-relaxed">
+                                <p className="text-[length:var(--fs-subtitle1)] text-gray-500 mb-8 max-w-[800px] leading-relaxed">
                                     Lorem ipsum dolor sit amet consectetur. Ornare velit massa adipiscing consequat semper a sed diam felis. Proin tortor dictumst bibendum nisl tempus enim maecenas
                                 </p>
                                 <div className="flex gap-4">
@@ -143,7 +143,7 @@ const ReviewPage = () => {
                                         className="h-[48px] px-8 border border-violet-50 rounded-[8px] flex items-center gap-2 bg-white hover:bg-violet-50 transition-colors"
                                     >
                                         <img src={MessageIcon} alt="Message" className="w-5 h-5 [filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]" />
-                                        <span className="text-violet-50 text-lg font-semibold">Message</span>
+                                        <span className="text-violet-50 text-[length:var(--fs-subtitle1)] font-semibold">Message</span>
                                     </button>
 
                                     <button
@@ -158,7 +158,7 @@ const ReviewPage = () => {
                                             alt={isFollowing ? 'Following' : 'Follow'}
                                             className={`w-5 h-5 ${isFollowing ? 'brightness-0 invert' : '[filter:invert(30%)_sepia(84%)_saturate(3451%)_hue-rotate(248deg)_brightness(92%)_contrast(96%)]'}`}
                                         />
-                                        <span className="text-lg font-semibold">{isFollowing ? 'Following' : 'Follow'}</span>
+                                        <span className="text-[length:var(--fs-subtitle1)] font-semibold">{isFollowing ? 'Following' : 'Follow'}</span>
                                     </button>
                                 </div>
                             </div>
@@ -213,7 +213,7 @@ const ReviewPage = () => {
                                 <div className="bg-white rounded-xl border border-gray-200 p-6">
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">AVERAGE RATING</h4>
                                     <div className="flex items-center gap-4 mb-4">
-                                        <span className="text-4xl font-bold text-violet-600">
+                                        <span className="text-[length:var(--fs-title1)] font-bold text-violet-600">
                                             {reviewMeta ? reviewMeta.reviewAverage.toFixed(1) : '0.0'}
                                         </span>
                                         <div className="flex flex-col gap-1">

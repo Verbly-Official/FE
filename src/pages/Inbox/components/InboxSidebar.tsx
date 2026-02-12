@@ -3,7 +3,6 @@ import { SearchBar } from '../../../components/SearchBar/SearchBar';
 import { Avatar } from '../../../components/Avatar/Avatar';
 import { Badge as ContentBadge } from '../../../components/Badge/ContentBadge';
 import { IconButton } from '../../../components/Button/IconButton';
-import { Text } from '../../../components/Text/Text';
 import { getChatrooms, searchChatrooms } from '../../../apis/chatrooms';
 import type { ChatroomListItem, ChatProfile } from '../../../types/chat';
 import ReloadIcon from '../../../assets/emoji/reload.svg';
@@ -79,10 +78,10 @@ export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSe
 
     return (
         <div className="w-full flex-shrink-0 flex flex-col border-r border-gray-200 h-full">
-            <div className="px-[30px] py-[24px] flex-shrink-0">
+            <div className="px-[30px] py-6 flex-shrink-0">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-[24px] font-bold text-gray-900">Chat</h1>
+                    <h1 className="text-[length:var(--fs-title1)] font-bold text-gray-900">Chat</h1>
                     <IconButton
                         iconSrc={ReloadIcon}
                         shape="round"
@@ -106,7 +105,7 @@ export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSe
                 {/* Section: Profile (Horizontal List) - Only show when searching and has results */}
                 {searchQuery && profileResults.length > 0 && (
                     <div className="mb-6">
-                        <span className="text-body2-medium14 text-gray-500 mb-3 block">프로필</span>
+                        <span className="text-[length:var(--fs-body2)] font-medium text-gray-500 mb-3 block">프로필</span>
                         <div className="flex items-center gap-4 overflow-x-auto pb-2 no-scrollbar">
                             {profileResults.map((profile) => (
                                 <div
@@ -115,7 +114,7 @@ export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSe
                                     onClick={() => onSelectChat(profile.chatroomId.toString())}
                                 >
                                     <Avatar src={profile.imageUrl} className="w-[48px] h-[48px]" />
-                                    <span className="text-[12px] font-bold text-gray-900">{profile.chatroomName}</span>
+                                    <span className="text-[length:var(--fs-button2)] font-bold text-gray-900">{profile.chatroomName}</span>
                                 </div>
                             ))}
                         </div>
@@ -123,7 +122,7 @@ export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSe
                 )}
 
                 {/* Section Header */}
-                <span className="text-body2-medium14 text-gray-500 mb-2 block">메세지</span>
+                <span className="text-[length:var(--fs-body2)] font-medium text-gray-500 mb-2 block">메세지</span>
             </div>
 
             {/* Scrollable List */}
@@ -153,20 +152,20 @@ export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSe
                                     {/* Content */}
                                     <div className="flex-1 min-w-0 flex flex-col gap-[10px]">
                                         <div className="flex items-center justify-between">
-                                            <Text size="medium" className="font-bold text-gray-900">{room.chatroomName}</Text>
-                                            <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
+                                            <span className="text-[length:var(--fs-subtitle2)] font-bold text-gray-900">{room.chatroomName}</span>
+                                            <span className="text-[length:var(--fs-button2)] text-gray-400 whitespace-nowrap ml-2">
                                                 {formatTime(room.chatMessageCreatedAt)}
                                             </span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <p className="text-gray-500 text-sm truncate pr-2">
+                                            <p className="text-[length:var(--fs-body2)] text-gray-500 truncate pr-2">
                                                 {room.chatMessage}
                                             </p>
                                             {room.unreadChatCount > 0 && (
                                                 <ContentBadge
                                                     content={room.unreadChatCount.toString()}
                                                     size="small"
-                                                    className="!bg-[#713DE3] !text-white !h-[20px] !px-[6px] !rounded-full !text-[11px] flex-shrink-0"
+                                                    className="!bg-[#713DE3] !text-white !h-[20px] !px-[6px] !rounded-full !text-[length:var(--fs-caption1)] flex-shrink-0"
                                                 />
                                             )}
                                         </div>

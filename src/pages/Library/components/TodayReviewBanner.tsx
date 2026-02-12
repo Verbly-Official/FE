@@ -38,19 +38,19 @@ export const TodayReviewBanner: React.FC<TodayReviewBannerProps> = ({ stats }) =
                 minHeight: '117px',
             }}
         >
-            <div className="flex flex-col gap-[8px] z-10">
-                <h2 className="text-title-bold28 text-white">Today's Review</h2>
-                <p className="text-btn-medium14 text-violet-100">
+            <div className="flex flex-col gap-2 z-10">
+                <h2 className="text-[length:var(--fs-title1)] font-bold text-white">Today's Review</h2>
+                <p className="text-[length:var(--fs-body2)] font-medium text-violet-100">
                     Keep up your streak! {stats.wordsRemaining} words remaining today
                 </p>
-                <div className="flex gap-[24px] mt-[8px]">
+                <div className="flex gap-6 mt-2">
                     <div className="flex flex-col">
-                        <span className="text-subtitle-semi24 text-white">{stats.accuracy}%</span>
-                        <span className="text-cap-medium11 text-white">Accuracy</span>
+                        <span className="text-[length:var(--fs-title1)] font-semibold text-white">{stats.accuracy}%</span>
+                        <span className="text-[length:var(--fs-caption1)] font-medium text-white">Accuracy</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-subtitle-semi24 text-white">{stats.totalSaved}</span>
-                        <span className="text-cap-medium11 text-white">Total Saved</span>
+                        <span className="text-[length:var(--fs-title1)] font-semibold text-white">{stats.totalSaved}</span>
+                        <span className="text-[length:var(--fs-caption1)] font-medium text-white">Total Saved</span>
                     </div>
                 </div>
             </div>

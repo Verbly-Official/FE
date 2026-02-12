@@ -27,14 +27,14 @@ export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({
     );
 
     return (
-        <div className="flex flex-col gap-[18px] w-full">
+        <div className="flex flex-col gap-4 w-full">
             <div className="flex justify-between items-end gap-[16px]">
                 <div className="flex flex-col gap-[2px]">
-                    <h3 className="text-title3-bold24 text-gray-9">My Library</h3>
-                    <p className="text-body-medium14 text-gray-7">
-                        <span className="font-regular">You have saved </span>
-                        <span className="text-btn1-semi14 text-violet-50">{filteredItems.length}</span>
-                        <span className="font-regular"> items.</span>
+                    <h3 className="text-[length:var(--fs-title1)] font-bold text-gray-9">My Library</h3>
+                    <p className="text-[length:var(--fs-body2)] font-medium text-gray-7">
+                        <span className="font-normal">You have saved </span>
+                        <span className="text-[length:var(--fs-body2)] font-semibold text-violet-50">{filteredItems.length}</span>
+                        <span className="font-normal"> items.</span>
                     </p>
                 </div>
                 <div className="flex items-center gap-[8px] flex-shrink-0">
@@ -58,7 +58,7 @@ export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({
                                 alt="filter"
                                 className="w-[20px] h-[20px]"
                             />
-                            <span className="text-violet-50 font-semibold text-btn1-semi14">Filter</span>
+                            <span className="text-violet-50 font-semibold text-[length:var(--fs-body2)]">Filter</span>
                         </div>
                     </TextButton>
                 </div>
@@ -80,7 +80,7 @@ export const MyLibrarySection: React.FC<MyLibrarySectionProps> = ({
                     </button>
                 </div>
             ) : filteredItems.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-[12px] w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
                     {filteredItems.map((item) => (
                         <WordCard
                             key={item.id}

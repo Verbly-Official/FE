@@ -65,10 +65,10 @@ const LibraryPage: React.FC = () => {
                 </div>
 
                 {/* Content Area - 반응형 */}
-                <div className="flex-1 flex flex-col lg:flex-row gap-[8px] lg:gap-[12px] px-[16px] md:px-[16px] lg:px-[20px] py-[20px] md:py-[24px] lg:py-[28px] overflow-y-auto">
+                <div className="flex-1 flex flex-col lg:flex-row gap-2 lg:gap-3 px-4 md:px-4 lg:px-5 py-5 md:py-6 lg:py-7 overflow-y-auto">
 
                     {/* Center Content */}
-                    <div className="flex-1 flex flex-col gap-[20px] md:gap-[24px] lg:gap-[28px] min-w-0">
+                    <div className="flex-1 flex flex-col gap-5 md:gap-6 lg:gap-7 min-w-0">
                         {/* Test Toggle Button */}
                         <button
                             onClick={() => setShowTest(!showTest)}
@@ -92,7 +92,7 @@ const LibraryPage: React.FC = () => {
                     </div>
 
                     {/* Right Sidebar - 반응형 (lg 이상에서만 표시) */}
-                    <div className="hidden lg:flex w-[260px] xl:w-[280px] flex-shrink-0 flex-col gap-[16px]">
+                    <div className="hidden lg:flex w-[260px] xl:w-[280px] flex-shrink-0 flex-col gap-4">
                         <UserStatsCard
                             userData={{
                                 id: 'viewer',
