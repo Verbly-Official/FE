@@ -50,7 +50,7 @@ export default function Home_Section({
   };
 
   return (
-    <div className="bg-white flex-1 p-[24px] w-full min-h-screen my-[32px] rounded-[12px] mx-[38px]">
+    <div className="bg-white flex-1 p-[24px] w-full min-h-screen rounded-[12px] ">
       {/* Tab */}
       <div className="flex mb-[28px] justify-start gap-0 border-b-[1px] border-line2">
         <Tabs
