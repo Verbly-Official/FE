@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Header } from '../../../components/Header/Header';
+import GNB from '../../../components/Nav/GNB';
 import SideMenu from '../../../components/Nav/SideMenu';
 import CircleProgress from '../../../components/ProgressIndicator/CircleProgress';
 import LinearProgress from '../../../components/ProgressIndicator/LinearProgress';
@@ -126,7 +126,7 @@ export const ReviewResultPage = () => {
   return (
     <div className="flex flex-col flex-1 bg-bg0 overflow-hidden">
       {/* Header */}
-      <Header />
+      <GNB variant="search" />
 
       {/* Main Content Wrapper */}
       <div className="flex flex-1 min-h-0 overflow-hidden">

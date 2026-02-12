@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SideMenu from '../../components/Nav/SideMenu';
-import { Header } from '../../components/Header/Header';
+import GNB from '../../components/Nav/GNB';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { Badge } from '../../components/Badge/ContentBadge';
 import { StarRating } from '../../components/Rating/StarRating';
@@ -80,7 +80,7 @@ const ProfilePage = () => {
 
     return (
         <div className="flex flex-col flex-1 bg-[#F8FAFC] overflow-hidden">
-            <Header />
+            <GNB variant="search" />
 
             <div className="flex flex-1 w-full overflow-hidden">
                 <SideMenu variant="default" />

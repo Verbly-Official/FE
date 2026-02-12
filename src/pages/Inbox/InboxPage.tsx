@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SideMenu from '../../components/Nav/SideMenu';
 
-import { Header } from '../../components/Header/Header';
+import GNB from '../../components/Nav/GNB';
 import { ChatRoomView } from './components/ChatRoomView';
 import { EmptyChatState } from './components/EmptyChatState';
 import { InboxSidebar } from './components/InboxSidebar';
@@ -16,7 +16,7 @@ const InboxPage = () => {
     return (
         <div className="flex flex-col h-screen bg-bg0">
             {/* 1. GNB */}
-            <Header />
+            <GNB variant="search" />
 
             {/* 2. Main Content Wrapper */}
             <div className="flex flex-1 overflow-hidden">
