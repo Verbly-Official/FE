@@ -43,7 +43,7 @@ export default function Home_Korean() {
         <div className={"w-full h-full bg-bg0 z-10 relative"}>
           <div className="flex w-full h-full">
             {/* 홈 내용 */}
-            <div className="flex-1 overflow-y-auto no-scrollbar mx-[38px] mt-[32px]">
+            <div className="flex-1 overflow-y-auto no-scrollbar mx-[38px] mt-[32px] no-scrollbar">
               <Home_Section
                 variant="kr"
                 refreshKey={refreshKey}

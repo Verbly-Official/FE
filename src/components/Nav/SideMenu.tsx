@@ -55,7 +55,7 @@ export default function SideMenu({
   switch (variant) {
     case "default":
       return (
-        <div className="w-[300px] min-h-screen px-[24px] py-[50px] flex flex-col gap-[28px] bg-white">
+        <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
           {menus.map((menu) => (
             <SideMenu_Tab
               key={menu.label}
@@ -68,7 +68,10 @@ export default function SideMenu({
             />
           ))}
 
-          <GradientButton onClick={onWriteClick} className="w-full whitespace-nowrap">
+          <GradientButton
+            onClick={onWriteClick}
+            className="w-full whitespace-nowrap"
+          >
             Write Post!
           </GradientButton>
         </div>
@@ -85,10 +88,11 @@ export default function SideMenu({
               className={`w-[56px] h-[56px] px-[16px] py-[16px]
               flex items-center justify-center
               rounded-[12px] cursor-pointer
-              ${location.pathname === menu.path
+              ${
+                location.pathname === menu.path
                   ? "bg-violet-100 border border-violet-50"
                   : "bg-transparent"
-                }
+              }
             `}
             >
               {renderIcon(menu.icon)}

@@ -15,6 +15,7 @@ import type { ViewerInfo, UuserInfo } from "../../types/home.ts";
 import type { PostItem } from "../../types/post.ts";
 import { getUserPosts } from "../../apis/post.ts";
 import { getViewerInfo, getUuserInfo } from "../../apis/home.ts";
+import Home_WriteModal from "../../components/Home/Home_WriteModal.tsx";
 
 export default function Home_Profile() {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export default function Home_Profile() {
   const [last, setLast] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
   useEffect(() => {
     const fetchViewer = async () => {
       try {
@@ -59,7 +62,7 @@ export default function Home_Profile() {
     };
     fetchPosts();
     fetchUuser();
-  }, [userId]);
+  }, [userId, refreshKey]);
 
   return (
     <div className="h-screen overflow-hidden">
@@ -69,7 +72,7 @@ export default function Home_Profile() {
       </div>
       <div>
         <div className="w-full flex flex-row justify-between h-[calc(100vh-60px)]">
-          <SideMenu onWriteClick={() => setModalOpen(true)} />
+          <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
           {/* 오버레이 가능 영역 */}
           <div className="w-full h-full bg-bg0 z-10 relative">
             <div className="flex w-full h-full">
@@ -83,7 +86,7 @@ export default function Home_Profile() {
                     className="w-[180px] h-[180px] object-cover shrink-0 rounded-full"
                   />
 
-                  <div className="w-[1072px] flex flex-col flex-start gap-[16px]">
+                  <div className="flex-1 flex flex-col flex-start gap-[16px]">
                     <div className="flex gap-[4px] flex-col">
                       <div className="flex flex-row gap-[12px] items-center">
                         <div className="font-bold text-[40px] leading-[40px]">
@@ -148,10 +151,9 @@ export default function Home_Profile() {
                   </div>
                 </div>
                 {/* Tabs */}
-                <div className="flex mb-[28px] justify-start gap-0 border-b-[1px] border-line2">
+                <div className="flex justify-start gap-0 border-b-[1px] border-line2">
                   <Tabs tabs={["Posts"]} />
                 </div>
-
                 <section className="p-[28px] flex flex-col gap-[20px]">
                   {posts.map((post) => (
                     <Home_Card
@@ -189,6 +191,26 @@ export default function Home_Profile() {
               </div>
             </div>
           </div>
+          {modalOpen && (
+            <>
+              <div
+                className="w-full absolute inset-0 bg-[rgba(0,0,0,0.40)] z-20"
+                onClick={() => setModalOpen(false)}
+              />
+              <div
+                className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Home_WriteModal
+                  variant="KOREAN"
+                  onClose={() => setModalOpen(false)}
+                  onPostCreated={() => {
+                    setRefreshKey((prev) => prev + 1);
+                  }}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
