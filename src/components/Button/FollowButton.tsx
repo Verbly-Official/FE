@@ -1,3 +1,4 @@
+// src/components/Button/FollowButton.tsx
 import { useState, useEffect } from 'react';
 import { followUser, unfollowUser } from '../../apis/follow'; 
 import personPlusIcon from '../../assets/emoji/person-plus.svg';
@@ -31,9 +32,7 @@ export default function FollowButton({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isLoading, setIsLoading] = useState(false);
 
-  // userId가 유효한지 확인 (없거나 0이면 false)
-  const isValidUserId = userId && userId > 0;
-
+  // [추가] 부모 컴포넌트에서 데이터 로딩 후 initialIsFollowing이 변경되면 상태 동기화
   useEffect(() => {
     setIsFollowing(initialIsFollowing);
   }, [initialIsFollowing]);
@@ -41,9 +40,9 @@ export default function FollowButton({
   const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // [수정] ID가 없으면 클릭 막기
-    if (!isValidUserId) {
-      console.warn("FollowButton: 유효하지 않은 userId입니다.");
+    // [수정] ID가 없으면 아예 동작하지 않도록 처리 (서버 요청 불가)
+    if (userId === undefined) {
+      console.error("FollowButton: userId is missing");
       return;
     }
 
@@ -52,21 +51,22 @@ export default function FollowButton({
     const previousState = isFollowing;
     const newState = !isFollowing;
     
+    // 낙관적 업데이트 (UI 먼저 변경)
     setIsFollowing(newState);
     if (onToggle) onToggle(newState);
-    setIsLoading(true);
 
+    setIsLoading(true);
     try {
       if (newState) {
-        await followUser(userId!);
+        await followUser(userId);
       } else {
-        await unfollowUser(userId!);
+        await unfollowUser(userId);
       }
     } catch (error) {
       console.error("Follow toggle failed:", error);
+      // 실패 시 롤백 (원래 상태로 복구)
       setIsFollowing(previousState);
       if (onToggle) onToggle(previousState);
-      alert("요청을 처리하는 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -74,27 +74,22 @@ export default function FollowButton({
 
   const stateStyles = isFollowing
     ? "bg-gray-3 text-gray-6"
-    : "bg-violet-50 text-white";
+    : "bg-violet-50 text-[var(--color-white)]";
 
-  // [수정] 비활성화(ID 없음) 상태 스타일
-  const disabledStyles = !isValidUserId 
-    ? "cursor-not-allowed bg-gray-2 text-gray-4" 
-    : "cursor-pointer";
-
-  const iconColorFilter = !isFollowing && isValidUserId ? "invert" : "";
+  // Tailwind의 invert 유틸리티 사용 (필터 효과)
+  const iconColorFilter = !isFollowing ? "invert" : "";
 
   return (
     <button
       onClick={handleClick}
-      // ID가 없거나 로딩 중이면 disabled 처리
-      disabled={!isValidUserId || isLoading}
+      disabled={isLoading}
       className={`
         flex justify-center items-center 
         font-medium transition-colors duration-200
         ${SIZE_STYLES[size]}
-        ${!isValidUserId ? disabledStyles : stateStyles}
+        ${stateStyles}
         ${className}
-        ${isLoading ? 'cursor-not-allowed' : ''}
+        ${isLoading ? 'opacity-80 cursor-not-allowed' : 'cursor-pointer'}
       `}
     >
       <img
