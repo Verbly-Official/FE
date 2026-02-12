@@ -1,4 +1,6 @@
 import { IconButton } from "../../components/Button";
+import CheckIcon from "../../src/assets/emoji/check-purple.svg";
+import CloseIcon from "../../src/assets/emoji/close.svg";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 
@@ -17,10 +19,7 @@ export default function Home_Notification() {
             {/* Section */}
             <div className="w-full flex flex-col gap-[12px]">
               <div className="flex flex-row gap-[8px] p-[4px] cursor-pointer">
-                <img
-                  src="../../src/assets/emoji/check-purple.svg"
-                  className="w-[24px] h-[24px]"
-                />
+                <img src={CheckIcon} className="w-[24px] h-[24px]" />
                 <div className="font-semibold text-violet-50 text-[length:var(--fs-subtitle1)]">
                   Mark All read
                 </div>
@@ -43,14 +42,8 @@ export default function Home_Notification() {
                   </div>
                   {/* IconButtons */}
                   <div className="flex flex-row gap-[28px]">
-                    <IconButton
-                      iconSrc={"../../src/assets/emoji/check-purple.svg"}
-                      ariaLabel="checkEmoji"
-                    />
-                    <IconButton
-                      iconSrc={"../../src/assets/emoji/close.svg"}
-                      ariaLabel="close"
-                    />
+                    <IconButton iconSrc={CheckIcon} ariaLabel="checkEmoji" />
+                    <IconButton iconSrc={CloseIcon} ariaLabel="close" />
                   </div>
                 </div>
 
@@ -69,14 +62,8 @@ export default function Home_Notification() {
                   </div>
                   {/* IconButtons */}
                   <div className="flex flex-row gap-[28px]">
-                    <IconButton
-                      iconSrc={"../../src/assets/emoji/check-purple.svg"}
-                      ariaLabel="checkEmoji"
-                    />
-                    <IconButton
-                      iconSrc={"../../src/assets/emoji/close.svg"}
-                      ariaLabel="close"
-                    />
+                    <IconButton iconSrc={CheckIcon} ariaLabel="checkEmoji" />
+                    <IconButton iconSrc={CloseIcon} ariaLabel="close" />
                   </div>
                 </div>
               </div>
