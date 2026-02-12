@@ -236,6 +236,7 @@ export const useProfileForm = (initialUser: User) => {
     user,
     setUser,
     previewImg,
+    setPreviewImg,
     emailId,
     setEmailId,
     emailDomain,

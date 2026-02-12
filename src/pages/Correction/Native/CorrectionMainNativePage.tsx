@@ -1,79 +1,109 @@
-import React, { useState } from "react";
-import GNB from "../../../components/Nav/GNB";
-import SideMenu from "../../../components/Nav/SideMenu";
+import React, { useEffect, useMemo, useState } from "react";
 import Tab from "../../../components/Tab/Tab";
-import { getNativeCorrections } from "../../../apis/correctionNative";
-import Sidebar from "../SideBar";
-import DocumentTable from "../DocumentTable";
+import Sidebar from "../components/SideBar";
+import DocumentTable, { type DocumentRow } from "../components/DocumentTable";
 import File from "../../../assets/emoji/file.svg?react";
 import { Pagination } from "../../../components/Pagination/Pagination";
+import { getNativeCorrections } from "../../../apis/correctionNative";
 
 const Correction_NMain = () => {
+  const SERVER_PAGE_IS_ZERO_BASED = true;
+
   const [page, setPage] = useState(1);
   const [selectedTab, setSelectedTab] = useState(0);
   const tabs = ["All", "Completed", "In Progress", "Pending"];
 
+  const [documents, setDocuments] = useState<DocumentRow[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const statusQuery = useMemo(() => {
+    if (selectedTab === 1) return "COMPLETED";
+    if (selectedTab === 2) return "IN_PROGRESS";
+    if (selectedTab === 3) return "PENDING";
+    return undefined;
+  }, [selectedTab]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [selectedTab]);
+
+  const PAGE_SIZE = 4;
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const apiPage = page - 1;
+
+        const params: any = {
+          page: apiPage,
+          size: PAGE_SIZE,
+          status: statusQuery,
+        };
+
+        const res = await getNativeCorrections(params);
+        const result = res?.result;
+
+        const nextDocs = Array.isArray(result?.content) ? result.content : [];
+
+        setTotalCount(Number(result?.totalElements ?? 0));
+        setTotalPages(Number(result?.totalPages ?? 1));
+
+        const rows: DocumentRow[] = nextDocs.map((item: any) => {
+          const statusText = item.status === "COMPLETED" ? "Completed" : item.status === "IN_PROGRESS" ? "In Progress" : item.status === "PENDING" ? "Pending" : String(item.status ?? "-");
+
+          return {
+            id: Number(item.correctionId),
+            title: item.title ?? "(no title)",
+            author: item.correctorName ?? "Native Speaker",
+            date: item.correctionCreatedAt ? new Date(item.correctionCreatedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "-",
+            status: statusText,
+            words: 0,
+            isStarred: Boolean(item.bookmark),
+          };
+        });
+
+        setDocuments(rows);
+      } catch (e) {
+        console.error(e);
+        setDocuments([]);
+        setTotalPages(1);
+        setTotalCount(0);
+      }
+    };
+
+    run();
+  }, [page, statusQuery]);
+
   return (
     <div className="min-h-screen">
-      {/* 1. GNB */}
-      <div className="w-full max-w-[1920px] mx-auto">
-        <GNB variant="home" />
-      </div>
-
-      {/* 2. 좌측 아이콘바 + 컨텐츠 */}
       <div className="flex w-full max-w-[1920px] mx-auto">
-        {/* 가장 왼쪽 사이드바(컴포넌트) */}
-        <SideMenu variant="small" />
-
-        {/* 컨텐츠 영역 */}
-        <div className="flex-1 min-w-0 px-[28px] py-[30px] bg-[#F8FAFC]">
-          <div className="flex min-w-0">
-            {/* 왼쪽 메뉴 카드 (고정폭 유지) */}
-            <div className="w-[250px] h-[940px] px-[20px] py-9 bg-white rounded-l-[12px] border border-r-0 border-[#E5E7EB] flex-shrink-0">
-              <Sidebar locale="en" />
+        <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
+          <div className="flex px-6 py-9 items-center gap-[20px] rounded-[12px] border border-[#D9D9D9] bg-white">
+            <div className="flex items-center gap-[10px] p-2 rounded-[8px] bg-[var(--Point-Blue-90,#E0EBFF)]">
+              <File className="w-[26.667px] h-[33.333px] text-[#353535]" />
             </div>
 
-            {/* 메인 카드 */}
-            <div
-              className="
-                flex-1 min-w-0
-                py-9
-                min-h-[940px]
-                rounded-r-[12px]
-                border border-[#E5E7EB]
-                bg-[#FBFBFB]
-                items-center
-                px-[clamp(48px,6vw,122px)]
-              "
-            >
-              <div className="flex px-6 py-9 items-center gap-[20px] rounded-[12px] border border-[#D9D9D9] bg-white">
-                <div
-                  className="flex items-center gap-[10px] p-2 rounded-[8px] bg-[var(--Point-Blue-90,#E0EBFF)]
-"
-                >
-                  <File className="w-[26.667px] h-[33.333px] text-[#353535] " />
-                </div>
-
-                <div>
-                  <div className="flex items-start text-[#9E9E9E] text-[17px] font-semibold leading-[100%] font-pretendard">Total Request</div>
-                  <div className="text-[#353535] font-pretendard text-4xl font-bold leading-none">24</div>
-                </div>
-              </div>
-
-              <div className="flex mt-8 overflow-x-auto whitespace-nowrap">
-                {tabs.map((label, index) => (
-                  <Tab key={index} label={label} isSelected={index === selectedTab} onClick={() => setSelectedTab(index)} />
-                ))}
-                <span className="w-full border-b border-[var(--Strok-line2,#ADADAD)]" />
-              </div>
-
-              <div className="w-full overflow-x-auto">
-                <div className="min-w-[900px]">{/* <DocumentTable /> */}</div>
-              </div>
-
-              <Pagination currentPage={page} totalPages={10} onChange={setPage} shape="num" className="flex items-center justify-center pt-[8px]" />
+            <div>
+              <div className="flex items-start text-[#9E9E9E] text-[17px] font-semibold leading-[100%] font-pretendard">Total Request</div>
+              <div className="text-[#353535] font-pretendard text-4xl font-bold leading-none">{totalCount}</div>
             </div>
           </div>
+
+          <div className="flex mt-8 overflow-x-auto whitespace-nowrap">
+            {tabs.map((label, index) => (
+              <Tab key={index} label={label} isSelected={index === selectedTab} onClick={() => setSelectedTab(index)} />
+            ))}
+            <span className="w-full border-b border-[var(--Strok-line2,#ADADAD)]" />
+          </div>
+
+          <div className="w-full overflow-x-auto">
+            <div className="min-w-[900px] mt-7">
+              <DocumentTable documents={documents} />
+            </div>
+          </div>
+
+          <Pagination currentPage={page - 1} totalPages={totalPages} onChange={(p) => setPage(p + 1)} shape="num" className="flex items-center justify-center pt-[8px]" />
         </div>
       </div>
     </div>

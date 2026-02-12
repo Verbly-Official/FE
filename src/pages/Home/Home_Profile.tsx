@@ -5,7 +5,7 @@ import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
 import { UserStatsCard } from "../Library/components/UserStatsCard";
-import MessageImg from "../../assets/emoji/mail-purple.svg";
+import MessageImg from "../../assets/emoji/mail-purple.svg?react";
 import CheckIcon from "../../assets/emoji/checkbox-rounded.svg";
 import { FollowButton, OutlinedButton } from "../../components/Button";
 import Tabs from "../../components/Tab/Tabs";
@@ -17,7 +17,7 @@ import { getUserPosts } from "../../apis/post.ts";
 import { getViewerInfo, getUuserInfo } from "../../apis/home.ts";
 
 export default function Home_Profile() {
-  const { uuid } = useParams();
+  const { userId } = useParams<{ userId: string }>();
 
   const [viewer, setViewer] = useState<ViewerInfo | null>(null);
   const [Uuser, setUuser] = useState<UuserInfo | null>(null);
@@ -39,10 +39,10 @@ export default function Home_Profile() {
   }, []);
 
   useEffect(() => {
-    if (!uuid) return;
+    if (!userId) return;
     const fetchPosts = async () => {
       try {
-        const data = await getUserPosts(uuid, 0);
+        const data = await getUserPosts(userId, 0);
         setPosts(data.content);
         setLast(data.last);
         setPage(data.number);
@@ -51,12 +51,12 @@ export default function Home_Profile() {
       }
     };
     const fetchUuser = async () => {
-      const data = await getUuserInfo(uuid);
+      const data = await getUuserInfo(userId);
       setUuser(data);
     };
     fetchPosts();
     fetchUuser();
-  }, [uuid]);
+  }, [userId]);
 
   return (
     <>
@@ -88,43 +88,43 @@ export default function Home_Profile() {
                         className="w-[48px] h-[48px] p-[3.33px]"
                       />
                     </div>
-                    <div className="text-[18px] text-gray-7 font-semibold">
+                    <div className="text-[length:var(--fs-subtitle1)] text-gray-7 font-semibold">
                       {Uuser?.nativeLang === "ko" ? "Korean" : "English"}
                     </div>
                   </div>
-                  <div className="w-[700px] h-auto text-[16px] leading-[24px]">
+                  <div className="w-[700px] h-auto text-[length:var(--fs-subtitle2)] leading-[24px]">
                     {Uuser?.description}
                   </div>
                   <div className="flex gap-[16px]">
                     <div className="flex gap-[4px] items-center">
-                      <span className="text-[18px] font-semibold">
+                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
                         {Uuser?.totalPosts}
                       </span>
-                      <span className="text-[16px] leading-[24px] text-gray-6">
+                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
                         Posts
                       </span>
                     </div>
                     <div className="flex gap-[4px] items-center">
-                      <span className="text-[18px] font-semibold">
+                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
                         {Uuser?.follower}
                       </span>
-                      <span className="text-[16px] leading-[24px] text-gray-6">
+                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
                         Follower
                       </span>
                     </div>
                     <div className="flex gap-[4px] items-center">
-                      <span className="text-[18px] font-semibold">
+                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
                         {Uuser?.following}
                       </span>
-                      <span className="text-[16px] leading-[24px] text-gray-6">
+                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
                         Follow
                       </span>
                     </div>
                     <div className="flex gap-[4px] items-center">
-                      <span className="text-[18px] font-semibold">
+                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
                         {Uuser?.correctionGiven}
                       </span>
-                      <span className="text-[16px] leading-[24px] text-gray-6">
+                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
                         Given Correct
                       </span>
                     </div>

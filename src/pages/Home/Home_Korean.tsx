@@ -3,7 +3,7 @@ import Home_WriteModal from "../../components/Home/Home_WriteModal.tsx";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
-import { UserStatsCard } from "./components/UserStatsCard.tsx";
+import { UserStatsCard } from "../../components/ProfileCard/UserStatsCard.tsx";
 
 import Home_Section from "./components/Home_Section.tsx";
 
@@ -29,22 +29,27 @@ export default function Home_Korean() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="h-screen overflow-hidden">
       {/*GNB*/}
       <div className="w-screen">
         <GNB variant="home" />
       </div>
 
-      <div className="w-full flex flex-row justify-between min-h-screen">
+      <div className="w-full flex flex-row justify-between h-[calc(100vh-60px)]">
         {/* 사이드메뉴 - 모달 열려도 가려지지 않음 */}
         <SideMenu onWriteClick={() => setModalOpen(true)} />
 
         {/* 오버레이 가능 영역 */}
-        <div className={"w-full min-h-screen bg-bg0 z-10 relative"}>
-          <div className="flex w-full">
+        <div className={"w-full h-full bg-bg0 z-10 relative"}>
+          <div className="flex w-full h-full">
             {/* 홈 내용 */}
-            <Home_Section variant="kr" refreshKey={refreshKey} />
-
+            <div className="flex-1 overflow-y-auto no-scrollbar mx-[38px] mt-[32px]">
+              <Home_Section
+                variant="kr"
+                refreshKey={refreshKey}
+                viewer={viewer}
+              />
+            </div>
             {/* 사이드 */}
             <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
               <UserStatsCard

@@ -120,3 +120,13 @@ body {
   --fs-caption1: 0.6875rem; /* 11 */
   --fs-caption2: 0.625rem; /* 10 */
 }
+
+/* 스크롤바 숨기기 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE */
+  scrollbar-width: none; /* Firefox */
+}

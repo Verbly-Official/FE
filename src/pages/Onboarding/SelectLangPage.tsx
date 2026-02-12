@@ -108,7 +108,7 @@ const SelectLangPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-5 py-10">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--color-white)] px-5 py-10">
       <div className="flex flex-col items-center w-full max-w-[500px] gap-10">
         <div className="flex flex-col items-center justify-center w-full mb-2">
           <Logo variant="hori" />
@@ -140,14 +140,15 @@ const SelectLangPage = () => {
           </div>
 
           {error && (
-            <div className="w-full p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="w-full p-3 bg-pink-100 border border-pink-20 rounded-lg">
+              <p className="text-[length:var(--fs-body2)] text-pink-20">{error}</p>
             </div>
           )}
           
+          {/* 유효성 경고 (text-orange-500 -> text-pink-20 통일) */}
           {!validation.isValid && nativeLang && learningLang && (
             <div className="w-full">
-               <p className="text-sm text-orange-500 text-center">
+               <p className="text-[length:var(--fs-body2)] text-pink-20 text-center">
                  {validation.error || '모국어와 학습 언어는 달라야 합니다.'}
                </p>
             </div>
