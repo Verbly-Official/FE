@@ -120,7 +120,7 @@ export default function Home_Profile() {
                               />
                             </div>
                             <div className="text-[length:var(--fs-subtitle1)] text-gray-7 font-semibold">
-                              {Uuser?.nativeLang === "ko"
+                              {Uuser?.nativeLang === "kr"
                                 ? "Korean"
                                 : "English"}
                             </div>
