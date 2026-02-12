@@ -1,5 +1,4 @@
 // src/types/home.ts
-
 import type { ApiResponse } from "./user";
 
 /**
@@ -15,6 +14,7 @@ export interface ViewerInfo {
   correctionReceived: number;
   level: string; // "LV1"
 }
+
 /**
  * 홈 화면 - 선택된 프로필 유저 정보
  * GET /api/home/users/{uuid}
@@ -30,6 +30,7 @@ export interface UuserInfo {
   isFollowing: boolean;
   correctionReceived: number;
   correctionGiven: number;
+  userId: number; // [수정] API 응답에 필수로 포함된다고 가정
 }
 
 /**

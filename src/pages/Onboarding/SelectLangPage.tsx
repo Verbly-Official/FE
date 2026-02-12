@@ -11,7 +11,7 @@ import { handleLogout, getMyProfileApi } from '../../apis/auth';
 import { getCookie, setCookie, clearOAuthInfoCookies } from '../../utils/cookieUtils';
 
 const LANGUAGE_OPTIONS = [
-  { label: '한국어', value: 'ko' },
+  { label: '한국어', value: 'kr' },
   { label: 'English', value: 'en' },
 ];
 
@@ -68,7 +68,7 @@ const SelectLangPage = () => {
         localStorage.setItem('learningLanguage', learningLang);
         localStorage.setItem('nativeLanguage', nativeLang);
 
-        const homePath = nativeLang === 'ko' ? '/home/korean' : '/home/native';
+        const homePath = nativeLang === 'kr' ? '/home/korean' : '/home/native';
         navigate(homePath, { replace: true });
       }
 
@@ -80,7 +80,7 @@ const SelectLangPage = () => {
           const profileRes = await getMyProfileApi();
           if (profileRes.isSuccess && profileRes.result.status === 'ACTIVE') {
             login(profileRes.result);
-            const homePath = profileRes.result.nativeLang === 'ko' ? '/home/korean' : '/home/native';
+            const homePath = profileRes.result.nativeLang === 'kr' ? '/home/korean' : '/home/native';
             navigate(homePath, { replace: true });
             return;
           }

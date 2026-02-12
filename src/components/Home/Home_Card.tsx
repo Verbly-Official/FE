@@ -132,6 +132,8 @@ export default function Home_Card({
               size="medium"
               data={{
                 id: post.uuid,
+                userId: post.userId,         // ✅ 추가
+                isFollowing: post.isFollowing, // ✅ 추가
                 name: post.nickname,
                 profileImg: post.userImageUrl,
                 bio: "",
@@ -243,6 +245,8 @@ export default function Home_Card({
               size="medium"
               data={{
                 id: post.uuid,
+                userId: post.userId,         // ✅ 추가
+                isFollowing: post.isFollowing, // ✅ 추가
                 name: post.nickname,
                 profileImg: post.userImageUrl,
                 bio: "",

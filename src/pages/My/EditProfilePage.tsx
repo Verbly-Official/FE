@@ -35,7 +35,7 @@ const EditProfilePage = () => {
   const {
     user,
     setUser,
-    previewImg, // 현재 보여지는 이미지 (미리보기)
+    previewImg,
     emailId,
     setEmailId,
     emailDomain,
@@ -55,13 +55,11 @@ const EditProfilePage = () => {
   } = useProfileForm(INITIAL_USER);
 
   // 초기 상태 저장용 state
-  // 페이지 로드 시점(또는 데이터 fetch 완료 시점)의 원본 데이터를 보관합니다.
   const [initialData, setInitialData] = useState<any>(null);
   const [isDirty, setIsDirty] = useState(false);
 
   // 1. 초기 데이터 로드 시점 캡처
   useEffect(() => {
-    // user.id가 있다는 것은 useProfileForm 내부에서 userInfo를 로드했다는 의미입니다.
     // 아직 초기 데이터가 설정되지 않았을 때 한 번만 저장합니다.
     if (user.id && !initialData) {
       setInitialData({
@@ -82,7 +80,6 @@ const EditProfilePage = () => {
     // 현재 상태와 초기 상태 비교
     const isNameChanged = user.name !== initialData.user.name;
     const isBioChanged = user.bio !== initialData.user.bio;
-    // 이미지 변경 여부는 previewImg가 초기값과 다른지로 판단 (새 파일 업로드 시 previewImg가 변경됨)
     const isImageChanged = previewImg !== initialData.previewImg;
     const isEmailIdChanged = emailId !== initialData.emailId;
     const isEmailDomainChanged = emailDomain?.value !== initialData.emailDomain?.value;
@@ -109,7 +106,7 @@ const EditProfilePage = () => {
         phone,
       });
       setIsDirty(false);
-      // navigate('/my'); // 필요 시 주석 해제
+      navigate(-1);
     }
   };
 
@@ -214,7 +211,6 @@ const EditProfilePage = () => {
                 variant="primary"
                 size="medium"
                 label="프로필 초기화"
-                // 변경사항이 없으면(isDirty === false) 비활성화
                 disabled={!isDirty} 
                 onClick={handleReset}
                 className="w-full sm:w-auto"

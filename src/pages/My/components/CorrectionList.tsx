@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Badge } from "../../../components/Badge/ContentBadge"; 
 import { getCorrections, type CorrectionItem } from '../../../apis/correction'; 
 
@@ -14,18 +15,19 @@ interface CorrectionListProps {
 }
 
 const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
+  const navigate = useNavigate();
   const [items, setItems] = useState<CorrectionItemData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // 1. Props로 전달된 데이터가 있으면 그것을 사용
+    // 1. Props로 데이터가 들어오면 우선 사용
     if (propData && propData.length > 0) {
       setItems(propData);
       setLoading(false);
       return;
     }
 
-    // 2. API 호출하여 데이터 가져오기
+    // 2. API 호출
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -33,23 +35,27 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
         const response = await getCorrections({ 
           sort: true 
         });
-        const mappedItems: CorrectionItemData[] = response.items.map((item: CorrectionItem) => ({
-          id: item.id,
-          title: item.title,
-          date: item.createdAt 
-            ? new Date(item.createdAt).toLocaleDateString('ko-KR', {
+
+        // [수정] Swagger 응답 구조(corrections 배열) 및 필드명(correctionId, correctionCreatedAt) 반영
+        // response가 { total: number, corrections: [...] } 형태라고 가정
+        const sourceData = response.corrections || [];
+
+        const mappedItems: CorrectionItemData[] = sourceData.map((item: CorrectionItem) => ({
+          id: item.correctionId ?? 0,
+          title: item.title ?? "제목 없음",
+          date: item.correctionCreatedAt 
+            ? new Date(item.correctionCreatedAt).toLocaleDateString('ko-KR', {
                 year: 'numeric',
                 month: '2-digit',
-                day: '2-digit'
-              }).replace(/\. /g, '.').replace('.', '')
-            : '',
-          status: item.status 
+                day: '2-digit',
+              }).replace(/\. /g, '.').slice(0, -1)
+            : 'Unknown Date',
+          status: item.status ?? 'PENDING'
         }));
 
         setItems(mappedItems);
       } catch (error) {
-        console.error("Correction history 조회 실패:", error);
-         setItems([]);
+        console.error("Failed to fetch corrections:", error);
       } finally {
         setLoading(false);
       }
@@ -58,23 +64,23 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
     fetchData();
   }, [propData]);
 
-  if (!loading && (!items || items.length === 0)) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 self-stretch py-10 md:py-16 border border-gray-2 rounded-xl bg-[var(--color-white)]">
-        <p className="text-gray-4 text-[length:var(--fs-body2)]">아직 받은 첨삭이 없습니다.</p>
-      </div>
-    );
-  }
-
   const getBadgeStyle = (status: string) => {
     switch (status) {
       case 'COMPLETED':
-        return { content: 'Completed', className: 'bg-green-100 text-green-800' };
+        return { content: 'Completed', className: 'bg-primary-5 text-primary-500' };
       case 'IN_PROGRESS':
-        return { content: 'In Progress', className: 'bg-blue-100 text-blue-800' };
-      default:
+        return { content: 'In Progress', className: 'bg-blue-50 text-blue-500' };
+      case 'PENDING':
         return { content: 'Pending', className: 'bg-gray-1 text-gray-8' };
+      case 'TEMP':
+        return { content: 'Temp', className: 'bg-gray-1 text-gray-5' };
+      default:
+        return { content: status, className: 'bg-gray-1 text-gray-8' };
     }
+  };
+
+  const handleItemClick = (id: number) => {
+    navigate(`/correction/${id}`); 
   };
 
   return (
@@ -85,6 +91,7 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
         return (
           <div
             key={item.id}
+            onClick={() => handleItemClick(item.id)}
             className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 md:p-6 gap-2 md:gap-3 w-full rounded-lg md:rounded-xl bg-[var(--color-white)] border border-gray-2 hover:shadow-sm transition-all duration-200 cursor-pointer"
           >
             <div className="flex flex-col w-full gap-1">
@@ -105,11 +112,8 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
         );
       })}
       
-      {loading && (
-         <div className="p-6 w-full rounded-xl bg-[var(--color-white)] border border-gray-2 animate-pulse">
-           <div className="h-5 bg-gray-2 rounded w-1/3 mb-2"></div>
-           <div className="h-4 bg-gray-1 rounded w-1/4"></div>
-         </div>
+      {!loading && items.length === 0 && (
+        <div className="p-6 text-center text-gray-5">작성된 첨삭 요청이 없습니다.</div>
       )}
     </div>
   );
