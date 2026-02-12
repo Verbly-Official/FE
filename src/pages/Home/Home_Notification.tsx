@@ -20,8 +20,8 @@ export default function Home_Notification() {
         <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
 
         <div className="flex-1 relative overflow-y-auto px-[38px] pt-[32px] pb-[40px] z-10">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="bg-white rounded-[12px] px-[59px] py-[60px] flex flex-col gap-[48px]">
+          <div className="max-w-[1200px]">
+            <div className="bg-white min-h-screen rounded-[12px] px-[59px] py-[60px] flex flex-col gap-[48px]">
               <div className="text-[40px] font-bold">Notification</div>
               {/* Section */}
               <div className="w-full flex flex-col gap-[12px]">

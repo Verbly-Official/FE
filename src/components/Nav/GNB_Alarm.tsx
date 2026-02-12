@@ -13,28 +13,32 @@ export default function GNB_Alarm() {
           Mark all read
         </span>
       </div>
-      {/* 연동하며 alarm 컴포넌트로 대체 필요 */}
-      <Alarm />
+      <div className="flex flex-col justify-between">
+        <div>
+          {/* 연동하며 alarm 컴포넌트로 대체 필요 */}
+          <Alarm />
 
-      <div className="flex flex-row items-center gap-[8px] w-[369px] h-[63px] px-[8px] py-[12px] border-b-[1px] border-gray-1">
-        <div className="w-[8px] h-[8px] bg-transparent rounded-[50px]" />
-        <div className="flex flex-col justify-center">
-          <div className="text-[16px]">David corrected your post.</div>
-          <div className="text-[14px] text-gray-5">5m ago</div>
+          <div className="flex flex-row items-center gap-[8px] w-[369px] h-[63px] px-[8px] py-[12px] border-b-[1px] border-gray-1">
+            <div className="w-[8px] h-[8px] bg-transparent rounded-[50px]" />
+            <div className="flex flex-col justify-center">
+              <div className="text-[16px]">David corrected your post.</div>
+              <div className="text-[14px] text-gray-5">5m ago</div>
+            </div>
+          </div>
+          <div className="flex flex-row items-center gap-[8px] w-[369px] h-[63px] px-[8px] py-[12px] border-b-[1px] border-gray-1">
+            <div className="w-[8px] h-[8px] bg-transparent rounded-[50px]" />
+            <div className="flex flex-col justify-center">
+              <div className="text-[16px]">Notice_System maintenance</div>
+              <div className="text-[14px] text-gray-5">5m ago</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row items-center gap-[8px] w-[369px] h-[63px] px-[8px] py-[12px] border-b-[1px] border-gray-1">
-        <div className="w-[8px] h-[8px] bg-transparent rounded-[50px]" />
-        <div className="flex flex-col justify-center">
-          <div className="text-[16px]">Notice_System maintenance</div>
-          <div className="text-[14px] text-gray-5">5m ago</div>
+        <div
+          onClick={() => navigate("/home/notification")}
+          className="text-center text-[14px] text-gray-6 font-medium cursor-pointer"
+        >
+          View all notifications
         </div>
-      </div>
-      <div
-        onClick={() => navigate("/home/notification")}
-        className="text-center text-[14px] text-gray-6 font-medium cursor-pointer"
-      >
-        View all notifications
       </div>
     </div>
   );
