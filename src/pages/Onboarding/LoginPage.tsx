@@ -5,6 +5,7 @@ import Logo from "../../components/Logo/Logo";
 import googleIcon from "../../assets/emoji/google.svg?react";
 import kakaoIcon from "../../assets/emoji/kakao.svg?react";
 import SolidButton from "../../components/Button/SolidButton";
+import onboardingImg from "./onboarding.png"; // 이미지 import
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -32,15 +33,23 @@ const LoginPage = () => {
 
   return (
     <div className="flex w-full h-screen bg-[var(--color-white)]">
-      <div className="w-[60%] h-full flex-shrink-0 bg-gray-1"></div>
+      {/* 왼쪽: 이미지 영역 (60% 비율) */}
+      <div className="w-[60%] h-full flex-shrink-0 overflow-hidden">
+        <img 
+          src={onboardingImg} 
+          alt="Onboarding"
+          className="w-full h-full object-cover" // 이미지가 영역을 꽉 채우도록 설정
+        />
+      </div>
 
+      {/* 오른쪽: 로그인 폼 영역 */}
       <div className="flex-1 h-full flex items-center justify-center">
         <div className="flex flex-col w-[460px] items-center gap-8">
           <div className="w-[144px] h-[40px] flex justify-center items-center cursor-pointer">
             <Logo variant="hori" />
           </div>
 
-          {/*에러 메세지 추후 삭제 예정*/}
+          {/* 에러 메세지 */}
           {errorMessage && (
             <div className="w-full p-4 bg-pink-100 border border-pink-20 rounded-lg">
               <p className="text-[length:var(--fs-body2)] text-pink-20 text-center">{errorMessage}</p>
