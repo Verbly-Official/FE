@@ -111,15 +111,13 @@ export default function Home_Card({
     if (diff < 60) return "just now";
 
     const minutes = Math.floor(diff / 60);
-    if (minutes < 60) return `${minutes}min`;
+    if (minutes < 60) return `${minutes} min`;
 
     const hours = Math.floor(diff / 3600);
-    if (hours < 24) return hours === 1 ? "1hour" : `${hours}hours`;
+    if (hours < 24) return hours === 1 ? "1 hour" : `${hours} hours`;
 
     const days = Math.floor(diff / 86400);
-    return days === 1 ? "1day" : `${days}days`;
-
-    return past.toLocaleDateString("ko-KR");
+    return days === 1 ? "1 day" : `${days} days`;
   };
 
   switch (varient) {
