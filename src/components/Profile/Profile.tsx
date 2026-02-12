@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { type User, type UserInfo } from '../../types/user';
 import { Badge } from '../Badge/ContentBadge';
 import FollowButton from '../Button/FollowButton';
@@ -8,6 +9,9 @@ import MediumProfile from './img/medium.svg';
 import LargeProfile from './img/large.svg';
 
 type ProfileData = Partial<User> & Partial<UserInfo> & {
+  id?: number | string;
+  userId?: number | string;
+  writerId?: number | string;
   badges?: string;
   lastActive?: string;
   introduction?: string;
@@ -39,6 +43,12 @@ export const UserProfile: React.FC<ProfileProps> = ({
   onFollow,
   className = '',
 }) => {
+  const navigate = useNavigate();
+  
+  // ID 추출 (없으면 undefined)
+  const rawId = data.userId ?? data.id ?? data.writerId;
+  const targetUserId = rawId ? Number(rawId) : undefined;
+
   const displayName = data.nickname || data.name || "User";
   const displayImage = data.profileImage || data.profileImg;
   const displayBio = data.bio || data.introduction;
@@ -53,12 +63,22 @@ export const UserProfile: React.FC<ProfileProps> = ({
     setImgSrc(DEFAULT_IMAGES[size]);
   };
 
+  const handleMoveToProfile = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (targetUserId) {
+      navigate(`/home/profile/${targetUserId}`);
+    } else {
+      navigate('/home/profile');
+    }
+  };
+
   const renderImage = () => (
     <img
       src={imgSrc}
       alt={`${displayName} profile`}
       onError={handleError}
-      className="rounded-full object-cover bg-gray-1 flex-shrink-0"
+      onClick={handleMoveToProfile}
+      className="rounded-full object-cover bg-gray-1 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity"
       style={{ width: IMG_PIXELS[size], height: IMG_PIXELS[size] }}
     />
   );
@@ -69,7 +89,12 @@ export const UserProfile: React.FC<ProfileProps> = ({
       <div className={`flex items-center gap-3 ${className}`}>
         {renderImage()}
         <div className="flex flex-col">
-          <span className="font-bold text-[length:var(--fs-subtitle2)] text-gray-9">{displayName}</span>
+          <span 
+            onClick={handleMoveToProfile}
+            className="font-bold text-[length:var(--fs-subtitle2)] text-gray-9 cursor-pointer hover:underline"
+          >
+            {displayName}
+          </span>
           {displayBio && (
             <span className="text-[length:var(--fs-body2)] text-gray-5 line-clamp-1">
               {displayBio}
@@ -87,15 +112,21 @@ export const UserProfile: React.FC<ProfileProps> = ({
         {renderImage()}
         <div className="flex flex-col flex-1">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-[length:var(--fs-subtitle1)] text-gray-9">{displayName}</span>
+            <span 
+              onClick={handleMoveToProfile}
+              className="font-bold text-[length:var(--fs-subtitle1)] text-gray-9 cursor-pointer hover:underline"
+            >
+              {displayName}
+            </span>
           </div>
           {data.lastActive && (
             <span className="text-[length:var(--fs-body2)] text-gray-4">{data.lastActive}</span>
           )}
         </div>
-        
+    
         <FollowButton 
-          userId={data.userId} 
+          key={targetUserId}
+          userId={targetUserId} 
           initialIsFollowing={data.isFollowing} 
           onToggle={onFollow}
         />
@@ -108,7 +139,11 @@ export const UserProfile: React.FC<ProfileProps> = ({
     <div className={`flex flex-col items-center gap-4 text-center ${className}`}>
       {renderImage()}
       <div>
-        <h2 className="text-[length:var(--fs-title1)] font-bold text-gray-9">{displayName}</h2>
+        <h2 
+          className="text-[length:var(--fs-title1)] font-bold text-gray-9 cursor-pointer hover:text-gray-7 transition-colors"
+        >
+          {displayName}
+        </h2>
         <div className="flex items-center justify-center gap-2 mt-1">
           {data.level !== undefined && (
             <span className="text-[length:var(--fs-subtitle2)] text-gray-6">LV.{data.level}</span>
