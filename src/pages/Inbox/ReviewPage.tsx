@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SideMenu from '../../components/Nav/SideMenu';
-import { Header } from '../../components/Header/Header';
+import GNB from '../../components/Nav/GNB';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { Badge } from '../../components/Badge/ContentBadge';
 import { StarRating } from '../../components/Rating/StarRating';
@@ -114,7 +114,7 @@ const ReviewPage = () => {
 
     return (
         <div className="flex flex-col flex-1 bg-[#F8FAFC] overflow-hidden">
-            <Header />
+            <GNB variant="search" />
 
             <div className="flex flex-1 w-full overflow-hidden">
                 <SideMenu variant="default" />
@@ -149,8 +149,8 @@ const ReviewPage = () => {
                                     <button
                                         onClick={() => setIsFollowing(!isFollowing)}
                                         className={`h-[48px] px-8 border border-violet-50 rounded-[8px] flex items-center gap-2 transition-colors ${isFollowing
-                                                ? 'bg-violet-50 text-white hover:bg-violet-600'
-                                                : 'bg-white text-violet-50 hover:bg-violet-50'
+                                            ? 'bg-violet-50 text-white hover:bg-violet-600'
+                                            : 'bg-white text-violet-50 hover:bg-violet-50'
                                             }`}
                                     >
                                         <img

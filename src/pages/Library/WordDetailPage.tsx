@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Header } from '../../components/Header/Header';
+import GNB from '../../components/Nav/GNB';
 import SideMenu from '../../components/Nav/SideMenu';
 import InfoIcon from '../../assets/emoji/info.svg';
 import { getLibraryItemDetail } from '../../apis/library';
@@ -123,7 +123,7 @@ export const WordDetailPage = () => {
   return (
     <div className="flex flex-col flex-1 bg-bg0 overflow-hidden">
       {/* Header */}
-      <Header />
+      <GNB variant="search" />
 
       {/* Main Content Wrapper */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
