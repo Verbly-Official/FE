@@ -1,6 +1,7 @@
 import instance from "./axios";
 import type { PostSliceResponse } from "../types/post";
 import type { ApiResponse } from "../types/user";
+import axios from "./axios";
 
 export const getPosts = async (page: number, size: number = 10) => {
   const res = await instance.get<PostSliceResponse>("/api/posts", {
@@ -22,7 +23,7 @@ export const getHotPosts = async () => {
 export const getUserPosts = async (
   uuid: string,
   page: number,
-  size: number = 10
+  size: number = 10,
 ) => {
   const res = await instance.get(`/api/posts/${uuid}`, {
     params: {
@@ -51,5 +52,15 @@ export type CreatePostResponse = ApiResponse<CreatePostResult>;
 export const createPost = async (body: CreatePostRequest) => {
   const res = await instance.post<CreatePostResponse>("/api/posts/home", body);
 
+  return res.data.result;
+};
+
+export const addLike = async (postId: number) => {
+  const res = await axios.post(`/api/posts/${postId}/like`);
+  return res.data.result;
+};
+
+export const removeLike = async (postId: number) => {
+  const res = await axios.delete(`/api/posts/${postId}/like`);
   return res.data.result;
 };
