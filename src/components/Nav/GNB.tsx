@@ -9,7 +9,7 @@ export default function GNB({ variant = "default" }) {
   const [isOpen, setOpen] = useState<boolean>(false);
 
   return (
-    <div className="w-full h-[60px] bg-white px-[40px] py-[8px] shadow-[0_4px_8px_rgba(0,0,0,0.08)]">
+    <div className="relative z-30 w-full h-[60px] bg-white px-[40px] py-[8px] shadow-[0_4px_8px_rgba(0,0,0,0.08)]">
       <div className="flex items-center justify-between h-full">
         <div className="flex-none">
           <Logo variant="hori" />

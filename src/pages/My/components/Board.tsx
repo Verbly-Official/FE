@@ -42,22 +42,22 @@ const Board: React.FC<RecentCountCardProps> = ({
   const displayCount = propCount !== undefined ? propCount : fetchedCount;
 
   return (
-    <div className="w-full bg-white rounded-xl md:rounded-2xl border border-gray-200 p-4 md:p-6 flex items-center justify-between gap-4">
+    <div className="w-full bg-[var(--color-white)] rounded-xl md:rounded-2xl border border-gray-2 p-4 md:p-6 flex items-center justify-between gap-4">
       <div className="flex flex-col gap-1">
-        <p className="text-xs md:text-sm text-gray-600 font-medium">
+        <p className="text-[length:var(--fs-body2)] text-gray-6">
           {title}
         </p>
-        <p className="text-2xl md:text-3xl font-bold text-gray-900">
+        <p className="text-[length:var(--fs-title1)] font-bold text-gray-9">
           {loading && propCount === undefined ? (
-            <span className="inline-block w-8 h-8 bg-gray-100 rounded animate-pulse align-middle" />
+            <span className="inline-block w-8 h-8 bg-gray-1 rounded animate-pulse align-middle" />
           ) : (
             displayCount
           )}
-          <span className="text-lg md:text-2xl ml-1 font-normal text-gray-500">{unit}</span>
+          <span className="text-[length:var(--fs-subtitle1)] ml-1 font-normal text-gray-5">{unit}</span>
         </p>
       </div>
 
-      <div className="w-20 h-16 sm:w-24 sm:h-18 md:w-32 md:h-20 rounded-lg md:rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-gray-50">
+      <div className="w-20 h-16 sm:w-24 sm:h-18 md:w-32 md:h-20 rounded-lg md:rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-gray-1">
         {imageSrc ? (
           <img 
             src={imageSrc} 
@@ -65,7 +65,7 @@ const Board: React.FC<RecentCountCardProps> = ({
             className="w-full h-full object-contain"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+          <div className="w-full h-full bg-[var(--color-bg0)] flex items-center justify-center">
           </div>
         )}
       </div>

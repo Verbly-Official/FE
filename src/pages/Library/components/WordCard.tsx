@@ -4,18 +4,20 @@ import { useNavigate } from 'react-router-dom';
 interface WordCardProps {
     word: string;
     translation: string;
+    itemId?: number;
 }
 
-export const WordCard: React.FC<WordCardProps> = ({ word, translation }) => {
+export const WordCard: React.FC<WordCardProps> = ({ word, translation, itemId }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        // URL 인코딩하여 단어를 파라미터로 전달
-        navigate(`/library/word/${encodeURIComponent(word)}`);
+        if (itemId) {
+            navigate(`/library/${itemId}`);
+        }
     };
 
     return (
-        <div 
+        <div
             onClick={handleClick}
             className="bg-white p-[24px] h-[112px] rounded-[12px] border border-line1 flex flex-col justify-center gap-[11.5px] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer"
         >

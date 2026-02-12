@@ -1,29 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// 컴포넌트
 import GNB from '../../components/Nav/GNB';
 import SideMenu from '../../components/Nav/SideMenu';
 import OutlinedButton from '../../components/Button/OutlinedButton';
 import { IconButton } from '../../components/Button';
 import { Toast } from '../../components/Toast/Toast';
-
-// 페이지 전용 컴포넌트
 import { ProfileImageSection } from './components/ProfileImageSection';
 import { ProfileInfoForm } from './components/ProfileInfoForm';
 import { EmailForm } from './components/EmailForm';
 import { PhoneVerificationForm } from './components/PhoneVerificationForm';
-
-// Custom Hook
 import { useProfileForm } from './hooks/useProfileForm';
-
-// 타입 & 상수
 import type { User } from '../../types/user';
 import type { Option } from '../../components/Select/Select';
 import PersonIcon from '../../assets/emoji/person.svg';
 import CloseIcon from '../../assets/emoji/close.svg';
 
-// 초기값 (API 로딩 전 잠시 보여질 값)
 const INITIAL_USER: User = {
   id: "",
   name: "",
@@ -41,7 +32,6 @@ const EMAIL_OPTIONS: Option[] = [
 const EditProfilePage = () => {
   const navigate = useNavigate();
   
-  // Hook 사용
   const {
     user,
     setUser,
@@ -64,81 +54,130 @@ const EditProfilePage = () => {
     validateAndSave,
   } = useProfileForm(INITIAL_USER);
 
-  // ✅ 저장 핸들러 (비동기 처리)
+  // 초기 상태 저장용 state
+  const [initialData, setInitialData] = useState<any>(null);
+  const [isDirty, setIsDirty] = useState(false);
+
+  // 1. 초기 데이터 로드 시점 캡처
+  useEffect(() => {
+    // 아직 초기 데이터가 설정되지 않았을 때 한 번만 저장합니다.
+    if (user.id && !initialData) {
+      setInitialData({
+        user: { ...user },
+        previewImg,
+        emailId,
+        emailDomain,
+        customEmailDomain,
+        phone,
+      });
+    }
+  }, [user, previewImg, emailId, emailDomain, customEmailDomain, phone, initialData]);
+
+  // 2. 변경 사항 감지 (Dirty Check)
+  useEffect(() => {
+    if (!initialData) return;
+
+    // 현재 상태와 초기 상태 비교
+    const isNameChanged = user.name !== initialData.user.name;
+    const isBioChanged = user.bio !== initialData.user.bio;
+    const isImageChanged = previewImg !== initialData.previewImg;
+    const isEmailIdChanged = emailId !== initialData.emailId;
+    const isEmailDomainChanged = emailDomain?.value !== initialData.emailDomain?.value;
+    const isCustomDomainChanged = customEmailDomain !== initialData.customEmailDomain;
+    const isPhoneChanged = phone !== initialData.phone;
+
+    const hasChanges = isNameChanged || isBioChanged || isImageChanged || 
+                       isEmailIdChanged || isEmailDomainChanged || 
+                       isCustomDomainChanged || isPhoneChanged;
+
+    setIsDirty(hasChanges);
+  }, [user, previewImg, emailId, emailDomain, customEmailDomain, phone, initialData]);
+
+  // 3. 저장 핸들러
   const handleSave = async () => {
-    // API 호출이 완료될 때까지 기다립니다.
     const savedData = await validateAndSave(); 
     if (savedData) {
-      // 저장이 성공했을 때 추가적인 동작(예: 페이지 이동)이 필요하면 여기에 작성하세요.
-      // 예: navigate('/my');
+       setInitialData({
+        user: { ...user },
+        previewImg,
+        emailId,
+        emailDomain,
+        customEmailDomain,
+        phone,
+      });
+      setIsDirty(false);
+      navigate(-1);
     }
   };
 
-  const handleCancel = () => {
+  // 4. 취소(뒤로가기) 핸들러
+  const handleQuit = () => {
       navigate(-1);
   };
 
+  // 초기화 핸들러
+  const handleReset = () => {
+    if (!initialData) return;
+
+    // 모든 상태를 초기 데이터로 복구
+    setUser(initialData.user);
+    setEmailId(initialData.emailId);
+    setEmailDomain(initialData.emailDomain);
+    setCustomEmailDomain(initialData.customEmailDomain);
+    setPhone(initialData.phone);
+  };
+
   return (
-    // ✅ [레이아웃 수정] 전체 페이지 래퍼 (스크롤 및 높이 설정 통일)
-    <div className="w-full bg-[#F8FAFC] flex flex-col flex-1 overflow-hidden min-h-screen">
-      {/* Header */}
+    <div className="w-full bg-bg0 flex flex-col flex-1 overflow-hidden min-h-screen">
       <GNB />
       
-      {/* Main Content Wrapper */}
       <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
-        
-        {/* Left Sidebar */}
         <SideMenu variant="default" />
 
-        {/* Page Content */}
-        {/* ✅ [레이아웃 수정] main 영역에 스크롤 적용 */}
         <main className="flex-1 flex flex-col overflow-y-auto">
-          
-          {/* ✅ [레이아웃 수정] 내부 컨테이너 너비 제한 (max-w-[1800px]) 및 패딩 적용 */}
           <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 relative">
             
-            {/* Quit Button */}
             <div className="flex items-center gap-2 mb-6 md:mb-8 lg:mb-[40px]">
               <IconButton 
                 iconSrc={CloseIcon} 
                 ariaLabel='quit'
                 size="small" 
                 shape="square" 
-                onClick={handleCancel} 
+                onClick={handleQuit} 
               />
-              <span className='text-sm md:text-[14px] text-gray-500'>Quit</span>
+              <span className='text-[length:var(--fs-body2)] text-gray-5'>Quit</span>
             </div>
 
-            {/* Title */}
             <div className="mb-6 md:mb-8 lg:mb-[32px]">
-              <h1 className="text-xl md:text-2xl lg:text-[28px] font-bold text-gray-900 flex items-center gap-2 mb-2 lg:mb-[8px]">
+              <h1 className="text-[length:var(--fs-title1)] font-bold text-gray-9 flex items-center gap-2 mb-2 lg:mb-[8px]">
                 <img src={PersonIcon} alt="icon" className="w-6 h-6 md:w-7 md:h-7 lg:w-[28px] lg:h-[28px]" />
                 프로필 수정
               </h1>
-              <p className='text-xs md:text-sm lg:text-[14px] text-gray-500'>
+              <p className='text-[length:var(--fs-body2)] text-gray-5'>
                 {user.name || 'User'} 프로필 관리
               </p>
             </div>
 
-            {/* Main Cards */}
             <div className='flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-[24px] mb-8 md:mb-10 lg:mb-[40px]'>
               
-              {/* Profile Card */}
-              <div className="flex-1 bg-white rounded-xl md:rounded-2xl lg:rounded-[24px] px-6 md:px-8 lg:px-[40px] py-8 md:py-10 lg:py-[48px] shadow-sm border border-gray-100">
+              <div className="flex-1 bg-[var(--color-white)] rounded-xl md:rounded-2xl lg:rounded-[24px] px-6 md:px-8 lg:px-[40px] py-8 md:py-10 lg:py-[48px] shadow-sm border border-gray-1">
+                {/* 키(key) prop을 사용하여 초기화 시 컴포넌트를 강제로 리마운트 시킬 수도 있습니다. 
+                   initialData가 변경될 때마다(사실상 리셋 시) 리렌더링
+                */}
                 <ProfileImageSection 
+                  key={initialData ? 'loaded' : 'loading'} 
                   previewImg={previewImg}
                   onImageUpload={handleImageUpload}
                 />
                 <ProfileInfoForm
                   name={user.name}
-                  introduction={user.bio} // User 타입의 bio를 introduction props로 전달
+                  introduction={user.bio}
                   onNameChange={(value) => setUser({ ...user, name: value })}
                   onIntroChange={(value) => setUser({ ...user, bio: value })}
                 />
               </div>
 
-              {/* Contact Card */}
-              <div className="flex-1 bg-white rounded-xl md:rounded-2xl lg:rounded-[24px] px-6 md:px-8 lg:px-[40px] py-8 md:py-10 lg:py-[48px] shadow-sm border border-gray-100">
+              <div className="flex-1 bg-[var(--color-white)] rounded-xl md:rounded-2xl lg:rounded-[24px] px-6 md:px-8 lg:px-[40px] py-8 md:py-10 lg:py-[48px] shadow-sm border border-gray-1">
                 <EmailForm
                   emailId={emailId}
                   emailDomain={emailDomain}
@@ -160,7 +199,6 @@ const EditProfilePage = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row justify-end gap-3 md:gap-4 lg:gap-[16px]">
               <OutlinedButton 
                 variant="primary"
@@ -173,8 +211,8 @@ const EditProfilePage = () => {
                 variant="primary"
                 size="medium"
                 label="프로필 초기화"
-                disabled={false}
-                onClick={handleCancel} // 필요에 따라 초기화 로직 별도 구현 가능
+                disabled={!isDirty} 
+                onClick={handleReset}
                 className="w-full sm:w-auto"
               />
             </div>
@@ -183,7 +221,6 @@ const EditProfilePage = () => {
         </main>
       </div>
 
-      {/* Toast Message */}
       {toastMessage && (
         <div className="fixed top-20 md:top-[100px] left-1/2 transform -translate-x-1/2 z-50 px-4 w-full max-w-md">
           <Toast 

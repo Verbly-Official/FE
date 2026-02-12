@@ -121,10 +121,12 @@ body {
   --fs-caption2: 0.625rem; /* 10 */
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE/Edge */
-  scrollbar-width: none; /* Firefox */
+/* 스크롤바 숨기기 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE */
+  scrollbar-width: none; /* Firefox */
 }

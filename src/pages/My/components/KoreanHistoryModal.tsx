@@ -23,7 +23,6 @@ export default function KoreanHistoryModal({
   if (!data) return null;
 
   const modalContent = {
-    // ✅ [수정] introduction -> bio 로 변경 (User 타입 정의 일치)
     student: {
       id: userInfo?.userId.toString() || 'guest',
       name: userInfo?.nickname || 'Guest',

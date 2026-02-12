@@ -9,7 +9,7 @@ import InboxIcon from "../../assets/emoji/message1.svg";
 import ProfileIcon from "../../assets/emoji/person.svg";
 
 interface SideMenuProps {
-  variant?: "default" | "small";
+  variant?: "default" | "small" | "profile";
   onWriteClick?: () => void;
 }
 
@@ -68,7 +68,12 @@ export default function SideMenu({
             />
           ))}
 
-          <GradientButton onClick={onWriteClick}>Write Post!</GradientButton>
+          <GradientButton
+            onClick={onWriteClick}
+            className="w-full whitespace-nowrap"
+          >
+            Write Post!
+          </GradientButton>
         </div>
       );
     case "small":
@@ -92,6 +97,22 @@ export default function SideMenu({
             >
               {renderIcon(menu.icon)}
             </div>
+          ))}
+        </div>
+      );
+    case "profile":
+      return (
+        <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
+          {menus.map((menu) => (
+            <SideMenu_Tab
+              key={menu.label}
+              label={menu.label}
+              isSelected={location.pathname === menu.path}
+              onClick={() => {
+                navigate(menu.path);
+              }}
+              icon={renderIcon(menu.icon)}
+            />
           ))}
         </div>
       );

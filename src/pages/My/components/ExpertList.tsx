@@ -6,7 +6,7 @@ import KoreanHistoryModal from './KoreanHistoryModal';
 import ExpertHistoryModal from './ExpertHistoryModal';
 import FileIcon from '../../../assets/emoji/file.svg';
 import ChevIcon from '../../../assets/emoji/chev-right.svg';
-import { getNativeCorrections } from '../../../apis/correctionNative'; 
+import { getCorrections, type CorrectionItem } from '../../../apis/correction'; 
 
 interface ExpertItem {
   id: number;
@@ -32,22 +32,37 @@ const ExpertList: React.FC<ExpertListProps> = ({ modalType = 'native' }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // API 호출 부분 (기존과 동일)
-        const response = await getNativeCorrections({ page: 1, size: 6 });
-        const mappedItems: ExpertItem[] = Array.isArray(response) ? response.map((item: any) => ({
-          id: item.id,
-          expertName: item.correctorName || 'Unknown Expert',
-          location: item.correctorLocation || 'Global',
-          status: item.status || 'COMPLETED',
-          title: item.title,
-          originalText: item.originalText,
-          correctedText: item.correctedText,
-          comment: item.comment
-        })) : [];
+        // [수정] Swagger 명세에 따라 파라미터명 변경 (corrector -> correctorType)
+        const response = await getCorrections({ 
+          sort: true,
+          correctorType: 'NATIVE_SPEAKER' 
+        });
+
+        // [수정] 응답 구조 변경 대응 (result.corrections 사용)
+        // getCorrections API 함수가 'result' 객체를 반환한다고 가정
+        const sourceData = response.corrections || [];
+
+        const mappedItems: ExpertItem[] = sourceData.map((item: CorrectionItem) => ({
+          // [수정] API 필드 매핑 (correctionId, correctorName 등)
+          id: item.correctionId ?? 0, 
+          expertName: item.correctorName ?? 'Native Expert', 
+          location: 'Global', // API에 지역 정보가 없다면 기본값 설정
+          status: item.status ?? 'PENDING',
+          imageUrl: undefined, // 프로필 이미지가 없다면 undefined (DefaultProfile 사용됨)
+          title: item.title ?? '',
+          
+          // [주의] 목록 API에는 상세 내용(originalText, correctedText)이 포함되지 않는 경우가 많습니다.
+          // 상세 내용은 "개별 조회 API"를 통해 가져오거나, 목록 API에 포함되어 있다면 해당 필드를 매핑해야 합니다.
+          // 현재는 빈 값으로 처리합니다.
+          originalText: '', 
+          correctedText: '',
+          comment: '' 
+        }));
+
         setItems(mappedItems);
       } catch (error) {
         console.error("전문가 의뢰 내역 조회 실패:", error);
-        setItems([]); // 에러 발생 시 빈 배열로 설정
+        setItems([]);
       }
     };
     fetchData();
@@ -65,11 +80,10 @@ const ExpertList: React.FC<ExpertListProps> = ({ modalType = 'native' }) => {
 
   return (
     <>
-      {/* ✅ [수정 1] 컨테이너에 shadow-sm 추가 (BadgeSection과 통일) */}
-      <div className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6">
+      <div className="w-full bg-[var(--color-white)] rounded-xl shadow-sm border border-gray-2 p-4 md:p-6">
         <div className="flex justify-start items-center mb-4 md:mb-6 gap-[8px]">
-          <img src={FileIcon} alt="icon" className="w-6 h-6 md:w-8 md:h-8" />
-          <h3 className="text-lg md:text-[20px] text-gray-9">전문가 의뢰 관리</h3>
+          <img src={FileIcon} alt="icon" className="w-6 h-6" />
+          <h3 className="text-[length:var(--fs-subtitle1)] text-gray-9">전문가 의뢰 관리</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"> 
@@ -77,22 +91,20 @@ const ExpertList: React.FC<ExpertListProps> = ({ modalType = 'native' }) => {
             items.map((item) => (
               <div 
                 key={item.id} 
-                // w-[272px] h-[192px] 고정 크기 유지
                 className="
-                  bg-white border border-gray-100 rounded-xl 
+                  bg-[var(--color-white)] border border-gray-2 rounded-xl 
                   flex flex-col items-start 
-                  w-[272px] h-[192px] 
+                  w-full sm:w-[272px] h-[192px] 
                   p-3 transition-all group cursor-pointer hover:shadow-md
                   flex-shrink-0
                 "
               >
-                {/* 카드 내용 (기존과 동일) */}
-                <div className="relative w-full h-[100px] flex-none rounded-lg overflow-hidden bg-gray-50 mb-3">
+                <div className="relative w-full h-[100px] flex-none rounded-lg overflow-hidden bg-gray-1 mb-3">
                   <div className="absolute top-2 left-2 z-10">
                     <Badge 
                       content={item.status === 'COMPLETED' ? "첨삭 완료" : "진행 중"}
                       size="small"
-                      className="!px-1.5 !py-0.5 !text-xs opacity-90"
+                      className={item.status === 'COMPLETED' ? "bg-primary-5 text-primary-500" : "bg-blue-50 text-blue-500"}
                     />
                   </div>
                   <img 
@@ -104,10 +116,10 @@ const ExpertList: React.FC<ExpertListProps> = ({ modalType = 'native' }) => {
                 
                 <div className="flex justify-between items-center w-full mt-auto">
                   <div className="flex flex-col text-left gap-0.5 min-w-0">
-                    <p className="text-[16px] font-bold text-gray-900 truncate max-w-[120px]">
+                    <p className="text-[length:var(--fs-subtitle2)] text-gray-9 truncate max-w-[120px]">
                       {item.expertName}
                     </p>
-                    <p className="text-[13px] text-gray-400 truncate max-w-[120px]">
+                    <p className="text-[length:var(--fs-button1)] text-gray-5 truncate max-w-[120px]">
                       {item.location}
                     </p>
                   </div>
@@ -115,7 +127,7 @@ const ExpertList: React.FC<ExpertListProps> = ({ modalType = 'native' }) => {
                   <div onClick={(e) => { e.stopPropagation(); handleHistoryClick(item); }}>
                     <TextButton onClick={() => {}} variant="secondary" size="small">
                       <div className="flex items-center gap-1">
-                        <span className="text-xs">내역보기</span>
+                        <span className="text-[length:var(--fs-button2)]">내역보기</span>
                         <img src={ChevIcon} alt="arrow" className="w-3 h-3 opacity-60" />
                       </div>
                     </TextButton>
@@ -124,8 +136,7 @@ const ExpertList: React.FC<ExpertListProps> = ({ modalType = 'native' }) => {
               </div>
             ))
           ) : (
-             // ✅ [수정 2] 데이터 없음 영역: 점선 테두리 제거, 높이는 유지
-             <div className="col-span-full h-[192px] flex items-center justify-center text-gray-400 text-sm w-full">
+             <div className="col-span-full h-[192px] flex items-center justify-center text-gray-5 text-[length:var(--fs-body2)] w-full">
                의뢰한 내역이 없습니다.
              </div>
           )}

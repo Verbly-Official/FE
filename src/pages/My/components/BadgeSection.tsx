@@ -1,12 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import DefaultBadgeIcon from '../../../components/Profile/img/medium.svg'; 
-import FireIcon from '../../../assets/emoji/fire1.svg';
+// API
 import { getMyProfileApi } from '../../../apis/user'; 
 
+// Icons
+import FireIcon from '../../../assets/emoji/fire1.svg';
+import AttendanceIcon from '../img/attendance.svg';
+import FirstPostIcon from '../img/firstPost.svg';
+import Like50Icon from '../img/Like50.svg';
+
+// Badge 인터페이스
 interface AchievementBadge {
   id: string;
   name: string;
+  icon: string;
   acquired: boolean;
+  description?: string;
+}
+
+// API 응답 데이터 타입 정의 (현재 사용 가능한 필드만 정의)
+interface UserProfileData {
+  userId: number;
+  nickname: string;
+  streakDays: number;      // 연속 출석 일수
+  totalPosts: number;      // 작성한 게시글 수
+  [key: string]: any;
 }
 
 const BadgeSection: React.FC = () => {
@@ -17,17 +34,39 @@ const BadgeSection: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const response = await getMyProfileApi();
+        
         if (response && response.isSuccess && response.result) {
-          const user = response.result;
+          const user = response.result as UserProfileData;
           
+          // 총 좋아요 수는 Home API 연동 전까지 0으로 고정 (또는 테스트 값 입력)
+          const totalLikes = 0; 
+
+          // 뱃지 획득 조건 설정
           const dynamicBadges: AchievementBadge[] = [
-            { id: '1', name: '첫 가입', acquired: true },
-            { id: '2', name: '7일 연속', acquired: (user.streakDays || 0) >= 7 },
-            { id: '3', name: '첫 첨삭', acquired: (user.correctionsGiven || 0) > 0 },
+            { 
+              id: '1', 
+              name: '성실한출석왕', 
+              icon: AttendanceIcon,
+              acquired: (user.streakDays || 0) >= 7, // 7일 연속 출석
+              description: '7일 연속 출석 달성'
+            },
+            { 
+              id: '2', 
+              name: '첫걸음마', 
+              icon: FirstPostIcon,
+              acquired: (user.totalPosts || 0) > 0, // 게시글 1개 이상 작성
+              description: '첫 게시글 업로드 완료'
+            },
+            { 
+              id: '3', 
+              name: '소통의중심', 
+              icon: Like50Icon,
+              acquired: totalLikes >= 50, // API 연동 제외 (변수값 기준)
+              description: '받은 좋아요 50개 달성'
+            },
           ];
 
-          // ✅ [수정] 획득한(acquired === true) 뱃지만 필터링하여 저장
-          // 획득하지 못한 뱃지는 배열에 포함되지 않아 화면에 렌더링되지 않습니다.
+          // 획득한 뱃지만 필터링
           const acquiredBadges = dynamicBadges.filter(badge => badge.acquired);
           setBadges(acquiredBadges);
         }
@@ -42,10 +81,10 @@ const BadgeSection: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-[214px] bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-5 flex flex-col">
+    <div className="w-full h-[214px] bg-[var(--color-white)] rounded-xl shadow-sm border border-gray-2 p-4 md:p-5 flex flex-col">
       <div className="flex justify-start items-center mb-3 md:mb-4 gap-[8px] flex-none">
         <img src={FireIcon} alt="icon" className="w-5 h-5 md:w-6 md:h-6" />
-        <h3 className="text-base md:text-lg font-bold text-gray-900">뱃지 관리</h3>
+        <h3 className="text-[length:var(--fs-subtitle1)] text-gray-9">뱃지 관리</h3>
       </div>
       
       <div className="flex-1 overflow-hidden">
@@ -54,26 +93,30 @@ const BadgeSection: React.FC = () => {
             {badges.map((badge) => (
               <div 
                 key={badge.id} 
-                // 획득한 뱃지만 표시되므로 흑백 처리 클래스 제거
                 className="flex flex-col items-center gap-1.5 md:gap-2 group cursor-pointer"
+                title={badge.description}
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-[84px] md:h-[84px] rounded-lg md:rounded-[12px] flex items-center justify-center bg-gray-50 border border-gray-100 transition-all overflow-hidden">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-[84px] md:h-[84px] rounded-lg md:rounded-[12px] flex items-center justify-center bg-gray-1 transition-all overflow-hidden">
                   <img 
-                    src={DefaultBadgeIcon} 
+                    src={badge.icon} 
                     alt={badge.name}
                     className="w-full h-full object-cover" 
                   />
                 </div>
                 
-                <span className="text-xs sm:text-[13px] md:text-[14px] text-violet-50 text-center truncate w-full max-w-[56px] sm:max-w-[64px] md:max-w-[84px] font-medium">
+                <span className="text-[length:var(--fs-subtitle3)] font-bold text-violet-50 text-center truncate w-full max-w-[56px] sm:max-w-[64px] md:max-w-[84px]">
                   {badge.name}
                 </span>
               </div>
             ))}
           </div>
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-            {loading ? '로딩 중...' : '보유한 뱃지가 없습니다.'}
+          <div className="w-full h-full flex flex-col items-center justify-center text-gray-4 gap-2">
+             {!loading && (
+               <span className="text-[length:var(--fs-body2)] text-gray-6">
+                 아직 획득한 뱃지가 없어요
+               </span>
+             )}
           </div>
         )}
       </div>

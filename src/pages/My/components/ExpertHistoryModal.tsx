@@ -22,12 +22,11 @@ export default function ExpertHistoryModal({
   if (!data) return null;
 
   const modalContent = {
-    // ✅ [수정] introduction -> bio 로 변경
     student: {
       id: userInfo?.userId.toString() || 'guest',
       name: userInfo?.nickname || 'Guest',
       profileImg: userInfo?.profileImage || '',
-      bio: userInfo?.bio || '', // 여기가 수정됨
+      bio: userInfo?.bio || '', 
     } as User,
     
     correction: {

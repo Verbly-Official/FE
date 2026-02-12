@@ -6,7 +6,7 @@ export interface LinearProgressProps {
     size?: "large" | "medium" | "small";
     labelLeft?: string;
     labelRight?: string;
-    fillGradient?: "main" | "point"; 
+    fillGradient?: "main" | "point";
     className?: string;
 }
 
@@ -23,12 +23,11 @@ const LinearProgress: React.FC<LinearProgressProps> = ({
             size === "medium" ? "h-[20px]" :
                 "h-[16px]";
 
-    const trackWidthClass = "w-full max-w-[612px]"; 
-    
-    const isSolidFill = (size === "small" || size === "medium") && (value === 50 || value === 100);
-    const backgroundStyle = isSolidFill
-        ? { backgroundColor: "var(--color-violet-50)" }
-        : { backgroundImage: fillGradient === "main" ? "var(--gradient-1-main)" : "var(--gradient-4)" };
+    const trackWidthClass = "w-full max-w-[612px]";
+
+    const backgroundStyle = {
+        backgroundImage: fillGradient === "main" ? "var(--gradient-1-main)" : "var(--gradient-4)"
+    };
 
     return (
         <div className={`flex flex-col gap-[4px] ${className}`}>

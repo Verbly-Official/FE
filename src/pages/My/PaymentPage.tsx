@@ -63,21 +63,16 @@ const PaymentPage: React.FC = () => {
   } = usePaymentForm(PRICING_OPTIONS);
 
   return (
-    <div className="w-full bg-[#F8FAFC] flex flex-col flex-1 overflow-hidden min-h-screen">
-      {/* Header */}
+    <div className="w-full bg-bg0 flex flex-col flex-1 overflow-hidden min-h-screen">
       <GNB />
       
-      {/* Main Content Wrapper - 반응형 구조 */}
       <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
               
-        {/* Left Sidebar */}
         <SideMenu variant="default" />
 
-        {/* Page Content */}
         <main className="flex-1 flex flex-col overflow-y-auto">
           <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 relative">
             
-            {/* Quit Button */}
             <div className="flex items-center gap-2 mb-6">
               <IconButton 
                 iconSrc={CloseIcon} 
@@ -86,16 +81,13 @@ const PaymentPage: React.FC = () => {
                 shape="square" 
                 onClick={() => window.history.back()} 
               />
-              <span className='text-sm text-gray-500'>Quit</span>
+              <span className='text-[length:var(--fs-body2)] text-gray-5'>Quit</span>
             </div>
 
-            {/* Main Layout */}
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl relative z-10">
               
-              {/* Left Side: Plan Selection & Payment Info */}
               <div className="flex-1 space-y-6 lg:space-y-8">
-                {/* Choose Plan */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                <div className="bg-[var(--color-white)] rounded-2xl border border-gray-1 shadow-sm p-6 md:p-8">
                   <SectionHeader number={1} title="Choose Your plan" />
                   <PricingCard 
                     options={PRICING_OPTIONS}
@@ -104,8 +96,7 @@ const PaymentPage: React.FC = () => {
                   />
                 </div>
 
-                {/* Payment Information */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                <div className="bg-[var(--color-white)] rounded-2xl border border-gray-1 shadow-sm p-6 md:p-8">
                   <SectionHeader number={2} title="Payment Information" />
                   
                   <PaymentMethodSelector 
@@ -128,7 +119,6 @@ const PaymentPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Side: Order Summary & Benefits */}
               <div className="lg:w-[400px] xl:w-[450px] space-y-6 relative">
                 <DecorativeIcons />
 

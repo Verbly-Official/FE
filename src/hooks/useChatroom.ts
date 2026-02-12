@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Message, Partner } from '../types/chat';
-import { getChatroomMessages, sendMessage as apiSendMessage } from '../apis/chatrooms';
-import { mockChatrooms } from '../pages/Inbox/mocks/chatData';
+import type { ChatMessageItem } from '../types/chat';
+import { getChatroomMessages } from '../apis/chatrooms';
+
+interface Partner {
+    name: string;
+    avatarUrl?: string;
+}
 
 interface UseChatroomReturn {
-    messages: Message[];
+    messages: ChatMessageItem[];
     partner: Partner | null;
     isLoading: boolean;
     error: string | null;
@@ -18,7 +22,7 @@ interface UseChatroomReturn {
  * @returns Chatroom data and actions
  */
 export const useChatroom = (chatroomId: string | null): UseChatroomReturn => {
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<ChatMessageItem[]>([]);
     const [partner, setPartner] = useState<Partner | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -35,25 +39,25 @@ export const useChatroom = (chatroomId: string | null): UseChatroomReturn => {
         setError(null);
 
         try {
-            console.log('Fetching messages for:', chatroomId);
-            const fetchedMessages = await getChatroomMessages(chatroomId);
+            const chatroomIdNum = parseInt(chatroomId, 10);
+            if (isNaN(chatroomIdNum)) {
+                throw new Error('Invalid chatroom ID');
+            }
+
+            const fetchedMessages = await getChatroomMessages(chatroomIdNum);
             setMessages(fetchedMessages);
 
-            // Get partner info from chatroom data (search by room ID or partner ID)
-            const searchId = chatroomId.toLowerCase();
-            console.log('Searching for partner with ID:', searchId);
-            console.log('Available rooms:', mockChatrooms.map(r => ({ id: r.id, partnerId: r.partner.id })));
-
-            const chatroom = mockChatrooms.find((room) =>
-                room.id.toString().toLowerCase() === searchId ||
-                room.partner.id.toLowerCase() === searchId
-            );
-
-            if (chatroom) {
-                console.log('Found partner:', chatroom.partner.name);
-                setPartner(chatroom.partner as Partner);
-            } else {
-                console.warn('Partner not found for ID:', searchId);
+            // Extract partner info from messages
+            if (fetchedMessages.length > 0) {
+                // Find the first message from the other person (not current user)
+                // Assuming current user's messages won't have senderImageUrl or we can identify them differently
+                const otherPersonMessage = fetchedMessages.find(msg => msg.senderImageUrl);
+                if (otherPersonMessage) {
+                    setPartner({
+                        name: otherPersonMessage.senderName,
+                        avatarUrl: otherPersonMessage.senderImageUrl
+                    });
+                }
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to fetch messages');
@@ -67,43 +71,17 @@ export const useChatroom = (chatroomId: string | null): UseChatroomReturn => {
         fetchMessages();
     }, [fetchMessages]);
 
-    // Send a message with optimistic update
+    // Send a message (WebSocket implementation would go here)
     const sendMessage = useCallback(
         async (content: string) => {
             if (!chatroomId || !content.trim()) return;
 
-            // Optimistic update - add message immediately
-            const optimisticMessage: Message = {
-                id: `temp-${Date.now()}`,
-                chatId: chatroomId,
-                role: 'user',
-                content: content.trim(),
-                createdAt: new Date().toISOString(),
-                promptType: 'default_chat',
-            };
+            // TODO: Implement WebSocket message sending
+            // For now, this is a placeholder
+            console.log('Sending message:', content, 'to chatroom:', chatroomId);
 
-            setMessages((prev) => [...prev, optimisticMessage]);
-
-            try {
-                // Send to API
-                const sentMessage = await apiSendMessage(chatroomId, {
-                    content: content.trim(),
-                });
-
-                // Replace optimistic message with real one
-                setMessages((prev) =>
-                    prev.map((msg) =>
-                        msg.id === optimisticMessage.id ? sentMessage : msg
-                    )
-                );
-            } catch (err) {
-                // Remove optimistic message on error
-                setMessages((prev) =>
-                    prev.filter((msg) => msg.id !== optimisticMessage.id)
-                );
-                setError(err instanceof Error ? err.message : 'Failed to send message');
-                console.error('Error sending message:', err);
-            }
+            // Optimistic update could be added here
+            // After WebSocket implementation, messages will be received via WebSocket
         },
         [chatroomId]
     );

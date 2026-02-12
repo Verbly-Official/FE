@@ -31,8 +31,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex w-full h-screen bg-white">
-      <div className="w-[60%] h-full flex-shrink-0 bg-gray-100"></div>
+    <div className="flex w-full h-screen bg-[var(--color-white)]">
+      <div className="w-[60%] h-full flex-shrink-0 bg-gray-1"></div>
 
       <div className="flex-1 h-full flex items-center justify-center">
         <div className="flex flex-col w-[460px] items-center gap-8">
@@ -42,8 +42,8 @@ const LoginPage = () => {
 
           {/*에러 메세지 추후 삭제 예정*/}
           {errorMessage && (
-            <div className="w-full p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600 text-center">{errorMessage}</p>
+            <div className="w-full p-4 bg-pink-100 border border-pink-20 rounded-lg">
+              <p className="text-[length:var(--fs-body2)] text-pink-20 text-center">{errorMessage}</p>
             </div>
           )}
 
@@ -52,7 +52,7 @@ const LoginPage = () => {
               variant="assistive"
               size="large"
               Icon={googleIcon}
-              className="justify-center !text-gray-9 text-opacity-85 w-full border border-gray-200"
+              className="justify-center !text-gray-9 text-opacity-85 w-full border border-gray-2"
               onClick={handleGoogleLogin}
               label="Continue with Google"
             />
@@ -61,7 +61,7 @@ const LoginPage = () => {
               variant="assistive"
               size="large"
               Icon={kakaoIcon}
-              className="justify-center !bg-[#FEE500] !text-black w-full hover:!bg-[#FDD835]"
+              className="justify-center !bg-[#FEE500] !text-[var(--color-black)] w-full hover:!bg-[#FDD835]"
               onClick={handleKakaoLogin}
               label="Continue with Kakao talk"
             />

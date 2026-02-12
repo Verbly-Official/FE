@@ -1,5 +1,4 @@
 // src/types/home.ts
-
 import type { ApiResponse } from "./user";
 
 /**
@@ -7,6 +6,7 @@ import type { ApiResponse } from "./user";
  * GET /api/home/viewer/info
  */
 export interface ViewerInfo {
+  userId: number;
   imageUrl: string;
   nickname: string;
   following: number;
@@ -15,11 +15,13 @@ export interface ViewerInfo {
   correctionReceived: number;
   level: string; // "LV1"
 }
+
 /**
  * 홈 화면 - 선택된 프로필 유저 정보
  * GET /api/home/users/{uuid}
  */
 export interface UuserInfo {
+  userId: number;
   imageUrl: string;
   nickname: string;
   nativeLang: string;

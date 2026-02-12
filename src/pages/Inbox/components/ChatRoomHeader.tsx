@@ -1,12 +1,18 @@
 import React from 'react';
-import type { Partner } from '../../../types/chat';
 import { Avatar } from '../../../components/Avatar/Avatar';
 import { Badge } from '../../../components/Badge/ContentBadge';
 import { IconButton } from '../../../components/Button/IconButton';
 import MoreIcon from '../../../assets/emoji/more-vert.svg';
 
+interface SimplifiedPartner {
+    name: string;
+    avatarUrl?: string;
+    status?: "online" | "offline" | "away";
+    isNativeSpeaker?: boolean;
+}
+
 interface ChatRoomHeaderProps {
-    partner: Partner;
+    partner: SimplifiedPartner;
     onToggleSidebar: () => void;
     isSidebarOpen: boolean;
 }
