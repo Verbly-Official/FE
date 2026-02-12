@@ -48,7 +48,12 @@ export const UserProfile: React.FC<ProfileProps> = ({
 
   // ID 추출 (없으면 undefined)
   const rawId = data.userId ?? data.id ?? data.writerId;
-  const targetUserId = rawId ? String(rawId) : undefined;
+
+  //유진: 두개의 타입이 필요해서 수정했습니다.
+  //const targetUserId = rawId ?? undefined; <-- 원래 이거 였음
+  const numericUserId = typeof rawId === "number" ? rawId : undefined;
+
+  const uuidUserId = typeof rawId === "string" ? rawId : undefined;
 
   const displayName = data.nickname || data.name || "User";
   const displayImage = data.profileImage || data.profileImg;
@@ -68,8 +73,8 @@ export const UserProfile: React.FC<ProfileProps> = ({
 
   const handleMoveToProfile = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!targetUserId) return;
-    navigate(`/home/profile/${targetUserId}`);
+    if (!uuidUserId) return;
+    navigate(`/home/profile/${uuidUserId}`);
   };
 
   const renderImage = () => (
@@ -127,8 +132,8 @@ export const UserProfile: React.FC<ProfileProps> = ({
         </div>
 
         <FollowButton
-          key={targetUserId}
-          userId={targetUserId}
+          key={numericUserId}
+          userId={numericUserId}
           initialIsFollowing={data.isFollowing}
           onToggle={onFollow}
         />

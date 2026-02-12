@@ -78,7 +78,7 @@ export default function Home_Profile() {
                 {/* Profile */}
                 <div className="w-full p-[20px] flex flex-row gap-[52px]">
                   <img
-                    src={Uuser?.imageUrl ?? ""}
+                    src={Uuser?.imageUrl || undefined}
                     alt="profile"
                     className="size-[180px] rounded-full"
                   />
@@ -147,7 +147,10 @@ export default function Home_Profile() {
                   </div>
                 </div>
                 {/* Tabs */}
-                <Tabs tabs={["Posts"]} />
+                <div className="flex mb-[28px] justify-start gap-0 border-b-[1px] border-line2">
+                  <Tabs tabs={["Posts"]} />
+                </div>
+
                 <section className="p-[28px] flex flex-col gap-[20px]">
                   {posts.map((post) => (
                     <Home_Card
