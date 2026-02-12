@@ -4,15 +4,18 @@ import Tabs from "../../../components/Tab/Tabs";
 import { getPosts, getHotPosts } from "../../../apis/post";
 import type { PostItem } from "../../../types/post";
 import { useEffect, useState } from "react";
+import type { ViewerInfo } from "../../../types/home";
 
 interface SectionProps {
   variant: "kr" | "en";
   refreshKey: number;
+  viewer: ViewerInfo | null;
 }
 
 export default function Home_Section({
   variant = "kr",
   refreshKey,
+  viewer,
 }: SectionProps) {
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [page, setPage] = useState(0);
@@ -72,6 +75,7 @@ export default function Home_Section({
             key={post.postId}
             varient="default"
             isCorrected={post.status !== "PENDING"}
+            viewer={viewer}
             post={post}
           />
         ))}

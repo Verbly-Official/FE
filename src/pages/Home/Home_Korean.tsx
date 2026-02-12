@@ -43,7 +43,12 @@ export default function Home_Korean() {
         <div className={"w-full min-h-screen bg-bg0 z-10 relative"}>
           <div className="flex w-full">
             {/* 홈 내용 */}
-            <Home_Section variant="kr" refreshKey={refreshKey} />
+
+            <Home_Section
+              variant="kr"
+              refreshKey={refreshKey}
+              viewer={viewer}
+            />
 
             {/* 사이드 */}
             <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
