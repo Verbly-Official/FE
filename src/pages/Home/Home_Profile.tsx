@@ -80,8 +80,9 @@ export default function Home_Profile() {
                   <img
                     src={Uuser?.imageUrl ?? ""}
                     alt="profile"
-                    className="size-[180px] rounded-full"
+                    className="w-[180px] h-[180px] object-cover shrink-0 rounded-full"
                   />
+
                   <div className="w-[1072px] flex flex-col flex-start gap-[16px]">
                     <div className="flex gap-[4px] flex-col">
                       <div className="flex flex-row gap-[12px] items-center">
@@ -160,23 +161,6 @@ export default function Home_Profile() {
                   ))}
                 </section>
               </div>
-<<<<<<< HEAD
-              {/* Tabs */}
-              <Tabs tabs={["Posts"]} />
-              <section className="p-[28px] flex flex-col gap-[20px]">
-                {posts.map((post) => (
-                  <Home_Card
-                    key={post.postId}
-                    varient="default"
-                    isCorrected={post.status !== "PENDING"}
-                    post={post}
-                    viewer={viewer}
-                  />
-                ))}
-              </section>
-            </div>
-=======
->>>>>>> 32cde90d1b8cc436e4d6d787ac0dcb40d167311d
 
               {/* Right Side */}
               <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
