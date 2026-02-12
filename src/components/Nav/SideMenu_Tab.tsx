@@ -14,7 +14,7 @@ export default function SideMenu_Tab({
   return (
     <div
       {...props}
-      className={`w-[172px] h-[56px] flex items-center gap-[20px] px-[16px] rounded-[4px] text-[length:var(--fs-title3)] cursor-pointer ${
+      className={`h-[56px] flex items-center gap-[20px] p-[16px] rounded-[4px] text-[length:var(--fs-title3)] cursor-pointer ${
         isSelected
           ? "bg-violet-100 text-violet-50 border-[1px] border-violet-50"
           : "bg-white"
