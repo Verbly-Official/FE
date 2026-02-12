@@ -1,6 +1,6 @@
 import { IconButton } from "../../components/Button";
-import CheckIcon from "../../src/assets/emoji/check-purple.svg";
-import CloseIcon from "../../src/assets/emoji/close.svg";
+import CheckIcon from "../../assets/emoji/check-purple.svg";
+import CloseIcon from "../../assets/emoji/close.svg";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 
