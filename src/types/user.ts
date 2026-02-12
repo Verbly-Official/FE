@@ -67,7 +67,7 @@ export interface OnboardingResult {
 }
 
 /**
- * ✅ [신규] 프로필 수정 완료 응답 DTO
+ * 프로필 수정 완료 응답 DTO
  * (백엔드가 UserInfo 전체가 아닌 일부 필드만 반환하므로 별도 정의)
  */
 export interface UpdateProfileResult {

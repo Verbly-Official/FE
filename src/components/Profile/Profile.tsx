@@ -1,8 +1,9 @@
+// src/components/Profile/Profile.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { type User, type UserInfo } from "../../types/user";
 import { Badge } from "../Badge/ContentBadge";
-import FollowButton from "../Button/FollowButton";
+import FollowButton from "../Button/FollowButton"; 
 
 import SmallProfile from "./img/small.svg";
 import MediumProfile from "./img/medium.svg";
@@ -11,7 +12,7 @@ import LargeProfile from "./img/large.svg";
 type ProfileData = Partial<User> &
   Partial<UserInfo> & {
     id?: number | string;
-    userId?: number | string;
+    userId?: number | string; // API 호환성을 위해 유연하게 두되, 사용 시 체크
     writerId?: number | string;
     badges?: string;
     lastActive?: string;
@@ -47,9 +48,12 @@ export const UserProfile: React.FC<ProfileProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // ID 추출 (없으면 undefined)
-  const rawId = data.userId ?? data.id ?? data.writerId;
-  const targetUserId = rawId ? String(rawId) : undefined;
+  // 1. 프로필 이동용 ID (UUID 권장)
+  // Home_Card 등에서 uuid 필드를 명시적으로 넘겨주는 것이 가장 정확함
+  const profileNavId = data.uuid ?? data.id ?? data.writerId;
+  
+  // 2. 팔로우용 ID (API 스펙상 반드시 Number여야 함)
+  const followTargetId = typeof data.userId === 'number' ? data.userId : undefined;
 
   const displayName = data.nickname || data.name || "User";
   const displayImage = data.profileImage || data.profileImg;
@@ -69,8 +73,8 @@ export const UserProfile: React.FC<ProfileProps> = ({
 
   const handleMoveToProfile = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!targetUserId) return;
-    navigate(`/home/profile/${targetUserId}`);
+    if (!profileNavId) return;
+    navigate(`/home/profile/${profileNavId}`);
   };
 
   const renderImage = () => (
@@ -87,13 +91,10 @@ export const UserProfile: React.FC<ProfileProps> = ({
   // [Small Size]
   if (size === "small") {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div className={`flex items-center gap-3 ${className}`} onClick={handleMoveToProfile}>
         {renderImage()}
         <div className="flex flex-col">
-          <span
-            onClick={handleMoveToProfile}
-            className="font-bold text-[length:var(--fs-subtitle2)] text-gray-9 cursor-pointer hover:underline"
-          >
+          <span className="font-bold text-[length:var(--fs-subtitle2)] text-gray-9 cursor-pointer hover:underline">
             {displayName}
           </span>
           {displayBio && (
@@ -109,14 +110,11 @@ export const UserProfile: React.FC<ProfileProps> = ({
   // [Medium Size]
   if (size === "medium") {
     return (
-      <div className={`flex items-center gap-4 ${className}`}>
+      <div className={`flex items-center gap-4 ${className}`} onClick={handleMoveToProfile}>
         {renderImage()}
         <div className="flex flex-col flex-1">
           <div className="flex items-center gap-2">
-            <span
-              onClick={handleMoveToProfile}
-              className="font-bold text-[length:var(--fs-subtitle1)] text-gray-9 cursor-pointer hover:underline"
-            >
+            <span className="font-bold text-[length:var(--fs-subtitle1)] text-gray-9 cursor-pointer hover:underline">
               {displayName}
             </span>
           </div>
@@ -143,6 +141,7 @@ export const UserProfile: React.FC<ProfileProps> = ({
   return (
     <div
       className={`flex flex-col items-center gap-4 text-center ${className}`}
+      onClick={handleMoveToProfile}
     >
       {renderImage()}
       <div>

@@ -5,6 +5,7 @@ export interface PostItem {
   nickname: string;
   isFollowing: boolean;
   uuid: string;
+  userId: number;
   postId: number;
   content: string;
   status: "PENDING" | "COMPLETED" | string;

@@ -1,3 +1,4 @@
+// src/components/Button/FollowButton.tsx
 import { useState, useEffect } from 'react';
 import { followUser, unfollowUser } from '../../apis/follow';
 import personPlusIcon from '../../assets/emoji/person-plus.svg';
@@ -51,11 +52,10 @@ export default function FollowButton({
 
     const previousState = isFollowing;
     const newState = !isFollowing;
-
     setIsFollowing(newState);
     if (onToggle) onToggle(newState);
-    setIsLoading(true);
 
+    setIsLoading(true);
     try {
       // API가 number를 기대한다면 변환, string도 가능하다면 그대로
       const numericId = Number(userId);
@@ -70,9 +70,9 @@ export default function FollowButton({
       }
     } catch (error) {
       console.error("Follow toggle failed:", error);
+      // 실패 시 롤백 (원래 상태로 복구)
       setIsFollowing(previousState);
       if (onToggle) onToggle(previousState);
-      alert("요청을 처리하는 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +80,7 @@ export default function FollowButton({
 
   const stateStyles = isFollowing
     ? "bg-gray-3 text-gray-6"
-    : "bg-violet-50 text-white";
+    : "bg-violet-50 text-[var(--color-white)]";
 
   // [수정] 비활성화(ID 없음) 상태 스타일
   const disabledStyles = !isValidUserId
@@ -92,15 +92,14 @@ export default function FollowButton({
   return (
     <button
       onClick={handleClick}
-      // ID가 없거나 로딩 중이면 disabled 처리
-      disabled={!isValidUserId || isLoading}
+      disabled={isLoading}
       className={`
         flex justify-center items-center 
         font-medium transition-colors duration-200
         ${SIZE_STYLES[size]}
-        ${!isValidUserId ? disabledStyles : stateStyles}
+        ${stateStyles}
         ${className}
-        ${isLoading ? 'cursor-not-allowed' : ''}
+        ${isLoading ? 'opacity-80 cursor-not-allowed' : 'cursor-pointer'}
       `}
     >
       <img
