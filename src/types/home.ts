@@ -6,6 +6,7 @@ import type { ApiResponse } from "./user";
  * GET /api/home/viewer/info
  */
 export interface ViewerInfo {
+  userId: number;
   imageUrl: string;
   nickname: string;
   following: number;
@@ -20,6 +21,7 @@ export interface ViewerInfo {
  * GET /api/home/users/{uuid}
  */
 export interface UuserInfo {
+  userId: number;
   imageUrl: string;
   nickname: string;
   nativeLang: string;
@@ -30,7 +32,6 @@ export interface UuserInfo {
   isFollowing: boolean;
   correctionReceived: number;
   correctionGiven: number;
-  userId: number; // [수정] API 응답에 필수로 포함된다고 가정
 }
 
 /**
