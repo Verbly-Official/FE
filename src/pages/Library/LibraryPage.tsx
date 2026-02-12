@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from '../../components/Header/Header';
+import GNB from '../../components/Nav/GNB';
 import SideMenu from '../../components/Nav/SideMenu';
 import TrendingTag from '../../components/TrendingTag/TrendingTag';
 import { TodayReviewBanner } from './components/TodayReviewBanner';
@@ -59,7 +59,7 @@ const LibraryPage: React.FC = () => {
     return (
         <div className="w-full bg-bg0 flex flex-col flex-1 overflow-hidden">
             {/* Header */}
-            <Header />
+            <GNB variant="search" />
 
             {/* Main Content Wrapper - 모든 화면 크기에 반응형 */}
             <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden">
