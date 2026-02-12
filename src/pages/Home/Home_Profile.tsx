@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import TrendingTag from "../../components/TrendingTag/TrendingTag";
-import { UserStatsCard } from "../Library/components/UserStatsCard";
+import { UserStatsCard } from "../../components/ProfileCard/UserStatsCard.tsx";
 import MessageImg from "../../assets/emoji/mail-purple.svg?react";
 import CheckIcon from "../../assets/emoji/checkbox-rounded.svg";
 import { FollowButton, OutlinedButton } from "../../components/Button";
@@ -17,6 +17,8 @@ import { getUserPosts } from "../../apis/post.ts";
 import { getViewerInfo, getUuserInfo } from "../../apis/home.ts";
 
 export default function Home_Profile() {
+  const navigate = useNavigate();
+
   const { userId } = useParams<{ userId: string }>();
 
   const [viewer, setViewer] = useState<ViewerInfo | null>(null);
@@ -26,6 +28,7 @@ export default function Home_Profile() {
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
     const fetchViewer = async () => {
       try {
@@ -59,103 +62,107 @@ export default function Home_Profile() {
   }, [userId]);
 
   return (
-    <>
-      <div className="min-h-screen">
-        {/*GNB*/}
-        <div className="w-full max-w-[1920px] mx-auto">
-          <GNB variant="home" />
-        </div>
-        <div>
-          <div className="w-full min-h-screen bg-bg0 flex flex-row justify-between pr-[40px]">
-            <SideMenu />
-            <div className="bg-white p-[24px] w-[1120px] min-h-screen mt-[32px] rounded-[12px]">
-              {/* Profile */}
-              <div className="w-full h-stretch p-[20px] flex flex-row gap-[52px]">
-                <img
-                  src={Uuser?.imageUrl ?? ""}
-                  alt="profile"
-                  className="w-[180px] h-[180px]"
-                />
-                <div className="w-[1072px] flex flex-col flex-start gap-[16px]">
-                  <div className="flex gap-[4px] flex-col">
-                    <div className="flex flex-row gap-[12px] items-center">
-                      <div className="font-bold text-[40px] leading-[40px]">
-                        {Uuser?.nickname ?? ""}
+    <div className="h-screen overflow-hidden">
+      {/*GNB*/}
+      <div className="w-screen">
+        <GNB variant="home" />
+      </div>
+      <div>
+        <div className="w-full flex flex-row justify-between h-[calc(100vh-60px)]">
+          <SideMenu onWriteClick={() => setModalOpen(true)} />
+          {/* 오버레이 가능 영역 */}
+          <div className="w-full h-full bg-bg0 z-10 relative">
+            <div className="flex w-full h-full">
+              {/* 스크롤 가능 영역 */}
+              <div className="bg-white p-[24px] flex-1 overflow-y-auto mx-[38px] mt-[32px] rounded-[12px] no-scrollbar">
+                {/* Profile */}
+                <div className="w-full p-[20px] flex flex-row gap-[52px]">
+                  <img
+                    src={Uuser?.imageUrl ?? ""}
+                    alt="profile"
+                    className="size-[180px] rounded-full"
+                  />
+                  <div className="w-[1072px] flex flex-col flex-start gap-[16px]">
+                    <div className="flex gap-[4px] flex-col">
+                      <div className="flex flex-row gap-[12px] items-center">
+                        <div className="font-bold text-[40px] leading-[40px]">
+                          {Uuser?.nickname ?? ""}
+                        </div>
+                        <img
+                          src={CheckIcon}
+                          alt="checkIcon"
+                          className="w-[48px] h-[48px] p-[3.33px]"
+                        />
                       </div>
-                      <img
-                        src={CheckIcon}
-                        alt="checkIcon"
-                        className="w-[48px] h-[48px] p-[3.33px]"
+                      <div className="text-[length:var(--fs-subtitle1)] text-gray-7 font-semibold">
+                        {Uuser?.nativeLang === "ko" ? "Korean" : "English"}
+                      </div>
+                    </div>
+                    <div className="w-[700px] h-auto text-[length:var(--fs-subtitle2)] leading-[24px]">
+                      {Uuser?.description}
+                    </div>
+                    <div className="flex gap-[16px]">
+                      <div className="flex gap-[4px] items-center">
+                        <span className="text-[length:var(--fs-subtitle1)] font-semibold">
+                          {Uuser?.totalPosts}
+                        </span>
+                        <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
+                          Posts
+                        </span>
+                      </div>
+                      <div className="flex gap-[4px] items-center">
+                        <span className="text-[length:var(--fs-subtitle1)] font-semibold">
+                          {Uuser?.follower}
+                        </span>
+                        <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
+                          Follower
+                        </span>
+                      </div>
+                      <div className="flex gap-[4px] items-center">
+                        <span className="text-[length:var(--fs-subtitle1)] font-semibold">
+                          {Uuser?.following}
+                        </span>
+                        <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
+                          Follow
+                        </span>
+                      </div>
+                      <div className="flex gap-[4px] items-center">
+                        <span className="text-[length:var(--fs-subtitle1)] font-semibold">
+                          {Uuser?.correctionGiven}
+                        </span>
+                        <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
+                          Given Correct
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-[20px]">
+                      <FollowButton size="large" className="w-[508px]" />
+                      <OutlinedButton
+                        label="Message"
+                        Icon={MessageImg}
+                        size="large"
+                        onClick={() => navigate("/inbox")}
                       />
                     </div>
-                    <div className="text-[length:var(--fs-subtitle1)] text-gray-7 font-semibold">
-                      {Uuser?.nativeLang === "ko" ? "Korean" : "English"}
-                    </div>
-                  </div>
-                  <div className="w-[700px] h-auto text-[length:var(--fs-subtitle2)] leading-[24px]">
-                    {Uuser?.description}
-                  </div>
-                  <div className="flex gap-[16px]">
-                    <div className="flex gap-[4px] items-center">
-                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
-                        {Uuser?.totalPosts}
-                      </span>
-                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
-                        Posts
-                      </span>
-                    </div>
-                    <div className="flex gap-[4px] items-center">
-                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
-                        {Uuser?.follower}
-                      </span>
-                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
-                        Follower
-                      </span>
-                    </div>
-                    <div className="flex gap-[4px] items-center">
-                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
-                        {Uuser?.following}
-                      </span>
-                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
-                        Follow
-                      </span>
-                    </div>
-                    <div className="flex gap-[4px] items-center">
-                      <span className="text-[length:var(--fs-subtitle1)] font-semibold">
-                        {Uuser?.correctionGiven}
-                      </span>
-                      <span className="text-[length:var(--fs-subtitle2)] leading-[24px] text-gray-6">
-                        Given Correct
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex flex-row gap-[20px]">
-                    <FollowButton size="large" className="w-[508px]" />
-                    <OutlinedButton
-                      label="Message"
-                      Icon={MessageImg}
-                      size="large"
-                    />
                   </div>
                 </div>
+                {/* Tabs */}
+                <Tabs tabs={["Posts"]} />
+                <section className="p-[28px] flex flex-col gap-[20px]">
+                  {posts.map((post) => (
+                    <Home_Card
+                      key={post.postId}
+                      varient="default"
+                      isCorrected={post.status !== "PENDING"}
+                      viewer={viewer}
+                      post={post}
+                    />
+                  ))}
+                </section>
               </div>
-              {/* Tabs */}
-              <Tabs tabs={["Posts"]} />
-              <section className="p-[28px] flex flex-col gap-[20px]">
-                {posts.map((post) => (
-                  <Home_Card
-                    key={post.postId}
-                    varient="default"
-                    isCorrected={post.status !== "PENDING"}
-                    post={post}
-                  />
-                ))}
-              </section>
-            </div>
 
-            {/* Right Side */}
-            <div>
-              <div className="mt-[32px] flex flex-col gap-[32px]">
+              {/* Right Side */}
+              <div className="mt-[32px] mr-[40px] flex flex-col gap-[32px]">
                 <UserStatsCard
                   userData={{
                     id: "viewer",
@@ -180,6 +187,6 @@ export default function Home_Profile() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
