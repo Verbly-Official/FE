@@ -16,3 +16,19 @@ export interface CommentSlice {
 }
 
 export type CommentSliceResponse = ApiResponse<CommentSlice>;
+
+export interface CreateCommentRequest {
+  content: string;
+}
+
+export interface CreateCommentResult {
+  uuid: string;
+  nickname: string;
+  userImageUrl: string;
+  content: string;
+  createdAt: string;
+  totalComments: number;
+  postId: number;
+}
+
+export type CreateCommentResponse = ApiResponse<CreateCommentResult>;

@@ -28,7 +28,7 @@ export default function Home_Section({
     try {
       const data = await getPosts(pageNumber);
       setPosts((prev) =>
-        pageNumber === 0 ? data.content : [...prev, ...data.content]
+        pageNumber === 0 ? data.content : [...prev, ...data.content],
       );
       setLast(data.last);
       setPage(data.number);
