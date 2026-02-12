@@ -1,14 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Tab from "../../../components/Tab/Tab";
-import Sidebar from "../components/SideBar";
+
 import DocumentTable, { type DocumentRow } from "../components/DocumentTable";
 import File from "../../../assets/emoji/file.svg?react";
 import { Pagination } from "../../../components/Pagination/Pagination";
 import { getNativeCorrections } from "../../../apis/correctionNative";
 
 const Correction_NMain = () => {
-  const SERVER_PAGE_IS_ZERO_BASED = true;
-
   const [page, setPage] = useState(1);
   const [selectedTab, setSelectedTab] = useState(0);
   const tabs = ["All", "Completed", "In Progress", "Pending"];
@@ -16,6 +15,8 @@ const Correction_NMain = () => {
   const [documents, setDocuments] = useState<DocumentRow[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  const navigate = useNavigate();
 
   const statusQuery = useMemo(() => {
     if (selectedTab === 1) return "COMPLETED";
@@ -44,7 +45,7 @@ const Correction_NMain = () => {
         const res = await getNativeCorrections(params);
         const result = res?.result;
 
-        const nextDocs = Array.isArray(result?.content) ? result.content : [];
+        const nextDocs = Array.isArray(result?.corrections) ? result.corrections : [];
 
         setTotalCount(Number(result?.totalElements ?? 0));
         setTotalPages(Number(result?.totalPages ?? 1));
@@ -99,7 +100,7 @@ const Correction_NMain = () => {
 
           <div className="w-full overflow-x-auto">
             <div className="min-w-[900px] mt-7">
-              <DocumentTable documents={documents} />
+              <DocumentTable documents={documents} onRowClick={(row) => navigate(`/correction/native/list?correctionId=${row.id}`)} />
             </div>
           </div>
 

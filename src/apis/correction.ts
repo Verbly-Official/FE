@@ -104,3 +104,18 @@ export async function getDraftCorrections(params: any) {
   });
   return res.data;
 }
+
+export async function getDraftCorrection(postId: number) {
+  const res = await api.get(`/api/temp-posts/${postId}`);
+  return res.data;
+}
+
+export async function postDraftCorrections(params: any) {
+  const res = await api.post(`/api/temp-posts`, params);
+  return res.data;
+}
+
+export async function removeDraftCorrection(postId: number) {
+  const res = await api.delete(`/api/temp-posts/${postId}`);
+  return res.data;
+}

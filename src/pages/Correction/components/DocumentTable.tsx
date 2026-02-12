@@ -15,6 +15,7 @@ export type DocumentRow = {
 type DocumentTableProps = {
   documents: DocumentRow[];
   onToggleBookmark?: (id: number) => void;
+  onRowClick?: (row: DocumentRow) => void;
 
   /** 옵션 (기본 true) */
   showAuthor?: boolean;
@@ -23,7 +24,7 @@ type DocumentTableProps = {
   renderStatusCell?: (row: DocumentRow) => React.ReactNode;
 };
 
-export default function DocumentTable({ documents, onToggleBookmark, showAuthor = true, showStar = true, showWords = true, renderStatusCell }: DocumentTableProps) {
+export default function DocumentTable({ documents, onToggleBookmark, onRowClick, showAuthor = true, showStar = true, showWords = true, renderStatusCell }: DocumentTableProps) {
   const StatusBadge = ({ status }: { status: string }) => {
     const getVariantClass = (status: string) => {
       switch (status.toLowerCase()) {
@@ -43,24 +44,24 @@ export default function DocumentTable({ documents, onToggleBookmark, showAuthor 
 
   return (
     <div className="w-full overflow-hidden rounded-lg border border-[#E5E7EB] bg-[#F1ECFC]">
-      <table className="min-w-full divide-y divide-gray-200">
+      <table className="min-w-full table-fixed divide-y divide-gray-200">
         {/* ===== Header ===== */}
         <thead>
           <tr>
-            <th className="px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Document Name</th>
+            <th className="w-[340px] px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Document Name</th>
 
-            {showAuthor && <th className="px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Author</th>}
+            {showAuthor && <th className="w-[200px] px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Corrector</th>}
 
-            <th className="px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Date</th>
+            <th className="w-[200px] px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Date</th>
 
-            <th className="px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Status</th>
+            <th className="w-[200px] px-[20px] py-4 text-left font-pretendard text-[18px] font-medium text-[var(--Gray-7,#585858)]">Status</th>
           </tr>
         </thead>
 
         {/* ===== Body ===== */}
         <tbody className="divide-y divide-gray-100 bg-white">
           {documents.map((doc) => (
-            <tr key={doc.id} className="hover:bg-gray-50">
+            <tr key={doc.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => onRowClick?.(doc)}>
               {/* Title column */}
               <td className="px-[20px] py-5">
                 <div className="flex items-center">
@@ -90,13 +91,13 @@ export default function DocumentTable({ documents, onToggleBookmark, showAuthor 
               </td>
 
               {/* Author */}
-              {showAuthor && <td className="px-[20px] font-pretendard text-[16px] font-medium text-[var(--Gray-10,#1F1F1F)]">{doc.author}</td>}
+              {showAuthor && <td className="px-4 font-pretendard text-[16px] font-medium text-[var(--Gray-10,#1F1F1F)]">{doc.author}</td>}
 
               {/* Date */}
-              <td className="px-[20px] font-pretendard text-[16px] font-medium text-[var(--Gray-10,#1F1F1F)]">{doc.date}</td>
+              <td className="px-4 font-pretendard text-[16px] font-medium text-[var(--Gray-10,#1F1F1F)]">{doc.date}</td>
 
               {/* Status */}
-              <td className="px-[20px] whitespace-nowrap px-6 py-7">{renderStatusCell ? renderStatusCell(doc) : <StatusBadge status={doc.status} />}</td>
+              <td className="px-4 whitespace-nowrap py-7">{renderStatusCell ? renderStatusCell(doc) : <StatusBadge status={doc.status} />}</td>
             </tr>
           ))}
         </tbody>
