@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getMyProfileApi } from '../../../apis/user'; 
+import DashBoardIcon from '../img/dashBoard.svg'; // [수정] SVG 이미지 import
 
 interface RecentCountCardProps {
   title?: string;
@@ -57,7 +58,7 @@ const Board: React.FC<RecentCountCardProps> = ({
         </p>
       </div>
 
-      <div className="w-20 h-16 sm:w-24 sm:h-18 md:w-32 md:h-20 rounded-lg md:rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-gray-1">
+      <div className="w-20 h-16 sm:w-24 sm:h-18 md:w-32 md:h-20 rounded-lg md:rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0">
         {imageSrc ? (
           <img 
             src={imageSrc} 
@@ -65,7 +66,13 @@ const Board: React.FC<RecentCountCardProps> = ({
             className="w-full h-full object-contain"
           />
         ) : (
-          <div className="w-full h-full bg-[var(--color-bg0)] flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center">
+            {/* [수정] import한 이미지 변수 사용 */}
+            <img 
+              src={DashBoardIcon} 
+              alt="Dashboard Default" 
+              className="w-full h-full object-cover" 
+            />
           </div>
         )}
       </div>
