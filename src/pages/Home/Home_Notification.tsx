@@ -1,76 +1,67 @@
-import { IconButton } from "../../components/Button";
-import CheckIcon from "../../assets/emoji/check-purple.svg";
-import CloseIcon from "../../assets/emoji/close.svg";
+import { useState } from "react";
+import { TextButton } from "../../components/Button";
+import Notification_Alarm from "./components/Notification_Alarm";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
+import Home_WriteModal from "../../components/Home/Home_WriteModal";
+import CheckIcon from "../../assets/emoji/check-purple.svg";
 
 export default function Home_Notification() {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
-    <>
-      <div className="min-h-screen">
-        {/*GNB*/}
+    <div className="h-screen flex flex-col bg-bg0">
+      {/*GNB*/}
+      <div className="w-screen">
         <GNB variant="home" />
-        <div className="w-full min-h-screen bg-bg0 flex flex-row gap-[38px] pr-[220px]">
-          {/* SideMenu */}
-          <SideMenu />
-          {/* Notification */}
-          <div className="w-full min-h-screen bg-white mt-[32px] rounded-[12px] flex flex-col px-[59px] py-[60px] gap-[48px] ">
-            <div className="text-[40px] font-bold">Notification</div>
-            {/* Section */}
-            <div className="w-full flex flex-col gap-[12px]">
-              <div className="flex flex-row gap-[8px] p-[4px] cursor-pointer">
-                <img src={CheckIcon} className="w-[24px] h-[24px]" />
-                <div className="font-semibold text-violet-50 text-[length:var(--fs-subtitle1)]">
-                  Mark All read
-                </div>
-              </div>
+      </div>
 
-              {/* Alarms */}
-              <div className="flex flex-col gap-[8px]">
-                {/* Content */}
-                <div className="w-full flex flex-row justify-between items-center gap-[857px] w-full h-[125px] p-[20px] rounded-[12px] bg-violet-110 cursor-pointer">
-                  <div className="flex flex-row gap-[20px]">
-                    <div className="w-[85px] h-[85px] rounded-[171px] bg-gray-10" />
-                    <div className="flex flex-col gap-[3px] py-[18px]">
-                      <div className="text-[length:var(--fs-title2)] font-semibold">
-                        Contents
-                      </div>
-                      <div className="text-[length:var(--fs-subtitle2)] font-normal leading-[24px] text-gray-5">
-                        10min
-                      </div>
-                    </div>
-                  </div>
-                  {/* IconButtons */}
-                  <div className="flex flex-row gap-[28px]">
-                    <IconButton iconSrc={CheckIcon} ariaLabel="checkEmoji" />
-                    <IconButton iconSrc={CloseIcon} ariaLabel="close" />
-                  </div>
-                </div>
+      <div className="flex flex-1 overflow-hidden">
+        {/* 사이드메뉴 - 모달 열려도 가려지지 않음 */}
+        <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
 
-                {/* Content */}
-                <div className="w-full flex flex-row justify-between items-center gap-[857px] w-full h-[125px] p-[20px] rounded-[12px] bg-violet-110 cursor-pointer">
-                  <div className="flex flex-row gap-[20px]">
-                    <div className="w-[85px] h-[85px] rounded-[171px] bg-gray-10" />
-                    <div className="flex flex-col gap-[3px] py-[18px]">
-                      <div className="text-[length:var(--fs-title1)] font-semibold">
-                        Contents
-                      </div>
-                      <div className="text-[length:var(--fs-subtitle2)] font-normal leading-[24px] text-gray-5">
-                        10min
-                      </div>
-                    </div>
-                  </div>
-                  {/* IconButtons */}
-                  <div className="flex flex-row gap-[28px]">
-                    <IconButton iconSrc={CheckIcon} ariaLabel="checkEmoji" />
-                    <IconButton iconSrc={CloseIcon} ariaLabel="close" />
-                  </div>
+        <div className="flex-1 relative overflow-y-auto px-[38px] pt-[32px] pb-[40px] z-10">
+          <div className="max-w-[1200px]">
+            <div className="bg-white min-h-screen rounded-[12px] px-[59px] py-[60px] flex flex-col gap-[48px]">
+              <div className="text-[40px] font-bold">Notification</div>
+              {/* Section */}
+              <div className="w-full flex flex-col gap-[12px]">
+                <TextButton
+                  icon="leading"
+                  iconSrc={CheckIcon}
+                  className="justify-start"
+                >
+                  Mark all read
+                </TextButton>
+
+                {/* Alarms */}
+                <div className="flex flex-col gap-[8px]">
+                  <Notification_Alarm />
+                  <Notification_Alarm />
                 </div>
               </div>
             </div>
           </div>
+          {/* MODAL */}
+          {modalOpen && (
+            <>
+              <div
+                className="w-full absolute inset-0 bg-[rgba(0,0,0,0.40)] z-20"
+                onClick={() => setModalOpen(false)}
+              />
+              <div
+                className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Home_WriteModal
+                  variant="KOREAN"
+                  onClose={() => setModalOpen(false)}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

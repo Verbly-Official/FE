@@ -14,15 +14,15 @@ export default function SideMenu_Tab({
   return (
     <div
       {...props}
-      className={`h-[56px] flex items-center gap-[20px] p-[16px] rounded-[4px] text-[length:var(--fs-title3)] cursor-pointer ${
+      className={`w-full h-[53px] flex items-center gap-5 pl-4 py-4 rounded-[4px] text-[length:var(--fs-title3)] cursor-pointer ${
         isSelected
-          ? "bg-violet-100 text-violet-50 border-[1px] border-violet-50"
-          : "bg-white"
+          ? "bg-violet-100 text-violet-50 border-1 border-violet-50"
+          : "bg-white text-black"
       }
       ${className ?? ""}
       `}
     >
-      {icon && <div className="w-[20px] h-[20px]">{icon}</div>}
+      {icon && <div className="w-5 h-5">{icon}</div>}
       <span>{label}</span>
     </div>
   );

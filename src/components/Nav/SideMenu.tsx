@@ -55,12 +55,12 @@ export default function SideMenu({
   switch (variant) {
     case "default":
       return (
-        <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
+        <div className="w-60 min-h-screen px-10 py-12 flex flex-col gap-7 bg-white">
           {menus.map((menu) => (
             <SideMenu_Tab
               key={menu.label}
               label={menu.label}
-              isSelected={location.pathname === menu.path}
+              isSelected={location.pathname.startsWith(menu.path)}
               onClick={() => {
                 navigate(menu.path);
               }}
@@ -69,6 +69,7 @@ export default function SideMenu({
           ))}
 
           <GradientButton
+            size="medium"
             onClick={onWriteClick}
             className="w-full whitespace-nowrap"
           >
@@ -78,18 +79,18 @@ export default function SideMenu({
       );
     case "small":
       return (
-        <div className="w-[96px] min-h-screen px-[20px] py-[50px] flex flex-col gap-[28px]">
+        <div className="w-24 min-h-screen px-5 py-12 flex flex-col gap-7">
           {menus.map((menu) => (
             <div
               key={menu.label}
               onClick={() => {
                 navigate(menu.path);
               }}
-              className={`w-[56px] h-[56px] px-[16px] py-[16px]
+              className={`w-14 h-14 px-4 py-4
               flex items-center justify-center
-              rounded-[12px] cursor-pointer
+              rounded-xl cursor-pointer
               ${
-                location.pathname === menu.path
+                location.pathname.startsWith(menu.path)
                   ? "bg-violet-100 border border-violet-50"
                   : "bg-transparent"
               }
@@ -102,7 +103,7 @@ export default function SideMenu({
       );
     case "profile":
       return (
-        <div className="w-[300px] min-h-screen px-[40px] py-[50px] flex flex-col gap-[28px] bg-white">
+        <div className="w-60 min-h-screen px-10 py-12 flex flex-col gap-7 bg-white">
           {menus.map((menu) => (
             <SideMenu_Tab
               key={menu.label}
