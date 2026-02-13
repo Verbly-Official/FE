@@ -4,6 +4,7 @@ import Notification_Alarm from "./components/Notification_Alarm";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import Home_WriteModal from "../../components/Home/Home_WriteModal";
+import CheckIcon from "../../assets/emoji/check-purple.svg";
 
 export default function Home_Notification() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +26,11 @@ export default function Home_Notification() {
               <div className="text-[40px] font-bold">Notification</div>
               {/* Section */}
               <div className="w-full flex flex-col gap-[12px]">
-                <TextButton icon="leading" className="justify-start">
+                <TextButton
+                  icon="leading"
+                  iconSrc={CheckIcon}
+                  className="justify-start"
+                >
                   Mark all read
                 </TextButton>
 
