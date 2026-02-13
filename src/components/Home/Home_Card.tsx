@@ -6,6 +6,8 @@ import { TextField } from "../TextArea/TextField";
 import { IconButton } from "../Button";
 import CommentIcon from "../../assets/emoji/message.svg?react";
 import SendIcon from "../../assets/emoji/send-filled.svg?react";
+import HeartTrue from "../../assets/emoji/heart-true.svg?react";
+import HeartFalse from "../../assets/emoji/heart-false.svg?react";
 import DefaultImg from "../Profile/img/small.svg";
 
 import type { PostItem } from "../../types/post";
@@ -132,7 +134,7 @@ export default function Home_Card({
               size="medium"
               data={{
                 id: post.uuid,
-                userId: post.userId,         // ✅ 추가
+                userId: post.userId, // ✅ 추가
                 isFollowing: post.isFollowing, // ✅ 추가
                 name: post.nickname,
                 profileImg: post.userImageUrl,
@@ -171,10 +173,12 @@ export default function Home_Card({
               <InteractionIcon
                 type="heart"
                 selected={localPost.isLiked}
+                IconTrue={HeartTrue}
+                IconFalse={HeartFalse}
                 onToggle={handleLikeClick}
                 className="w-[20px] h-[20px] cursor-pointer"
               />
-              <div className="text-[length:var(--fs-subtitle2)]">
+              <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
                 {localPost.likesCount}
               </div>
             </div>
@@ -183,7 +187,7 @@ export default function Home_Card({
               className="flex flex-row gap-[4px] cursor-pointer"
             >
               <CommentIcon className="w-[20px] h-[20px]" />
-              <div className="text-[length:var(--fs-subtitle2)]">
+              <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
                 {post.commentsCount}
               </div>
             </div>
@@ -245,7 +249,7 @@ export default function Home_Card({
               size="medium"
               data={{
                 id: post.uuid,
-                userId: post.userId,         // ✅ 추가
+                userId: post.userId, // ✅ 추가
                 isFollowing: post.isFollowing, // ✅ 추가
                 name: post.nickname,
                 profileImg: post.userImageUrl,
@@ -266,11 +270,13 @@ export default function Home_Card({
             <div className="flex flex-row gap-[4px]">
               <InteractionIcon
                 type="heart"
-                selected={false}
+                selected={localPost.isLiked}
+                IconTrue={HeartTrue}
+                IconFalse={HeartFalse}
                 onToggle={handleLikeClick}
                 className="w-[20px] h-[20px] cursor-pointer"
               />
-              <div className="text-[length:var(--fs-subtitle2)]">
+              <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
                 {localPost.likesCount}
               </div>
             </div>
@@ -279,7 +285,7 @@ export default function Home_Card({
               className="flex flex-row gap-[4px] cursor-pointer"
             >
               <CommentIcon className="w-[20px] h-[20px]" />
-              <div className="text-[length:var(--fs-subtitle2)]">
+              <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
                 {post.commentsCount}
               </div>
             </div>
