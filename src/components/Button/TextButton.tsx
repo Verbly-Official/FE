@@ -1,7 +1,5 @@
 import React from "react";
-import PurpleIcon from "../../assets/emoji/checkbox-dashed-purple.svg";
-import RedIcon from "../../assets/emoji/checkbox-dashed-red.svg";
-import GrayIcon from "../../assets/emoji/checkbox-dashed-gray.svg";
+
 
 export type TextButtonVariant = "primary" | "secondary";
 export type TextButtonSize = "large" | "medium" | "small";
@@ -18,6 +16,8 @@ export interface TextButtonProps {
     onClick?: () => void;
     ariaLabel?: string;
     className?: string;
+    /** Custom icon source (svg path) to override default icons */
+    iconSrc?: string;
 }
 
 export const TextButton: React.FC<TextButtonProps> = ({
@@ -30,6 +30,7 @@ export const TextButton: React.FC<TextButtonProps> = ({
     onClick,
     ariaLabel,
     className = "",
+    iconSrc,
 }) => {
     // Determine effective interaction state
     const effectiveInteraction = disabled ? "disabled" : interaction;
@@ -77,9 +78,7 @@ export const TextButton: React.FC<TextButtonProps> = ({
     const textColorClass = interactionTextColors[effectiveInteraction] || variantTextColors[variant];
 
     const renderIcon = () => {
-        let iconSrc = variant === "primary" ? PurpleIcon : GrayIcon;
-        if (isError) iconSrc = RedIcon;
-        else if (isDisabled) iconSrc = GrayIcon;
+        if (!iconSrc) return null;
 
         return (
             <img
