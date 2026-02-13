@@ -80,7 +80,7 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({
         <span className="text-[length:var(--fs-subtitle1)] text-gray-6 font-semibold text-left px-[4px]">
           Correction
         </span>
-        <div className="bg-violet-100 p-[16px] rounded-[12px] flex flex-col items-center justify-center gap-[4px] h-auto">
+        <div className="bg-violet-100 py-[12px] rounded-[12px] flex flex-col items-center justify-center gap-[4px] h-auto">
           <span className="text-[length:var(--fs-title2)] font-semibold text-violet-50">
             {stats.correctionReceived}
           </span>
