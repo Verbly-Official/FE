@@ -54,13 +54,10 @@ const EditProfilePage = () => {
     validateAndSave,
   } = useProfileForm(INITIAL_USER);
 
-  // 초기 상태 저장용 state
   const [initialData, setInitialData] = useState<any>(null);
   const [isDirty, setIsDirty] = useState(false);
 
-  // 1. 초기 데이터 로드 시점 캡처
   useEffect(() => {
-    // 아직 초기 데이터가 설정되지 않았을 때 한 번만 저장합니다.
     if (user.id && !initialData) {
       setInitialData({
         user: { ...user },
@@ -73,11 +70,9 @@ const EditProfilePage = () => {
     }
   }, [user, previewImg, emailId, emailDomain, customEmailDomain, phone, initialData]);
 
-  // 2. 변경 사항 감지 (Dirty Check)
   useEffect(() => {
     if (!initialData) return;
 
-    // 현재 상태와 초기 상태 비교
     const isNameChanged = user.name !== initialData.user.name;
     const isBioChanged = user.bio !== initialData.user.bio;
     const isImageChanged = previewImg !== initialData.previewImg;
@@ -93,7 +88,6 @@ const EditProfilePage = () => {
     setIsDirty(hasChanges);
   }, [user, previewImg, emailId, emailDomain, customEmailDomain, phone, initialData]);
 
-  // 3. 저장 핸들러
   const handleSave = async () => {
     const savedData = await validateAndSave(); 
     if (savedData) {
@@ -110,16 +104,12 @@ const EditProfilePage = () => {
     }
   };
 
-  // 4. 취소(뒤로가기) 핸들러
   const handleQuit = () => {
       navigate(-1);
   };
 
-  // 초기화 핸들러
   const handleReset = () => {
     if (!initialData) return;
-
-    // 모든 상태를 초기 데이터로 복구
     setUser(initialData.user);
     setEmailId(initialData.emailId);
     setEmailDomain(initialData.emailDomain);
@@ -128,16 +118,16 @@ const EditProfilePage = () => {
   };
 
   return (
-    // [80% 배율 적용] 외부 래퍼: 전체 화면 영역 잡아주기 (overflow-hidden 필수)
-    <div className="w-full h-screen overflow-hidden bg-bg0">
-      {/* [80% 배율 적용] 내부 컨텐츠: 125% 크기 -> 0.8 축소 */}
-      <div className="flex flex-col w-[125%] h-[125vh] origin-top-left scale-[0.8] overflow-hidden">
-        <GNB />
-        
-        <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
-          <SideMenu variant="profile" />
+    // 전체 레이아웃 (GNB, SideMenu는 정사이즈 유지)
+    <div className="w-full h-screen overflow-hidden bg-bg0 flex flex-col">
+      <GNB />
+      
+      <div className="w-full flex flex-1 overflow-hidden mx-auto">
+        <SideMenu variant="profile" />
 
-          <main className="flex-1 flex flex-col overflow-y-auto">
+        {/* 메인 영역: 여기서 스케일 적용 */}
+        <main className="flex-1 overflow-hidden relative">
+          <div className="w-[111.2%] h-[111.2%] origin-top-left scale-[0.9] overflow-y-auto">
             <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 relative">
               
               <div className="flex items-center gap-2 mb-6 md:mb-8 lg:mb-[40px]">
@@ -218,20 +208,20 @@ const EditProfilePage = () => {
               </div>
 
             </div>
-          </main>
-        </div>
-
-        {toastMessage && (
-          <div className="fixed top-20 md:top-[100px] left-1/2 transform -translate-x-1/2 z-50 px-4 w-full max-w-md">
-            <Toast 
-              variant={toastMessage.variant}
-              message={toastMessage.message}
-              bgClassName={toastMessage.bgClassName}
-              iconColorClassName={toastMessage.iconColorClassName}
-            />
           </div>
-        )}
+        </main>
       </div>
+
+      {toastMessage && (
+        <div className="fixed top-20 md:top-[100px] left-1/2 transform -translate-x-1/2 z-50 px-4 w-full max-w-md">
+          <Toast 
+            variant={toastMessage.variant}
+            message={toastMessage.message}
+            bgClassName={toastMessage.bgClassName}
+            iconColorClassName={toastMessage.iconColorClassName}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -24,20 +24,15 @@ const My_Korean: React.FC = () => {
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
 
-  const onLogoutClick = () => setIsLogoutOpen(true);
-  const onWithdrawalClick = () => setIsWithdrawOpen(true);
-
   return (
-    // [80% 배율 적용] 외부 래퍼
-    <div className="w-full h-screen overflow-hidden bg-bg0">
-      {/* [80% 배율 적용] 내부 컨텐츠: 125% 확대 후 0.8 축소 */}
-      <div className="flex flex-col w-[125%] h-[125vh] origin-top-left scale-[0.8] overflow-hidden">
-        <GNB />
+    <div className="w-full h-screen overflow-hidden bg-bg0 flex flex-col">
+      <GNB />
 
-        <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
-          <SideMenu variant="profile" />
+      <div className="w-full flex flex-1 overflow-hidden mx-auto">
+        <SideMenu variant="profile" />
 
-          <main className="flex-1 flex flex-col overflow-y-auto relative">
+        <main className="flex-1 overflow-hidden relative">
+          <div className="w-[125%] h-[125%] origin-top-left scale-[0.8] overflow-y-auto">
             <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 flex flex-col gap-[38px]">
               <div className="flex flex-col xl:flex-row gap-[29px] items-start">
                 <div className="w-full xl:w-[620px] flex-none flex justify-center xl:block overflow-hidden rounded-2xl">
@@ -96,8 +91,8 @@ const My_Korean: React.FC = () => {
               isOpen={isWithdrawOpen}
               onClose={() => setIsWithdrawOpen(false)}
             />
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   );
