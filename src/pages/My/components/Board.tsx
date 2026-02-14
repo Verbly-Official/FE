@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getMyProfileApi } from '../../../apis/user'; 
+import DashBoardIcon from '../img/dashBoard.svg';
 
 interface RecentCountCardProps {
   title?: string;
@@ -42,8 +43,9 @@ const Board: React.FC<RecentCountCardProps> = ({
   const displayCount = propCount !== undefined ? propCount : fetchedCount;
 
   return (
-    <div className="w-full bg-[var(--color-white)] rounded-xl md:rounded-2xl border border-gray-2 p-4 md:p-6 flex items-center justify-between gap-4">
-      <div className="flex flex-col gap-1">
+    // overflow-hidden을 주어 이미지가 둥근 모서리를 넘지 않도록 함
+    <div className="w-full bg-[var(--color-white)] rounded-xl md:rounded-2xl border border-gray-2 p-4 md:p-6 flex items-center justify-between gap-4 overflow-hidden relative min-h-[120px]">
+      <div className="flex flex-col gap-1 z-10">
         <p className="text-[length:var(--fs-body2)] text-gray-6">
           {title}
         </p>
@@ -57,17 +59,17 @@ const Board: React.FC<RecentCountCardProps> = ({
         </p>
       </div>
 
-      <div className="w-20 h-16 sm:w-24 sm:h-18 md:w-32 md:h-20 rounded-lg md:rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-gray-1">
-        {imageSrc ? (
-          <img 
-            src={imageSrc} 
-            alt={title}
-            className="w-full h-full object-contain"
-          />
-        ) : (
-          <div className="w-full h-full bg-[var(--color-bg0)] flex items-center justify-center">
-          </div>
-        )}
+      {/* [수정] 아이콘 컨테이너 및 이미지 스타일
+        - absolute positioning을 사용하여 우측 하단에 고정
+        - w-[160px], h-[160px]: 요청하신 크기 반영
+        - -right-[20px], -bottom-[20px]: 박스 밖으로 살짝 나가게 하여 자연스러운 배치 유도 (수치 조절 가능)
+      */}
+      <div className="absolute right-10 -bottom-6 w-[160px] h-[160px] flex items-center justify-center pointer-events-none">
+        <img 
+          src={imageSrc || DashBoardIcon} 
+          alt="Dashboard Default" 
+          className="w-full h-full object-contain" 
+        />
       </div>
     </div>
   );

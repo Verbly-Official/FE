@@ -108,70 +108,73 @@ const SelectLangPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--color-white)] px-5 py-10">
-      <div className="flex flex-col items-center w-full max-w-[500px] gap-10">
-        <div className="flex flex-col items-center justify-center w-full mb-2">
-          <Logo variant="hori" />
-        </div>
-
-        <div className="flex flex-col w-full gap-6">
-          <div className="flex flex-col w-full gap-2">
-            <Text size="medium" state="default">Learning</Text>
-            <Select
-              placeholder="언어를 선택해주세요"
-              options={LANGUAGE_OPTIONS}
-              value={learningLang}
-              onChange={(val) => { setLearningLang(val); if (error) setError(''); }}
-              size="large"
-              className="!w-full"
-            />
+    // [80% 배율 적용] 외부 래퍼
+    <div className="w-full min-h-screen overflow-hidden bg-[var(--color-white)]">
+      {/* [80% 배율 적용] 내부 컨텐츠: 125% 크기로 늘린 후 0.8로 축소 */}
+      <div className="flex flex-col items-center justify-center w-[125%] min-h-[125vh] px-5 py-10 origin-top-left scale-[0.8]">
+        <div className="flex flex-col items-center w-full max-w-[500px] gap-10">
+          <div className="flex flex-col items-center justify-center w-full mb-2">
+            <Logo variant="hori" />
           </div>
 
-          <div className="flex flex-col w-full gap-2">
-            <Text size="medium" state="default">Native Language</Text>
-            <Select
-              placeholder="언어를 선택해주세요"
-              options={LANGUAGE_OPTIONS}
-              value={nativeLang}
-              onChange={(val) => { setNativeLang(val); if (error) setError(''); }}
-              size="large"
-              className="!w-full"
-            />
+          <div className="flex flex-col w-full gap-6">
+            <div className="flex flex-col w-full gap-2">
+              <Text size="medium" state="default">Learning</Text>
+              <Select
+                placeholder="언어를 선택해주세요"
+                options={LANGUAGE_OPTIONS}
+                value={learningLang}
+                onChange={(val) => { setLearningLang(val); if (error) setError(''); }}
+                size="large"
+                className="!w-full"
+              />
+            </div>
+
+            <div className="flex flex-col w-full gap-2">
+              <Text size="medium" state="default">Native Language</Text>
+              <Select
+                placeholder="언어를 선택해주세요"
+                options={LANGUAGE_OPTIONS}
+                value={nativeLang}
+                onChange={(val) => { setNativeLang(val); if (error) setError(''); }}
+                size="large"
+                className="!w-full"
+              />
+            </div>
+
+            {error && (
+              <div className="w-full p-3 bg-pink-100 border border-pink-20 rounded-lg">
+                <p className="text-[length:var(--fs-body2)] text-pink-20">{error}</p>
+              </div>
+            )}
+            
+            {!validation.isValid && nativeLang && learningLang && (
+              <div className="w-full">
+                 <p className="text-[length:var(--fs-body2)] text-pink-20 text-center">
+                   {validation.error || '모국어와 학습 언어는 달라야 합니다.'}
+                 </p>
+              </div>
+            )}
           </div>
 
-          {error && (
-            <div className="w-full p-3 bg-pink-100 border border-pink-20 rounded-lg">
-              <p className="text-[length:var(--fs-body2)] text-pink-20">{error}</p>
-            </div>
-          )}
-          
-          {/* 유효성 경고 (text-orange-500 -> text-pink-20 통일) */}
-          {!validation.isValid && nativeLang && learningLang && (
-            <div className="w-full">
-               <p className="text-[length:var(--fs-body2)] text-pink-20 text-center">
-                 {validation.error || '모국어와 학습 언어는 달라야 합니다.'}
-               </p>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-col w-full gap-3 mt-4">
-          <SolidButton 
-            variant="primary" 
-            size="large" 
-            className="w-full"
-            label={isLoading ? 'Processing...' : 'Complete'}
-            disabled={isButtonDisabled} 
-            onClick={handleComplete}
-          />
-          <OutlinedButton 
-            variant="secondary"
-            size="large"
-            className="w-full"
-            label='Logout'
-            onClick={handleLogoutClick}
-            disabled={isLoading}
-          />
+          <div className="flex flex-col w-full gap-3 mt-4">
+            <SolidButton 
+              variant="primary" 
+              size="large" 
+              className="w-full"
+              label={isLoading ? 'Processing...' : 'Complete'}
+              disabled={isButtonDisabled} 
+              onClick={handleComplete}
+            />
+            <OutlinedButton 
+              variant="secondary"
+              size="large"
+              className="w-full"
+              label='Logout'
+              onClick={handleLogoutClick}
+              disabled={isLoading}
+            />
+          </div>
         </div>
       </div>
     </div>
