@@ -8,8 +8,8 @@ import StarFalse from "../../assets/emoji/star-false.svg";
 import StarTrue from "../../assets/emoji/star-true.svg";
 import BookmarkFalse from "../../assets/emoji/bookmark-false.svg";
 import BookmarkTrue from "../../assets/emoji/bookmark-true.svg";
-import HeartFalse from "../../assets/emoji/heart-false.svg";
-import HeartTrue from "../../assets/emoji/heart-true.svg";
+import HeartTrue from "../../assets/emoji/heart-true.svg?react";
+import HeartFalse from "../../assets/emoji/heart-false.svg?react";
 
 const iconMap = {
   checkbox: { false: CheckboxFalse, true: CheckboxTrue },
@@ -39,16 +39,17 @@ export const InteractionIcon: React.FC<InteractionIconProps> = ({
       onClick={handleClick}
       aria-label={defaultAriaLabel}
       className={`
-        flex items-center justify-center p-1 rounded-md transition-colors duration-200
+        flex items-center justify-center px-[1.67px] pt-[2.5px] pb-[1.52px] rounded-md transition-colors duration-200
         cursor-pointer
         ${className}
       `}
     >
-      <img
-        src={Icon}
-        alt=""
-        aria-hidden="true"
-        className="w-6 h-6 object-contain"
+      <Icon
+        className={`
+          w-6 h-6
+          ${selected ? "text-blue-60" : "text-blue-60"}
+          ${className}
+        `}
       />
     </button>
   );
