@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNotification } from "../../contexts/NotificationContext";
 import Logo from "../Logo/Logo";
 import { SearchBar } from "../SearchBar/SearchBar";
 import GNB_Alarm from "./GNB_Alarm";
@@ -7,6 +8,8 @@ import BellIcon from "../../assets/emoji/bell-on.svg";
 export default function GNB({ variant = "default" }) {
   const [isActive, setActive] = useState<boolean>(true);
   const [isOpen, setOpen] = useState<boolean>(false);
+
+  const { unreadCount } = useNotification();
 
   return (
     <div className="relative z-30 w-full h-[60px] bg-white px-[40px] py-[8px] shadow-[0_4px_8px_rgba(0,0,0,0.08)]">
@@ -33,15 +36,11 @@ export default function GNB({ variant = "default" }) {
           >
             <div
               className={`w-[44px] h-[44px] rounded-[24px] px-[3px] py-[3px] flex relative items-center justify-center ${
-                isActive ? "bg-violet-90" : ""
+                unreadCount > 0 ? "bg-violet-90" : ""
               }`}
             >
               <img src={BellIcon} alt="bell" />
-              <div
-                className={`w-[8px] h-[8px] absolute right-[10px] top-[10px] rounded-[12px] ${
-                  isActive ? "bg-violet-50" : "bg-transparent"
-                }`}
-              />
+              <div className="w-[8px] h-[8px] absolute right-[10px] top-[10px] rounded-[12px] bg-violet-50" />
             </div>
           </div>
           {isOpen && (

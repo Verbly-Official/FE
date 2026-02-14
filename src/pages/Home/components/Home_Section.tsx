@@ -7,20 +7,21 @@ import { useEffect, useState } from "react";
 import type { ViewerInfo } from "../../../types/home";
 
 interface SectionProps {
-  variant: "kr" | "en";
   refreshKey: number;
   viewer: ViewerInfo | null;
 }
 
-export default function Home_Section({
-  variant = "kr",
-  refreshKey,
-  viewer,
-}: SectionProps) {
+export default function Home_Section({ refreshKey, viewer }: SectionProps) {
+  const isNative = viewer?.nativeLang === "en";
+
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
   const [isHotPost, setIsHotPost] = useState(false);
+
+  const [mode, setMode] = useState<"all" | "hot" | "help">("all");
+  const displayedPosts =
+    mode === "help" ? posts.filter((post) => post.status === "PENDING") : posts;
 
   useEffect(() => {
     if (isHotPost) fetchHotPosts();
@@ -55,14 +56,19 @@ export default function Home_Section({
       <div className="flex mb-[28px] justify-start gap-0 border-b-[1px] border-line2">
         <Tabs
           tabs={
-            variant === "kr"
-              ? ["For You", "Hot Posts"]
-              : ["For You", "Hot Posts", "Need Correction"]
+            isNative
+              ? ["For You", "Hot Posts", "Need Correction"]
+              : ["For You", "Hot Posts"]
           }
           onChange={(index) => {
             if (index === 1) {
+              setMode("hot");
               setIsHotPost(true);
+            } else if (index === 2 && isNative) {
+              setMode("help");
+              setIsHotPost(false);
             } else {
+              setMode("all");
               setIsHotPost(false);
             }
           }}
@@ -70,7 +76,7 @@ export default function Home_Section({
       </div>
       {/* HomeCards */}
       <div className="flex flex-col gap-[20px]">
-        {posts.map((post) => (
+        {displayedPosts.map((post) => (
           <Home_Card
             key={post.postId}
             varient="default"
