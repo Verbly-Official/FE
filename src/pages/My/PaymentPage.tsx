@@ -63,88 +63,98 @@ const PaymentPage: React.FC = () => {
   } = usePaymentForm(PRICING_OPTIONS);
 
   return (
-    <div className="w-full bg-bg0 flex flex-col flex-1 overflow-hidden min-h-screen">
+    <div className="w-full h-screen overflow-hidden bg-bg0 flex flex-col">
       <GNB />
       
-      <div className="w-full flex flex-col md:flex-row flex-1 overflow-hidden mx-auto">
-              
+      <div className="w-full flex flex-1 overflow-hidden mx-auto">
         <SideMenu variant="profile" />
 
-        <main className="flex-1 flex flex-col overflow-y-auto">
-          <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 relative">
-            
-            <div className="flex items-center gap-2 mb-6">
-              <IconButton 
-                iconSrc={CloseIcon} 
-                ariaLabel='quit'
-                size="small" 
-                shape="square" 
-                onClick={() => window.history.back()} 
-              />
-              <span className='text-[length:var(--fs-body2)] text-gray-5'>Quit</span>
-            </div>
-
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl relative z-10">
+        <main className="flex-1 overflow-hidden relative">
+          <div className="w-[111.2%] h-[111.2%] origin-top-left scale-[0.9] overflow-y-auto">
+            <div className="w-full max-w-[1800px] mx-auto px-4 py-6 md:px-8 lg:px-12 relative">
               
-              <div className="flex-1 space-y-6 lg:space-y-8">
-                <div className="bg-[var(--color-white)] rounded-2xl border border-gray-1 shadow-sm p-6 md:p-8">
-                  <SectionHeader number={1} title="Choose Your plan" />
-                  <PricingCard 
-                    options={PRICING_OPTIONS}
-                    selectedId={selectedPlan}
-                    onSelect={setSelectedPlan}
-                  />
-                </div>
-
-                <div className="bg-[var(--color-white)] rounded-2xl border border-gray-1 shadow-sm p-6 md:p-8">
-                  <SectionHeader number={2} title="Payment Information" />
-                  
-                  <PaymentMethodSelector 
-                    selectedMethod={paymentMethod}
-                    onMethodChange={setPaymentMethod}
-                  />
-
-                  {paymentMethod === 'card' && (
-                    <CardForm
-                      cardName={cardName}
-                      cardNumber={cardNumber}
-                      expirationDate={expirationDate}
-                      cvv={cvv}
-                      onCardNameChange={setCardName}
-                      onCardNumberChange={setCardNumber}
-                      onExpirationDateChange={setExpirationDate}
-                      onCvvChange={setCvv}
-                    />
-                  )}
-                </div>
+              <div className="flex items-center gap-2 mb-6">
+                <IconButton 
+                  iconSrc={CloseIcon} 
+                  ariaLabel='quit'
+                  size="small" 
+                  shape="square" 
+                  onClick={() => window.history.back()} 
+                />
+                <span className='text-[length:var(--fs-body2)] text-gray-5'>Quit</span>
               </div>
 
-              <div className="lg:w-[400px] xl:w-[450px] space-y-6 relative">
-                <DecorativeIcons />
+              <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-8 max-w-7xl relative z-10">
+                
+                {/* 왼쪽 메인 폼 영역 */}
+                <div className="flex-1 w-full bg-[var(--color-white)] rounded-2xl border border-gray-1 shadow-sm p-6 md:p-8">
+                  
+                  {/* Section 1: Choose Your Plan */}
+                  <div className="mb-10">
+                    <SectionHeader number={1} title="Choose Your plan" />
+                    <div className="mt-6">
+                      <PricingCard 
+                        options={PRICING_OPTIONS}
+                        selectedId={selectedPlan}
+                        onSelect={setSelectedPlan}
+                      />
+                    </div>
+                  </div>
 
-                <div className="relative z-10">
-                  <OrderSummary
-                    period={period}
-                    basePrice={originalPrice}
-                    discount={discount}
-                    tax={tax}
-                    total={total}
-                  />
+                  {/* Section 2: Payment Information */}
+                  <div>
+                    <SectionHeader number={2} title="Payment Information" />
+                    
+                    <div className="mt-6 flex flex-col gap-6">
+                      <PaymentMethodSelector 
+                        selectedMethod={paymentMethod}
+                        onMethodChange={setPaymentMethod}
+                      />
+
+                      {paymentMethod === 'card' && (
+                        <CardForm
+                          cardName={cardName}
+                          cardNumber={cardNumber}
+                          expirationDate={expirationDate}
+                          cvv={cvv}
+                          onCardNameChange={setCardName}
+                          onCardNumberChange={setCardNumber}
+                          onExpirationDateChange={setExpirationDate}
+                          onCvvChange={setCvv}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                <div className="p-6 relative z-10">
-                  <BenefitsList />
-                  <TermsCheckbox 
-                    checked={agreedToTerms}
-                    onChange={setAgreedToTerms}
-                  />
-                  <GradientButton 
-                    size='large'
-                    className="w-full justify-center gap-2 h-[3.5rem]"
-                    onClick={handleSubscribe}
-                  >
-                    Subscribe Now
-                  </GradientButton>
+                {/* 오른쪽 사이드바 */}
+                <div className="w-full lg:w-[400px] xl:w-[450px] space-y-6 relative">
+                  <DecorativeIcons />
+
+                  <div className="relative z-10">
+                    <OrderSummary
+                      period={period}
+                      basePrice={originalPrice}
+                      discount={discount}
+                      tax={tax}
+                      total={total}
+                    />
+                  </div>
+
+                  <div className="p-6 relative z-10">
+                    <BenefitsList />
+                    <TermsCheckbox 
+                      checked={agreedToTerms}
+                      onChange={setAgreedToTerms}
+                    />
+                    <GradientButton 
+                      size='large'
+                      className="w-full justify-center gap-2 h-[3.5rem]"
+                      onClick={handleSubscribe}
+                    >
+                      Subscribe Now
+                    </GradientButton>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,13 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextButton } from "../../components/Button";
 import Notification_Alarm from "./components/Notification_Alarm";
 import GNB from "../../components/Nav/GNB";
 import SideMenu from "../../components/Nav/SideMenu";
 import Home_WriteModal from "../../components/Home/Home_WriteModal";
 import CheckIcon from "../../assets/emoji/check-purple.svg";
+import { getNoti, markAllRead } from "../../apis/notification";
+import type { NotiItem } from "../../types/notification";
 
 export default function Home_Notification() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [notis, setNotis] = useState<NotiItem[]>([]);
+
+  const fetchNoti = async () => {
+    try {
+      const data = await getNoti(0, 20);
+      setNotis(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    fetchNoti();
+  }, []);
+
+  useEffect(() => {
+    const eventSource = new EventSource(
+      "http://3.35.202.0:8080/api/notifications/subscribe",
+      { withCredentials: true },
+    );
+
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type !== "CONNECT") {
+        setNotis((prev) => [data, ...prev]);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("SSE error:", err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   return (
     <div className="h-screen flex flex-col bg-bg0">
@@ -30,14 +70,23 @@ export default function Home_Notification() {
                   icon="leading"
                   iconSrc={CheckIcon}
                   className="justify-start"
+                  onClick={async () => {
+                    await markAllRead(0, 20);
+                    fetchNoti();
+                  }}
                 >
                   Mark all read
                 </TextButton>
 
                 {/* Alarms */}
                 <div className="flex flex-col gap-[8px]">
-                  <Notification_Alarm />
-                  <Notification_Alarm />
+                  {notis.map((noti) => (
+                    <Notification_Alarm
+                      key={noti.createdAt}
+                      notification={noti}
+                      onRead={() => setRefreshKey((prev) => prev + 1)}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
