@@ -1,6 +1,8 @@
 // src/types/home.ts
 import type { ApiResponse } from "./user";
 
+export type NativeLang = "kr" | "en";
+
 /**
  * 홈 화면 - 현재 로그인한 유저 정보
  * GET /api/home/viewer/info
@@ -9,6 +11,7 @@ export interface ViewerInfo {
   userId: number;
   imageUrl: string;
   nickname: string;
+  nativeLang: NativeLang;
   following: number;
   streak: number;
   point: number;

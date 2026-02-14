@@ -47,11 +47,7 @@ export default function Home_Korean() {
                 {/* 홈 내용 */}
                 <div className="flex-1 overflow-y-auto no-scrollbar px-[38px] pt-[32px] pb-[40px]">
                   <div className="max-w-[1200px] mx-auto">
-                    <Home_Section
-                      variant="kr"
-                      refreshKey={refreshKey}
-                      viewer={viewer}
-                    />
+                    <Home_Section refreshKey={refreshKey} viewer={viewer} />
                   </div>
                 </div>
                 {/* 사이드 */}
@@ -87,7 +83,9 @@ export default function Home_Korean() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Home_WriteModal
-                        variant="KOREAN"
+                        variant={
+                          viewer?.nativeLang === "en" ? "NATIVE" : "KOREAN"
+                        }
                         onClose={() => setModalOpen(false)}
                         onPostCreated={() => {
                           setRefreshKey((prev) => prev + 1);
