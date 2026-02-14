@@ -31,7 +31,6 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], o
   const [toastVariant, setToastVariant] = useState<"positive" | "cautionary">("positive");
 
   const [edited, setEdited] = useState<string>(() => normalizeText(sentence.correctedText));
-  const wordsOfSentence = useMemo(() => words.filter((w) => w.sentenceIdx === sentence.sentenceIdx), [words, sentence.sentenceIdx]);
 
   const handleSend = async () => {
     try {
@@ -53,27 +52,25 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], o
   return (
     <>
       <div className="flex w-full flex-col items-start gap-5 rounded-[12px] bg-white p-8">
-        <span className="text-[#585858] font-pretendard text-[length:var(--fs-title1)] font-medium leading-none">Sentence #{sentence.sentenceIdx + 1}</span>
+        <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Sentence #{sentence.sentenceIdx + 1}</span>
 
         <div className="flex p-6 items-center gap-[10px] rounded-[12px] w-full border border-[#D9D9D9] bg-[#FBFBFB]">
           <p className="whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]">{normalizeText(sentence.originalText)}</p>
         </div>
 
-        {wordsOfSentence.length > 0 && <div className="w-full text-xs text-[#585858]">Words: {wordsOfSentence.length}</div>}
-
-        <span className="text-[#585858] font-pretendard text-[length:var(--fs-title1)] font-medium leading-none">Corrected Sentence #{sentence.sentenceIdx + 1}</span>
+        <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Corrected Sentence #{sentence.sentenceIdx + 1}</span>
 
         <div className="flex flex-col p-8 items-start self-stretch gap-6 rounded-[12px] border border-[#D9D9D9] bg-white">
           <textarea
-            className="w-full min-h-[140px] resize-none outline-none whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]"
+            className="w-full min-h-[30px] resize-none outline-none whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]"
             value={edited}
             onChange={(e) => setEdited(e.target.value)}
             placeholder="Edit corrected sentence..."
           />
 
           <div className="flex w-full gap-[10px] justify-end">
-            <OutlinedButton label="Cancel" className="h-[60px]" onClick={handleCancel} />
-            <SolidButton label="Send" Icon={SendIcon} className="h-[60px]" onClick={handleSend} />
+            <OutlinedButton label="Cancel" className="!h-[50px]" onClick={handleCancel} />
+            <SolidButton label="Send" Icon={SendIcon} className="!h-[50px]" onClick={handleSend} />
           </div>
         </div>
       </div>
