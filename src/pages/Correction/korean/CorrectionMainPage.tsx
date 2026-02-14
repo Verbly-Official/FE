@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Tab from "../../components/Tab/Tab";
-import BtnTab_C from "./components/BtnTab_c";
-import DocumentTable from "./components/DocumentTable";
-import type { DocumentRow } from "./components/DocumentTable";
-import { addCorrectionBookmark, removeCorrectionBookmark } from "../../apis/correction";
+import { useLocation, useNavigate } from "react-router-dom";
+import Tab from "../../../components/Tab/Tab";
+import BtnTab_C from "../components/BtnTab_c";
+import DocumentTable from "../components/DocumentTable";
+import type { DocumentRow } from "../components/DocumentTable";
+import { addCorrectionBookmark, removeCorrectionBookmark } from "../../../apis/correction";
 
-import File from "../../assets/emoji/file.svg?react";
-import { Pagination } from "../../components/Pagination/Pagination";
-import { getCorrections } from "../../apis/correction";
+import File from "../../../assets/emoji/file.svg?react";
+import { Pagination } from "../../../components/Pagination/Pagination";
+import { getCorrections } from "../../../apis/correction";
+import { Toast } from "../../../components/Toast/Toast";
 
 const Correction_Main = () => {
   const SERVER_PAGE_IS_ZERO_BASED = true;
@@ -20,9 +21,6 @@ const Correction_Main = () => {
   const [documents, setDocuments] = useState<DocumentRow[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-
-  const navigate = useNavigate();
-  const handleNewPost = () => navigate("/correction/write");
 
   // 첨삭자 필터
   const [correctorKey, setCorrectorKey] = useState<"all" | "ai" | "native">("all");
@@ -71,6 +69,24 @@ const Correction_Main = () => {
   useEffect(() => {
     setPage(1);
   }, [correctorKey]);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.showToast) {
+      setShowToast(true);
+
+      // state 초기화 (뒤로가기 눌렀을 때 또 안 뜨게)
+      navigate(location.pathname, { replace: true, state: {} });
+
+      // 3초 후 자동 제거
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+  }, [location.state, navigate]);
 
   useEffect(() => {
     const run = async () => {
@@ -125,6 +141,11 @@ const Correction_Main = () => {
 
   return (
     <div className="min-h-screen">
+      {showToast && (
+        <div className="fixed top-9 left-1/2 -translate-x-1/2 z-[9999]">
+          <Toast variant="positive" message="Revision request sent!" />
+        </div>
+      )}
       <div className="flex min-w-0">
         <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
           <div className="flex px-6 py-9 items-center gap-[20px] rounded-[12px] border border-[#D9D9D9] bg-white">

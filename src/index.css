@@ -102,23 +102,23 @@ body {
   /* Gradients */
   --gradient-1-main: linear-gradient(90deg, #713de3 0%, #4f46dd 100%);
   --gradient-4: linear-gradient(90deg, #713de3 0%, #ff7395 100%);
-  --fs-title1: 1.5rem; /* 24 */
-  --fs-title2: 1.375rem; /* 22 */
-  --fs-title3: 1.25rem; /* 20 */
-  --fs-title4: 1.125rem; /* 18 */
+  --fs-title1: 1.375rem; /* 24 */
+  --fs-title2: 1.25rem; /* 22 */
+  --fs-title3: 1.125rem; /* 20 */
+  --fs-title4: 1rem; /* 18 */
 
-  --fs-subtitle1: 1.125rem; /* 18 */
-  --fs-subtitle2: 1rem; /* 16 */
-  --fs-subtitle3: 0.9375rem; /* 15 */
+  --fs-subtitle1: 1rem; /* 18 */
+  --fs-subtitle2: 0.9375rem; /* 16 */
+  --fs-subtitle3: 0.875rem; /* 15 */
 
-  --fs-body1: 0.9375rem; /* 15 */
-  --fs-body2: 0.875rem; /* 14 */
+  --fs-body1: 0.875rem; /* 15 */
+  --fs-body2: 0.8125rem; /* 14 */
 
-  --fs-button1: 0.8125rem; /* 13 */
-  --fs-button2: 0.75rem; /* 12 */
+  --fs-button1: 0.75rem; /* 13 */
+  --fs-button2: 0.6875rem; /* 12 */
 
-  --fs-caption1: 0.6875rem; /* 11 */
-  --fs-caption2: 0.625rem; /* 10 */
+  --fs-caption1: 0.625rem; /* 11 */
+  --fs-caption2: 0.5625rem; /* 10 */
 }
 
 /* 스크롤바 숨기기 */

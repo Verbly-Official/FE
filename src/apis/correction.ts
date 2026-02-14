@@ -88,6 +88,17 @@ export async function getCorrections(params: GetCorrectionsParams) {
   return normalizePageResponse(res.data, cleaned.page as number | undefined, (cleaned.size as number | undefined) ?? 10);
 }
 
+export type PatchCorrectionPayload = {
+  title?: string;
+  content?: string;
+  tags?: string[] | null; // null이면 유지, []면 전체 삭제 (백 명세)
+};
+
+export const patchCorrection = async (correctionId: number, payload: PatchCorrectionPayload) => {
+  const { data } = await api.patch(`/api/correction/${correctionId}`, payload);
+  return data;
+};
+
 export async function addCorrectionBookmark(correctionId: number) {
   const res = await api.patch(`/api/correction/${correctionId}/bookmark`);
   return res.data;
@@ -118,4 +129,43 @@ export async function postDraftCorrections(params: any) {
 export async function removeDraftCorrection(postId: number) {
   const res = await api.delete(`/api/temp-posts/${postId}`);
   return res.data;
+}
+
+// api/correction.ts
+export type AiCorrectionResponse = {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: {
+    toneManner?: {
+      grade: "GOOD" | "NORMAL" | "BAD";
+      casualToFormal: number;
+      commentKo: string;
+    };
+    suggestionCount?: number;
+    suggestions?: Array<{
+      original: string;
+      revised: string;
+      reasonKo: string;
+    }>;
+    recommendedPhrases?: string[];
+  };
+};
+
+export async function requestAiCorrection(params: { correctionId: number; accessToken: string }) {
+  const res = await fetch(`/api/corrections/${params.correctionId}/ai-assistance`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${params.accessToken}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok || !data.isSuccess) {
+    throw new Error(data.message ?? "AI 요청 실패");
+  }
+
+  return data;
 }

@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import GNB from "../../../components/Nav/GNB";
 import SideMenu from "../../../components/Nav/SideMenu";

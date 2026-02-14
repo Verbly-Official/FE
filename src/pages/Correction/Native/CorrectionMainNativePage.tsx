@@ -5,7 +5,7 @@ import Tab from "../../../components/Tab/Tab";
 import DocumentTable, { type DocumentRow } from "../components/DocumentTable";
 import File from "../../../assets/emoji/file.svg?react";
 import { Pagination } from "../../../components/Pagination/Pagination";
-import { getNativeCorrections } from "../../../apis/correctionNative";
+import { addNativeCorrectionBookmark, removeNativeCorrectionBookmark, getNativeCorrections } from "../../../apis/correctionNative";
 
 const Correction_NMain = () => {
   const [page, setPage] = useState(1);
@@ -17,6 +17,25 @@ const Correction_NMain = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   const navigate = useNavigate();
+
+  const handleToggleBookmark = async (id: number) => {
+    const current = documents.find((d) => d.id === id);
+    if (!current) return;
+
+    setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: !d.isStarred } : d)));
+
+    try {
+      if (current.isStarred) {
+        await removeNativeCorrectionBookmark(id);
+      } else {
+        await addNativeCorrectionBookmark(id);
+      }
+    } catch (e) {
+      setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: current.isStarred } : d)));
+      console.error(e);
+      alert("북마크 변경에 실패했어요.");
+    }
+  };
 
   const statusQuery = useMemo(() => {
     if (selectedTab === 1) return "COMPLETED";
@@ -100,7 +119,7 @@ const Correction_NMain = () => {
 
           <div className="w-full overflow-x-auto">
             <div className="min-w-[900px] mt-7">
-              <DocumentTable documents={documents} onRowClick={(row) => navigate(`/correction/native/list?correctionId=${row.id}`)} />
+              <DocumentTable documents={documents} onToggleBookmark={handleToggleBookmark} onRowClick={(row) => navigate(`/correction/native/list?correctionId=${row.id}`)} />
             </div>
           </div>
 

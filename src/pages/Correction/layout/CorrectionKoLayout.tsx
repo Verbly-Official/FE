@@ -15,7 +15,7 @@ export default function CorrectionKoLayout() {
           locale="ko"
           onChangeActive={(key) => {
             if (key === "drafts") navigate("/correction/draft");
-            else navigate("/correction");
+            else navigate("/correction/ko");
           }}
         />
       </div>
