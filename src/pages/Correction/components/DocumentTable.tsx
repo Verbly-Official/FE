@@ -10,6 +10,8 @@ export type DocumentRow = {
   status: string;
   words: number;
   isStarred: boolean;
+  correctorName?: string | null;
+  rawStatus: "PENDING" | "IN_PROGRESS" | "COMPLETED";
 };
 
 type DocumentTableProps = {

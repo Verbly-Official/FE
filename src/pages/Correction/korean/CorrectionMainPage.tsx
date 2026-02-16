@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+
 import Tab from "../../../components/Tab/Tab";
 import BtnTab_C from "../components/BtnTab_c";
 import DocumentTable from "../components/DocumentTable";
@@ -21,6 +23,10 @@ const Correction_Main = () => {
   const [documents, setDocuments] = useState<DocumentRow[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
+  const [searchParams] = useSearchParams();
+  const bookmark = searchParams.get("bookmark") === "true";
+  const sort = searchParams.get("sort") === "true";
 
   // 첨삭자 필터
   const [correctorKey, setCorrectorKey] = useState<"all" | "ai" | "native">("all");
@@ -94,6 +100,11 @@ const Correction_Main = () => {
         const apiPage = SERVER_PAGE_IS_ZERO_BASED ? Math.max(page - 1, 0) : page;
 
         const params: any = { page: apiPage, size: 10, sort: true };
+        // 최신순(Recent)일 때만 sort=true 전달 (서버가 sort boolean 받는다는 전제)
+        if (sort) params.sort = true;
+
+        // 즐겨찾기일 때만 bookmark=true 전달
+        if (bookmark) params.bookmark = true;
 
         // All이면 안 보내기
         if (statusQuery) params.status = statusQuery;
@@ -112,16 +123,21 @@ const Correction_Main = () => {
           const dateText = item.relativeTime ?? "-";
 
           const author = item.correctorName ?? (item.correctorType === "AI_ASSISTANT" ? "AI Assistant" : item.correctorType === "NATIVE_SPEAKER" ? "Native Speaker" : "부여받지 않음");
-          const statusText = item.status === "COMPLETED" ? "Completed" : item.status === "IN_PROGRESS" ? "In Progress" : item.status === "PENDING" ? "Pending" : String(item.status ?? "-");
+
+          const rawStatus = (item.status ?? "PENDING") as "PENDING" | "IN_PROGRESS" | "COMPLETED";
+
+          const statusText = rawStatus === "COMPLETED" ? "Completed" : rawStatus === "IN_PROGRESS" ? "In Progress" : "Pending";
 
           return {
-            id: item.correctionId,
+            id: Number(item.correctionId),
             title: item.title ?? "(no title)",
             author,
             date: dateText,
             status: statusText,
-            words: item.wordCount ?? 0, // 서버에 없으면 0 처리
+            rawStatus,
+            words: Number(item.wordCount ?? 0),
             isStarred: Boolean(item.bookmark),
+            correctorName: item.correctorName ?? null,
           };
         });
 
@@ -137,7 +153,9 @@ const Correction_Main = () => {
     };
 
     run();
-  }, [page, statusQuery, correctorQuery]);
+  }, [page, statusQuery, correctorQuery, bookmark, sort]);
+
+  useEffect(() => setPage(1), [bookmark, sort]);
 
   return (
     <div className="min-h-screen">
@@ -176,7 +194,17 @@ const Correction_Main = () => {
 
           <div className="w-full overflow-x-auto">
             <div className="min-w-[900px]">
-              <DocumentTable documents={documents} onToggleBookmark={handleToggleBookmark} />
+              <DocumentTable
+                documents={documents}
+                onToggleBookmark={handleToggleBookmark}
+                onRowClick={(row) => {
+                  if (row.rawStatus !== "COMPLETED") {
+                    alert("첨삭이 완료된 글만 확인할 수 있어요.");
+                    return;
+                  }
+                  navigate(`/correction/list/${row.id}`);
+                }}
+              />
             </div>
           </div>
 

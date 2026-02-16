@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
 import SideMenu_Tab from "../../../components/Nav/SideMenu_Tab";
 import DocIcon from "../../../assets/emoji/file.svg?react";
 import StarIcon from "../../../assets/emoji/star-false.svg?react";
@@ -55,7 +56,13 @@ const SIDEBAR_CONTENT: Record<Locale, SidebarSection[]> = {
 export default function Sidebar({ locale, defaultActive = "all", onChangeActive }: SidebarProps) {
   const [active, setActive] = useState<MenuKey>(defaultActive);
 
+  // locale 바뀔 때만 섹션 계산
   const sections = useMemo(() => SIDEBAR_CONTENT[locale], [locale]);
+
+  // defaultActive가 바뀌면(=URL query 바뀜) active도 동기화
+  useEffect(() => {
+    setActive(defaultActive);
+  }, [defaultActive]);
 
   const handleClick = (key: MenuKey) => {
     setActive(key);
@@ -66,17 +73,7 @@ export default function Sidebar({ locale, defaultActive = "all", onChangeActive 
     <aside className="bg-white">
       {sections.map((section) => (
         <div key={section.title} className="mb-6 last:mb-0">
-          <p
-            className="
-              flex items-start pb-[8px]
-              text-[#9E9E9E]
-              font-pretendard font-semibold
-              text-[length:var(--fs-subtitle2)]
-              leading-[var(--lh-title)]
-            "
-          >
-            {section.title}
-          </p>
+          <p className="flex items-start pb-[8px] text-[#9E9E9E] font-pretendard font-semibold text-[length:var(--fs-subtitle2)] leading-[var(--lh-title)]">{section.title}</p>
 
           <div className="space-y-2">
             {section.items.map((item) => (

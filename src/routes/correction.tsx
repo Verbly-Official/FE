@@ -4,6 +4,7 @@ import CorrectionWriteLayout from "../pages/Correction/layout/CorrectionWriteLay
 
 import Correction_Main from "../pages/Correction/korean/CorrectionMainPage";
 import Correction_Drafts from "../pages/Correction/korean/CorrectionDrafts";
+import Correction_ReadOnly from "../pages/Correction/korean/CorrectionReadOnly";
 
 import Correction_Write from "../pages/Correction/korean/WriteCorrectionPage";
 
@@ -26,6 +27,7 @@ export const correctionRoutes: RouteObject[] = [
           { path: "ko", element: <Correction_Main /> }, // /correction/ko
           { path: "draft", element: <Correction_Drafts /> }, // /correction/draft
           { index: true, element: <CorrectionRedirectPage /> }, // /correction -> redirect
+          { path: "list/:correctionId", element: <Correction_ReadOnly /> },
         ],
       },
 
