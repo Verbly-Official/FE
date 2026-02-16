@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TextButton } from "../../components/Button";
 import Notification_Alarm from "./components/Notification_Alarm";
 import GNB from "../../components/Nav/GNB";
@@ -7,11 +7,12 @@ import Home_WriteModal from "../../components/Home/Home_WriteModal";
 import CheckIcon from "../../assets/emoji/check-purple.svg";
 import { getNoti, markAllRead } from "../../apis/notification";
 import type { NotiItem } from "../../types/notification";
+import { useNotification } from "../../contexts/NotificationContext";
 
 export default function Home_Notification() {
   const [modalOpen, setModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [notis, setNotis] = useState<NotiItem[]>([]);
+  const { notis, setNotis } = useNotification();
 
   const fetchNoti = async () => {
     try {
@@ -21,9 +22,17 @@ export default function Home_Notification() {
       console.error(err);
     }
   };
-  useEffect(() => {
-    fetchNoti();
-  }, []);
+  //useEffect(() => {
+  //  fetchNoti();
+  //}, []);
+
+  const sortedNotis = useMemo(() => {
+    return [...notis].sort(
+      (a, b) =>
+        Number(a.isRead) - Number(b.isRead) ||
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+  }, [notis]);
 
   useEffect(() => {
     const eventSource = new EventSource(
@@ -66,25 +75,44 @@ export default function Home_Notification() {
               <div className="text-[40px] font-bold">Notification</div>
               {/* Section */}
               <div className="w-full flex flex-col gap-[12px]">
-                <TextButton
-                  icon="leading"
-                  iconSrc={CheckIcon}
-                  className="justify-start"
-                  onClick={async () => {
-                    await markAllRead(0, 20);
-                    fetchNoti();
-                  }}
-                >
-                  Mark all read
-                </TextButton>
-
+                <div className="flex">
+                  <TextButton
+                    icon="leading"
+                    iconSrc={CheckIcon}
+                    className="justify-start"
+                    onClick={async () => {
+                      await markAllRead(0, 20);
+                      setNotis((prev) =>
+                        prev.map((noti) => ({ ...noti, isRead: true })),
+                      );
+                    }}
+                  >
+                    Mark all read
+                  </TextButton>
+                </div>
                 {/* Alarms */}
-                <div className="flex flex-col gap-[8px]">
-                  {notis.map((noti) => (
+                <div className="flex flex-col gap-[8px] transition-all duration-300">
+                  {sortedNotis.map((noti) => (
                     <Notification_Alarm
-                      key={noti.createdAt}
+                      key={noti.notificationId}
                       notification={noti}
-                      onRead={() => setRefreshKey((prev) => prev + 1)}
+                      onRead={() =>
+                        setNotis((prev) =>
+                          prev.map((item) =>
+                            item.notificationId === noti.notificationId
+                              ? { ...item, isRead: true }
+                              : item,
+                          ),
+                        )
+                      }
+                      onDelete={() =>
+                        setNotis((prev) =>
+                          prev.filter(
+                            (item) =>
+                              item.notificationId !== noti.notificationId,
+                          ),
+                        )
+                      }
                     />
                   ))}
                 </div>

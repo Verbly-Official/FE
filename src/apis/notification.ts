@@ -13,6 +13,12 @@ export const getNoti = async (page: number, size: number) => {
   return res.data.result as NotiItem[];
 };
 
+export const markOneRead = async (notificationId: number) => {
+  const res = await instance.patch(`/api/notifications/${notificationId}`);
+
+  return res.data.result;
+};
+
 export const markAllRead = async (page: number, size: number) => {
   const res = await instance.patch("/api/notifications", null, {
     params: {
