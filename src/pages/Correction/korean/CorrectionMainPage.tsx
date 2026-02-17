@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Tab from "../../components/Tab/Tab";
-import BtnTab_C from "./components/BtnTab_c";
-import DocumentTable from "./components/DocumentTable";
-import type { DocumentRow } from "./components/DocumentTable";
-import { addCorrectionBookmark, removeCorrectionBookmark } from "../../apis/correction";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
-import File from "../../assets/emoji/file.svg?react";
-import { Pagination } from "../../components/Pagination/Pagination";
-import { getCorrections } from "../../apis/correction";
+import Tab from "../../../components/Tab/Tab";
+import BtnTab_C from "../components/BtnTab_c";
+import DocumentTable from "../components/DocumentTable";
+import type { DocumentRow } from "../components/DocumentTable";
+import { addCorrectionBookmark, removeCorrectionBookmark } from "../../../apis/correction";
+
+import File from "../../../assets/emoji/file.svg?react";
+import { Pagination } from "../../../components/Pagination/Pagination";
+import { getCorrections } from "../../../apis/correction";
+import { Toast } from "../../../components/Toast/Toast";
 
 const Correction_Main = () => {
   const SERVER_PAGE_IS_ZERO_BASED = true;
@@ -21,8 +24,9 @@ const Correction_Main = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const navigate = useNavigate();
-  const handleNewPost = () => navigate("/correction/write");
+  const [searchParams] = useSearchParams();
+  const bookmark = searchParams.get("bookmark") === "true";
+  const sort = searchParams.get("sort") === "true";
 
   // 첨삭자 필터
   const [correctorKey, setCorrectorKey] = useState<"all" | "ai" | "native">("all");
@@ -72,12 +76,35 @@ const Correction_Main = () => {
     setPage(1);
   }, [correctorKey]);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.showToast) {
+      setShowToast(true);
+
+      // state 초기화 (뒤로가기 눌렀을 때 또 안 뜨게)
+      navigate(location.pathname, { replace: true, state: {} });
+
+      // 3초 후 자동 제거
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+  }, [location.state, navigate]);
+
   useEffect(() => {
     const run = async () => {
       try {
         const apiPage = SERVER_PAGE_IS_ZERO_BASED ? Math.max(page - 1, 0) : page;
 
         const params: any = { page: apiPage, size: 10, sort: true };
+        // 최신순(Recent)일 때만 sort=true 전달 (서버가 sort boolean 받는다는 전제)
+        if (sort) params.sort = true;
+
+        // 즐겨찾기일 때만 bookmark=true 전달
+        if (bookmark) params.bookmark = true;
 
         // All이면 안 보내기
         if (statusQuery) params.status = statusQuery;
@@ -96,16 +123,21 @@ const Correction_Main = () => {
           const dateText = item.relativeTime ?? "-";
 
           const author = item.correctorName ?? (item.correctorType === "AI_ASSISTANT" ? "AI Assistant" : item.correctorType === "NATIVE_SPEAKER" ? "Native Speaker" : "부여받지 않음");
-          const statusText = item.status === "COMPLETED" ? "Completed" : item.status === "IN_PROGRESS" ? "In Progress" : item.status === "PENDING" ? "Pending" : String(item.status ?? "-");
+
+          const rawStatus = (item.status ?? "PENDING") as "PENDING" | "IN_PROGRESS" | "COMPLETED";
+
+          const statusText = rawStatus === "COMPLETED" ? "Completed" : rawStatus === "IN_PROGRESS" ? "In Progress" : "Pending";
 
           return {
-            id: item.correctionId,
+            id: Number(item.correctionId),
             title: item.title ?? "(no title)",
             author,
             date: dateText,
             status: statusText,
-            words: item.wordCount ?? 0, // 서버에 없으면 0 처리
+            rawStatus,
+            words: Number(item.wordCount ?? 0),
             isStarred: Boolean(item.bookmark),
+            correctorName: item.correctorName ?? null,
           };
         });
 
@@ -121,10 +153,17 @@ const Correction_Main = () => {
     };
 
     run();
-  }, [page, statusQuery, correctorQuery]);
+  }, [page, statusQuery, correctorQuery, bookmark, sort]);
+
+  useEffect(() => setPage(1), [bookmark, sort]);
 
   return (
     <div className="min-h-screen">
+      {showToast && (
+        <div className="fixed top-9 left-1/2 -translate-x-1/2 z-[9999]">
+          <Toast variant="positive" message="Revision request sent!" />
+        </div>
+      )}
       <div className="flex min-w-0">
         <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
           <div className="flex px-6 py-9 items-center gap-[20px] rounded-[12px] border border-[#D9D9D9] bg-white">
@@ -155,7 +194,17 @@ const Correction_Main = () => {
 
           <div className="w-full overflow-x-auto">
             <div className="min-w-[900px]">
-              <DocumentTable documents={documents} onToggleBookmark={handleToggleBookmark} />
+              <DocumentTable
+                documents={documents}
+                onToggleBookmark={handleToggleBookmark}
+                onRowClick={(row) => {
+                  if (row.rawStatus !== "COMPLETED") {
+                    alert("첨삭이 완료된 글만 확인할 수 있어요.");
+                    return;
+                  }
+                  navigate(`/correction/list/${row.id}`);
+                }}
+              />
             </div>
           </div>
 

@@ -1,12 +1,8 @@
-// Correction_NList.tsx
+// Correction_NList.tsx (Korean user - Read Only)
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { SolidButton } from "../../../components/Button";
-import { TextField } from "../../../components/TextArea/TextField";
-import DetailSentence from "../components/DetailSentence";
 import RightSentence from "../components/R_SentenceItem";
 import { instance } from "../../../apis/axios";
-import { submitNativeCorrection, saveNativeWordEdits } from "../../../apis/correctionNative";
 
 type FeedbackItem = {
   feedbackId?: number;
@@ -42,9 +38,9 @@ type CorrectionNativeDetail = {
   feedback: FeedbackItem[];
 };
 
-type WordEdit = { wordId: number; correctedText: string | null };
+const normalizeText = (t: string) => (t ?? "").replaceAll("\\n", "\n");
 
-const Correction_NList = () => {
+const Correction_ReadOnly = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -65,12 +61,6 @@ const Correction_NList = () => {
   const isDetailOpen = selectedSentenceIdx !== null;
 
   const [activeRightIdx, setActiveRightIdx] = useState<number | null>(null);
-  const [feedbackText, setFeedbackText] = useState("");
-  const [sending, setSending] = useState(false);
-
-  // wordId 기반 draft edits: wordId -> correctedText (null이면 삭제)
-  const [draftEdits, setDraftEdits] = useState<Record<number, string | null>>({});
-  const [savingEdits, setSavingEdits] = useState(false);
 
   const fetchDetail = async (id: number) => {
     const { data } = await instance.get(`/api/correction-native/${id}`);
@@ -114,105 +104,21 @@ const Correction_NList = () => {
     }).format(date);
   };
 
-  // 제출 버튼
-  const handleSubmit = async () => {
-    if (!activeCorrectionId) return;
+  const selectedSentence = useMemo(() => {
+    if (!detail || selectedSentenceIdx === null) return null;
+    return detail.sentences.find((x) => x.sentenceIdx === selectedSentenceIdx) ?? null;
+  }, [detail, selectedSentenceIdx]);
 
-    try {
-      await submitNativeCorrection(activeCorrectionId);
-      alert("제출이 완료되었습니다.");
-      navigate("/correction/native");
-
-      await fetchDetail(activeCorrectionId);
-    } catch (error) {
-      console.error(error);
-      alert("제출 중 오류가 발생했습니다.");
-    }
-  };
-
-  // 피드백 전송
-  const submitFeedback = async () => {
-    if (!activeCorrectionId) return;
-
-    const content = feedbackText.trim();
-    if (!content) return;
-
-    setSending(true);
-    try {
-      const payload: { content: string; sentenceIdx?: number } = { content };
-      if (activeRightIdx !== null) payload.sentenceIdx = Number(activeRightIdx);
-
-      const { data } = await instance.post(`/api/correction-native/${activeCorrectionId}/feedback`, payload);
-
-      const newItem = (data?.result ?? data) as FeedbackItem | null;
-
-      if (newItem && typeof newItem === "object" && "content" in newItem) {
-        setFeedbacks((prev) => [...prev, newItem]);
-      } else {
-        await fetchDetail(activeCorrectionId);
-      }
-
-      setFeedbackText("");
-      setActiveRightIdx(null);
-    } catch (e: any) {
-      console.error("STATUS:", e?.response?.status);
-      console.error("ERROR RESPONSE:", e?.response?.data);
-      console.error("ERROR MESSAGE:", e?.message);
-    } finally {
-      setSending(false);
-    }
-  };
-
-  const handleEditWord = (wordId: number, correctedText: string | null) => {
-    setDraftEdits((prev) => ({ ...prev, [wordId]: correctedText }));
-  };
-
-  // 특정 wordId draft 제거(Reset)
-  const handleResetWord = (wordId: number) => {
-    setDraftEdits((prev) => {
-      const next = { ...prev };
-      delete next[wordId];
-      return next;
-    });
-  };
-
-  // 택 문장에 해당하는 edits만 저장
-  const handleSaveEdits = async ({ sentenceIdx, edits }: { sentenceIdx: number; edits: WordEdit[] }) => {
-    if (!activeCorrectionId) return;
-    if (!edits?.length) return;
-
-    setSavingEdits(true);
-    try {
-      const payload = { edits };
-
-      console.log("[saveNativeWordEdits] correctionId:", activeCorrectionId);
-      console.log("[saveNativeWordEdits] payload:", payload);
-      console.log("[saveNativeWordEdits] payload(JSON):", JSON.stringify(payload, null, 2));
-
-      await saveNativeWordEdits(activeCorrectionId, { edits });
-
-      // 저장 후 상세 재조회(서버 상태로 동기화)
-      await fetchDetail(activeCorrectionId);
-
-      // 저장한 wordId들만 draft에서 제거
-      setDraftEdits((prev) => {
-        const next = { ...prev };
-        edits.forEach((e) => delete next[e.wordId]);
-        return next;
-      });
-    } catch (e) {
-      console.error(e);
-      alert("저장에 실패했습니다.");
-    } finally {
-      setSavingEdits(false);
-    }
-  };
+  const selectedWords = useMemo(() => {
+    if (!detail || selectedSentenceIdx === null) return [];
+    return (detail.words ?? []).filter((w) => w.sentenceIdx === selectedSentenceIdx);
+  }, [detail, selectedSentenceIdx]);
 
   return (
-    <div className="w-full h-full">
-      <div className="flex w-full h-[calc(100vh-64px)] bg-[#F8FAFC]">
+    <div className="w-full h-full min-h-0">
+      <div className="flex w-full h-[calc(100vh-64px)] bg-[#F8FAFC] overflow-hidden">
         {/* ===== Left: Sentences list ===== */}
-        <aside className="w-[370px] flex-shrink-0 h-full bg-white border border-[#D9D9D9] overflow-y-auto scrollbar-hide">
+        <aside className="w-[370px] flex-shrink-0 h-full min-h-0 bg-white border border-[#D9D9D9] overflow-y-auto scrollbar-hide">
           <div className="flex p-[24px_30px] flex-col items-start gap-4 w-full border-b border-[#D9D9D9] bg-white">
             <span className="text-[#585858] font-pretendard text-[length:var(--fs-body1)] font-semibold leading-[150%]">SENTENCES ({detail?.sentences?.length ?? 0})</span>
           </div>
@@ -227,7 +133,6 @@ const Correction_NList = () => {
                 onClick={() => setSelectedSentenceIdx((prev) => (prev === s.sentenceIdx ? null : s.sentenceIdx))}
               >
                 <div className="font-pretendard text-[length:var(--fs-subtitle3)] font-semibold text-[#585858] leading-[150%]">Sentence #{s.sentenceIdx + 1}</div>
-
                 <div className="font-pretendard text-[length:var(--fs-body2)] text-[#8a8a8a] leading-[150%] line-clamp-2">{s.originalText}</div>
               </button>
             );
@@ -235,7 +140,7 @@ const Correction_NList = () => {
         </aside>
 
         {/* ===== Center: Main content ===== */}
-        <main className="flex flex-col min-w-0 h-full overflow-y-auto scrollbar-hide px-10 py-3 gap-[13px] flex-1 relative">
+        <main className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto scrollbar-hide px-10 py-3 gap-[13px]">
           {loading && <div className="p-4">Loading...</div>}
           {!loading && errorMsg && <div className="p-4 text-red-500">{errorMsg}</div>}
 
@@ -252,42 +157,59 @@ const Correction_NList = () => {
                   />
                 ))}
               </div>
-            ) : (
-              (() => {
-                const sentence = detail.sentences.find((x) => x.sentenceIdx === selectedSentenceIdx);
-                if (!sentence) return null;
+            ) : selectedSentence ? (
+              // ✅ 읽기 전용 상세 뷰
+              <div className="flex w-full flex-col items-start gap-5 rounded-[12px] bg-white p-8">
+                <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Sentence #{selectedSentence.sentenceIdx + 1}</span>
 
-                return (
-                  <DetailSentence
-                    sentence={sentence}
-                    words={detail.words ?? []}
-                    draftEdits={draftEdits}
-                    onEditWord={handleEditWord}
-                    onResetWord={handleResetWord}
-                    onSaveEdits={handleSaveEdits}
-                    saving={savingEdits}
-                  />
-                );
-              })()
-            )
+                <div className="flex p-6 items-center gap-[10px] rounded-[12px] w-full border border-[#D9D9D9] bg-[#FBFBFB]">
+                  <p className="whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]">{normalizeText(selectedSentence.originalText)}</p>
+                </div>
+
+                <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Corrected Sentence #{selectedSentence.sentenceIdx + 1}</span>
+
+                <div className="flex flex-col p-8 items-start self-stretch gap-4 rounded-[12px] border border-[#D9D9D9] bg-white">
+                  <p className="w-full whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]">
+                    {normalizeText(selectedSentence.correctedText)}
+                  </p>
+
+                  {/* (선택) word 구간 정보도 보여주고 싶으면 */}
+                  {selectedWords.length > 0 && (
+                    <div className="w-full pt-4 border-t border-[#E5E7EB]">
+                      <div className="text-[#9E9E9E] font-pretendard text-[length:var(--fs-body2)] font-semibold">Edited Segments</div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {selectedWords.map((w) => (
+                          <span key={w.wordId} className="px-3 py-2 rounded-[10px] border border-[#E5E7EB] bg-[#FBFBFB] text-[#585858] font-pretendard text-[length:var(--fs-body2)]">
+                            {w.originalText} → {w.correctedText}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null
           ) : null}
         </main>
 
         {/* ===== Right: Feedback panel (hidden when detail open) ===== */}
         {!isDetailOpen && (
-          <aside className="w-[410px] flex-shrink-0 h-full bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col">
-            <div className="bg-[#F1ECFC] flex p-5 justify-center items-center gap-[10px] w-full">
+          <aside className="w-[410px] flex-shrink-0 h-full min-h-0 bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col overflow-hidden">
+            <div className="bg-[#F1ECFC] flex p-5 justify-center items-center gap-[10px] w-full shrink-0">
               <span className="text-black font-pretendard text-[length:var(--fs-title2)] font-semibold leading-none">Comments & Feedback</span>
             </div>
 
-            <div className="flex p-4 justify-between items-center w-full border-b border-[#D9D9D9] bg-white">
+            <div className="flex p-4 justify-between items-center w-full border-b border-[#D9D9D9] bg-white shrink-0">
               <div className="flex flex-col items-start px-2 py-1 rounded bg-[#D1FAE5]">
                 <span className="text-[var(--System-Green-1,#047857)] font-pretendard text-[length:var(--fs-body1)] font-semibold leading-[150%]">{detail?.status ?? "IN_PROGRESS"}</span>
               </div>
-              <SolidButton label="Submit Correction" className="!h-[50px] !p-4" onClick={handleSubmit} />
+
+              {/* ✅ 한국 유저용이면 보통 Submit은 숨김. 필요하면 살리기 */}
+              {/* <SolidButton label="Submit Correction" className="!h-[50px] !p-4" onClick={handleSubmit} /> */}
             </div>
 
-            <div className="flex-1 w-full flex flex-col gap-4 p-4 bg-[#FBFBFB] overflow-y-auto">
+            {/* 댓글 리스트만 */}
+            <div className="flex-1 min-h-0 w-full flex flex-col gap-4 p-4 bg-[#FBFBFB] overflow-y-auto">
               {feedbacks.map((f, i) => {
                 const key = f.feedbackId ?? `${f.sentenceIdx ?? "all"}-${i}`;
                 const hasSentence = f.sentenceIdx !== null && f.sentenceIdx !== undefined;
@@ -317,9 +239,8 @@ const Correction_NList = () => {
               })}
             </div>
 
-            <div className="flex p-6 flex-col items-start gap-[10px] w-full border-t border-[#D9D9D9] bg-white">
-              <TextField showBtn={true} value={feedbackText} onChange={(e) => setFeedbackText(e.target.value)} onSendClick={submitFeedback} disabled={sending} />
-            </div>
+            {/* ✅ 입력창 제거 (한국 유저는 작성 못하게) */}
+            {/* <div className="flex p-6 ..."><TextField ... /></div> */}
           </aside>
         )}
       </div>
@@ -327,4 +248,4 @@ const Correction_NList = () => {
   );
 };
 
-export default Correction_NList;
+export default Correction_ReadOnly;
