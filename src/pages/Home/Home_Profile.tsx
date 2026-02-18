@@ -79,7 +79,7 @@ export default function Home_Profile() {
   }, [uuidFromUrl, refreshKey]);
 
   return (
-    <div className="h-screen flex flex-col bg-bg0 overflow-hidden">
+    <div className="h-screen flex flex-col bg-bg0 overflow-hidden min-w-[1200px]">
       {/*GNB*/}
       <div className="w-screen">
         <GNB variant="home" />

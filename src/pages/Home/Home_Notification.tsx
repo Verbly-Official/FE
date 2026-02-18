@@ -59,7 +59,7 @@ export default function Home_Notification() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-bg0">
+    <div className="h-screen flex flex-col bg-bg0  min-w-[1200px]">
       {/*GNB*/}
       <div className="w-screen">
         <GNB variant="home" />

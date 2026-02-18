@@ -42,7 +42,7 @@ export default function Home_Korean() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-bg0">
+    <div className="h-screen flex flex-col bg-bg0 min-w-[1200px]">
       {/*GNB*/}
       <div className="w-screen">
         <GNB variant="home" />
@@ -96,7 +96,7 @@ export default function Home_Korean() {
                   onClick={() => setModalOpen(false)}
                 />
                 <div
-                  className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[956px]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Home_WriteModal
