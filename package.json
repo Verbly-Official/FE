@@ -11,12 +11,14 @@
   },
   "proxy": "http://3.35.202.0:8080/",
   "dependencies": {
+    "@stomp/stompjs": "^7.3.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.16",
     "axios": "^1.13.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.12.0",
+    "sockjs-client": "^1.6.1",
     "tailwind": "^4.0.0",
     "tailwindcss": "^4.1.18",
     "zustand": "^5.0.10"

@@ -16,6 +16,7 @@ import type { ViewerInfo, UuserInfo } from "../../types/home.ts";
 import type { PostItem } from "../../types/post.ts";
 import { getUserPosts } from "../../apis/post.ts";
 import { getViewerInfo, getUuserInfo } from "../../apis/home.ts";
+import { createOrEnterChatroom } from "../../apis/chatrooms.ts";
 import Home_WriteModal from "../../components/Home/Home_WriteModal.tsx";
 
 export default function Home_Profile() {
@@ -176,7 +177,24 @@ export default function Home_Profile() {
                               label="Message"
                               Icon={MessageImg}
                               size="large"
-                              onClick={() => navigate("/inbox")}
+                              onClick={async () => {
+                                if (Uuser?.userId) {
+                                  try {
+                                    const chatroomId = await createOrEnterChatroom(Uuser.userId);
+                                    navigate(`/inbox/${chatroomId}`, {
+                                      state: {
+                                        selectedChatId: chatroomId.toString(),
+                                        partner: {
+                                          name: Uuser.nickname,
+                                          imageUrl: Uuser.imageUrl,
+                                        },
+                                      },
+                                    });
+                                  } catch (error) {
+                                    console.error("Failed to enter chatroom:", error);
+                                  }
+                                }
+                              }}
                             />
                           </div>
                         </div>

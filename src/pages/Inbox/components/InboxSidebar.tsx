@@ -4,41 +4,35 @@ import { Avatar } from '../../../components/Avatar/Avatar';
 import { Badge as ContentBadge } from '../../../components/Badge/ContentBadge';
 import { IconButton } from '../../../components/Button/IconButton';
 import { Text } from '../../../components/Text/Text';
-import { getChatrooms, searchChatrooms } from '../../../apis/chatrooms';
+import { searchChatrooms } from '../../../apis/chatrooms';
 import type { ChatroomListItem, ChatProfile } from '../../../types/chat';
 import ReloadIcon from '../../../assets/emoji/reload.svg';
 
 interface InboxSidebarProps {
     selectedChatId: string | null;
     onSelectChat: (id: string) => void;
+    chatrooms: ChatroomListItem[];
+    isLoading: boolean;
+    error: string | null;
+    onRefresh: () => void;
 }
 
-export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSelectChat }) => {
+export const InboxSidebar: React.FC<InboxSidebarProps> = ({
+    selectedChatId,
+    onSelectChat,
+    chatrooms,
+    isLoading,
+    error,
+    onRefresh
+}) => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [chatrooms, setChatrooms] = useState<ChatroomListItem[]>([]);
+    // const [chatrooms, setChatrooms] = useState<ChatroomListItem[]>([]); // Removed internal state
     const [profileResults, setProfileResults] = useState<ChatProfile[]>([]);
     const [messageResults, setMessageResults] = useState<ChatroomListItem[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    // const [isLoading, setIsLoading] = useState(false); // Removed internal state
+    // const [error, setError] = useState<string | null>(null); // Removed internal state
 
-    // Fetch chatrooms on mount
-    useEffect(() => {
-        fetchChatrooms();
-    }, []);
-
-    const fetchChatrooms = async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const data = await getChatrooms();
-            setChatrooms(data);
-        } catch (err) {
-            setError('Failed to load chatrooms');
-            console.error('Error fetching chatrooms:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    // Removed internal useEffect fetchChatrooms
 
     // Handle search
     useEffect(() => {
@@ -89,7 +83,7 @@ export const InboxSidebar: React.FC<InboxSidebarProps> = ({ selectedChatId, onSe
                         size="small"
                         ariaLabel="Refresh"
                         className="!bg-transparent hover:!bg-gray-100"
-                        onClick={fetchChatrooms}
+                        onClick={onRefresh}
                     />
                 </div>
 
