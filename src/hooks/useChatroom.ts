@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ChatMessageItem } from '../types/chat';
-import { getChatroomMessages } from '../apis/chatrooms';
+import { getChatroomMessages, sendChatroomMessage } from '../apis/chatrooms';
 
 interface Partner {
     name: string;
@@ -28,14 +28,14 @@ export const useChatroom = (chatroomId: string | null): UseChatroomReturn => {
     const [error, setError] = useState<string | null>(null);
 
     // Fetch messages when chatroomId changes
-    const fetchMessages = useCallback(async () => {
+    const fetchMessages = useCallback(async (showLoading = true) => {
         if (!chatroomId) {
             setMessages([]);
             setPartner(null);
             return;
         }
 
-        setIsLoading(true);
+        if (showLoading) setIsLoading(true);
         setError(null);
 
         try {
@@ -63,27 +63,52 @@ export const useChatroom = (chatroomId: string | null): UseChatroomReturn => {
             setError(err instanceof Error ? err.message : 'Failed to fetch messages');
             console.error('Error fetching messages:', err);
         } finally {
-            setIsLoading(false);
+            if (showLoading) setIsLoading(false);
         }
     }, [chatroomId]);
 
     useEffect(() => {
-        fetchMessages();
+        fetchMessages(true);
+
+        // Polling every 3 seconds
+        const intervalId = setInterval(() => {
+            fetchMessages(false);
+        }, 3000);
+
+        return () => clearInterval(intervalId);
     }, [fetchMessages]);
 
     // Send a message (WebSocket implementation would go here)
+    // Send a message
     const sendMessage = useCallback(
         async (content: string) => {
             if (!chatroomId || !content.trim()) return;
 
-            // TODO: Implement WebSocket message sending
-            // For now, this is a placeholder
-            console.log('Sending message:', content, 'to chatroom:', chatroomId);
+            try {
+                const chatroomIdNum = parseInt(chatroomId, 10);
+                if (isNaN(chatroomIdNum)) throw new Error('Invalid chatroom ID');
 
-            // Optimistic update could be added here
-            // After WebSocket implementation, messages will be received via WebSocket
+                // Optimistic update
+                const tempMessage: ChatMessageItem = {
+                    senderName: 'Me', // Placeholder
+                    senderImageUrl: '', // Placeholder
+                    chatContent: content,
+                    createdAt: new Date().toISOString()
+                };
+                setMessages(prev => [...prev, tempMessage]);
+
+                await sendChatroomMessage(chatroomIdNum, content);
+                console.log('Message sent successfully via API');
+
+                // Refresh messages after sending (silent refresh)
+                await fetchMessages(false);
+            } catch (err) {
+                console.error('Failed to send message:', err);
+                setError('Failed to send message');
+                // TODO: Rollback optimistic update if needed
+            }
         },
-        [chatroomId]
+        [chatroomId, fetchMessages]
     );
 
     return {

@@ -1,32 +1,54 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { useChatroom } from '../../../hooks/useChatroom';
+import { useAuthStore } from '../../../store/useAuthStore';
 import { ChatRoomHeader } from './ChatRoomHeader';
 import { ChatList } from '../../../components/Chat/ChatList';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage } from '../../../types/chat';
 
+interface PartnerInfo {
+    name: string;
+    avatarUrl?: string;
+}
+
 interface ChatRoomViewProps {
     chatroomId: string;
     onToggleSidebar: () => void;
     isSidebarOpen: boolean;
+    partnerProp?: PartnerInfo | null;
 }
 
 export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
     chatroomId,
     onToggleSidebar,
-    isSidebarOpen
+    isSidebarOpen,
+    partnerProp
 }) => {
-    const { messages, partner, isLoading, sendMessage } = useChatroom(chatroomId);
+    const { messages, partner: hookPartner, isLoading, sendMessage } = useChatroom(chatroomId);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
+    const { userInfo } = useAuthStore(); // Get current user info
+
+    // Use partner from prop if available (for header), otherwise fall back to hook data
+    const displayPartner = partnerProp || hookPartner;
 
     // Map ChatMessageItem[] to ChatMessage[] for the common ChatList component
     const chatMessages = useMemo((): ChatMessage[] => {
-        if (!partner) return [];
-
-        // Get current user name from localStorage or auth store if available
-        // For now, we'll identify messages by checking if they have senderImageUrl
         return messages.map((msg, index) => {
-            const isFromOther = msg.senderImageUrl !== undefined && msg.senderImageUrl !== '';
+            // Check if message is from other person
+            // If senderName matches current user's nickname, it's from 'me'
+            // Fallback: if senderName is same as partner name, it's from 'other'
+            let isFromOther = true;
+
+            if (userInfo?.nickname && msg.senderName === userInfo.nickname) {
+                isFromOther = false;
+            } else if (displayPartner?.name && msg.senderName === displayPartner.name) {
+                isFromOther = true;
+            } else {
+                // Legacy check or fallback
+                isFromOther = msg.senderImageUrl !== undefined && msg.senderImageUrl !== '';
+                // If I have an image, the above check is wrong. 
+                // Better to default to 'other' unless we are sure it's 'me'.
+            }
 
             return {
                 id: index,
@@ -37,10 +59,10 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
                     minute: '2-digit',
                     hour12: false,
                 }),
-                avatarUrl: isFromOther ? msg.senderImageUrl : undefined
+                avatarUrl: isFromOther ? msg.senderImageUrl : (userInfo?.profileImage || displayPartner?.avatarUrl)
             };
         });
-    }, [messages, partner]);
+    }, [messages, displayPartner, userInfo]);
 
     // Auto-scroll to bottom when messages change
     useEffect(() => {
@@ -49,7 +71,7 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
         }
     }, [messages]);
 
-    if (isLoading && messages.length === 0) {
+    if (isLoading && messages.length === 0 && !displayPartner) {
         return (
             <div className="flex-1 flex items-center justify-center bg-white">
                 <div className="text-gray-400">Loading...</div>
@@ -57,7 +79,7 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
         );
     }
 
-    if (!partner) {
+    if (!displayPartner) {
         return (
             <div className="flex-1 flex items-center justify-center bg-white">
                 <div className="text-gray-400">Partner not found</div>
@@ -69,7 +91,7 @@ export const ChatRoomView: React.FC<ChatRoomViewProps> = ({
         <div className="flex-1 flex flex-col h-full bg-white min-w-0">
             {/* Header */}
             <ChatRoomHeader
-                partner={partner}
+                partner={displayPartner}
                 onToggleSidebar={onToggleSidebar}
                 isSidebarOpen={isSidebarOpen}
             />

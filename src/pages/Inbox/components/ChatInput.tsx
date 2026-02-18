@@ -20,6 +20,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled = false }
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.nativeEvent.isComposing) return;
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSend();

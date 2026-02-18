@@ -68,3 +68,10 @@ export const searchChatrooms = async (query: string): Promise<SearchResult> => {
     });
     return response.data.result;
 };
+/**
+ * POST /api/chatrooms/{chatroomId}/messages
+ * Send a message to a chatroom
+ */
+export const sendChatroomMessage = async (chatroomId: number, content: string): Promise<void> => {
+    await instance.post<ApiResponse<void>>(`/api/chatrooms/${chatroomId}/messages`, { content });
+};

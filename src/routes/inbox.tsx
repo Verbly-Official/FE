@@ -9,6 +9,10 @@ export const inboxRoutes: RouteObject[] = [
         element: <InboxPage />,
     },
     {
+        path: '/inbox/:chatroomId',
+        element: <InboxPage />,
+    },
+    {
         path: '/inbox/profile/:id',
         element: <ProfilePage />,
     },
