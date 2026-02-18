@@ -183,12 +183,12 @@ const EditProfilePage = () => {
                     phone={phone}
                     verificationCode={verificationCode}
                     isVerificationSent={isVerificationSent}
-                    isVerified={isVerified}       // ✅ 추가: Prop 전달
+                    isVerified={isVerified}
                     timer={timer}
                     onPhoneChange={setPhone}
                     onVerificationCodeChange={setVerificationCode}
                     onSendVerification={handleSendVerification}
-                    onVerify={handleVerifyCode}   // ✅ 추가: Prop 전달
+                    onVerify={handleVerifyCode}
                   />
                 </div>
               </div>

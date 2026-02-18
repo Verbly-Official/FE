@@ -121,7 +121,7 @@ const PaymentPage: React.FC = () => {
                       size='large'
                       className="w-full justify-center gap-2 h-[3.5rem]"
                       onClick={handleSubscribe}
-                      disabled={isLoading} // 로딩 중 클릭 방지
+                      disabled={isLoading} 
                     >
                       {isLoading ? 'Processing...' : 'Subscribe Now'}
                     </GradientButton>

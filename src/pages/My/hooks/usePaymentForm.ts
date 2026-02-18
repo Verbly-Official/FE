@@ -20,7 +20,7 @@ export const usePaymentForm = () => {
   const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<string>(''); 
   // 기본 결제 수단을 카카오페이로 설정
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'kakaopay'>('kakaopay');
+  const [paymentMethod, setPaymentMethod] = useState<'kakaopay' | 'paypal'>();
   
   // 카드 정보 (카카오페이 사용 시 미사용)
   const [cardName, setCardName] = useState('');

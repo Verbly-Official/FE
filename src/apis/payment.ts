@@ -46,7 +46,6 @@ export const getPaymentPlansApi = async (): Promise<ApiResponse<PlanDto[]>> => {
  * @param planId 구독할 플랜 ID
  */
 export const readyPaymentApi = async (planId: number): Promise<ApiResponse<KakaoReadyResult>> => {
-  // ✅ 수정됨: 백엔드의 @RequestParam에 맞춰 Query Parameter로 전송
   const response = await instance.post<ApiResponse<KakaoReadyResult>>(
     '/api/payment/ready',
     null, // Body는 비움
@@ -54,5 +53,22 @@ export const readyPaymentApi = async (planId: number): Promise<ApiResponse<Kakao
       params: { planId }, // URL에 ?planId=1 형태로 붙음
     }
   );
+  return response.data;
+};
+
+/**
+ * 구독 상태 조회 API
+ * GET /api/payment/subscription
+ */
+export interface SubscriptionDto {
+  isSubscribed: boolean;
+  planName?: string;
+  startDate?: string;
+  endDate?: string;
+  billingCycle?: 'MONTHLY' | 'YEARLY';
+}
+
+export const getSubscriptionStatusApi = async (): Promise<ApiResponse<SubscriptionDto>> => {
+  const response = await instance.get<ApiResponse<SubscriptionDto>>('/api/payment/subscription');
   return response.data;
 };
