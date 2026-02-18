@@ -14,10 +14,8 @@ instance.interceptors.request.use(
   (config) => {
     // FormData인 경우 Content-Type 헤더를 완전히 제거
     if (config.data instanceof FormData) {
-      // 방법 1: delete 사용 (가장 확실한 방법)
       if (config.headers) {
         delete config.headers['Content-Type'];
-        // axios 내부적으로 사용하는 키도 제거
         delete config.headers['content-type'];
       }
     }
@@ -26,13 +24,20 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor (기존 유지)
+// Response Interceptor
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // ✅ 핵심 수정: 이미 로그아웃 상태면 재발급 시도 없이 바로 종료
+      // 로그아웃 후 마운트된 컴포넌트들의 잔여 API 요청이 401을 받아도
+      // logout() → 렌더링 → 재요청 → 401 의 무한 루프가 발생하지 않음
+      if (!useAuthStore.getState().isLoggedIn) {
+        return Promise.reject(error);
+      }
+
       if (originalRequest.url?.includes('/auth/reissue')) {
         useAuthStore.getState().logout();
         window.location.href = '/login'; 

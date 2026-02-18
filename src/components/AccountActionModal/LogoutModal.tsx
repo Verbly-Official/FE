@@ -51,7 +51,7 @@ export const LogoutModal: React.FC<LogoutModalProps> = ({
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
       <div className="bg-[var(--color-white)] rounded-lg shadow-xl w-[660px] p-8 md:p-10 flex flex-col items-center text-center animate-fadeIn mx-4">
         
         {step === 'confirm' ? (
@@ -101,7 +101,6 @@ export const LogoutModal: React.FC<LogoutModalProps> = ({
           /* [Step 2] 완료 화면 (Complete) */
           <>
             <div className="mb-5">
-               {/* ✅ [수정 3] 완료 상태이므로 체크 아이콘 사용 및 img 태그 적용 */}
                <img 
                  src={CheckIcon} 
                  alt="complete" 

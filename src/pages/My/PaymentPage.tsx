@@ -6,13 +6,13 @@ import { SectionHeader } from './components/SectionHeader';
 import PricingCard from './components/PricingCard';
 import OrderSummary from './components/OrderSummary';
 import { PaymentMethodSelector } from './components/PaymentMethodSelector';
-import { CardForm } from './components/CardForm';
 import { BenefitsList } from './components/BenefitsList';
 import { TermsCheckbox } from './components/TermsCheckbox';
 import { DecorativeIcons } from './components/DecorativeIcons';
 import { usePaymentForm } from './hooks/usePaymentForm';
 import CloseIcon from '../../assets/emoji/close.svg';
 
+// 필요 시 usePaymentForm에서 export한 타입을 import 해서 사용해도 됩니다.
 interface PricingOption {
   id: string;
   period: string;
@@ -21,37 +21,13 @@ interface PricingOption {
   description: string;
 }
 
-const PRICING_OPTIONS: PricingOption[] = [
-  {
-    id: 'monthly',
-    period: 'MONTHLY',
-    price: '$ 1.60',
-    rawPrice: 1.60,
-    description: 'Per month'
-  },
-  {
-    id: 'yearly',
-    period: 'YEARLY',
-    price: '$ 9.60',
-    rawPrice: 9.60,
-    description: 'Per year'
-  }
-];
-
 const PaymentPage: React.FC = () => {
   const {
+    pricingOptions, // API에서 받아온 플랜 리스트
     selectedPlan,
     setSelectedPlan,
     paymentMethod,
     setPaymentMethod,
-    cardName,
-    setCardName,
-    cardNumber,
-    setCardNumber,
-    expirationDate,
-    setExpirationDate,
-    cvv,
-    setCvv,
     agreedToTerms,
     setAgreedToTerms,
     period,
@@ -60,7 +36,8 @@ const PaymentPage: React.FC = () => {
     tax,
     total,
     handleSubscribe,
-  } = usePaymentForm(PRICING_OPTIONS);
+    isLoading, // 로딩 상태
+  } = usePaymentForm(); // 인자 제거 (훅 내부에서 API 호출)
 
   return (
     <div className="w-full h-screen overflow-hidden bg-bg0 flex flex-col">
@@ -93,11 +70,17 @@ const PaymentPage: React.FC = () => {
                   <div className="mb-10">
                     <SectionHeader number={1} title="Choose Your plan" />
                     <div className="mt-6">
-                      <PricingCard 
-                        options={PRICING_OPTIONS}
-                        selectedId={selectedPlan}
-                        onSelect={setSelectedPlan}
-                      />
+                      {pricingOptions.length > 0 ? (
+                        <PricingCard 
+                          options={pricingOptions}
+                          selectedId={selectedPlan}
+                          onSelect={setSelectedPlan}
+                        />
+                      ) : (
+                        <div className="w-full py-10 flex justify-center items-center text-gray-500">
+                          Loading plans...
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -110,19 +93,6 @@ const PaymentPage: React.FC = () => {
                         selectedMethod={paymentMethod}
                         onMethodChange={setPaymentMethod}
                       />
-
-                      {paymentMethod === 'card' && (
-                        <CardForm
-                          cardName={cardName}
-                          cardNumber={cardNumber}
-                          expirationDate={expirationDate}
-                          cvv={cvv}
-                          onCardNameChange={setCardName}
-                          onCardNumberChange={setCardNumber}
-                          onExpirationDateChange={setExpirationDate}
-                          onCvvChange={setCvv}
-                        />
-                      )}
                     </div>
                   </div>
                 </div>
@@ -151,8 +121,9 @@ const PaymentPage: React.FC = () => {
                       size='large'
                       className="w-full justify-center gap-2 h-[3.5rem]"
                       onClick={handleSubscribe}
+                      disabled={isLoading} // 로딩 중 클릭 방지
                     >
-                      Subscribe Now
+                      {isLoading ? 'Processing...' : 'Subscribe Now'}
                     </GradientButton>
                   </div>
                 </div>

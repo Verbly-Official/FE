@@ -1,11 +1,12 @@
 import React from 'react';
 import { OutlinedButton } from '../../../components/Button';
 import CardIcon from '../../../assets/emoji/card.svg';
+import KakaoIcon from '../../../assets/emoji/kakao.svg'; 
 import HomeIcon from '../../../assets/emoji/home.svg';
 
 interface PaymentMethodSelectorProps {
-  selectedMethod: 'card' | 'paypal';
-  onMethodChange: (method: 'card' | 'paypal') => void;
+  selectedMethod: 'card' | 'paypal' | 'kakaopay';
+  onMethodChange: (method: 'card' | 'paypal' | 'kakaopay') => void;
 }
 
 export const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
@@ -14,13 +15,17 @@ export const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      <OutlinedButton 
+        <OutlinedButton 
         variant='primary'
         size='large' 
-        label='Credit Card' 
-        Icon={() => <img src={CardIcon} alt="card" className="w-5 h-5" />}
-        onClick={() => onMethodChange('card')}
-        className={selectedMethod === 'card' ? 'border-violet-50 bg-violet-100' : ''}
+        label='Kakaopay' 
+        Icon={() => <img src={KakaoIcon} alt="kakaopay" className="w-5 h-5" />}
+        onClick={() => onMethodChange('kakaopay')}
+        className={`w-full ${
+          selectedMethod === 'kakaopay' 
+            ? '!border-violet-500 !bg-violet-100 !text-violet-700' 
+            : ''
+        }`}
       />
       <OutlinedButton 
         variant='primary'
@@ -28,7 +33,11 @@ export const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         label='Paypal' 
         Icon={() => <img src={HomeIcon} alt="paypal" className="w-5 h-5" />}
         onClick={() => onMethodChange('paypal')}
-        className={selectedMethod === 'paypal' ? 'border-violet-50 bg-violet-100' : ''}
+        className={`w-full ${
+          selectedMethod === 'paypal' 
+            ? '!border-violet-500 !bg-violet-100 !text-violet-700' 
+            : ''
+        }`}
       />
     </div>
   );

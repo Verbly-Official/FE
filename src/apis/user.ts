@@ -51,6 +51,34 @@ export const withdrawApi = async (): Promise<ApiResponse<void>> => {
 };
 
 /**
+ * 전화번호 인증번호 발송
+ * POST /api/user/phone/send
+ * Body: { "phoneNumber": "01012345678" }
+ */
+export const sendPhoneVerificationApi = async (phoneNumber: string): Promise<ApiResponse<void>> => {
+  const response = await instance.post<ApiResponse<void>>('/api/user/phone/send', {
+    phoneNumber, // 키 이름이 명세서와 일치해야 함
+  });
+  return response.data;
+};
+
+/**
+ * 전화번호 인증번호 검증
+ * POST /api/user/phone/verify
+ * Body: { "phoneNumber": "...", "code": "..." }
+ */
+export const verifyPhoneVerificationApi = async (
+  phoneNumber: string,
+  code: string
+): Promise<ApiResponse<void>> => {
+  const response = await instance.post<ApiResponse<void>>('/api/user/phone/verify', {
+    phoneNumber,
+    code,
+  });
+  return response.data;
+};
+
+/**
  * 프로필 수정 파라미터 타입
  */
 export interface UpdateProfileParams {
@@ -62,8 +90,7 @@ export interface UpdateProfileParams {
 
 /**
  * ✅ 프로필 수정 API (500 에러 해결 버전)
- * 
- * 주요 개선사항:
+ * * 주요 개선사항:
  * 1. 파일명에서 특수문자 제거 강화
  * 2. FormData 키 이름 확인
  * 3. Content-Type 자동 설정 보장
