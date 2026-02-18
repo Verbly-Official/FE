@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { UserProfile } from "../Profile/Profile";
 import FireIcon from "../../assets/emoji/fire2.svg?react";
 import PersonIcon from "../../assets/emoji/person.svg?react";

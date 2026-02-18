@@ -78,14 +78,6 @@ export default function Home_Profile() {
     fetchUuser();
   }, [uuidFromUrl, refreshKey]);
 
-  useEffect(() => {
-    console.log("🔥 uuidFromUrl:", uuidFromUrl);
-  }, [uuidFromUrl]);
-
-  useEffect(() => {
-    console.log("🔥 Uuser:", Uuser);
-  }, [Uuser]);
-
   return (
     <div className="h-screen flex flex-col bg-bg0 overflow-hidden">
       {/*GNB*/}

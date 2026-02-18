@@ -23,6 +23,7 @@ type HomeCardProps = {
   isCorrected: boolean;
   post: PostItem;
   viewer: ViewerInfo | null;
+  onFollowToggle?: (isFollowing: boolean) => void;
 };
 
 export default function Home_Card({
@@ -30,6 +31,7 @@ export default function Home_Card({
   isCorrected = true,
   post,
   viewer,
+  onFollowToggle,
 }: HomeCardProps) {
   const navigate = useNavigate();
 
@@ -50,7 +52,6 @@ export default function Home_Card({
 
   useEffect(() => {
     setLocalPost(post);
-    console.log("🔥 post data:", post);
   }, [post]);
 
   const fetchComments = async (pageNumber: number) => {
@@ -141,6 +142,7 @@ export default function Home_Card({
                   nickname: post.nickname,
                   profileImg: post.userImageUrl,
                 }}
+                onFollow={onFollowToggle}
               />
             ) : (
               <div className="flex items-center gap-4">
@@ -268,6 +270,7 @@ export default function Home_Card({
                   nickname: post.nickname,
                   profileImg: post.userImageUrl,
                 }}
+                onFollow={onFollowToggle}
               />
             ) : (
               <div className="flex items-center gap-4">

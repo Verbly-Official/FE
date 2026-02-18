@@ -15,17 +15,29 @@ export default function Home_Korean() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [viewer, setViewer] = useState<ViewerInfo | null>(null);
 
+  const handleFollowChange = (isFollowing: boolean) => {
+    setViewer((prev) =>
+      prev
+        ? {
+            ...prev,
+            following: isFollowing ? prev.following + 1 : prev.following - 1,
+          }
+        : prev,
+    );
+  };
+
+  const fetchViewer = async () => {
+    try {
+      console.log("viewer:", viewer);
+      console.log("viewer.nativeLang:", viewer?.nativeLang);
+      const data = await getViewerInfo();
+      setViewer(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchViewer = async () => {
-      try {
-        console.log("viewer:", viewer);
-        console.log("viewer.nativeLang:", viewer?.nativeLang);
-        const data = await getViewerInfo();
-        setViewer(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchViewer();
   }, []);
 
@@ -47,7 +59,11 @@ export default function Home_Korean() {
             {/* 홈 내용 */}
             <div className="flex flex-1 overflow-y-auto no-scrollbar pl-[38px] pt-[32px] pb-[40px]">
               <div className="flex-1 max-w-[1200px] mx-auto">
-                <Home_Section refreshKey={refreshKey} viewer={viewer} />
+                <Home_Section
+                  refreshKey={refreshKey}
+                  viewer={viewer}
+                  refreshViewer={handleFollowChange}
+                />
               </div>
               {/* 사이드 */}
               <div className="hidden lg:flex w-[280px] flex-shrink-0 mx-[40px] flex-col gap-[32px]">

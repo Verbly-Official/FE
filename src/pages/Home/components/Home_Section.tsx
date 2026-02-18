@@ -9,9 +9,14 @@ import type { ViewerInfo } from "../../../types/home";
 interface SectionProps {
   refreshKey: number;
   viewer: ViewerInfo | null;
+  refreshViewer: (isFollowing: boolean) => void;
 }
 
-export default function Home_Section({ refreshKey, viewer }: SectionProps) {
+export default function Home_Section({
+  refreshKey,
+  viewer,
+  refreshViewer,
+}: SectionProps) {
   const isNative = viewer?.nativeLang === "en";
 
   const [posts, setPosts] = useState<PostItem[]>([]);
@@ -50,6 +55,16 @@ export default function Home_Section({ refreshKey, viewer }: SectionProps) {
     }
   };
 
+  const handleFollowToggle = (userId: number, isFollowing: boolean) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.userId === userId ? { ...post, isFollowing } : post,
+      ),
+    );
+
+    refreshViewer(isFollowing);
+  };
+
   return (
     <div className="bg-white flex-1 p-[24px] w-full min-h-screen rounded-[12px] ">
       {/* Tab */}
@@ -83,6 +98,9 @@ export default function Home_Section({ refreshKey, viewer }: SectionProps) {
             isCorrected={post.status !== "PENDING"}
             viewer={viewer}
             post={post}
+            onFollowToggle={(isFollowing) =>
+              handleFollowToggle(post.userId, isFollowing)
+            }
           />
         ))}
       </div>
