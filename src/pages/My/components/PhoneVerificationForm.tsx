@@ -6,20 +6,24 @@ interface PhoneVerificationFormProps {
   phone: string;
   verificationCode: string;
   isVerificationSent: boolean;
+  isVerified: boolean;
   timer: number;
   onPhoneChange: (value: string) => void;
   onVerificationCodeChange: (value: string) => void;
   onSendVerification: () => void;
+  onVerify: () => void;
 }
 
 export const PhoneVerificationForm: React.FC<PhoneVerificationFormProps> = ({
   phone,
   verificationCode,
   isVerificationSent,
+  isVerified,
   timer,
   onPhoneChange,
   onVerificationCodeChange,
   onSendVerification,
+  onVerify,
 }) => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -38,9 +42,10 @@ export const PhoneVerificationForm: React.FC<PhoneVerificationFormProps> = ({
           <TextField
             value={phone}
             onChange={(e) => onPhoneChange(e.target.value)}
-            placeholder="+8201000000000"
+            placeholder="01012345678"
             className="w-full"
-            maxLength={20}
+            maxLength={13}
+            disabled={isVerified}
           />
         </div>
       </div>
@@ -53,22 +58,38 @@ export const PhoneVerificationForm: React.FC<PhoneVerificationFormProps> = ({
             size="small"
             label={isVerificationSent ? "재발송" : "인증번호 발송"}
             onClick={onSendVerification}
+            disabled={isVerified}
             className="whitespace-nowrap w-full sm:w-auto"
           />
           <div className="flex items-center gap-3 lg:gap-[12px] w-full">
-            <div className="flex-1">
+            <div className="flex-1 flex gap-2">
               <TextField
                 value={verificationCode}
                 onChange={(e) => onVerificationCodeChange(e.target.value)}
-                placeholder="직접 입력"
+                placeholder="인증번호 6자리"
                 className="w-full"
-                disabled={!isVerificationSent}
+                disabled={!isVerificationSent || isVerified}
+                maxLength={6}
               />
+              {isVerificationSent && !isVerified && (
+                <OutlinedButton 
+                  variant="assistive"
+                  size="small"
+                  label="확인"
+                  onClick={onVerify}
+                  className="whitespace-nowrap"
+                />
+              )}
             </div>
-            {isVerificationSent && timer > 0 && (
-              <span className="text-[length:var(--fs-body2)] text-violet-50 whitespace-nowrap">
+            {isVerificationSent && !isVerified && timer > 0 && (
+              <span className="text-[length:var(--fs-body2)] text-violet-50 whitespace-nowrap min-w-[40px]">
                 {formatTime(timer)}
               </span>
+            )}
+            {isVerified && (
+               <span className="text-[length:var(--fs-body2)] text-main-100 whitespace-nowrap font-medium">
+                인증완료
+               </span>
             )}
           </div>
         </div>

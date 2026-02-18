@@ -50,7 +50,7 @@ export const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
       <div className="bg-[var(--color-white)] rounded-2xl shadow-xl w-[660px] p-8 md:p-10 flex flex-col items-center text-center animate-fadeIn mx-4">
         
         {step === 'confirm' ? (

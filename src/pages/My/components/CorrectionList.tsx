@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Badge } from "../../../components/Badge/ContentBadge"; 
 import { getCorrections, type CorrectionItem } from '../../../apis/correction'; 
 
-interface CorrectionItemData {
+// 외부에서 사용할 수도 있으므로 export (필요 시 타입 분리 가능)
+export interface CorrectionItemData {
   id: number;
   title: string;
   date: string;
@@ -11,16 +11,16 @@ interface CorrectionItemData {
 }
 
 interface CorrectionListProps {
-  data?: CorrectionItemData[]; 
+  data?: CorrectionItemData[];
+  onItemClick?: (id: number) => void; // 클릭 핸들러 추가
 }
 
-const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
-  const navigate = useNavigate();
+const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData, onItemClick }) => {
   const [items, setItems] = useState<CorrectionItemData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // 1. Props로 데이터가 들어오면 우선 사용
+    // 1. Props로 데이터가 들어오면 우선 사용 (기존 로직 유지)
     if (propData && propData.length > 0) {
       setItems(propData);
       setLoading(false);
@@ -32,17 +32,20 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
       try {
         setLoading(true);
         
+        // API 호출: 정렬, 페이지, 사이즈 등 필요한 파라미터 전달
         const response = await getCorrections({ 
-          sort: true 
+          sort: true,
+          page: 0,
+          size: 5 // 대시보드 형태라면 5개 정도만 노출
         });
 
-        // [수정] Swagger 응답 구조(corrections 배열) 및 필드명(correctionId, correctionCreatedAt) 반영
-        // response가 { total: number, corrections: [...] } 형태라고 가정
-        const sourceData = response.corrections || [];
+        // normalizePageResponse는 'items' 키를 반환합니다.
+        const sourceData = response.items || [];
 
         const mappedItems: CorrectionItemData[] = sourceData.map((item: CorrectionItem) => ({
           id: item.correctionId ?? 0,
           title: item.title ?? "제목 없음",
+          // 날짜 포맷팅
           date: item.correctionCreatedAt 
             ? new Date(item.correctionCreatedAt).toLocaleDateString('ko-KR', {
                 year: 'numeric',
@@ -60,7 +63,6 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [propData]);
 
@@ -80,7 +82,10 @@ const CorrectionList: React.FC<CorrectionListProps> = ({ data: propData }) => {
   };
 
   const handleItemClick = (id: number) => {
-    navigate(`/correction/${id}`); 
+    // 부모에게 클릭 이벤트 전달
+    if (onItemClick) {
+      onItemClick(id);
+    }
   };
 
   return (

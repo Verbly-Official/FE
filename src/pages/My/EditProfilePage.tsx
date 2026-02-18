@@ -47,10 +47,12 @@ const EditProfilePage = () => {
     verificationCode,
     setVerificationCode,
     isVerificationSent,
+    isVerified,      // ✅ 추가: 인증 완료 상태
     timer,
     toastMessage,
     handleImageUpload,
     handleSendVerification,
+    handleVerifyCode, // ✅ 추가: 인증 번호 확인 함수
     validateAndSave,
   } = useProfileForm(INITIAL_USER);
 
@@ -181,10 +183,12 @@ const EditProfilePage = () => {
                     phone={phone}
                     verificationCode={verificationCode}
                     isVerificationSent={isVerificationSent}
+                    isVerified={isVerified}       // ✅ 추가: Prop 전달
                     timer={timer}
                     onPhoneChange={setPhone}
                     onVerificationCodeChange={setVerificationCode}
                     onSendVerification={handleSendVerification}
+                    onVerify={handleVerifyCode}   // ✅ 추가: Prop 전달
                   />
                 </div>
               </div>
