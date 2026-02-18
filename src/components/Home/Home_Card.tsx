@@ -50,6 +50,7 @@ export default function Home_Card({
 
   useEffect(() => {
     setLocalPost(post);
+    console.log("🔥 post data:", post);
   }, [post]);
 
   const fetchComments = async (pageNumber: number) => {
@@ -130,17 +131,29 @@ export default function Home_Card({
         <div className="flex flex-col bg-white w-full my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
-            <UserProfile
-              size="medium"
-              data={{
-                id: post.uuid,
-                userId: post.userId, // ✅ 추가
-                isFollowing: post.isFollowing, // ✅ 추가
-                name: post.nickname,
-                profileImg: post.userImageUrl,
-                bio: "",
-              }}
-            />
+            {post.uuid ? (
+              <UserProfile
+                size="medium"
+                data={{
+                  uuid: post.uuid,
+                  userId: post.userId,
+                  isFollowing: post.isFollowing,
+                  nickname: post.nickname,
+                  profileImg: post.userImageUrl,
+                }}
+              />
+            ) : (
+              <div className="flex items-center gap-4">
+                <img
+                  src={post.userImageUrl ?? DefaultImg}
+                  className="w-[48px] h-[48px] rounded-full"
+                />
+                <span className="font-bold text-[length:var(--fs-subtitle1)]">
+                  {post.nickname}
+                </span>
+              </div>
+            )}
+
             {!isCorrected && (
               <Badge content="Request Correction" size="medium" />
             )}
@@ -245,17 +258,28 @@ export default function Home_Card({
         <div className="flex flex-col bg-white w-[340px] h-auto my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
-            <UserProfile
-              size="medium"
-              data={{
-                id: post.uuid,
-                userId: post.userId, // ✅ 추가
-                isFollowing: post.isFollowing, // ✅ 추가
-                name: post.nickname,
-                profileImg: post.userImageUrl,
-                bio: "",
-              }}
-            />
+            {post.uuid ? (
+              <UserProfile
+                size="medium"
+                data={{
+                  uuid: post.uuid,
+                  userId: post.userId,
+                  isFollowing: post.isFollowing,
+                  nickname: post.nickname,
+                  profileImg: post.userImageUrl,
+                }}
+              />
+            ) : (
+              <div className="flex items-center gap-4">
+                <img
+                  src={post.userImageUrl ?? DefaultImg}
+                  className="w-[48px] h-[48px] rounded-full"
+                />
+                <span className="font-bold text-[length:var(--fs-subtitle1)]">
+                  {post.nickname}
+                </span>
+              </div>
+            )}
           </div>
           {/* Content */}
           <div>{post.content}</div>

@@ -18,6 +18,8 @@ export default function Home_Korean() {
   useEffect(() => {
     const fetchViewer = async () => {
       try {
+        console.log("viewer:", viewer);
+        console.log("viewer.nativeLang:", viewer?.nativeLang);
         const data = await getViewerInfo();
         setViewer(data);
       } catch (error) {
@@ -36,8 +38,9 @@ export default function Home_Korean() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* 좌측 사이드메뉴 (고정) */}
-        <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
-
+        <div className="hidden md:flex flex-shrink-0">
+          <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
+        </div>
         {/* 오버레이 가능 영역 */}
         <div className={"w-full h-full bg-bg0 z-10 relative"}>
           <div className="flex w-full h-full">
