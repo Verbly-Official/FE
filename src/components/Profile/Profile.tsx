@@ -91,9 +91,9 @@ export const UserProfile: React.FC<ProfileProps> = ({
   // [Small Size]
   if (size === "small") {
     return (
-      <div className={`flex items-center gap-3 ${className}`} onClick={handleMoveToProfile}>
+      <div className={`flex items-center gap-3 ${className}`}>
         {renderImage()}
-        <div className="flex flex-col">
+        <div className="flex flex-col" onClick={handleMoveToProfile}>
           <span className="font-bold text-[length:var(--fs-subtitle2)] text-gray-9 cursor-pointer hover:underline">
             {displayName}
           </span>
@@ -110,10 +110,10 @@ export const UserProfile: React.FC<ProfileProps> = ({
   // [Medium Size]
   if (size === "medium") {
     return (
-      <div className={`flex items-center gap-4 ${className}`} onClick={handleMoveToProfile}>
+      <div className={`flex items-center gap-4 ${className}`}>
         {renderImage()}
         <div className="flex flex-col flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2"  onClick={handleMoveToProfile}>
             <span className="font-bold text-[length:var(--fs-subtitle1)] text-gray-9 cursor-pointer hover:underline">
               {displayName}
             </span>
@@ -137,13 +137,11 @@ export const UserProfile: React.FC<ProfileProps> = ({
 
   // [Large Size]
   return (
-    <div
-      className={`flex flex-col items-center gap-4 text-center ${className}`}
-      onClick={handleMoveToProfile}
-    >
+    <div className={`flex flex-col items-center gap-4 text-center ${className}`}>
       {renderImage()}
       <div>
-        <h2 className="text-[length:var(--fs-title1)] font-bold text-gray-9 cursor-pointer hover:text-gray-7 transition-colors">
+        <h2 className="text-[length:var(--fs-title1)] font-bold text-gray-9 cursor-pointer hover:text-gray-7 transition-colors" 
+        onClick={handleMoveToProfile}>
           {displayName}
         </h2>
         <div className="flex items-center justify-center gap-2 mt-1">
