@@ -89,12 +89,7 @@ export interface UpdateProfileParams {
 }
 
 /**
- * ✅ 프로필 수정 API (500 에러 해결 버전)
- * * 주요 개선사항:
- * 1. 파일명에서 특수문자 제거 강화
- * 2. FormData 키 이름 확인
- * 3. Content-Type 자동 설정 보장
- * 4. 디버깅을 위한 콘솔 로그 추가 (개발 환경)
+ * 프로필 수정 API
  */
 export const updateUserProfileApi = async (
   params: UpdateProfileParams,
