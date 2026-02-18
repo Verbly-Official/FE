@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { removeDraftCorrection } from "../../apis/correction";
+import { removeDraftCorrection } from "../../../apis/correction";
 
-import DocumentTable from "./components/DocumentTable";
-import type { DocumentRow } from "./components/DocumentTable";
-import { Pagination } from "../../components/Pagination/Pagination";
-import { getDraftCorrections } from "../../apis/correction";
-import { SolidButton } from "../../components/Button";
-import { OutlinedButton } from "../../components/Button";
-import TrashIcon from "../../assets/emoji/delete.svg?react";
-import EditIcon from "../../assets/emoji/edit.svg?react";
+import DocumentTable from "../components/DocumentTable";
+import type { DocumentRow } from "../components/DocumentTable";
+import { Pagination } from "../../../components/Pagination/Pagination";
+import { getDraftCorrections } from "../../../apis/correction";
+import { SolidButton } from "../../../components/Button";
+import { OutlinedButton } from "../../../components/Button";
+import TrashIcon from "../../../assets/emoji/delete.svg?react";
+import EditIcon from "../../../assets/emoji/edit.svg?react";
 
 const Correction_drafts = () => {
   const SERVER_PAGE_IS_ZERO_BASED = true;

@@ -1,13 +1,60 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Tab from "../../../components/Tab/Tab";
-
 import DocumentTable, { type DocumentRow } from "../components/DocumentTable";
 import File from "../../../assets/emoji/file.svg?react";
 import { Pagination } from "../../../components/Pagination/Pagination";
-import { getNativeCorrections } from "../../../apis/correctionNative";
+import { addNativeCorrectionBookmark, removeNativeCorrectionBookmark, getNativeCorrections } from "../../../apis/correctionNative";
+
+type CorrectionStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED";
+
+type CorrectionListItem = {
+  correctionId: number;
+  title: string;
+  status: CorrectionStatus;
+  bookmark: boolean;
+  correctorName?: string | null;
+  wordCount?: number | null;
+  correctionCreatedAt?: string | null;
+};
+
+type CorrectionsListResult = {
+  corrections: CorrectionListItem[];
+  total: number;
+  totalPages: number;
+};
+
+type ApiResponse<T> = {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: T;
+};
+
+const PAGE_SIZE = 4;
+
+const toStatusLabel = (status: CorrectionStatus) => {
+  if (status === "COMPLETED") return "Completed";
+  if (status === "IN_PROGRESS") return "In Progress";
+  return "Pending";
+};
+
+const toDateLabel = (iso?: string | null) => {
+  if (!iso) return "-";
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
 
 const Correction_NMain = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const bookmark = searchParams.get("bookmark") === "true";
+  const sort = searchParams.get("sort") === "true";
+
   const [page, setPage] = useState(1);
   const [selectedTab, setSelectedTab] = useState(0);
   const tabs = ["All", "Completed", "In Progress", "Pending"];
@@ -16,53 +63,74 @@ const Correction_NMain = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const navigate = useNavigate();
-
-  const statusQuery = useMemo(() => {
+  const statusQuery = useMemo<CorrectionStatus | undefined>(() => {
     if (selectedTab === 1) return "COMPLETED";
     if (selectedTab === 2) return "IN_PROGRESS";
     if (selectedTab === 3) return "PENDING";
     return undefined;
   }, [selectedTab]);
 
+  // 탭/필터 변경 시 1페이지로
   useEffect(() => {
     setPage(1);
-  }, [selectedTab]);
+  }, [selectedTab, bookmark, sort]);
 
-  const PAGE_SIZE = 4;
+  const handleToggleBookmark = async (id: number) => {
+    const current = documents.find((d) => d.id === id);
+    if (!current) return;
+
+    setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: !d.isStarred } : d)));
+
+    try {
+      if (current.isStarred) await removeNativeCorrectionBookmark(id);
+      else await addNativeCorrectionBookmark(id);
+    } catch (e) {
+      setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: current.isStarred } : d)));
+      console.error(e);
+      alert("북마크 변경에 실패했어요.");
+    }
+  };
 
   useEffect(() => {
     const run = async () => {
       try {
         const apiPage = page - 1;
 
-        const params: any = {
+        const params: {
+          page: number;
+          size: number;
+          status?: CorrectionStatus;
+          bookmark?: true;
+          sort?: true;
+          correctorType?: "NATIVE_SPEAKER" | "AI_ASSISTANT";
+        } = {
           page: apiPage,
           size: PAGE_SIZE,
-          status: statusQuery,
+          ...(statusQuery ? { status: statusQuery } : {}),
+          ...(bookmark ? { bookmark: true } : {}),
+          ...(sort ? { sort: true } : {}),
+          correctorType: "NATIVE_SPEAKER",
         };
 
-        const res = await getNativeCorrections(params);
+        const res = (await getNativeCorrections(params)) as ApiResponse<CorrectionsListResult>;
         const result = res?.result;
 
         const nextDocs = Array.isArray(result?.corrections) ? result.corrections : [];
 
-        setTotalCount(Number(result?.totalElements ?? 0));
+        setTotalCount(Number(result?.total ?? 0));
         setTotalPages(Number(result?.totalPages ?? 1));
 
-        const rows: DocumentRow[] = nextDocs.map((item: any) => {
-          const statusText = item.status === "COMPLETED" ? "Completed" : item.status === "IN_PROGRESS" ? "In Progress" : item.status === "PENDING" ? "Pending" : String(item.status ?? "-");
-
-          return {
-            id: Number(item.correctionId),
-            title: item.title ?? "(no title)",
-            author: item.correctorName ?? "Native Speaker",
-            date: item.correctionCreatedAt ? new Date(item.correctionCreatedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "-",
-            status: statusText,
-            words: 0,
-            isStarred: Boolean(item.bookmark),
-          };
-        });
+        const rows: DocumentRow[] = nextDocs.map((item) => ({
+          id: Number(item.correctionId),
+          title: item.title ?? "(no title)",
+          author: item.correctorName ?? "Native Speaker",
+          date: toDateLabel(item.correctionCreatedAt),
+          status: toStatusLabel(item.status),
+          words: Number(item.wordCount ?? 0),
+          isStarred: Boolean(item.bookmark),
+          correctorName: item.correctorName ?? null,
+          rawStatus: item.status, // (있으면 권한/클릭 제한에 쓰기 좋음)
+        })) as any;
 
         setDocuments(rows);
       } catch (e) {
@@ -74,7 +142,7 @@ const Correction_NMain = () => {
     };
 
     run();
-  }, [page, statusQuery]);
+  }, [page, statusQuery, bookmark, sort]);
 
   return (
     <div className="min-h-screen">
@@ -84,7 +152,6 @@ const Correction_NMain = () => {
             <div className="flex items-center gap-[10px] p-2 rounded-[8px] bg-[var(--Point-Blue-90,#E0EBFF)]">
               <File className="w-[26.667px] h-[33.333px] text-[#353535]" />
             </div>
-
             <div>
               <div className="flex items-start text-[#9E9E9E] text-[17px] font-semibold leading-[100%] font-pretendard">Total Request</div>
               <div className="text-[#353535] font-pretendard text-4xl font-bold leading-none">{totalCount}</div>
@@ -100,7 +167,7 @@ const Correction_NMain = () => {
 
           <div className="w-full overflow-x-auto">
             <div className="min-w-[900px] mt-7">
-              <DocumentTable documents={documents} onRowClick={(row) => navigate(`/correction/native/list?correctionId=${row.id}`)} />
+              <DocumentTable documents={documents} onToggleBookmark={handleToggleBookmark} onRowClick={(row) => navigate(`/correction/native/list?correctionId=${row.id}`)} />
             </div>
           </div>
 

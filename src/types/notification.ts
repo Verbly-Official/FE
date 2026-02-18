@@ -1,7 +1,7 @@
 import type { ApiResponse } from "./user";
 
 export interface NotiItem {
-  id: number;
+  notificationId: number;
   content: string;
   url?: string;
   type?: string;
