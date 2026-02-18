@@ -79,6 +79,12 @@ export default function Home_Card({
       });
 
       setComments((prev) => [newComment, ...prev]);
+
+      setLocalPost((prev) => ({
+        ...prev,
+        commentsCount: prev.commentsCount + 1,
+      }));
+
       setCommentInput("");
     } catch (err) {
       console.error(err);
@@ -203,7 +209,7 @@ export default function Home_Card({
             >
               <CommentIcon className="w-[20px] h-[20px]" />
               <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
-                {post.commentsCount}
+                {localPost.commentsCount}
               </div>
             </div>
           </div>
@@ -214,7 +220,7 @@ export default function Home_Card({
                 <div className="flex flex-row text-blue-60 text-[16px] gap-[4px] font-medium">
                   <CommentIcon className="w-[20px] h-[20px]" />
                   <div>COMMENTS</div>
-                  <div>({post.commentsCount})</div>
+                  <div>({localPost.commentsCount})</div>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   {comments.map((comment) => (
@@ -313,7 +319,7 @@ export default function Home_Card({
             >
               <CommentIcon className="w-[20px] h-[20px]" />
               <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
-                {post.commentsCount}
+                {localPost.commentsCount}
               </div>
             </div>
           </div>
@@ -324,7 +330,7 @@ export default function Home_Card({
                 <div className="flex flex-row text-blue-60 text-[length:var(--fs-subtitle2)] gap-[4px] font-medium">
                   <CommentIcon className="w-[20px] h-[20px]" />
                   <div>COMMENTS</div>
-                  <div>({post.commentsCount})</div>
+                  <div>({localPost.commentsCount})</div>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   {comments.map((comment) => (
