@@ -37,7 +37,6 @@ export default function CorrectionKoLayout() {
     <>
       <div className="w-[210px] flex-shrink-0 px-[1.25rem] py-9 bg-white border border-r-0 border-[#E5E7EB]">
         <SolidButton size="large" className="w-full mb-8" label="새 글 작성하기" onClick={() => navigate("/correction/write")} />
-
         <Sidebar locale="ko" defaultActive={defaultActive} onChangeActive={handleSidebarChange} />
       </div>
 
