@@ -1,17 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import Tab from "../../../components/Tab/Tab";
 import BtnTab_C from "../components/BtnTab_c";
 import DocumentTable from "../components/DocumentTable";
 import type { DocumentRow } from "../components/DocumentTable";
-import { addCorrectionBookmark, removeCorrectionBookmark } from "../../../apis/correction";
 
 import File from "../../../assets/emoji/file.svg?react";
 import { Pagination } from "../../../components/Pagination/Pagination";
-import { getCorrections } from "../../../apis/correction";
 import { Toast } from "../../../components/Toast/Toast";
+
+import { addCorrectionBookmark, removeCorrectionBookmark, getCorrections } from "../../../apis/correction";
 
 const Correction_Main = () => {
   const SERVER_PAGE_IS_ZERO_BASED = true;
@@ -71,10 +70,15 @@ const Correction_Main = () => {
     setPage(1);
   }, [selectedTab]);
 
-  // correctorKey 변경 시에도 페이지 1로 리셋(필터 바뀌면 UX 상 자연스러움)
+  // correctorKey 변경 시에도 페이지 1로 리셋
   useEffect(() => {
     setPage(1);
   }, [correctorKey]);
+
+  // bookmark/sort 변경 시 페이지 1로 리셋
+  useEffect(() => {
+    setPage(1);
+  }, [bookmark, sort]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -88,9 +92,7 @@ const Correction_Main = () => {
       navigate(location.pathname, { replace: true, state: {} });
 
       // 3초 후 자동 제거
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      setTimeout(() => setShowToast(false), 3000);
     }
   }, [location.state, navigate]);
 
@@ -99,8 +101,9 @@ const Correction_Main = () => {
       try {
         const apiPage = SERVER_PAGE_IS_ZERO_BASED ? Math.max(page - 1, 0) : page;
 
-        const params: any = { page: apiPage, size: 10, sort: true };
-        // 최신순(Recent)일 때만 sort=true 전달 (서버가 sort boolean 받는다는 전제)
+        const params: any = { page: apiPage, size: 10 };
+
+        // 최신순(Recent)일 때만 sort=true 전달
         if (sort) params.sort = true;
 
         // 즐겨찾기일 때만 bookmark=true 전달
@@ -109,12 +112,20 @@ const Correction_Main = () => {
         // All이면 안 보내기
         if (statusQuery) params.status = statusQuery;
 
-        // corrector 필터 실제로 서버에 전달 (API 타입에서 corrector 키 사용)
-        if (correctorQuery) params.corrector = correctorQuery;
+        // 첨삭자 필터 (all이면 안 보내기)
+        if (correctorQuery) params.correctorType = correctorQuery;
 
         const res = await getCorrections(params);
 
-        console.log("getCorrections normalized res:", res);
+        console.log("params(corrector/status/bookmark):", {
+          corrector: params.corrector,
+          status: params.status,
+          bookmark: params.bookmark,
+          sort: params.sort,
+        });
+
+        console.log("res.items length:", res?.items?.length);
+        console.log("res.items[0] id/title/correctorType:", res?.items?.[0]?.correctionId, res?.items?.[0]?.title, res?.items?.[0]?.correctorType);
 
         setTotalPages(res.totalPages ?? 1);
         setTotalCount(res.totalElements ?? 0);
@@ -141,11 +152,9 @@ const Correction_Main = () => {
           };
         });
 
-        console.log("DocumentTable rows:", rows);
-
         setDocuments(rows);
-      } catch (e) {
-        console.error(e);
+      } catch (e: any) {
+        console.error("getCorrections error:", e?.response?.data ?? e);
         setDocuments([]);
         setTotalPages(1);
         setTotalCount(0);
@@ -155,8 +164,6 @@ const Correction_Main = () => {
     run();
   }, [page, statusQuery, correctorQuery, bookmark, sort]);
 
-  useEffect(() => setPage(1), [bookmark, sort]);
-
   return (
     <div className="min-h-screen">
       {showToast && (
@@ -164,6 +171,7 @@ const Correction_Main = () => {
           <Toast variant="positive" message="Revision request sent!" />
         </div>
       )}
+
       <div className="flex min-w-0">
         <div className="flex-1 min-w-0 py-9 min-h-[940px] rounded-r-[12px] border border-[#E5E7EB] bg-[#FBFBFB] items-center px-[clamp(48px,6vw,122px)]">
           <div className="flex px-6 py-9 items-center gap-[20px] rounded-[12px] border border-[#D9D9D9] bg-white">
@@ -185,8 +193,9 @@ const Correction_Main = () => {
 
           <div className="pt-7 pb-3">
             <BtnTab_C
+              value={correctorKey}
               onChange={(key) => {
-                setCorrectorKey(key as any);
+                setCorrectorKey(key);
                 setPage(1);
               }}
             />
