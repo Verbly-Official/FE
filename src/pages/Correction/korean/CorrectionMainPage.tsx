@@ -67,6 +67,7 @@ const Correction_Main = () => {
   useEffect(() => {
     if (location.state?.showToast) {
       setShowToast(true);
+
       navigate(location.pathname, { replace: true, state: {} });
       setTimeout(() => setShowToast(false), 3000);
     }
