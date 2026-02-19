@@ -46,6 +46,32 @@ const WriteCorrectionPage = () => {
 
   const draftId = searchParams.get("draftId");
   const isNativeRequestDisabled = !aiData;
+  const [correctionId, setCorrectionId] = useState<number | null>(null);
+
+  const ensureCorrectionId = async () => {
+    if (correctionId) return correctionId;
+
+    const draftIdParam = searchParams.get("draftId");
+    const tempPostId = draftIdParam ? Number(draftIdParam) : null;
+    const tagsForApi = tags.map((t) => t.replace(/^#/, ""));
+
+    const createPayload: any = {
+      title: title.trim(),
+      content: text,
+      tags: tagsForApi,
+    };
+    if (tempPostId) createPayload.tempPostId = tempPostId;
+
+    const created = await instance.post("/api/correction", createPayload);
+
+    const newId = created.data?.result?.correctionId ?? created.data?.result?.id ?? created.data?.correctionId ?? created.data?.id;
+
+    if (!newId) throw new Error("correctionId 없음");
+
+    const numericId = Number(newId);
+    setCorrectionId(numericId);
+    return numericId;
+  };
 
   const normalizeTag = (raw: string) => {
     const trimmed = raw.trim();
@@ -117,26 +143,19 @@ const WriteCorrectionPage = () => {
 
   const requestNativeCorrection = async () => {
     try {
-      if (!title.trim()) {
-        alert("제목을 입력해주세요.");
-        return;
-      }
-      if (!text.trim()) {
-        alert("내용을 입력해주세요.");
-        return;
-      }
+      if (!title.trim()) return alert("제목을 입력해주세요.");
+      if (!text.trim()) return alert("내용을 입력해주세요.");
 
-      const { correctionId, tagsForApi } = await createCorrectionAndGetId();
+      const id = await ensureCorrectionId();
+      const tagsForApi = tags.map((t) => t.replace(/^#/, ""));
 
-      await patchCorrection(correctionId, {
+      await patchCorrection(id, {
         title: title.trim(),
         content: text,
         tags: tagsForApi,
       });
 
-      navigate("/correction/ko", {
-        state: { showToast: true },
-      });
+      navigate("/correction/ko", { state: { showToast: true } });
     } catch (e: any) {
       if (e.response?.status === 401) {
         alert("로그인이 필요합니다.");
@@ -177,9 +196,8 @@ const WriteCorrectionPage = () => {
       setAiError(null);
       setShowResult(false);
 
-      const { correctionId } = await createCorrectionAndGetId();
-
-      const aiRes = await instance.post(`/api/correction/${correctionId}/ai-assist`);
+      const id = await ensureCorrectionId();
+      const aiRes = await instance.post(`/api/correction/${id}/ai-assist`);
 
       if (!aiRes.data?.isSuccess) {
         throw new Error(aiRes.data?.message ?? "AI 첨삭 실패");
