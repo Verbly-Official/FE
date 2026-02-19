@@ -64,7 +64,7 @@ const Profilecard: React.FC<UserProfileProps> = ({ user }) => {
               onClick={() => navigate('/my/editProfile')} 
               size="small" 
               variant="assistive"
-              className="text-[length:var(--fs-caption1)]"
+              className="text-[length:var(--fs-button1)]"
             />
           </div>
         </div>
@@ -79,16 +79,16 @@ const Profilecard: React.FC<UserProfileProps> = ({ user }) => {
         {/* 스탯 정보 (Follow, Streak, Point) */}
         <div className="flex justify-start items-center w-full gap-4 mb-[24px]">
           <div className="flex items-start gap-[4px] ">
-            <span className="text-[length:var(--fs-body2)] text-gray-9 font-bold">{userData.followers}</span>
-            <span className="text-[length:var(--fs-body2)] text-gray-5">Follow</span>
+            <span className="text-[length:var(--fs-body1)] text-gray-9 font-bold">{userData.followers}</span>
+            <span className="text-[length:var(--fs-body1)] text-gray-5">Follow</span>
           </div>
           <div className="flex items-start gap-[4px]">
-            <span className="text-[length:var(--fs-body2)] text-gray-9 font-bold">{userData.following}</span>
-            <span className="text-[length:var(--fs-body2)] text-gray-5">Streak</span>
+            <span className="text-[length:var(--fs-body1)] text-gray-9 font-bold">{userData.following}</span>
+            <span className="text-[length:var(--fs-body1)] text-gray-5">Streak</span>
           </div>
           <div className="flex items-start gap-[4px]">
-            <span className="text-[length:var(--fs-body2)] text-gray-9 font-bold">{userData.points}</span>
-            <span className="text-[length:var(--fs-body2)] text-gray-5">Point</span>
+            <span className="text-[length:var(--fs-body1)] text-gray-9 font-bold">{userData.points}</span>
+            <span className="text-[length:var(--fs-body1)] text-gray-5">Point</span>
           </div>
         </div>
 
@@ -99,7 +99,7 @@ const Profilecard: React.FC<UserProfileProps> = ({ user }) => {
             value={levelProgress}
             size="medium"
             labelLeft="Level"
-            className="text-[length:var(--fs-body2)] text-gray-6 font-medium"
+            className="text-[length:var(--fs-body2)] !text-gray-6 font-medium"
           />
           <div className="flex justify-end mt-2">
             <span className="text-[length:var(--fs-body1)] text-gray-6 font-medium">
