@@ -11,5 +11,5 @@ export const homeRoutes: RouteObject[] = [
   { path: "/home/native", element: <Home_Native /> },
   { path: "/home/notification", element: <Home_Notification /> },
   { path: "/home/profile/:userId", element: <Home_Profile /> },
-  { path: "/home/search", element: <Home_Search /> },
+  { path: "/home/search/:keyword", element: <Home_Search /> },
 ];
