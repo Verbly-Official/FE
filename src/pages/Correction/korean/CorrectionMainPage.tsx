@@ -25,7 +25,6 @@ const Correction_Main = () => {
   const bookmark = searchParams.get("bookmark") === "true";
   const sort = searchParams.get("sort") === "true";
 
-  // 첨삭자 필터
   const [correctorKey, setCorrectorKey] = useState<"all" | "ai" | "native">("all");
 
   const correctorQuery = useMemo(() => {
@@ -35,48 +34,31 @@ const Correction_Main = () => {
   }, [correctorKey]);
 
   const statusQuery = useMemo(() => {
-    // 서버 enum: COMPLETED, IN_PROGRESS, PENDING
     if (selectedTab === 1) return "COMPLETED";
     if (selectedTab === 2) return "IN_PROGRESS";
     if (selectedTab === 3) return "PENDING";
-    return undefined; // All이면 undefined
+    return undefined;
   }, [selectedTab]);
 
   const handleToggleBookmark = async (id: number) => {
     const current = documents.find((d) => d.id === id);
     if (!current) return;
 
-    // 낙관적 업데이트(바로 UI 반영)
     setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: !d.isStarred } : d)));
 
     try {
-      if (current.isStarred) {
-        await removeCorrectionBookmark(id);
-      } else {
-        await addCorrectionBookmark(id);
-      }
+      if (current.isStarred) await removeCorrectionBookmark(id);
+      else await addCorrectionBookmark(id);
     } catch (e) {
-      // 실패 시 롤백
       setDocuments((prev) => prev.map((d) => (d.id === id ? { ...d, isStarred: current.isStarred } : d)));
       console.error(e);
       alert("북마크 변경에 실패했어요.");
     }
   };
 
-  // 탭 변경 시 페이지 1로 리셋
   useEffect(() => {
     setPage(1);
-  }, [selectedTab]);
-
-  // correctorKey 변경 시에도 페이지 1로 리셋
-  useEffect(() => {
-    setPage(1);
-  }, [correctorKey]);
-
-  // bookmark/sort 변경 시 페이지 1로 리셋
-  useEffect(() => {
-    setPage(1);
-  }, [bookmark, sort]);
+  }, [selectedTab, correctorKey, bookmark, sort]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -85,14 +67,10 @@ const Correction_Main = () => {
   useEffect(() => {
     if (location.state?.showToast) {
       setShowToast(true);
-
-      // state 초기화 (뒤로가기 눌렀을 때 또 안 뜨게)
       navigate(location.pathname, { replace: true, state: {} });
-
-      // 3초 후 자동 제거
       setTimeout(() => setShowToast(false), 3000);
     }
-  }, [location.state, navigate]);
+  }, [location.state, navigate, location.pathname]);
 
   useEffect(() => {
     const run = async () => {
@@ -104,29 +82,7 @@ const Correction_Main = () => {
         if (statusQuery) params.status = statusQuery;
         if (correctorQuery) params.correctorType = correctorQuery;
 
-        // 최신순(Recent)일 때만 sort=true 전달
-        if (sort) params.sort = true;
-
-        // 즐겨찾기일 때만 bookmark=true 전달
-        if (bookmark) params.bookmark = true;
-
-        // All이면 안 보내기
-        if (statusQuery) params.status = statusQuery;
-
-        // 첨삭자 필터 (all이면 안 보내기)
-        if (correctorQuery) params.correctorType = correctorQuery;
-
         const res = await getCorrections(params);
-
-        console.log("params(corrector/status/bookmark):", {
-          corrector: params.corrector,
-          status: params.status,
-          bookmark: params.bookmark,
-          sort: params.sort,
-        });
-
-        console.log("res.items length:", res?.items?.length);
-        console.log("res.items[0] id/title/correctorType:", res?.items?.[0]?.correctionId, res?.items?.[0]?.title, res?.items?.[0]?.correctorType);
 
         setTotalPages(res.totalPages ?? 1);
         setTotalCount(res.totalElements ?? 0);
@@ -137,7 +93,6 @@ const Correction_Main = () => {
           const author = item.correctorName ?? (item.correctorType === "AI_ASSISTANT" ? "AI Assistant" : item.correctorType === "NATIVE_SPEAKER" ? "Native Speaker" : "부여받지 않음");
 
           const rawStatus = (item.status ?? "PENDING") as "PENDING" | "IN_PROGRESS" | "COMPLETED";
-
           const statusText = rawStatus === "COMPLETED" ? "Completed" : rawStatus === "IN_PROGRESS" ? "In Progress" : "Pending";
 
           return {
