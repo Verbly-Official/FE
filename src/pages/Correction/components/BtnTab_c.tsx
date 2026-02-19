@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { ComponentType, SVGProps } from "react";
 
 import FileIcon from "../../../assets/emoji/file.svg?react";
@@ -6,13 +5,14 @@ import AIIcon from "../../../assets/emoji/ai.svg?react";
 import PersonIcon from "../../../assets/emoji/person.svg?react";
 
 type BtnTabItem = {
-  key: string;
+  key: "all" | "ai" | "native";
   label: string;
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
 type BtnTabProps = {
-  onChange?: (key: string) => void;
+  value: "all" | "ai" | "native";
+  onChange?: (key: "all" | "ai" | "native") => void;
   className?: string;
 };
 
@@ -22,24 +22,17 @@ const BTN_TABS: BtnTabItem[] = [
   { key: "native", label: "Native Speakers", Icon: PersonIcon },
 ];
 
-export default function BtnTab_C({ onChange, className = "" }: BtnTabProps) {
-  const [selectedKey, setSelectedKey] = useState("all");
-
-  const handleClick = (key: string) => {
-    setSelectedKey(key);
-    onChange?.(key);
-  };
-
+export default function BtnTab_C({ value, onChange, className = "" }: BtnTabProps) {
   return (
     <div className={`flex gap-[8px] ${className}`}>
       {BTN_TABS.map((tab) => {
-        const isSelected = selectedKey === tab.key;
+        const isSelected = value === tab.key;
         const Icon = tab.Icon;
 
         return (
           <button
             key={tab.key}
-            onClick={() => handleClick(tab.key)}
+            onClick={() => onChange?.(tab.key)}
             className={`
               inline-flex items-center gap-[6px]
               px-[14px] py-[8px] rounded-[24px]
