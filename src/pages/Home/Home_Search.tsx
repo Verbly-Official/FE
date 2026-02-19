@@ -85,6 +85,26 @@ export default function Home_Search() {
     fetchViewer();
   }, []);
 
+  const handlePostFollowToggle = (
+    targetUserId: number,
+    isFollowing: boolean,
+  ) => {
+    // 🔥 1. 카드들 동기화
+    setPosts((prev) =>
+      prev.map((p) => (p.userId === targetUserId ? { ...p, isFollowing } : p)),
+    );
+
+    // 🔥 2. viewer follow 수 업데이트
+    setViewer((prev) =>
+      prev
+        ? {
+            ...prev,
+            following: isFollowing ? prev.following + 1 : prev.following - 1,
+          }
+        : prev,
+    );
+  };
+
   // 🔹 무한 스크롤
   useEffect(() => {
     if (!observerRef.current) return;
@@ -118,7 +138,7 @@ export default function Home_Search() {
         <div className={"w-full h-full bg-bg0 z-10 relative"}>
           <div className="flex w-full h-full">
             {/* 홈 내용 */}
-            <div className="flex flex-1 overflow-y-auto no-scrollbar pl-[58.5px] pt-[30px] pb-[30px]">
+            <div className="flex flex-1 overflow-y-auto no-scrollbar pl-[59px] pt-[30px] pb-[30px]">
               <div className="flex-1 flex flex-col max-w-[1200px] mx-auto bg-white w-full h-fit p-[20px] rounded-[12px] gap-[28px]">
                 {/* 검색 제목 */}
                 <div className="flex items-end gap-[12px]">
@@ -131,7 +151,7 @@ export default function Home_Search() {
                 </div>
 
                 {/* 카드 그리드 */}
-                <div className="grid gap-[20px] grid-cols-[repeat(auto-fit,minmax(292px,1fr))]">
+                <div className="grid gap-[20px] grid-cols-[repeat(auto-fit,minmax(360px,1fr))]">
                   {posts.map((post) => (
                     <Home_Card
                       key={post.postId}
@@ -139,7 +159,9 @@ export default function Home_Search() {
                       post={post}
                       isCorrected={post.status !== "PENDING"}
                       viewer={viewer}
-                      onFollowToggle={handleFollowChange}
+                      onFollowToggle={(isFollowing) =>
+                        handlePostFollowToggle(post.userId, isFollowing)
+                      }
                     />
                   ))}
                 </div>
