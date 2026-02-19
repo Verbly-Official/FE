@@ -13,8 +13,6 @@ import { Toast } from "../../../components/Toast/Toast";
 import { addCorrectionBookmark, removeCorrectionBookmark, getCorrections } from "../../../apis/correction";
 
 const Correction_Main = () => {
-  const SERVER_PAGE_IS_ZERO_BASED = true;
-
   const [page, setPage] = useState(1); // UI는 1부터
   const [selectedTab, setSelectedTab] = useState(0);
   const tabs = ["All", "Completed", "In Progress", "Pending"];
@@ -99,9 +97,12 @@ const Correction_Main = () => {
   useEffect(() => {
     const run = async () => {
       try {
-        const apiPage = SERVER_PAGE_IS_ZERO_BASED ? Math.max(page - 1, 0) : page;
+        const params: any = { page, size: 6 };
 
-        const params: any = { page: apiPage, size: 10 };
+        if (sort) params.sort = true;
+        if (bookmark) params.bookmark = true;
+        if (statusQuery) params.status = statusQuery;
+        if (correctorQuery) params.correctorType = correctorQuery;
 
         // 최신순(Recent)일 때만 sort=true 전달
         if (sort) params.sort = true;
@@ -216,8 +217,7 @@ const Correction_Main = () => {
               />
             </div>
           </div>
-
-          <Pagination currentPage={page} totalPages={totalPages} onChange={setPage} shape="num" className="flex items-center justify-center pt-[8px]" />
+          <Pagination currentPage={page} totalPages={totalPages} onChange={(p: any) => setPage(Number(p))} shape="num" className="flex items-center justify-center pt-[8px]" />
         </div>
       </div>
     </div>

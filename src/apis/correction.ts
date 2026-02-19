@@ -37,6 +37,18 @@ export type PageResponse<T> = {
   totalElements: number;
 };
 
+export type CreateCorrectionPayload = {
+  title: string;
+  content: string;
+  tags: string[];
+  tempPostId?: number;
+};
+
+export async function createCorrection(payload: CreateCorrectionPayload) {
+  const { data } = await api.post("/api/correction", payload);
+  return data;
+}
+
 function normalizePageResponse(raw: any, page?: number, size: number = 10): PageResponse<CorrectionItem> {
   const d0 = raw?.data ?? raw;
 
@@ -152,18 +164,10 @@ export type AiCorrectionResponse = {
   };
 };
 
-export async function requestAiCorrection(params: { correctionId: number; accessToken: string }) {
-  const res = await fetch(`/api/corrections/${params.correctionId}/ai-assistance`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${params.accessToken}`,
-    },
-  });
+export async function requestAiCorrection(correctionId: number) {
+  const { data } = await api.post(`/api/correction/${correctionId}/ai-assist`);
 
-  const data = await res.json();
-
-  if (!res.ok || !data.isSuccess) {
+  if (!data.isSuccess) {
     throw new Error(data.message ?? "AI 요청 실패");
   }
 

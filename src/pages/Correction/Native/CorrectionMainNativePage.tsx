@@ -70,7 +70,6 @@ const Correction_NMain = () => {
     return undefined;
   }, [selectedTab]);
 
-  // 탭/필터 변경 시 1페이지로
   useEffect(() => {
     setPage(1);
   }, [selectedTab, bookmark, sort]);
@@ -94,8 +93,6 @@ const Correction_NMain = () => {
   useEffect(() => {
     const run = async () => {
       try {
-        const apiPage = page - 1;
-
         const params: {
           page: number;
           size: number;
@@ -104,7 +101,7 @@ const Correction_NMain = () => {
           sort?: true;
           correctorType?: "NATIVE_SPEAKER" | "AI_ASSISTANT";
         } = {
-          page: apiPage,
+          page,
           size: PAGE_SIZE,
           ...(statusQuery ? { status: statusQuery } : {}),
           ...(bookmark ? { bookmark: true } : {}),
@@ -129,7 +126,7 @@ const Correction_NMain = () => {
           words: Number(item.wordCount ?? 0),
           isStarred: Boolean(item.bookmark),
           correctorName: item.correctorName ?? null,
-          rawStatus: item.status, // (있으면 권한/클릭 제한에 쓰기 좋음)
+          rawStatus: item.status,
         })) as any;
 
         setDocuments(rows);
@@ -171,7 +168,7 @@ const Correction_NMain = () => {
             </div>
           </div>
 
-          <Pagination currentPage={page - 1} totalPages={totalPages} onChange={(p) => setPage(p + 1)} shape="num" className="flex items-center justify-center pt-[8px]" />
+          <Pagination currentPage={page} totalPages={totalPages} onChange={(p) => setPage(Number(p))} shape="num" className="flex items-center justify-center pt-[8px]" />
         </div>
       </div>
     </div>

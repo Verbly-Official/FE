@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getDraftCorrection, patchCorrection } from "../../../apis/correction";
+import { getDraftCorrection, patchCorrection, createCorrection } from "../../../apis/correction";
 import { instance } from "../../../apis/axios";
 import TextArea from "../../../components/TextArea/TextArea";
 import SuggestionSlider from "../components/Pagination";
@@ -98,12 +98,9 @@ const WriteCorrectionPage = () => {
   const ensureCorrectionId = async () => {
     if (correctionId) return correctionId;
 
-    if (creating) {
-      throw new Error("생성 요청이 진행 중입니다. 잠시 후 다시 시도해주세요.");
-    }
-
     if (!title.trim()) throw new Error("제목을 입력해주세요.");
     if (!text.trim()) throw new Error("내용을 입력해주세요.");
+    if (creating) throw new Error("요청이 진행 중입니다. 잠시 후 다시 시도해주세요.");
 
     setCreating(true);
     setCreateError(null);
@@ -120,34 +117,27 @@ const WriteCorrectionPage = () => {
       };
       if (tempPostId) createPayload.tempPostId = tempPostId;
 
-      const created = await instance.post("/api/correction", createPayload);
+      const created = await createCorrection(createPayload);
 
-      const newId = created.data?.result?.correctionId ?? created.data?.result?.id ?? created.data?.correctionId ?? created.data?.id;
+      const newId = created?.result?.correctionId ?? created?.result?.id ?? created?.correctionId ?? created?.id;
 
-      if (!newId) {
-        console.error("create response:", created.data);
-        throw new Error("서버 응답에 correctionId가 없습니다.");
-      }
+      if (!newId) throw new Error("correctionId 없음");
 
       const numericId = Number(newId);
       setCorrectionId(numericId);
       return numericId;
     } catch (e: any) {
-      const status = e?.response?.status;
-      const msg = e?.response?.data?.message;
-
-      if (status === 401) {
+      if (e?.response?.status === 401) {
         alert("로그인이 필요합니다.");
         navigate("/login");
         throw e;
       }
-
-      if (status === 400) {
-        setCreateError(msg ?? "입력값을 확인해주세요.");
-        throw new Error(msg ?? "잘못된 요청입니다.");
+      if (e?.response?.status === 400) {
+        const msg = e?.response?.data?.message ?? "입력값을 확인해주세요.";
+        setCreateError(msg);
+        throw e;
       }
-
-      setCreateError(msg ?? "첨삭 생성 중 오류가 발생했어요.");
+      setCreateError(e?.response?.data?.message ?? e?.message ?? "첨삭 생성 중 오류가 발생했어요.");
       throw e;
     } finally {
       setCreating(false);
@@ -195,7 +185,7 @@ const WriteCorrectionPage = () => {
       await instance.post("/api/temp-posts", payload);
       navigate("/correction/draft");
     } catch (e: any) {
-      if (e.response?.status === 401) {
+      if (e?.response?.status === 401) {
         alert("로그인이 필요합니다.");
         navigate("/login");
         return;
