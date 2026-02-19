@@ -7,9 +7,9 @@ interface Benefit {
 
 const DEFAULT_BENEFITS: Benefit[] = [
   { id: 1, text: 'Unlimited AI Grammar' },
-  { id: 2, text: 'Unlimited AI Grammar' },
-  { id: 3, text: 'Unlimited AI Grammar' },
-  { id: 4, text: 'Unlimited AI Grammar' },
+  { id: 2, text: 'Template available' },
+  { id: 3, text: 'Open Pro base' },
+  { id: 4, text: 'Upgrade Grammer' },
 ];
 
 interface BenefitsListProps {

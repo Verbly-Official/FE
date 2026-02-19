@@ -22,6 +22,9 @@ export interface UserInfo {
   totalPosts: number;
   correctionsGiven: number;
   correctionsReceived: number;
+
+  // 구독 여부
+  sub: boolean; 
 }
 
 /**

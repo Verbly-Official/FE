@@ -5,8 +5,8 @@ import KakaoIcon from '../../../assets/emoji/kakao.svg';
 import HomeIcon from '../../../assets/emoji/home.svg';
 
 interface PaymentMethodSelectorProps {
-  selectedMethod: 'card' | 'paypal' | 'kakaopay';
-  onMethodChange: (method: 'card' | 'paypal' | 'kakaopay') => void;
+  selectedMethod: 'kakaopay' | 'paypal' | undefined;
+  onMethodChange: (method: 'kakaopay' | 'paypal') => void;
 }
 
 export const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
