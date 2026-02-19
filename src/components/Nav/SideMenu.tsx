@@ -7,6 +7,7 @@ import LibraryIcon from "../../assets/emoji/folder.svg";
 import CorrectionIcon from "../../assets/emoji/edit.svg";
 import InboxIcon from "../../assets/emoji/message1.svg";
 import ProfileIcon from "../../assets/emoji/person.svg";
+import { useAuthStore } from "../../store/useAuthStore";
 
 interface SideMenuProps {
   variant?: "default" | "small" | "profile";
@@ -20,10 +21,14 @@ export default function SideMenu({
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { userInfo } = useAuthStore(); 
+
   const renderIcon = (src: string) => (
     <img src={src} className="w-full h-full" />
   );
-
+  
+  const profilePath = userInfo?.nativeLang === 'en' ? '/my/native' : '/my/korean';
+  
   const menus = [
     {
       label: "Home",
@@ -48,7 +53,7 @@ export default function SideMenu({
     {
       label: "Profile",
       icon: ProfileIcon,
-      path: "/my/korean",
+      path: profilePath,
     },
   ];
 
