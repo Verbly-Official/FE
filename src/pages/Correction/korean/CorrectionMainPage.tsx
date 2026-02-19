@@ -75,7 +75,7 @@ const Correction_Main = () => {
   useEffect(() => {
     const run = async () => {
       try {
-        const params: any = { page, size: 6 };
+        const params: any = { page, size: 4 };
 
         if (sort) params.sort = true;
         if (bookmark) params.bookmark = true;
