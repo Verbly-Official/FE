@@ -143,7 +143,7 @@ export default function Home_Search() {
                     />
                   ))}
                 </div>
-                {/* 무한스크롤 감지 */}
+                {/* 무한스크롤 */}
                 <div ref={observerRef} className="h-[40px]" />
               </div>
               {/* 사이드 */}
