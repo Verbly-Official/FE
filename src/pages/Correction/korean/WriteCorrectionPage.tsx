@@ -48,30 +48,8 @@ const WriteCorrectionPage = () => {
   const isNativeRequestDisabled = !aiData;
   const [correctionId, setCorrectionId] = useState<number | null>(null);
 
-  const ensureCorrectionId = async () => {
-    if (correctionId) return correctionId;
-
-    const draftIdParam = searchParams.get("draftId");
-    const tempPostId = draftIdParam ? Number(draftIdParam) : null;
-    const tagsForApi = tags.map((t) => t.replace(/^#/, ""));
-
-    const createPayload: any = {
-      title: title.trim(),
-      content: text,
-      tags: tagsForApi,
-    };
-    if (tempPostId) createPayload.tempPostId = tempPostId;
-
-    const created = await instance.post("/api/correction", createPayload);
-
-    const newId = created.data?.result?.correctionId ?? created.data?.result?.id ?? created.data?.correctionId ?? created.data?.id;
-
-    if (!newId) throw new Error("correctionId 없음");
-
-    const numericId = Number(newId);
-    setCorrectionId(numericId);
-    return numericId;
-  };
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
 
   const normalizeTag = (raw: string) => {
     const trimmed = raw.trim();
@@ -117,32 +95,68 @@ const WriteCorrectionPage = () => {
     run();
   }, [draftId]);
 
-  const createCorrectionAndGetId = async () => {
-    const draftIdParam = searchParams.get("draftId");
-    const tempPostId = draftIdParam ? Number(draftIdParam) : null;
+  const ensureCorrectionId = async () => {
+    if (correctionId) return correctionId;
 
-    const tagsForApi = tags.map((t) => t.replace(/^#/, ""));
-
-    const createPayload: any = {
-      title: title.trim(),
-      content: text,
-      tags: tagsForApi,
-    };
-    if (tempPostId) createPayload.tempPostId = tempPostId;
-
-    const created = await instance.post("/api/correction", createPayload);
-
-    const correctionId = created.data?.result?.correctionId ?? created.data?.result?.id ?? created.data?.correctionId ?? created.data?.id;
-
-    if (!correctionId) {
-      console.error("create response:", created.data);
-      throw new Error("correctionId 없음");
+    if (creating) {
+      throw new Error("생성 요청이 진행 중입니다. 잠시 후 다시 시도해주세요.");
     }
-    return { correctionId: Number(correctionId), tagsForApi };
+
+    if (!title.trim()) throw new Error("제목을 입력해주세요.");
+    if (!text.trim()) throw new Error("내용을 입력해주세요.");
+
+    setCreating(true);
+    setCreateError(null);
+
+    try {
+      const draftIdParam = searchParams.get("draftId");
+      const tempPostId = draftIdParam ? Number(draftIdParam) : null;
+      const tagsForApi = tags.map((t) => t.replace(/^#/, ""));
+
+      const createPayload: any = {
+        title: title.trim(),
+        content: text,
+        tags: tagsForApi,
+      };
+      if (tempPostId) createPayload.tempPostId = tempPostId;
+
+      const created = await instance.post("/api/correction", createPayload);
+
+      const newId = created.data?.result?.correctionId ?? created.data?.result?.id ?? created.data?.correctionId ?? created.data?.id;
+
+      if (!newId) {
+        console.error("create response:", created.data);
+        throw new Error("서버 응답에 correctionId가 없습니다.");
+      }
+
+      const numericId = Number(newId);
+      setCorrectionId(numericId);
+      return numericId;
+    } catch (e: any) {
+      const status = e?.response?.status;
+      const msg = e?.response?.data?.message;
+
+      if (status === 401) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        throw e;
+      }
+
+      if (status === 400) {
+        setCreateError(msg ?? "입력값을 확인해주세요.");
+        throw new Error(msg ?? "잘못된 요청입니다.");
+      }
+
+      setCreateError(msg ?? "첨삭 생성 중 오류가 발생했어요.");
+      throw e;
+    } finally {
+      setCreating(false);
+    }
   };
 
   const requestNativeCorrection = async () => {
     try {
+      setCreateError(null);
       if (!title.trim()) return alert("제목을 입력해주세요.");
       if (!text.trim()) return alert("내용을 입력해주세요.");
 
@@ -157,9 +171,13 @@ const WriteCorrectionPage = () => {
 
       navigate("/correction/ko", { state: { showToast: true } });
     } catch (e: any) {
-      if (e.response?.status === 401) {
+      if (e?.response?.status === 401) {
         alert("로그인이 필요합니다.");
         navigate("/login");
+        return;
+      }
+      if (e?.response?.status === 400) {
+        alert(e?.response?.data?.message ?? "입력값을 확인해주세요.");
         return;
       }
       console.error(e);
@@ -191,10 +209,14 @@ const WriteCorrectionPage = () => {
   const handleAiCorrect = async () => {
     if (aiLoading) return;
 
+    if (!title.trim()) return alert("제목을 입력해주세요.");
+    if (!text.trim()) return alert("내용을 입력해주세요.");
+
     try {
       setAiLoading(true);
       setAiError(null);
       setShowResult(false);
+      setCreateError(null);
 
       const id = await ensureCorrectionId();
       const aiRes = await instance.post(`/api/correction/${id}/ai-assist`);
@@ -207,7 +229,14 @@ const WriteCorrectionPage = () => {
       setShowResult(true);
     } catch (e: any) {
       console.error(e);
-      setAiError(e?.message ?? "AI 첨삭 요청 중 오류가 발생했어요.");
+
+      if (e?.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+        navigate("/login");
+        return;
+      }
+
+      setAiError(e?.response?.data?.message ?? e?.message ?? "AI 첨삭 요청 중 오류가 발생했어요.");
       setShowResult(true);
     } finally {
       setAiLoading(false);
@@ -216,6 +245,7 @@ const WriteCorrectionPage = () => {
 
   const resultNode = useMemo(() => {
     if (aiError) return <div className="text-[length:var(--fs-body2)] text-red-600">{aiError}</div>;
+    if (createError) return <div className="text-[length:var(--fs-body2)] text-red-600">{createError}</div>;
     if (!aiData) return <div className="text-[length:var(--fs-body2)] text-[#6B7280]">결과가 없습니다.</div>;
 
     const r = aiData.result;
@@ -250,11 +280,10 @@ const WriteCorrectionPage = () => {
         )}
       </div>
     );
-  }, [aiData, aiError]);
+  }, [aiData, aiError, createError]);
 
   return (
     <div className="flex w-full">
-      {/* 메인 카드 */}
       <div className="flex-4 px-[2rem] py-5 border border-r-0 border-[#E5E7EB] bg-[#FBFBFB] items-center">
         <input
           type="text"
@@ -295,15 +324,14 @@ const WriteCorrectionPage = () => {
         </div>
       </div>
 
-      {/* AI section */}
       <AiSection
         showResult={showResult}
-        aiLoading={aiLoading}
+        aiLoading={aiLoading || creating}
         onClickRequestNative={requestNativeCorrection}
         onClickAiCorrect={handleAiCorrect}
         onClickTempSave={saveDraft}
         result={resultNode}
-        isNativeDisabled={isNativeRequestDisabled}
+        isNativeDisabled={isNativeRequestDisabled || creating}
       />
     </div>
   );

@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { useAuthStore } from '../store/useAuthStore';
-import { reissueTokenApi } from './auth'; 
+import axios from "axios";
+import { useAuthStore } from "../store/useAuthStore";
+import { reissueTokenApi } from "./auth";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const instance = axios.create({
-  baseURL: BASE_URL, 
-  withCredentials: true, 
+  baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 // ✅ Request Interceptor (개선된 버전)
@@ -15,13 +15,13 @@ instance.interceptors.request.use(
     // FormData인 경우 Content-Type 헤더를 완전히 제거
     if (config.data instanceof FormData) {
       if (config.headers) {
-        delete config.headers['Content-Type'];
-        delete config.headers['content-type'];
+        delete config.headers["Content-Type"];
+        delete config.headers["content-type"];
       }
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Response Interceptor
@@ -38,9 +38,9 @@ instance.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      if (originalRequest.url?.includes('/auth/reissue')) {
+      if (originalRequest.url?.includes("/auth/reissue")) {
         useAuthStore.getState().logout();
-        window.location.href = '/login'; 
+        window.location.href = "/login";
         return Promise.reject(error);
       }
 
@@ -50,14 +50,14 @@ instance.interceptors.response.use(
         await reissueTokenApi();
         return instance(originalRequest);
       } catch (reissueError) {
-        console.error('토큰 재발급 실패:', reissueError);
+        console.error("토큰 재발급 실패:", reissueError);
         useAuthStore.getState().logout();
-        window.location.href = '/login';
+        window.location.href = "/login";
         return Promise.reject(reissueError);
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default instance;
