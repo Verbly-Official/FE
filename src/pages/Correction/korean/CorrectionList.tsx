@@ -1,8 +1,8 @@
-// Correction_NList.tsx (Korean user - Read Only)
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import RightSentence from "../components/R_SentenceItem";
 import { instance } from "../../../apis/axios";
+import DetailSentence from "../components/DetailSentence";
 
 type FeedbackItem = {
   feedbackId?: number;
@@ -29,7 +29,7 @@ type WordDTO = {
   correctedText: string;
 };
 
-type CorrectionNativeDetail = {
+type CorrectionDetail = {
   correctionId: number;
   postId: number;
   status: CorrectionStatus;
@@ -38,21 +38,22 @@ type CorrectionNativeDetail = {
   feedback: FeedbackItem[];
 };
 
-const normalizeText = (t: string) => (t ?? "").replaceAll("\\n", "\n");
-
-const Correction_ReadOnly = () => {
+const Correction_List = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
-  const correctionId = searchParams.get("correctionId");
+  const { correctionId: paramId } = useParams<{ correctionId: string }>();
+
+  const [searchParams] = useSearchParams();
+  const queryId = searchParams.get("correctionId");
 
   const activeCorrectionId = useMemo(() => {
-    if (!correctionId) return null;
-    const n = Number(correctionId);
+    const raw = paramId ?? queryId;
+    if (!raw) return null;
+    const n = Number(raw);
     return Number.isNaN(n) ? null : n;
-  }, [correctionId]);
+  }, [paramId, queryId]);
 
-  const [detail, setDetail] = useState<CorrectionNativeDetail | null>(null);
+  const [detail, setDetail] = useState<CorrectionDetail | null>(null);
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -62,9 +63,14 @@ const Correction_ReadOnly = () => {
 
   const [activeRightIdx, setActiveRightIdx] = useState<number | null>(null);
 
+  useEffect(() => {
+    console.log("paramId/queryId:", { paramId, queryId, activeCorrectionId });
+  }, [paramId, queryId, activeCorrectionId]);
+
   const fetchDetail = async (id: number) => {
-    const { data } = await instance.get(`/api/correction-native/${id}`);
-    const result = (data?.result ?? null) as CorrectionNativeDetail | null;
+    console.log("fetchDetail called with id:", id);
+    const { data } = await instance.get(`/api/correction/${id}`);
+    const result = (data?.result ?? null) as CorrectionDetail | null;
     setDetail(result);
     setFeedbacks(result?.feedback ?? []);
   };
@@ -106,20 +112,15 @@ const Correction_ReadOnly = () => {
 
   const selectedSentence = useMemo(() => {
     if (!detail || selectedSentenceIdx === null) return null;
-    return detail.sentences.find((x) => x.sentenceIdx === selectedSentenceIdx) ?? null;
-  }, [detail, selectedSentenceIdx]);
-
-  const selectedWords = useMemo(() => {
-    if (!detail || selectedSentenceIdx === null) return [];
-    return (detail.words ?? []).filter((w) => w.sentenceIdx === selectedSentenceIdx);
+    return detail.sentences.find((s) => s.sentenceIdx === selectedSentenceIdx) ?? null;
   }, [detail, selectedSentenceIdx]);
 
   return (
-    <div className="w-full h-full min-h-0">
-      <div className="flex w-full h-[calc(100vh-64px)] bg-[#F8FAFC] overflow-hidden">
-        {/* ===== Left: Sentences list ===== */}
-        <aside className="w-[370px] flex-shrink-0 h-full min-h-0 bg-white border border-[#D9D9D9] overflow-y-auto scrollbar-hide">
-          <div className="flex p-[24px_30px] flex-col items-start gap-4 w-full border-b border-[#D9D9D9] bg-white">
+    <div className="w-full h-full">
+      <div className="flex w-full h-[calc(100vh-64px)] bg-[#F8FAFC]">
+        {/* Left */}
+        <aside className="w-[370px] flex-shrink-0 h-full bg-white border border-[#D9D9D9] overflow-y-auto no-scrollbar">
+          <div className="flex p-[24px_30px] flex-col items-start gap-2 w-full border-b border-[#D9D9D9] bg-white">
             <span className="text-[#585858] font-pretendard text-[length:var(--fs-body1)] font-semibold leading-[150%]">SENTENCES ({detail?.sentences?.length ?? 0})</span>
           </div>
 
@@ -139,8 +140,8 @@ const Correction_ReadOnly = () => {
           })}
         </aside>
 
-        {/* ===== Center: Main content ===== */}
-        <main className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto scrollbar-hide px-10 py-3 gap-[13px]">
+        {/* Center */}
+        <main className="flex flex-col min-w-0 h-full overflow-y-auto no-scrollbar px-10 py-3 gap-[13px] flex-1">
           {loading && <div className="p-4">Loading...</div>}
           {!loading && errorMsg && <div className="p-4 text-red-500">{errorMsg}</div>}
 
@@ -158,58 +159,38 @@ const Correction_ReadOnly = () => {
                 ))}
               </div>
             ) : selectedSentence ? (
-              // ✅ 읽기 전용 상세 뷰
-              <div className="flex w-full flex-col items-start gap-5 rounded-[12px] bg-white p-8">
-                <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Sentence #{selectedSentence.sentenceIdx + 1}</span>
-
-                <div className="flex p-6 items-center gap-[10px] rounded-[12px] w-full border border-[#D9D9D9] bg-[#FBFBFB]">
-                  <p className="whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]">{normalizeText(selectedSentence.originalText)}</p>
-                </div>
-
-                <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Corrected Sentence #{selectedSentence.sentenceIdx + 1}</span>
-
-                <div className="flex flex-col p-8 items-start self-stretch gap-4 rounded-[12px] border border-[#D9D9D9] bg-white">
-                  <p className="w-full whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]">
-                    {normalizeText(selectedSentence.correctedText)}
-                  </p>
-
-                  {/* (선택) word 구간 정보도 보여주고 싶으면 */}
-                  {selectedWords.length > 0 && (
-                    <div className="w-full pt-4 border-t border-[#E5E7EB]">
-                      <div className="text-[#9E9E9E] font-pretendard text-[length:var(--fs-body2)] font-semibold">Edited Segments</div>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {selectedWords.map((w) => (
-                          <span key={w.wordId} className="px-3 py-2 rounded-[10px] border border-[#E5E7EB] bg-[#FBFBFB] text-[#585858] font-pretendard text-[length:var(--fs-body2)]">
-                            {w.originalText} → {w.correctedText}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <DetailSentence
+                sentence={selectedSentence}
+                words={detail.words ?? []}
+                draftEdits={{}} // 유저는 편집 안 하니까
+                onEditWord={() => {}}
+                onResetWord={() => {}}
+                onSaveEdits={() => {}}
+                saving={false}
+                readOnly={true}
+              />
             ) : null
           ) : null}
         </main>
 
-        {/* ===== Right: Feedback panel (hidden when detail open) ===== */}
+        {/* Right */}
         {!isDetailOpen && (
-          <aside className="w-[410px] flex-shrink-0 h-full min-h-0 bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col overflow-hidden">
-            <div className="bg-[#F1ECFC] flex p-5 justify-center items-center gap-[10px] w-full shrink-0">
+          <aside className="w-[410px] flex-shrink-0 h-full bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col overflow-y-auto no-scrollbar">
+            <div className="bg-[#F1ECFC] flex p-5 justify-center items-center gap-[10px] w-full">
               <span className="text-black font-pretendard text-[length:var(--fs-title2)] font-semibold leading-none">Comments & Feedback</span>
             </div>
 
-            <div className="flex p-4 justify-between items-center w-full border-b border-[#D9D9D9] bg-white shrink-0">
+            <div className="flex p-4 justify-between items-center w-full border-b border-[#D9D9D9] bg-white">
               <div className="flex flex-col items-start px-2 py-1 rounded bg-[#D1FAE5]">
                 <span className="text-[var(--System-Green-1,#047857)] font-pretendard text-[length:var(--fs-body1)] font-semibold leading-[150%]">{detail?.status ?? "IN_PROGRESS"}</span>
               </div>
 
-              {/* ✅ 한국 유저용이면 보통 Submit은 숨김. 필요하면 살리기 */}
-              {/* <SolidButton label="Submit Correction" className="!h-[50px] !p-4" onClick={handleSubmit} /> */}
+              <button className="text-sm text-[#6D28D9] font-semibold" onClick={() => navigate("/correction/ko")}>
+                Back to List
+              </button>
             </div>
 
-            {/* 댓글 리스트만 */}
-            <div className="flex-1 min-h-0 w-full flex flex-col gap-4 p-4 bg-[#FBFBFB] overflow-y-auto">
+            <div className="flex-1 w-full flex flex-col gap-4 p-4 bg-[#FBFBFB] overflow-y-auto">
               {feedbacks.map((f, i) => {
                 const key = f.feedbackId ?? `${f.sentenceIdx ?? "all"}-${i}`;
                 const hasSentence = f.sentenceIdx !== null && f.sentenceIdx !== undefined;
@@ -221,7 +202,7 @@ const Correction_ReadOnly = () => {
                       <div className="flex-1">
                         <div className="bg-[#F1ECFC] rounded-2xl p-4">
                           <div className="flex items-baseline gap-2">
-                            <span className="font-semibold text-[#1F1F1F]">{f.correctorName ?? "Mark"}</span>
+                            <span className="font-semibold text-[#1F1F1F]">{f.correctorName ?? "Corrector"}</span>
                             <span className="text-xs text-[#8a8a8a]">{formatDate(f.createdAt)}</span>
                           </div>
                           <p className="mt-2 text-[#585858]">{f.content}</p>
@@ -238,9 +219,6 @@ const Correction_ReadOnly = () => {
                 );
               })}
             </div>
-
-            {/* ✅ 입력창 제거 (한국 유저는 작성 못하게) */}
-            {/* <div className="flex p-6 ..."><TextField ... /></div> */}
           </aside>
         )}
       </div>
@@ -248,4 +226,4 @@ const Correction_ReadOnly = () => {
   );
 };
 
-export default Correction_ReadOnly;
+export default Correction_List;

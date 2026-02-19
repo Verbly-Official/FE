@@ -1,4 +1,3 @@
-// Correction_NList.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SolidButton } from "../../../components/Button";
@@ -212,7 +211,7 @@ const Correction_NList = () => {
     <div className="w-full h-full">
       <div className="flex w-full h-[calc(100vh-64px)] bg-[#F8FAFC]">
         {/* ===== Left: Sentences list ===== */}
-        <aside className="w-[370px] flex-shrink-0 h-full bg-white border border-[#D9D9D9] overflow-y-auto scrollbar-hide">
+        <aside className="w-[370px] flex-shrink-0 h-full bg-white border border-[#D9D9D9] overflow-y-auto no-scrollbar">
           <div className="flex p-[24px_30px] flex-col items-start gap-4 w-full border-b border-[#D9D9D9] bg-white">
             <span className="text-[#585858] font-pretendard text-[length:var(--fs-body1)] font-semibold leading-[150%]">SENTENCES ({detail?.sentences?.length ?? 0})</span>
           </div>
@@ -235,7 +234,7 @@ const Correction_NList = () => {
         </aside>
 
         {/* ===== Center: Main content ===== */}
-        <main className="flex flex-col min-w-0 h-full overflow-y-auto scrollbar-hide px-10 py-3 gap-[13px] flex-1 relative">
+        <main className="flex flex-col min-w-0 h-full overflow-y-auto no-scrollbar px-10 py-3 gap-[13px] flex-1">
           {loading && <div className="p-4">Loading...</div>}
           {!loading && errorMsg && <div className="p-4 text-red-500">{errorMsg}</div>}
 
@@ -275,7 +274,7 @@ const Correction_NList = () => {
 
         {/* ===== Right: Feedback panel (hidden when detail open) ===== */}
         {!isDetailOpen && (
-          <aside className="w-[410px] flex-shrink-0 h-full bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col">
+          <aside className="w-[410px] flex-shrink-0 h-full bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col overflow-y-auto no-scrollbar">
             <div className="bg-[#F1ECFC] flex p-5 justify-center items-center gap-[10px] w-full">
               <span className="text-black font-pretendard text-[length:var(--fs-title2)] font-semibold leading-none">Comments & Feedback</span>
             </div>

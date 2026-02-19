@@ -24,44 +24,41 @@ interface DetailSentenceProps {
   sentence: SentenceDTO;
   words?: WordDTO[];
 
-  // ✅ 부모에서 내려주는 draft state + setters
   draftEdits: Record<number, string | null>;
   onEditWord: (wordId: number, correctedText: string | null) => void;
   onResetWord: (wordId: number) => void;
 
-  // ✅ 저장은 edits[]로
   onSaveEdits: (payload: { sentenceIdx: number; edits: WordEdit[] }) => Promise<void> | void;
 
   saving?: boolean;
+  readOnly?: boolean;
 }
 
 const normalizeText = (t: string) => (t ?? "").replaceAll("\\n", "\n");
 
-const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], draftEdits, onEditWord, onResetWord, onSaveEdits, saving }) => {
+const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], draftEdits, onEditWord, onResetWord, onSaveEdits, saving, readOnly = false }) => {
   const [showToast, setShowToast] = useState(false);
   const [toastVariant, setToastVariant] = useState<"positive" | "cautionary">("positive");
 
-  // ✅ 이 문장에 해당하는 word만 필터
   const sentenceWords = useMemo(() => words.filter((w) => w.sentenceIdx === sentence.sentenceIdx), [words, sentence.sentenceIdx]);
-
   const [activeWordId, setActiveWordId] = useState<number | null>(null);
 
   const activeWord = useMemo(() => sentenceWords.find((w) => w.wordId === activeWordId) ?? null, [sentenceWords, activeWordId]);
 
-  // ✅ input에 보여줄 값: draft > 서버 corrected > original
   const activeValue = useMemo(() => {
     if (!activeWord) return "";
 
     const draft = draftEdits[activeWord.wordId];
-    if (draft === null) return ""; // 삭제 지정이면 input은 빈값
+    if (draft === null) return "";
     if (typeof draft === "string") return draft;
 
     return (activeWord.correctedText ?? activeWord.originalText) as string;
   }, [activeWord, draftEdits]);
 
   const handleSave = async () => {
+    if (readOnly) return;
+
     try {
-      // ✅ 이 문장에 해당하는 wordId만 모아서 edits[] 만들기
       const edits: WordEdit[] = sentenceWords.filter((w) => Object.prototype.hasOwnProperty.call(draftEdits, w.wordId)).map((w) => ({ wordId: w.wordId, correctedText: draftEdits[w.wordId] }));
 
       if (edits.length === 0) return;
@@ -79,7 +76,7 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], d
   };
 
   const handleCancelSentenceDraft = () => {
-    // ✅ 현재 문장에 해당하는 draft만 제거(롤백)
+    if (readOnly) return;
     sentenceWords.forEach((w) => onResetWord(w.wordId));
   };
 
@@ -92,8 +89,7 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], d
           <p className="whitespace-pre-wrap text-[#585858] font-pretendard text-[length:var(--fs-subtitle2)] font-semibold leading-[150%]">{normalizeText(sentence.originalText)}</p>
         </div>
 
-        {/* ✅ “문장 전체 편집 textarea”는 미리보기 용도로 두거나 제거 */}
-        <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">Segments (click to edit)</span>
+        <span className="text-[#585858] font-pretendard text-[length:var(--fs-title2)] font-medium leading-none">{readOnly ? "Segments" : "Segments (click to edit)"}</span>
 
         <div className="flex flex-col p-8 items-start self-stretch gap-6 rounded-[12px] border border-[#D9D9D9] bg-white">
           {/* 구간 리스트 */}
@@ -107,7 +103,9 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], d
                 <button
                   key={w.wordId}
                   type="button"
-                  onClick={() => setActiveWordId(w.wordId)}
+                  onClick={() => {
+                    setActiveWordId(w.wordId);
+                  }}
                   className={[
                     "px-3 py-2 rounded-[10px] border text-sm font-pretendard",
                     activeWordId === w.wordId ? "bg-[#F1ECFC] border-[#6D28D9]" : "bg-white border-[#D9D9D9]",
@@ -121,8 +119,19 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], d
             })}
           </div>
 
-          {/* 선택된 구간 편집 */}
-          {activeWord && (
+          {activeWord && readOnly && (
+            <div className="w-full flex flex-col gap-3">
+              <div className="text-sm text-[#585858] font-pretendard">
+                Selected: <span className="font-semibold">{activeWord.originalText}</span>
+              </div>
+
+              <div className="w-full border border-[#D9D9D9] rounded-[10px] px-4 py-3 font-pretendard bg-[#FBFBFB]">
+                {activeWord.correctedText ?? <span className="text-[#8a8a8a]">아직 교정이 없습니다.</span>}
+              </div>
+            </div>
+          )}
+
+          {activeWord && !readOnly && (
             <div className="w-full flex flex-col gap-3">
               <div className="text-sm text-[#585858] font-pretendard">
                 Selected: <span className="font-semibold">{activeWord.originalText}</span>
@@ -142,11 +151,12 @@ const DetailSentence: React.FC<DetailSentenceProps> = ({ sentence, words = [], d
             </div>
           )}
 
-          {/* 하단 버튼 */}
-          <div className="flex w-full gap-[10px] justify-end">
-            <OutlinedButton label="Cancel" className="!h-[50px]" onClick={handleCancelSentenceDraft} />
-            <SolidButton label="Save" Icon={SendIcon} className="!h-[50px]" onClick={handleSave} disabled={saving} />
-          </div>
+          {!readOnly && (
+            <div className="flex w-full gap-[10px] justify-end">
+              <OutlinedButton label="Cancel" className="!h-[50px]" onClick={handleCancelSentenceDraft} />
+              <SolidButton label="Save" Icon={SendIcon} className="!h-[50px]" onClick={handleSave} disabled={saving} />
+            </div>
+          )}
         </div>
       </div>
 
