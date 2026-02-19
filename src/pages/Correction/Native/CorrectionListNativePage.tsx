@@ -200,6 +200,32 @@ const Correction_NList = () => {
         edits.forEach((e) => delete next[e.wordId]);
         return next;
       });
+
+      // Auto-save to Library
+      try {
+        const { createLibraryItem } = await import("../../../apis/library");
+
+        const savePromises = edits.map(async (edit) => {
+          if (!edit.correctedText) return; // Skip deletions
+
+          // Try to find original text from detail.words
+          const originalWord = detail?.words?.find(w => w.wordId === edit.wordId);
+          const originalText = originalWord ? originalWord.originalText : "";
+
+          await createLibraryItem({
+            phrase: edit.correctedText,
+            meaningKo: "원어민 교정", // Placeholder as agreed
+            meaningEn: originalText ? `Original: ${originalText}` : "",
+          });
+        });
+
+        await Promise.allSettled(savePromises);
+        console.log("Automatically saved Native edits to Library");
+
+      } catch (saveError) {
+        console.error("Failed to auto-save to library:", saveError);
+      }
+
     } catch (e) {
       console.error(e);
       alert("저장에 실패했습니다.");

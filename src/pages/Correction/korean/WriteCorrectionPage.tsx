@@ -187,6 +187,28 @@ const WriteCorrectionPage = () => {
 
       setAiData(aiRes.data);
       setShowResult(true);
+
+      // Auto-save suggestions to Library
+      if (aiRes.data.result.suggestions) {
+        try {
+          // Import dynamically if needed to avoid circular deps or just use top-level import
+          const { createLibraryItem } = await import("../../../apis/library");
+
+          const savePromises = aiRes.data.result.suggestions.map(async (suggestion: { revised: string; reasonKo: string; original: string }) => {
+            await createLibraryItem({
+              phrase: suggestion.revised,
+              meaningKo: suggestion.reasonKo,
+              meaningEn: suggestion.original,
+            });
+          });
+
+          await Promise.allSettled(savePromises);
+          console.log("Automatically saved AI suggestions to Library");
+        } catch (saveError) {
+          console.error("Failed to auto-save to library:", saveError);
+          // Don't show alert to user as this is a background process
+        }
+      }
     } catch (e: any) {
       console.error(e);
       setAiError(e?.message ?? "AI 첨삭 요청 중 오류가 발생했어요.");
