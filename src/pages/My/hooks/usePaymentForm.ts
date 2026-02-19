@@ -96,12 +96,9 @@ export const usePaymentForm = () => {
           alert(response.message || 'Failed to initialize KakaoPay payment.');
         }
       } 
-      // ✅ 페이팔 결제 요청 (수정된 부분)
       else if (paymentMethod === 'paypal') {
         const response = await readyPaypalApi(selectedOption.planId);
         if (response.isSuccess && typeof response.result === 'string') {
-          // 백엔드에서 반환된 URL로 바로 이동
-          // 예: https://www.sandbox.paypal.com/webapps/billing/subscriptions?ba_token=...
           window.location.href = response.result;
         } else {
           alert(response.message || 'Failed to initialize PayPal payment.');
