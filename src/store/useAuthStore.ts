@@ -63,6 +63,7 @@ export const useAuthStore = create<AuthState>()(
         localStorage.removeItem('auth-storage');
         localStorage.removeItem('learningLanguage');
         localStorage.removeItem('nativeLanguage');
+        localStorage.removeItem('accessToken'); 
         
         // 쿠키는 백엔드 /auth/logout API에서 삭제
       },

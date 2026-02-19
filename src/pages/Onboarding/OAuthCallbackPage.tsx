@@ -14,6 +14,7 @@ const OAuthCallbackPage = () => {
     isProcessing.current = true;
 
     const processLogin = async () => {
+      useAuthStore.getState().logout();
       console.log('🔐 OAuth 콜백 처리 시작 (API 인증 방식)');
 
       try {

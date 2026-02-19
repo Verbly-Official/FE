@@ -28,21 +28,20 @@ export const LogoutModal: React.FC<LogoutModalProps> = ({
   const handleConfirm = async () => {
     try {
       await logoutApi();
-      setStep('complete');
     } catch (error) {
-      console.error('로그아웃 실패:', error);
-      // 에러 시에도 클라이언트 처리는 진행하거나, 알림 후 닫기
-      alert('로그아웃 요청 중 오류가 발생했습니다.');
-      onClose();
+      console.error('서버 로그아웃 실패:', error);
+      // 실패해도 클라이언트는 무조건 정리
+    } finally {
+      setStep('complete'); // ← 성공/실패 관계없이 진행
     }
   };
 
   // 완료 후 처리
   const handleComplete = () => {
     logout(); 
-    navigate('/login'); 
     onClose();
     setStep('confirm'); 
+    window.location.href = '/login';
   };
 
   const handleCancel = () => {
