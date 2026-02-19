@@ -35,7 +35,7 @@ export default function Home_Profile() {
   // 프로필로 이동하는 함수 (UUID 사용)
   const handleNavigateToProfile = () => {
     if (uuidFromUrl) {
-      navigate(`/profile/${uuidFromUrl}`);
+      navigate(`/home/profile/${uuidFromUrl}`);
     }
   };
 
@@ -79,7 +79,7 @@ export default function Home_Profile() {
   }, [uuidFromUrl, refreshKey]);
 
   return (
-    <div className="h-screen flex flex-col bg-bg0 overflow-hidden">
+    <div className="h-screen flex flex-col bg-bg0 overflow-hidden min-w-[1200px]">
       {/*GNB*/}
       <div className="w-screen">
         <GNB variant="home" />
@@ -180,7 +180,8 @@ export default function Home_Profile() {
                               onClick={async () => {
                                 if (Uuser?.userId) {
                                   try {
-                                    const chatroomId = await createOrEnterChatroom(Uuser.userId);
+                                    const chatroomId =
+                                      await createOrEnterChatroom(Uuser.userId);
                                     navigate(`/inbox/${chatroomId}`, {
                                       state: {
                                         selectedChatId: chatroomId.toString(),
@@ -191,7 +192,10 @@ export default function Home_Profile() {
                                       },
                                     });
                                   } catch (error) {
-                                    console.error("Failed to enter chatroom:", error);
+                                    console.error(
+                                      "Failed to enter chatroom:",
+                                      error,
+                                    );
                                   }
                                 }
                               }}

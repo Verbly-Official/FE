@@ -15,20 +15,34 @@ export default function Home_Korean() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [viewer, setViewer] = useState<ViewerInfo | null>(null);
 
+  const handleFollowChange = (isFollowing: boolean) => {
+    setViewer((prev) =>
+      prev
+        ? {
+            ...prev,
+            following: isFollowing ? prev.following + 1 : prev.following - 1,
+          }
+        : prev,
+    );
+  };
+
+  const fetchViewer = async () => {
+    try {
+      console.log("viewer:", viewer);
+      console.log("viewer.nativeLang:", viewer?.nativeLang);
+      const data = await getViewerInfo();
+      setViewer(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchViewer = async () => {
-      try {
-        const data = await getViewerInfo();
-        setViewer(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchViewer();
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-bg0">
+    <div className="h-screen flex flex-col bg-bg0 min-w-[1200px]">
       {/*GNB*/}
       <div className="w-screen">
         <GNB variant="home" />
@@ -36,15 +50,20 @@ export default function Home_Korean() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* 좌측 사이드메뉴 (고정) */}
-        <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
-
+        <div className="hidden md:flex flex-shrink-0">
+          <SideMenu variant="default" onWriteClick={() => setModalOpen(true)} />
+        </div>
         {/* 오버레이 가능 영역 */}
         <div className={"w-full h-full bg-bg0 z-10 relative"}>
           <div className="flex w-full h-full">
             {/* 홈 내용 */}
             <div className="flex flex-1 overflow-y-auto no-scrollbar pl-[38px] pt-[32px] pb-[40px]">
               <div className="flex-1 max-w-[1200px] mx-auto">
-                <Home_Section refreshKey={refreshKey} viewer={viewer} />
+                <Home_Section
+                  refreshKey={refreshKey}
+                  viewer={viewer}
+                  refreshViewer={handleFollowChange}
+                />
               </div>
               {/* 사이드 */}
               <div className="hidden lg:flex w-[280px] flex-shrink-0 mx-[40px] flex-col gap-[32px]">
@@ -77,7 +96,7 @@ export default function Home_Korean() {
                   onClick={() => setModalOpen(false)}
                 />
                 <div
-                  className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  className="absolute z-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[956px]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Home_WriteModal

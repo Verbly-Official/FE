@@ -23,6 +23,7 @@ type HomeCardProps = {
   isCorrected: boolean;
   post: PostItem;
   viewer: ViewerInfo | null;
+  onFollowToggle?: (isFollowing: boolean) => void;
 };
 
 export default function Home_Card({
@@ -30,6 +31,7 @@ export default function Home_Card({
   isCorrected = true,
   post,
   viewer,
+  onFollowToggle,
 }: HomeCardProps) {
   const navigate = useNavigate();
 
@@ -77,6 +79,12 @@ export default function Home_Card({
       });
 
       setComments((prev) => [newComment, ...prev]);
+
+      setLocalPost((prev) => ({
+        ...prev,
+        commentsCount: prev.commentsCount + 1,
+      }));
+
       setCommentInput("");
     } catch (err) {
       console.error(err);
@@ -130,17 +138,30 @@ export default function Home_Card({
         <div className="flex flex-col bg-white w-full my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
-            <UserProfile
-              size="medium"
-              data={{
-                id: post.uuid,
-                userId: post.userId, // ✅ 추가
-                isFollowing: post.isFollowing, // ✅ 추가
-                name: post.nickname,
-                profileImg: post.userImageUrl,
-                bio: "",
-              }}
-            />
+            {post.uuid ? (
+              <UserProfile
+                size="medium"
+                data={{
+                  uuid: post.uuid,
+                  userId: post.userId,
+                  isFollowing: post.isFollowing,
+                  nickname: post.nickname,
+                  profileImg: post.userImageUrl,
+                }}
+                onFollow={onFollowToggle}
+              />
+            ) : (
+              <div className="flex items-center gap-4">
+                <img
+                  src={post.userImageUrl ?? DefaultImg}
+                  className="w-[48px] h-[48px] rounded-full"
+                />
+                <span className="font-bold text-[length:var(--fs-subtitle1)]">
+                  {post.nickname}
+                </span>
+              </div>
+            )}
+
             {!isCorrected && (
               <Badge content="Request Correction" size="medium" />
             )}
@@ -188,7 +209,7 @@ export default function Home_Card({
             >
               <CommentIcon className="w-[20px] h-[20px]" />
               <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
-                {post.commentsCount}
+                {localPost.commentsCount}
               </div>
             </div>
           </div>
@@ -199,7 +220,7 @@ export default function Home_Card({
                 <div className="flex flex-row text-blue-60 text-[16px] gap-[4px] font-medium">
                   <CommentIcon className="w-[20px] h-[20px]" />
                   <div>COMMENTS</div>
-                  <div>({post.commentsCount})</div>
+                  <div>({localPost.commentsCount})</div>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   {comments.map((comment) => (
@@ -245,17 +266,29 @@ export default function Home_Card({
         <div className="flex flex-col bg-white w-[340px] h-auto my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
-            <UserProfile
-              size="medium"
-              data={{
-                id: post.uuid,
-                userId: post.userId, // ✅ 추가
-                isFollowing: post.isFollowing, // ✅ 추가
-                name: post.nickname,
-                profileImg: post.userImageUrl,
-                bio: "",
-              }}
-            />
+            {post.uuid ? (
+              <UserProfile
+                size="medium"
+                data={{
+                  uuid: post.uuid,
+                  userId: post.userId,
+                  isFollowing: post.isFollowing,
+                  nickname: post.nickname,
+                  profileImg: post.userImageUrl,
+                }}
+                onFollow={onFollowToggle}
+              />
+            ) : (
+              <div className="flex items-center gap-4">
+                <img
+                  src={post.userImageUrl ?? DefaultImg}
+                  className="w-[48px] h-[48px] rounded-full"
+                />
+                <span className="font-bold text-[length:var(--fs-subtitle1)]">
+                  {post.nickname}
+                </span>
+              </div>
+            )}
           </div>
           {/* Content */}
           <div>{post.content}</div>
@@ -286,7 +319,7 @@ export default function Home_Card({
             >
               <CommentIcon className="w-[20px] h-[20px]" />
               <div className="text-[length:var(--fs-subtitle2)] inline-block w-4 text-start tabular-nums">
-                {post.commentsCount}
+                {localPost.commentsCount}
               </div>
             </div>
           </div>
@@ -297,7 +330,7 @@ export default function Home_Card({
                 <div className="flex flex-row text-blue-60 text-[length:var(--fs-subtitle2)] gap-[4px] font-medium">
                   <CommentIcon className="w-[20px] h-[20px]" />
                   <div>COMMENTS</div>
-                  <div>({post.commentsCount})</div>
+                  <div>({localPost.commentsCount})</div>
                 </div>
                 <div className="flex flex-col gap-[16px]">
                   {comments.map((comment) => (
