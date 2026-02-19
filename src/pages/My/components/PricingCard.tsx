@@ -53,7 +53,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
               `}
             >
               <div className="flex justify-between items-start mb-3 md:mb-4 lg:mb-[1rem]">
-                <span className="text-[length:var(--fs-subtitle1)] text-violet-40 uppercase tracking-wide">
+                <span className="text-[length:var(--fs-subtitle1)] text-violet-40 font-bold uppercase tracking-wide">
                   {option.period}
                 </span>
                 
@@ -89,7 +89,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                 <div className="text-[length:var(--fs-title1)] font-bold text-violet-40 mb-2 lg:mb-[0.5rem] leading-none">
                   {option.price}
                 </div>
-                <div className="text-[length:var(--fs-body2)] text-gray-5">
+                <div className="text-[length:var(--fs-body2)] text-gray-5 gap-1">
                   {option.description}
                 </div>
               </div>
