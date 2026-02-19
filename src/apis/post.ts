@@ -3,6 +3,8 @@ import type { PostSliceResponse } from "../types/post";
 import type { ApiResponse } from "../types/user";
 import axios from "./axios";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const getPosts = async (page: number, size: number = 10) => {
   const res = await instance.get<PostSliceResponse>("/api/posts", {
     params: {
@@ -63,4 +65,25 @@ export const addLike = async (postId: number) => {
 export const removeLike = async (postId: number) => {
   const res = await axios.delete(`/api/posts/${postId}/like`);
   return res.data.result;
+};
+
+export const searchPosts = async (
+  keyword: string,
+  page: number = 0,
+  size: number = 10,
+) => {
+  const encodedKeyword = encodeURIComponent(keyword);
+
+  const response = await axios.get(
+    `${BASE_URL}/api/posts/search/${encodedKeyword}`,
+    {
+      params: {
+        page,
+        size,
+        sort: "createdAt,DESC",
+      },
+    },
+  );
+
+  return response.data.result;
 };
