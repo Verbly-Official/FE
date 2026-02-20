@@ -7,7 +7,7 @@ import Home_Profile from "../pages/Home/Home_Profile";
 import Home_Search from "../pages/Home/Home_Search";
 
 export const homeRoutes: RouteObject[] = [
-  { path: "/home/korean", element: <Home_Korean /> },
+  { path: "/home", element: <Home_Korean /> },
   { path: "/home/native", element: <Home_Native /> },
   { path: "/home/notification", element: <Home_Notification /> },
   { path: "/home/profile/:userId", element: <Home_Profile /> },

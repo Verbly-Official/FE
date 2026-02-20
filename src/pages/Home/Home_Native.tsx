@@ -26,6 +26,17 @@ export default function Home_Native() {
     fetchViewer();
   }, []);
 
+  const handleFollowChange = (isFollowing: boolean) => {
+    setViewer((prev) =>
+      prev
+        ? {
+            ...prev,
+            following: isFollowing ? prev.following + 1 : prev.following - 1,
+          }
+        : prev,
+    );
+  };
+
   return (
     <div className="h-screen flex flex-col bg-bg0">
       {/*GNB*/}
@@ -46,9 +57,9 @@ export default function Home_Native() {
                 <div className="flex-1 overflow-y-auto no-scrollbar px-[38px] pt-[32px] pb-[40px]">
                   <div className="max-w-[1200px] mx-auto">
                     <Home_Section
-                      variant="en"
                       refreshKey={refreshKey}
                       viewer={viewer}
+                      refreshViewer={handleFollowChange}
                     />
                   </div>
                 </div>
