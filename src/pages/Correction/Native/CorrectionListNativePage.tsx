@@ -1,3 +1,4 @@
+// Correction_NList.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SolidButton } from "../../../components/Button";
@@ -199,32 +200,6 @@ const Correction_NList = () => {
         edits.forEach((e) => delete next[e.wordId]);
         return next;
       });
-
-      // Auto-save to Library
-      try {
-        const { createLibraryItem } = await import("../../../apis/library");
-
-        const savePromises = edits.map(async (edit) => {
-          if (!edit.correctedText) return; // Skip deletions
-
-          // Try to find original text from detail.words
-          const originalWord = detail?.words?.find(w => w.wordId === edit.wordId);
-          const originalText = originalWord ? originalWord.originalText : "";
-
-          await createLibraryItem({
-            phrase: edit.correctedText,
-            meaningKo: "원어민 교정", // Placeholder as agreed
-            meaningEn: originalText ? `Original: ${originalText}` : "",
-          });
-        });
-
-        await Promise.allSettled(savePromises);
-        console.log("Automatically saved Native edits to Library");
-
-      } catch (saveError) {
-        console.error("Failed to auto-save to library:", saveError);
-      }
-
     } catch (e) {
       console.error(e);
       alert("저장에 실패했습니다.");
@@ -237,7 +212,7 @@ const Correction_NList = () => {
     <div className="w-full h-full">
       <div className="flex w-full h-[calc(100vh-64px)] bg-[#F8FAFC]">
         {/* ===== Left: Sentences list ===== */}
-        <aside className="w-[370px] flex-shrink-0 h-full bg-white border border-[#D9D9D9] overflow-y-auto no-scrollbar">
+        <aside className="w-[370px] flex-shrink-0 h-full bg-white border border-[#D9D9D9] overflow-y-auto scrollbar-hide">
           <div className="flex p-[24px_30px] flex-col items-start gap-4 w-full border-b border-[#D9D9D9] bg-white">
             <span className="text-[#585858] font-pretendard text-[length:var(--fs-body1)] font-semibold leading-[150%]">SENTENCES ({detail?.sentences?.length ?? 0})</span>
           </div>
@@ -260,7 +235,7 @@ const Correction_NList = () => {
         </aside>
 
         {/* ===== Center: Main content ===== */}
-        <main className="flex flex-col min-w-0 h-full overflow-y-auto no-scrollbar px-10 py-3 gap-[13px] flex-1">
+        <main className="flex flex-col min-w-0 h-full overflow-y-auto scrollbar-hide px-10 py-3 gap-[13px] flex-1 relative">
           {loading && <div className="p-4">Loading...</div>}
           {!loading && errorMsg && <div className="p-4 text-red-500">{errorMsg}</div>}
 
@@ -300,7 +275,7 @@ const Correction_NList = () => {
 
         {/* ===== Right: Feedback panel (hidden when detail open) ===== */}
         {!isDetailOpen && (
-          <aside className="w-[410px] flex-shrink-0 h-full bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col overflow-y-auto no-scrollbar">
+          <aside className="w-[410px] flex-shrink-0 h-full bg-[#F8FAFC] border-l border-[#D9D9D9] flex flex-col">
             <div className="bg-[#F1ECFC] flex p-5 justify-center items-center gap-[10px] w-full">
               <span className="text-black font-pretendard text-[length:var(--fs-title2)] font-semibold leading-none">Comments & Feedback</span>
             </div>
