@@ -3,7 +3,7 @@ import Tabs from "../../../components/Tab/Tabs";
 
 import { getPosts, getHotPosts } from "../../../apis/post";
 import type { PostItem } from "../../../types/post";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ViewerInfo } from "../../../types/home";
 
 interface SectionProps {
@@ -23,6 +23,28 @@ export default function Home_Section({
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
   const [isHotPost, setIsHotPost] = useState(false);
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (isHotPost) return; // hot은 무한스크롤 X
+    if (last) return; // 마지막이면 중단
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchPosts(page + 1);
+        }
+      },
+      {
+        threshold: 1,
+      },
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [page, last, isHotPost]);
 
   const [mode, setMode] = useState<"all" | "hot" | "help">("all");
   const displayedPosts =
@@ -103,6 +125,7 @@ export default function Home_Section({
             }
           />
         ))}
+        {!last && !isHotPost && <div ref={observerRef} className="h-[1px]" />}
       </div>
     </div>
   );
