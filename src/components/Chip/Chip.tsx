@@ -1,4 +1,4 @@
-import CloseIcon from "../../src/assets/emoji/close.svg";
+import CloseIcon from "../../assets/emoji/close.svg";
 
 interface ChipProps {
   label: string;
