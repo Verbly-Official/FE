@@ -1,73 +1,163 @@
-# React + TypeScript + Vite
+# Verbly: 내가 쓴 영어일기를 AI와 원어민이 듀얼 첨삭해주는 서비스
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/021e41e2-ee30-49c6-b4cb-7a2eebadc6b9" />
 
-Currently, two official plugins are available:
+<br/>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## <span id="프로젝트-소개">프로젝트 소개</span>
+>**“AI 1차 교정 + 원어민 2차 첨삭의 2단계 학습 플랫폼"**
 
-## React Compiler
+많은 한국인 학습자들은
+틀릴까 봐 영어 사용을 망설입니다.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+버블리는 이 장벽을 낮추기 위해
+AI의 빠른 문법 교정과
+원어민의 문화적·맥락적 피드백을 결합했습니다.
 
-## Expanding the ESLint configuration
+교정된 문장은 자동으로 개인 라이브러리에 저장되고,
+퀴즈와 복습을 통해 장기 기억으로 전환됩니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+학습은 혼자가 아니라,
+글로벌 커뮤니티 속에서 함께 성장하는 경험이 됩니다.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+<br/>
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## <span id="배포-주소">배포 주소</span>
+> **🌐 프론트엔드 주소:** https://www.verbly.kr <br/>
+> **⚙️ 백엔드 주소:** https://api.verbly.kr <br/>
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+<br/>
+
+## <span id="팀원-소개">팀원 소개</span>
+<div align="center">
+
+| 멍이(전지은) | 누아(조호연) | 나옹(성유진) | 지니(김정현) |
+|:--:|:--:|:--:|:--:|
+| <img src="https://github.com/kniiiiko.png" width="100"/> | <img src="https://github.com/whghdus.png" width="100"/> | <img src="https://github.com/Naongjin.png" width="100"/> | <img src="https://github.com/ninininhihi.png" width="100"/> |
+| [@kniiiiko](https://github.com/kniiiiko) | [@whghdus](https://github.com/whghdus) | [@Naongjin](https://github.com/Naongjin) | [@ninininhihi](https://github.com/ninininhihi) |
+
+</div>
+
+<br/>
+
+<div align="center">
+  
+## <span id="사용-기술-스택">사용 기술 스택</span>
+| 분류              | 기술                               |
+| --------------- | -------------------------------- |
+| Package Manager | pnpm (v10.20.0)                  |
+| UI Library      | React                            |
+| Styling         | Tailwind CSS (v4)                |
+| HTTP Client     | axios (v1.13.2)                  |
+| Routing         | react-router-dom (v7.12.0)       |
+| Server State    | @tanstack/react-query (v5.90.16) |
+| Global State    | zustand (v5.0.10)                |
+
+</div>
+
+<br/>
+
+## <span id="git-컨벤션">git 컨벤션</span>
+### 브랜치 전략
+**Git Flow 방식: dev ← 개별 브랜치**
+- dev: 개발 + 배포 브랜치
+
+### 브랜치 명명 규칙 
+**브랜치 형식: 브랜치종류-#이슈번호/브랜치이름**
+- 브랜치 종류: feat, refactor, bug  등등…
+
+<br/>
+
+## <span id="폴더-구조">폴더 구조</span>
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+📦 verbly.react
+├── .github
+│   └── ISSUE_TEMPLATE
+│
+├── public
+│
+├── src
+│   ├── apis
+│   │
+│   ├── assets
+│   │   ├── emoji
+│   │   └── fonts
+│   │
+│   ├── auth
+│   │
+│   ├── components
+│   │   ├── AccountActionModal
+│   │   ├── Avatar
+│   │   ├── Badge
+│   │   ├── Button
+│   │   ├── Chat
+│   │   ├── Chip
+│   │   ├── Comment
+│   │   ├── Header
+│   │   ├── Home
+│   │   ├── Interaction
+│   │   ├── Logo
+│   │   │   └── img
+│   │   ├── Nav
+│   │   │   └── components
+│   │   ├── Pagination
+│   │   ├── Profile
+│   │   │   └── img
+│   │   ├── ProfileCard
+│   │   ├── ProgressIndicator
+│   │   ├── Rating
+│   │   ├── SearchBar
+│   │   ├── Select
+│   │   ├── Switch
+│   │   ├── Tab
+│   │   ├── Tag
+│   │   ├── Text
+│   │   ├── TextArea
+│   │   ├── Toast
+│   │   └── TrendingTag
+│   │
+│   ├── contexts
+│   │
+│   ├── hooks
+│   │
+│   ├── pages
+│   │   ├── Correction
+│   │   │   ├── Native
+│   │   │   ├── components
+│   │   │   ├── korean
+│   │   │   └── layout
+│   │   │
+│   │   ├── Home
+│   │   │   └── components
+│   │   │
+│   │   ├── Inbox
+│   │   │   └── components
+│   │   │
+│   │   ├── Library
+│   │   │   ├── components
+│   │   │   └── emoji
+│   │   │
+│   │   ├── Review
+│   │   │   └── components
+│   │   │
+│   │   ├── My
+│   │   │   ├── components
+│   │   │   ├── hooks
+│   │   │   └── img
+│   │   │
+│   │   └── Onboarding
+│   │       └── video
+│   │
+│   ├── routes
+│   │
+│   ├── store
+│   │
+│   ├── styles
+│   │
+│   ├── types
+│   │
+│   └── utils
+│
+├── .vite
+│   └── deps
 ```
