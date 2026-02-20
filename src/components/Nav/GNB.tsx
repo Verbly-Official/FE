@@ -4,12 +4,21 @@ import Logo from "../Logo/Logo";
 import { SearchBar } from "../SearchBar/SearchBar";
 import GNB_Alarm from "./GNB_Alarm";
 import BellIcon from "../../assets/emoji/bell-on.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function GNB({ variant = "default" }) {
-  const [isActive, setActive] = useState<boolean>(true);
   const [isOpen, setOpen] = useState<boolean>(false);
-
   const { unreadCount } = useNotification();
+  const navigate = useNavigate();
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const keyword = e.currentTarget.value.trim();
+      if (!keyword) return;
+
+      navigate(`/home/search/${encodeURIComponent(keyword)}`);
+    }
+  };
 
   return (
     <div className="relative z-30 w-full h-[60px] bg-white px-[40px] py-[8px] shadow-[0_4px_8px_rgba(0,0,0,0.08)]">
@@ -26,6 +35,7 @@ export default function GNB({ variant = "default" }) {
               shape="round"
               className="w-full"
               placeholder="Search topcis, users or keywords,,,"
+              onKeyDown={handleKeyDown}
             />
           </div>
         )}

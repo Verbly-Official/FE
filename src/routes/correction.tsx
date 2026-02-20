@@ -6,8 +6,8 @@ import Correction_Main from "../pages/Correction/korean/CorrectionMainPage";
 import Correction_Drafts from "../pages/Correction/korean/CorrectionDrafts";
 import Correction_Write from "../pages/Correction/korean/WriteCorrectionPage";
 
-import Correction_NMain from "../pages/Correction/native/CorrectionMainNativePage";
-import Correction_NList from "../pages/Correction/native/CorrectionListNativePage";
+import Correction_NMain from "../pages/Correction/Native/CorrectionMainNativePage";
+import Correction_NList from "../pages/Correction/Native/CorrectionListNativePage";
 
 import CorrectionKoLayout from "../pages/Correction/layout/CorrectionKoLayout";
 import CorrectionNativeLayout from "../pages/Correction/layout/CorrectionEnLayout";

@@ -263,7 +263,7 @@ export default function Home_Card({
       );
     case "mini":
       return (
-        <div className="flex flex-col bg-white w-[340px] h-auto my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
+        <div className="flex flex-col bg-white w-full min-w-[340px] min-h-[352px] my-auto p-[24px] border-[1px] border-line1 rounded-[20px] gap-[12px]">
           <div className="flex flex-row items-center justify-between">
             {/* Profile */}
             {post.uuid ? (

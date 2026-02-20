@@ -38,10 +38,10 @@ export const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
 
   // 완료 후 처리
   const handleComplete = () => {
-    logout(); // 클라이언트 정보 초기화
-    navigate('/login');
+    logout();
     onClose();
     setStep('confirm');
+    window.location.href = '/login';
   };
 
   const handleCancel = () => {
