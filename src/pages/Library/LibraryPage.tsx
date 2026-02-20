@@ -70,12 +70,12 @@ const LibraryPage: React.FC = () => {
                     {/* Center Content */}
                     <div className="flex-1 flex flex-col gap-[20px] md:gap-[24px] lg:gap-[28px] min-w-0">
                         {/* Test Toggle Button */}
-                        <button
+                        {/* <button
                             onClick={() => setShowTest(!showTest)}
                             className="self-start px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors text-sm font-medium"
                         >
                             {showTest ? '❌ 테스트 닫기' : '🧪 API 테스트 열기'}
-                        </button>
+                        </button> */}
 
                         {/* Test Component */}
                         {showTest && (
