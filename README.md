@@ -4,7 +4,7 @@
 
 <br/>
 
-## 🌍 <span id="프로젝트-소개">프로젝트 소개</span>
+## <span id="프로젝트-소개">프로젝트 소개</span>
 >**“AI 1차 교정 + 원어민 2차 첨삭의 2단계 학습 플랫폼"**
 
 많은 한국인 학습자들은
@@ -22,13 +22,13 @@ AI의 빠른 문법 교정과
 
 <br/>
 
-## 🚀 <span id="배포-주소">배포 주소</span>
+## <span id="배포-주소">배포 주소</span>
 > **🌐 프론트엔드 주소:** https://www.verbly.kr <br/>
 > **⚙️ 백엔드 주소:** https://api.verbly.kr <br/>
 
 <br/>
 
-## 👫 <span id="팀원-소개">팀원 소개</span>
+## <span id="팀원-소개">팀원 소개</span>
 <div align="center">
 
 | 멍이(전지은) | 누아(조호연) | 나옹(성유진) | 지니(김정현) |
@@ -42,7 +42,7 @@ AI의 빠른 문법 교정과
 
 <div align="center">
   
-## 💻 <span id="사용-기술-스택">사용 기술 스택</span>
+## <span id="사용-기술-스택">사용 기술 스택</span>
 | 분류              | 기술                               |
 | --------------- | -------------------------------- |
 | Package Manager | pnpm (v10.20.0)                  |
@@ -57,7 +57,7 @@ AI의 빠른 문법 교정과
 
 <br/>
 
-## 📚 <span id="git-컨벤션">git 컨벤션</span>
+## <span id="git-컨벤션">git 컨벤션</span>
 ### 브랜치 전략
 **Git Flow 방식: dev ← 개별 브랜치**
 - dev: 개발 + 배포 브랜치
@@ -68,7 +68,7 @@ AI의 빠른 문법 교정과
 
 <br/>
 
-## 🗂️ <span id="폴더-구조">폴더 구조</span>
+## <span id="폴더-구조">폴더 구조</span>
 ```
 📦 verbly.react
 ├── .github
