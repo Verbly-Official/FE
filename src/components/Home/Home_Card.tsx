@@ -300,7 +300,7 @@ export default function Home_Card({
           {/* Tags */}
           <div className="flex flex-row gap-[10px] text-blue-60 mt-auto">
             {post.tags.map((tag) => (
-              <div key={tag}>#{tag}</div>
+              <div key={tag}>{tag}</div>
             ))}
           </div>
           {/* Like&Comment */}
