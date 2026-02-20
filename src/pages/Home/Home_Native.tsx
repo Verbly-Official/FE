@@ -25,7 +25,6 @@ export default function Home_Native() {
     };
     fetchViewer();
   }, []);
-
   const handleFollowChange = (isFollowing: boolean) => {
     setViewer((prev) =>
       prev
