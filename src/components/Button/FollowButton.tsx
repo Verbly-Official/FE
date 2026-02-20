@@ -13,13 +13,13 @@ interface FollowButtonProps {
 }
 
 const SIZE_STYLES: Record<'small' | 'large', string> = {
-  small: "w-[80px] h-[24px] text-[length:var(--fs-button2)] gap-[4px] rounded-[4px]",
-  large: "w-[150px] h-[60px] text-[length:var(--fs-subtitle1)] gap-[8px] rounded-[8px]",
+  small: "w-[5rem] h-[1.5rem] text-[length:var(--fs-button2)] gap-[0.25rem] rounded-[0.25rem]",
+  large: "w-[9.375rem] h-[3.75rem] text-[length:var(--fs-subtitle1)] gap-[0.5rem] rounded-[0.5rem]",
 };
 
 const ICON_SIZE_STYLES: Record<'small' | 'large', string> = {
-  small: "w-[16px] h-[16px]",
-  large: "w-[24px] h-[24px]",
+  small: "w-[1rem] h-[1rem]",
+  large: "w-[1.5rem] h-[1.5rem]",
 };
 
 export default function FollowButton({ 
@@ -32,7 +32,6 @@ export default function FollowButton({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isLoading, setIsLoading] = useState(false);
 
-  // [추가] 부모 컴포넌트에서 데이터 로딩 후 initialIsFollowing이 변경되면 상태 동기화
   useEffect(() => {
     setIsFollowing(initialIsFollowing);
   }, [initialIsFollowing]);
@@ -40,7 +39,6 @@ export default function FollowButton({
   const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // [수정] ID가 없으면 아예 동작하지 않도록 처리 (서버 요청 불가)
     if (userId === undefined) {
       console.error("FollowButton: userId is missing");
       return;
@@ -51,7 +49,6 @@ export default function FollowButton({
     const previousState = isFollowing;
     const newState = !isFollowing;
     
-    // 낙관적 업데이트 (UI 먼저 변경)
     setIsFollowing(newState);
     if (onToggle) onToggle(newState);
 
@@ -64,7 +61,6 @@ export default function FollowButton({
       }
     } catch (error) {
       console.error("Follow toggle failed:", error);
-      // 실패 시 롤백 (원래 상태로 복구)
       setIsFollowing(previousState);
       if (onToggle) onToggle(previousState);
     } finally {
@@ -76,7 +72,6 @@ export default function FollowButton({
     ? "bg-gray-3 text-gray-6"
     : "bg-violet-50 text-[var(--color-white)]";
 
-  // Tailwind의 invert 유틸리티 사용 (필터 효과)
   const iconColorFilter = !isFollowing ? "invert" : "";
 
   return (
