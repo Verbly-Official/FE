@@ -19,6 +19,7 @@ interface UserStatsCardProps {
     streak: number;
     point: number;
     correctionReceived: number;
+    //corrected: number;
   };
 }
 
@@ -82,10 +83,11 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({
         </span>
         <div className="bg-violet-100 py-[12px] rounded-[12px] flex flex-col items-center justify-center gap-[4px] h-auto">
           <span className="text-[length:var(--fs-title2)] font-semibold text-violet-50">
+            {/*  {userData.role === "FOREIGNER" ? stats.corrected : stats.correctionReceived} */}
             {stats.correctionReceived}
           </span>
           <span className="text-[length:var(--fs-subtitle2)] text-gray-5 font-medium">
-            Received
+            {userData.role === "FOREIGNER" ? "Corrected" : "Received"}
           </span>
         </div>
       </div>

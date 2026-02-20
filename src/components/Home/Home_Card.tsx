@@ -50,10 +50,6 @@ export default function Home_Card({
     }
   }, [isCommentOpen]);
 
-  useEffect(() => {
-    setLocalPost(post);
-  }, [post]);
-
   const fetchComments = async (pageNumber: number) => {
     try {
       const data = await getComments(post.postId, pageNumber);
@@ -115,6 +111,15 @@ export default function Home_Card({
     }
   };
 
+  const handleFollowToggleLocal = (newState: boolean) => {
+    setLocalPost((prev) => ({
+      ...prev,
+      isFollowing: newState,
+    }));
+
+    onFollowToggle?.(newState);
+  };
+
   const formatRelativeTime = (dateString: string) => {
     const now = new Date();
     const past = new Date(dateString + "Z");
@@ -144,11 +149,11 @@ export default function Home_Card({
                 data={{
                   uuid: post.uuid,
                   userId: post.userId,
-                  isFollowing: post.isFollowing,
+                  isFollowing: localPost.isFollowing,
                   nickname: post.nickname,
                   profileImg: post.userImageUrl,
                 }}
-                onFollow={onFollowToggle}
+                onFollow={handleFollowToggleLocal}
               />
             ) : (
               <div className="flex items-center gap-4">
@@ -291,9 +296,9 @@ export default function Home_Card({
             )}
           </div>
           {/* Content */}
-          <div>{post.content}</div>
+          <div className="flex-1">{post.content}</div>
           {/* Tags */}
-          <div className="flex flex-row gap-[10px] text-blue-60">
+          <div className="flex flex-row gap-[10px] text-blue-60 mt-auto">
             {post.tags.map((tag) => (
               <div key={tag}>#{tag}</div>
             ))}

@@ -34,7 +34,7 @@ export default function GNB_Alarm() {
         </TextButton>
       </div>
 
-      <div className="flex-1 overflow-y-auto mt-[12px]">
+      <div className="flex-1 overflow-y-auto overflow-hidden mt-[12px]">
         {sortedNotis.slice(0, 5).map((noti) => (
           <Alarm key={noti.notificationId} notification={noti} />
         ))}
